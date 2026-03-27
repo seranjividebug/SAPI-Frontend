@@ -434,8 +434,9 @@ export default function SAPIResults() {
     new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
   const nav = (page, extra) => {
-    // For demo purposes, navigate to same page (no scorecard/roadmap pages yet)
+    // Navigate to the requested page
     console.log("Navigate to:", page, extra);
+    navigate(`/${page}`);
   };
 
   return (
@@ -684,6 +685,35 @@ export default function SAPIResults() {
             Individual national scores are not disclosed.
           </div>
           <PeerComparisonStrip compositeScore={compositeScore || 0} />
+          
+          <div style={{ marginTop: 24, display: "flex", justifyContent: "flex-end" }}>
+            <button
+              onClick={() => nav("peercomparison")}
+              style={{
+                background: "transparent",
+                color: C.gold,
+                border: `1px solid ${C.gold}`,
+                padding: "10px 20px",
+                fontFamily: "system-ui, sans-serif",
+                fontSize: 10, letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontWeight: 500,
+                cursor: "pointer",
+                borderRadius: 3,
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={e => {
+                e.target.style.background = C.gold;
+                e.target.style.color = C.void;
+              }}
+              onMouseLeave={e => {
+                e.target.style.background = "transparent";
+                e.target.style.color = C.gold;
+              }}
+            >
+              View Detailed Comparison →
+            </button>
+          </div>
         </div>
 
         <Rule />
