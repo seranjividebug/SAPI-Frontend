@@ -44,18 +44,18 @@ const ALL_QUESTIONS = [
   // DIMENSION 1 — COMPUTE CAPACITY
   {
     id: "Q1", dimIndex: 0, dimName: "Compute Capacity",
-    text: "What is your nation's primary AI compute infrastructure?",
+    text: "What is your organisation's primary AI compute infrastructure?",
     options: [
-      { label: "Public cloud only", score: 25 },
-      { label: "Mix of cloud + on-premise", score: 50 },
-      { label: "Dedicated on-premise GPU clusters", score: 75 },
-      { label: "Sovereign / air-gapped compute", score: 95 },
-      { label: "No dedicated AI compute", score: 5 },
+      { label: "We use public cloud (AWS, Azure, GCP) for all AI workloads", score: 25 },
+      { label: "We use a mix of public cloud and on-premise GPU/TPU hardware", score: 50 },
+      { label: "We operate dedicated on-premise AI compute (GPU clusters, HPC)", score: 75 },
+      { label: "We operate sovereign/air-gapped compute for classified or regulated workloads", score: 95 },
+      { label: "We have no dedicated AI compute infrastructure", score: 5 },
     ],
   },
   {
     id: "Q2", dimIndex: 0, dimName: "Compute Capacity",
-    text: "What percentage of AI workloads run within national borders?",
+    text: "What percentage of your AI workloads run on infrastructure located within your nation's borders?",
     options: [
       { label: "0–20%", score: 15 },
       { label: "21–50%", score: 40 },
@@ -65,293 +65,293 @@ const ALL_QUESTIONS = [
   },
   {
     id: "Q3", dimIndex: 0, dimName: "Compute Capacity",
-    text: "How resilient is your AI compute infrastructure to energy disruption?",
+    text: "How resilient is your AI compute to energy disruption?",
     options: [
-      { label: "No energy planning", score: 10 },
-      { label: "Standard commercial contracts", score: 35 },
-      { label: "Dedicated energy supply agreements", score: 65 },
-      { label: "National grid / renewable contracts dedicated to AI", score: 90 },
+      { label: "No dedicated energy planning for AI workloads", score: 10 },
+      { label: "Standard commercial energy contracts; no AI-specific provision", score: 35 },
+      { label: "Dedicated energy supply agreements for data centre / AI operations", score: 65 },
+      { label: "National grid allocation or renewable energy contracts dedicated to AI", score: 90 },
     ],
   },
   {
     id: "Q4", dimIndex: 0, dimName: "Compute Capacity",
-    text: "What is your AI hardware supply chain's foreign dependency level?",
+    text: "How exposed is your AI hardware supply chain to foreign dependency?",
     options: [
-      { label: "100% foreign, no visibility", score: 10 },
-      { label: "Foreign but diversified + stockpiles", score: 30 },
-      { label: "Some domestic assembly, foreign fab", score: 50 },
-      { label: "Partial domestic fab or strategic alliance", score: 75 },
-      { label: "Sovereign fab or guaranteed allied supply", score: 95 },
+      { label: "100% dependent on foreign-fabricated chips (no domestic supply chain visibility)", score: 10 },
+      { label: "Foreign-fabricated but with diversified suppliers and strategic stockpiles", score: 30 },
+      { label: "Some domestic assembly or packaging; fabrication remains foreign", score: 50 },
+      { label: "Partial domestic fabrication capability or strategic alliance with fabricator", score: 75 },
+      { label: "Sovereign fabrication or guaranteed allied-nation supply agreement", score: 95 },
     ],
   },
   {
     id: "Q5", dimIndex: 0, dimName: "Compute Capacity",
-    text: "What is your total data centre capacity dedicated to AI?",
+    text: "What is your total installed data centre capacity dedicated to or available for AI workloads?",
     options: [
-      { label: "No dedicated capacity", score: 5 },
-      { label: "Less than 10 MW", score: 25 },
+      { label: "No dedicated data centre capacity", score: 5 },
+      { label: "< 10 MW total capacity", score: 25 },
       { label: "10–50 MW", score: 50 },
       { label: "50–200 MW", score: 75 },
-      { label: "More than 200 MW", score: 95 },
+      { label: "> 200 MW", score: 95 },
     ],
   },
 
   // DIMENSION 2 — CAPITAL FORMATION
   {
     id: "Q6", dimIndex: 1, dimName: "Capital Formation",
-    text: "What percentage of your national R&D budget is allocated to AI?",
+    text: "What proportion of your government's total R&D budget is allocated to AI infrastructure and development?",
     options: [
-      { label: "No dedicated AI budget", score: 5 },
-      { label: "Less than 1% of R&D", score: 20 },
-      { label: "1–3% of R&D", score: 45 },
-      { label: "3–5% of R&D", score: 70 },
-      { label: "More than 5% of R&D", score: 95 },
+      { label: "No dedicated AI budget line", score: 5 },
+      { label: "< 1% of total R&D spend", score: 20 },
+      { label: "1–3% of total R&D spend", score: 45 },
+      { label: "3–5% of total R&D spend", score: 70 },
+      { label: "> 5% of total R&D spend", score: 95 },
     ],
   },
   {
     id: "Q7", dimIndex: 1, dimName: "Capital Formation",
-    text: "What is your sovereign wealth fund's AI mandate?",
+    text: "Does your nation have sovereign wealth fund or state-backed investment vehicles with explicit AI infrastructure mandates?",
     options: [
-      { label: "No sovereign wealth fund", score: 5 },
-      { label: "SWF exists, no AI allocation", score: 25 },
-      { label: "SWF with general technology allocation", score: 55 },
-      { label: "SWF with explicit AI infrastructure allocation", score: 90 },
+      { label: "No SWF or state-backed AI fund exists", score: 5 },
+      { label: "SWF exists but with no AI-specific allocation", score: 25 },
+      { label: "SWF exists with general technology allocation that includes AI", score: 55 },
+      { label: "SWF has an explicit, published AI infrastructure allocation", score: 90 },
     ],
   },
   {
     id: "Q8", dimIndex: 1, dimName: "Capital Formation",
-    text: "How developed is your AI venture capital ecosystem?",
+    text: "How would you characterise the AI venture capital ecosystem in your country?",
     options: [
-      { label: "Minimal VC activity", score: 10 },
-      { label: "Some deals, less than $500M annually", score: 35 },
-      { label: "Active ecosystem $500M–$5B", score: 65 },
-      { label: "Deep market over $5B + domestic LPs", score: 95 },
+      { label: "Minimal AI VC activity", score: 10 },
+      { label: "Some AI VC deals but fragmented and below $500M total annually", score: 35 },
+      { label: "Active AI VC ecosystem with $500M–$5B annually", score: 65 },
+      { label: "Deep AI VC market with > $5B annually and domestic institutional LPs", score: 95 },
     ],
   },
   {
     id: "Q9", dimIndex: 1, dimName: "Capital Formation",
-    text: "What is your development finance institutions' AI capability?",
+    text: "Do your national development finance institutions (DFIs) have AI infrastructure financing capability?",
     options: [
-      { label: "No DFI involvement", score: 5 },
-      { label: "DFI finances general tech, not AI-specific", score: 30 },
-      { label: "DFI financed AI-adjacent infrastructure in past 3 years", score: 60 },
-      { label: "DFI has published AI mandate + active pipeline", score: 90 },
+      { label: "No DFI involvement in AI financing", score: 5 },
+      { label: "DFI finances general technology but not AI-specific infrastructure", score: 30 },
+      { label: "DFI has financed AI-adjacent infrastructure in the past 3 years", score: 60 },
+      { label: "DFI has a published AI infrastructure mandate with active pipeline", score: 90 },
     ],
   },
   {
     id: "Q10", dimIndex: 1, dimName: "Capital Formation",
-    text: "What is the typical timeframe from AI budget commitment to delivery?",
+    text: "What is the typical timeframe from government AI budget commitment to operational infrastructure delivery?",
     options: [
-      { label: "More than 36 months or unknown", score: 15 },
+      { label: "> 36 months or unknown", score: 15 },
       { label: "24–36 months", score: 40 },
       { label: "12–24 months", score: 70 },
-      { label: "Less than 12 months", score: 95 },
+      { label: "< 12 months", score: 95 },
     ],
   },
   {
     id: "Q11", dimIndex: 1, dimName: "Capital Formation",
-    text: "Does your nation have a multi-year AI infrastructure funding commitment?",
+    text: "Does your government have committed multi-year (5–10 year) AI infrastructure funding beyond annual budget cycles?",
     options: [
-      { label: "No multi-year commitment", score: 10 },
-      { label: "Exists in strategy documents, no legislative backing", score: 35 },
-      { label: "Legislative / cabinet commitment 3–5 years", score: 60 },
-      { label: "5–10 year committed funding with legislation", score: 95 },
+      { label: "No multi-year AI funding commitment exists", score: 10 },
+      { label: "Multi-year commitment exists in strategy documents but no legislative backing", score: 35 },
+      { label: "Legislative or cabinet-level commitment to 3–5 year AI funding", score: 60 },
+      { label: "5–10 year committed AI infrastructure funding with legislative backing", score: 95 },
     ],
   },
 
   // DIMENSION 3 — REGULATORY READINESS
   {
     id: "Q12", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "How mature is your national AI strategy?",
+    text: "Does your nation have a formal, published national AI strategy?",
     options: [
       { label: "No formal AI strategy", score: 5 },
-      { label: "Published, no measurable objectives", score: 30 },
-      { label: "Published with objectives, timelines, and ownership", score: 60 },
-      { label: "Published, implemented, with public progress reporting", score: 90 },
+      { label: "AI strategy published but with no measurable objectives or timelines", score: 30 },
+      { label: "AI strategy published with objectives, timelines, and institutional ownership", score: 60 },
+      { label: "AI strategy published, implemented, with public progress reporting", score: 90 },
     ],
   },
   {
     id: "Q13", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "How clear is the legal framework for AI deployment?",
+    text: "How clear is the legal framework for AI deployment in your jurisdiction?",
     options: [
-      { label: "No AI-specific legislation", score: 10 },
-      { label: "General technology law only", score: 30 },
-      { label: "AI-specific legislation enacted", score: 60 },
-      { label: "Comprehensive AI legislation with enforcement", score: 90 },
+      { label: "No AI-specific legislation or liability frameworks exist", score: 10 },
+      { label: "General technology law applies; no AI-specific provisions", score: 30 },
+      { label: "AI-specific legislation enacted covering liability and/or IP rules", score: 60 },
+      { label: "Comprehensive AI legislation with liability, IP, and enforcement mechanisms", score: 90 },
     ],
   },
   {
     id: "Q14", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "Does your nation have a national procurement system for AI?",
+    text: "Can your national procurement system acquire AI systems efficiently?",
     options: [
-      { label: "Standard IT procurement, no AI provisions", score: 20 },
-      { label: "Some AI guidelines, not widely adopted", score: 40 },
-      { label: "AI-specific frameworks + pre-approved panels", score: 65 },
-      { label: "Rapid AI procurement with sandbox + oversight", score: 90 },
+      { label: "AI procurement follows standard IT procurement with no AI-specific provisions", score: 20 },
+      { label: "Some AI procurement guidelines exist but are not widely adopted", score: 40 },
+      { label: "AI-specific procurement frameworks with pre-approved vendor panels", score: 65 },
+      { label: "Rapid AI procurement with sandbox, pilot-to-production, and oversight built in", score: 90 },
     ],
   },
   {
     id: "Q15", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "What is your AI ethics governance architecture?",
+    text: "Does your government have an AI ethics governance architecture?",
     options: [
-      { label: "No AI ethics board", score: 5 },
-      { label: "Advisory body, no statutory authority", score: 30 },
-      { label: "Ethics board with statutory authority", score: 60 },
-      { label: "Mandatory impact assessments + algorithmic audit", score: 90 },
+      { label: "No AI ethics board or governance structure", score: 5 },
+      { label: "Advisory AI ethics body exists but with no statutory authority", score: 30 },
+      { label: "AI ethics board with statutory authority and published guidelines", score: 60 },
+      { label: "AI ethics governance with mandatory impact assessments and algorithmic audit", score: 90 },
     ],
   },
   {
     id: "Q16", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "What is your level of participation in international AI standards?",
+    text: "To what extent does your nation participate in international AI standards bodies?",
     options: [
-      { label: "No formal participation", score: 5 },
-      { label: "Formal membership, limited participation", score: 25 },
-      { label: "Active working group membership (ISO/IEC JTC1/SC42)", score: 60 },
-      { label: "Standards leadership: chairing groups, contributing documents", score: 90 },
+      { label: "No formal participation in AI standards bodies", score: 5 },
+      { label: "Formal membership but limited active participation", score: 25 },
+      { label: "Active working group membership in ISO/IEC JTC 1/SC 42 or equivalent", score: 60 },
+      { label: "Standards leadership: chairing working groups, contributing documents", score: 90 },
     ],
   },
   {
     id: "Q17", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "How effective is cross-government AI regulation coordination?",
+    text: "How coordinated is AI regulation across your government departments?",
     options: [
-      { label: "Fragmented, no coordination", score: 10 },
-      { label: "Some coordination, informal channels", score: 35 },
-      { label: "Formal cross-ministry body with published mandate", score: 65 },
-      { label: "Centralised AI governance office with authority", score: 90 },
+      { label: "Fragmented: departments regulate AI independently with no coordination", score: 10 },
+      { label: "Some coordination exists (working groups, informal channels)", score: 35 },
+      { label: "Formal cross-ministry AI coordination body with published mandate", score: 65 },
+      { label: "Centralised AI governance office with cross-departmental authority", score: 90 },
     ],
   },
   {
     id: "Q18", dimIndex: 2, dimName: "Regulatory Readiness",
-    text: "What is your strategy-to-implementation ratio?",
+    text: "What proportion of your published national AI strategy commitments have been implemented?",
     options: [
-      { label: "Less than 10% implemented or no measurable milestones", score: 10 },
-      { label: "10–30% implemented", score: 30 },
-      { label: "31–60% implemented with evidence", score: 60 },
-      { label: "More than 60% implemented with public reporting", score: 90 },
+      { label: "< 10% or no measurable milestones set", score: 10 },
+      { label: "10–30% of commitments have measurable implementation", score: 30 },
+      { label: "31–60% of commitments implemented with evidence", score: 60 },
+      { label: "> 60% of commitments implemented with public reporting", score: 90 },
     ],
   },
 
   // DIMENSION 4 — DATA SOVEREIGNTY
   {
     id: "Q19", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "What data residency requirements does your nation enforce?",
+    text: "Does your nation have enforceable data residency requirements for strategic and citizen data?",
     options: [
       { label: "No data localisation requirements", score: 10 },
-      { label: "Laws exist but enforcement is limited", score: 35 },
-      { label: "Enforcement for strategic / government data", score: 65 },
-      { label: "Comprehensive framework, public + private sectors", score: 90 },
+      { label: "Data localisation laws exist but enforcement is limited", score: 35 },
+      { label: "Data localisation with enforcement for strategic/government data", score: 65 },
+      { label: "Comprehensive data residency framework with enforcement across public and private sectors", score: 90 },
     ],
   },
   {
     id: "Q20", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "What proportion of government cloud workloads run on sovereign infrastructure?",
+    text: "What proportion of government cloud workloads run on sovereign or sovereignty-graded infrastructure?",
     options: [
-      { label: "Most on commercial foreign cloud", score: 15 },
-      { label: "Some on sovereign, majority on foreign", score: 40 },
-      { label: "Majority on sovereign / domestic", score: 70 },
-      { label: "All sensitive workloads on sovereign with air-gap", score: 95 },
+      { label: "Most government cloud workloads on commercial foreign cloud", score: 15 },
+      { label: "Some workloads on sovereign-graded cloud but majority on foreign", score: 40 },
+      { label: "Majority of government cloud on sovereign/domestic infrastructure", score: 70 },
+      { label: "All sensitive government workloads on sovereign cloud with air-gap capability", score: 95 },
     ],
   },
   {
     id: "Q21", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "How developed is your cross-border data transfer governance?",
+    text: "How does your nation govern cross-border data transfers?",
     options: [
-      { label: "No regulations", score: 10 },
-      { label: "GDPR adequacy or bilateral framework", score: 40 },
-      { label: "Active controls with enforcement for government data", score: 65 },
-      { label: "Comprehensive: adequacy + contractual + technical controls", score: 90 },
+      { label: "No specific cross-border data transfer regulations", score: 10 },
+      { label: "GDPR adequacy or bilateral agreement framework in place", score: 40 },
+      { label: "Active cross-border data flow controls with enforcement for government data", score: 65 },
+      { label: "Comprehensive framework: adequacy decisions, contractual clauses, and technical controls", score: 90 },
     ],
   },
   {
     id: "Q22", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "Do you have classified / air-gapped environments configured for AI?",
+    text: "Does your nation have classified or air-gapped computing environments for strategic AI workloads?",
     options: [
-      { label: "None exist", score: 5 },
-      { label: "Classified environments exist, not AI-configured", score: 30 },
-      { label: "Classified AI-ready + sovereign cloud regions", score: 65 },
-      { label: "Full trusted operating environment + AI integration", score: 90 },
+      { label: "No classified or air-gapped AI environments exist", score: 5 },
+      { label: "Classified environments exist but not configured for AI workloads", score: 30 },
+      { label: "Classified AI-ready environments with sovereign cloud regions", score: 65 },
+      { label: "Full trusted operating environment with jurisdictional guarantees and AI integration", score: 90 },
     ],
   },
   {
     id: "Q23", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "How mature is your government data governance?",
+    text: "How mature is your government's data governance capability?",
     options: [
-      { label: "No formal catalogue or quality management", score: 10 },
-      { label: "Some departments, no whole-of-government framework", score: 35 },
-      { label: "Whole-of-government strategy + cataloguing + access controls", score: 65 },
-      { label: "Mature: real-time cataloguing + quality + stewardship", score: 90 },
+      { label: "No formal data catalogue or quality management across government", score: 10 },
+      { label: "Some departments have data governance; no whole-of-government framework", score: 35 },
+      { label: "Whole-of-government data strategy with cataloguing and access controls", score: 65 },
+      { label: "Mature data governance: real-time cataloguing, quality management, stewardship roles", score: 90 },
     ],
   },
   {
     id: "Q24", dimIndex: 3, dimName: "Data Sovereignty",
-    text: "Are your AI models trained on domestically controlled data?",
+    text: "Are AI models deployed in your country trained on or fine-tuned with domestically controlled data?",
     options: [
-      { label: "Foreign models, no domestic fine-tuning", score: 10 },
-      { label: "Some fine-tuning, training data largely foreign", score: 35 },
-      { label: "Significant domestic training data for key use cases", score: 65 },
-      { label: "Sovereign AI training pipeline: domestic data + curation + training", score: 95 },
+      { label: "Models are primarily pre-trained foreign models with no domestic fine-tuning", score: 10 },
+      { label: "Some domestic fine-tuning but training data largely foreign-sourced", score: 35 },
+      { label: "Significant domestic training data under sovereign control for key use cases", score: 65 },
+      { label: "Sovereign AI training pipeline: domestic data collection, curation, and model training", score: 95 },
     ],
   },
 
   // DIMENSION 5 — DIRECTED INTELLIGENCE MATURITY
   {
     id: "Q25", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "Are your AI deployments explicitly tied to sovereign priorities?",
+    text: "To what extent are national AI deployments tied to explicit sovereign priorities?",
     options: [
-      { label: "Opportunistic, no link to national strategy", score: 10 },
-      { label: "Some reference to priorities, mostly ad hoc", score: 35 },
-      { label: "Systematically mapped to sovereign priority areas", score: 65 },
-      { label: "Mission-first: sovereign priorities drive technology selection", score: 90 },
+      { label: "AI deployments are opportunistic with no link to national strategy", score: 10 },
+      { label: "Some AI projects reference national priorities but most are ad hoc", score: 35 },
+      { label: "AI deployments are systematically mapped to sovereign priority areas", score: 65 },
+      { label: "Mission-first AI: sovereign priorities drive technology selection, not the reverse", score: 90 },
     ],
   },
   {
     id: "Q26", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "What percentage of AI initiatives have moved beyond pilot to production?",
+    text: "What percentage of your national AI initiatives have progressed beyond pilot stage to production deployment?",
     options: [
-      { label: "Less than 5% or unknown", score: 10 },
+      { label: "< 5% or unknown", score: 10 },
       { label: "5–15%", score: 30 },
       { label: "16–30%", score: 60 },
-      { label: "More than 30%", score: 90 },
+      { label: "> 30%", score: 90 },
     ],
   },
   {
     id: "Q27", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "How effective is cross-departmental AI coordination?",
+    text: "How effective is cross-departmental AI coordination in your government?",
     options: [
-      { label: "No cross-departmental coordination", score: 5 },
-      { label: "Informal coordination only", score: 30 },
-      { label: "Formal body with mandate but limited authority", score: 55 },
-      { label: "Systematic coordination with shared infrastructure + budgets", score: 90 },
+      { label: "No cross-departmental AI coordination exists", score: 5 },
+      { label: "Informal coordination (working groups, shared Slack channels)", score: 30 },
+      { label: "Formal coordination body with published mandate but limited authority", score: 55 },
+      { label: "Systematic cross-government AI coordination with shared infrastructure and budgets", score: 90 },
     ],
   },
   {
     id: "Q28", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "How rigorously are outcomes attributed to AI deployments?",
+    text: "Can you attribute specific, documented outcomes to your AI deployments?",
     options: [
-      { label: "No formal outcome measurement", score: 5 },
-      { label: "Anecdotal outcomes, not systematically measured", score: 25 },
-      { label: "Some deployments have documented measured outcomes", score: 55 },
-      { label: "Systematic attribution: all production AI systems measured", score: 90 },
+      { label: "No formal outcome measurement for AI deployments", score: 5 },
+      { label: "Anecdotal outcomes reported but not systematically measured", score: 25 },
+      { label: "Some AI deployments have documented, measured outcomes", score: 55 },
+      { label: "Systematic outcome attribution: all production AI systems have documented, measured impact", score: 90 },
     ],
   },
   {
     id: "Q29", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "What human-agent decision governance framework exists?",
+    text: "Does your government have defined human-agent decision ratios and override mechanisms?",
     options: [
-      { label: "No human-agent governance framework", score: 5 },
-      { label: "General AI ethics principles, no operational rules", score: 25 },
-      { label: "Human-agent policies defined for some departments", score: 55 },
-      { label: "Comprehensive framework: ratios + override + accountability per dept", score: 90 },
+      { label: "No human-agent governance framework exists", score: 5 },
+      { label: "General AI ethics principles but no operational human-agent rules", score: 25 },
+      { label: "Human-agent decision policies defined for some departments", score: 55 },
+      { label: "Comprehensive framework: human-agent ratios, override mechanisms, and accountability per department", score: 90 },
     ],
   },
   {
     id: "Q30", dimIndex: 4, dimName: "Directed Intelligence Maturity",
-    text: "How durable are your AI programme institutions across leadership transitions?",
+    text: "Have your AI programmes survived at least one leadership change, budget cycle, or political transition?",
     options: [
-      { label: "Programmes too new to have faced transition", score: 20 },
-      { label: "Programmes disrupted by leadership / budget changes", score: 30 },
-      { label: "Core programmes survived one transition with continuity", score: 60 },
-      { label: "Survived multiple transitions with documented continuity", score: 90 },
+      { label: "AI programmes are too new to have faced a transition", score: 20 },
+      { label: "AI programmes exist but have been disrupted by leadership or budget changes", score: 30 },
+      { label: "Core AI programmes survived one transition with some continuity", score: 60 },
+      { label: "AI programmes have institutional durability: survived multiple transitions with documented continuity", score: 90 },
     ],
   },
 ];
@@ -596,11 +596,11 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
 }
 
 // ── Main Quiz Component ───────────────────────────────────────────────────────
-export default function SAPIQuiz() {
+export default function SAPIQuiz({ appState, setCurrentPage }) {
   const navigate = useNavigate();
   
-  // For demo purposes, using mock data
-  const dimIndex = 0;
+  // Get current dimension from props or default to 0
+  const dimIndex = appState?.currentDimension ?? 0;
   const dimQuestions = getDimQuestions(dimIndex);
   const [qIndex, setQIndex] = useState(0);
   const [selectedScore, setSelectedScore] = useState(null);
@@ -634,9 +634,20 @@ export default function SAPIQuiz() {
     if (!isLastInDim) {
       setQIndex(qIndex + 1);
       setSelectedScore(null); // Reset selection for next question
+    } else if (!isLastDimension) {
+      // Advance to next dimension intro
+      if (setCurrentPage) {
+        setCurrentPage('dimIntro');
+      } else {
+        navigate('/dimintro');
+      }
     } else {
-      // For demo purposes, navigate to calculating when dimension is complete
-      navigate('/calculating');
+      // Last question of last dimension - go to calculating
+      if (setCurrentPage) {
+        setCurrentPage('calculating');
+      } else {
+        navigate('/calculating');
+      }
     }
   }
 

@@ -200,27 +200,33 @@ function DimGlyph({ number }) {
 }
 
 // ── Main Component ─────────────────────────────────────────────────────────────
-export default function SAPIDimIntro() {
+export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
   const navigate = useNavigate();
 
   const [ctaHover,  setCtaHover]  = useState(false);
   const [backHover, setBackHover] = useState(false);
 
-  // For demo purposes, using mock data
-  const currentIndex = 0;
+  // Get dimension data based on currentIndex prop
   const dim = DIMENSION_DATA[currentIndex] || DIMENSION_DATA[0];
   const isFirst = currentIndex === 0;
 
   function handleBegin() {
-    navigate('/quiz');
+    if (onBegin) {
+      onBegin();
+    } else {
+      navigate('/quiz');
+    }
   }
 
   function handleBack() {
-    if (currentIndex === 0) {
-      navigate('/briefing');
+    if (onBack) {
+      onBack();
     } else {
-      // For demo, go back to briefing
-      navigate('/briefing');
+      if (currentIndex === 0) {
+        navigate('/briefing');
+      } else {
+        navigate('/briefing');
+      }
     }
   }
 
