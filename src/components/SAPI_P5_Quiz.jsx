@@ -659,6 +659,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   const [selectedScore, setSelectedScore] = useState(null);
   const [nextHover, setNextHover]   = useState(false);
   const [backHover, setBackHover]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   
   // Local ref to accumulate all answers across dimensions
   const answersRef = useRef(appState?.answers || {});
@@ -736,10 +737,13 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
     } else {
       // Last question of last dimension - submit and go to calculating
       if (setCurrentPage) {
+        // Show loader while API call is in progress
+        setSubmitting(true);
         // Get all answers from local ref (guaranteed to be up-to-date)
         const allAnswers = answersRef.current;
         console.log('Submitting all answers:', Object.keys(allAnswers).length, allAnswers);
         await setCurrentPage('calculating', allAnswers);
+        // Navigation will happen, no need to setSubmitting(false)
       } else {
         navigate('/calculating');
       }
@@ -842,6 +846,32 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       display:     "flex",
       flexDirection: "column",
     }}>
+
+      {/* Submitting loader overlay */}
+      {submitting && (
+        <div style={{
+          position:      "fixed",
+          inset:         0,
+          background:    "rgba(6,3,14,0.85)",
+          backdropFilter: "blur(4px)",
+          display:       "flex",
+          flexDirection: "column",
+          alignItems:    "center",
+          justifyContent: "center",
+          zIndex:        9999,
+        }}>
+          <SAPIGlobe size={64} />
+          <div style={{
+            fontFamily:    "system-ui, sans-serif",
+            fontSize:      14,
+            color:         C.paleGold,
+            letterSpacing: "0.1em",
+            marginTop:     24,
+          }}>
+            Submitting assessment…
+          </div>
+        </div>
+      )}
 
       {/* ── Header ── */}
       <header style={{
