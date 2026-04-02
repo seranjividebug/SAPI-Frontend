@@ -53,6 +53,7 @@ const DIMENSIONS = [
 // ── Full Intervention Library ─────────────────────────────────────────────────
 // Each dimension has LOW / MEDIUM / HIGH, each with 3 interventions.
 // Interventions are ordered: [0]=Quick Win (0–3m), [1]=Structural (3–12m), [2]=Strategic (12–18m)
+// eslint-disable-next-line no-unused-vars
 const LIBRARY = {
   "Compute Capacity": {
     LOW: [
@@ -305,6 +306,7 @@ function scoreTarget(score, band) {
   return "85+";
 }
 
+// eslint-disable-next-line no-unused-vars
 function dimMeta(key) {
   return DIMENSIONS.find(d => d.key === key) || { shortCode: "D?", color: C.muted };
 }
