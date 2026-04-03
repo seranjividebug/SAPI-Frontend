@@ -445,14 +445,6 @@ const DIMS = [
   {label:"📚 Interventions", full:"Intervention Library"},
 ];
 
-const NAV_ITEMS = [
-  {key:"dashboard",      label:"Dashboard",       glyph:"⊞"},
-  {key:"submissions",    label:"Submissions",      glyph:"≡"},
-  {key:"leads",          label:"Leads Pipeline",   glyph:"◈"},
-  {key:"questionEditor", label:"Question Editor",  glyph:"✎"},
-  {key:"userMgmt",       label:"Users & Settings", glyph:"⚙"},
-];
-
 // ============================================================
 // TOAST COMPONENT
 // ============================================================
@@ -520,77 +512,6 @@ function ConfirmDialog({msg, onConfirm, onCancel}) {
           <button onClick={onCancel} style={{padding:"8px 18px",background:"transparent",border:"0.5px solid #2A204A",borderRadius:6,color:"#9880B0",cursor:"pointer",fontSize:13}}>Cancel</button>
           <button onClick={onConfirm} style={{padding:"8px 18px",background:"#C03058",border:"none",borderRadius:6,color:"#FBF5E6",cursor:"pointer",fontSize:13}}>Delete</button>
         </div>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================
-// LOGIN PAGE
-// ============================================================
-function LoginPage({onLogin}) {
-  const [email,setEmail]=useState("");
-  const [pass,setPass]=useState("");
-  const [err,setErr]=useState("");
-  const attempt=()=>{
-    if(email==="admin@sapi.ai"&&pass==="SAPI2026admin") onLogin();
-    else setErr("Invalid credentials.");
-  };
-  const inp={width:"100%",padding:"10px 12px",background:"rgba(255,255,255,0.04)",border:"0.5px solid #2A204A",borderRadius:6,color:"#FBF5E6",fontSize:14,outline:"none",boxSizing:"border-box",fontFamily:"system-ui,sans-serif"};
-  return (
-    <div style={{minHeight:"100vh",background:"#06030E",display:"flex",alignItems:"center",justifyContent:"center"}}>
-      <div style={{width:380,background:"#0F0830",border:"0.5px solid #2A204A",borderRadius:12,padding:"2.5rem 2.25rem"}}>
-        <div style={{textAlign:"center",marginBottom:"2.25rem"}}>
-          <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",width:44,height:44,background:"#C9963A",borderRadius:8,marginBottom:14,fontSize:20,fontFamily:"Georgia,serif",color:"#06030E"}}>S</div>
-          <div style={{color:"#C9963A",fontSize:11,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:6,fontWeight:500}}>Sovereign AI Power Index</div>
-          <div style={{color:"#FBF5E6",fontSize:20,fontFamily:"Georgia,serif"}}>Admin Panel</div>
-        </div>
-        <div style={{marginBottom:14}}>
-          <label style={{display:"block",fontSize:11,color:"#9880B0",marginBottom:7,letterSpacing:"0.09em",textTransform:"uppercase"}}>Email</label>
-          <input type="email" value={email} placeholder="admin@sapi.ai" onChange={e=>{setEmail(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&attempt()} style={inp}/>
-        </div>
-        <div style={{marginBottom:err?12:20}}>
-          <label style={{display:"block",fontSize:11,color:"#9880B0",marginBottom:7,letterSpacing:"0.09em",textTransform:"uppercase"}}>Password</label>
-          <input type="password" value={pass} placeholder="••••••••" onChange={e=>{setPass(e.target.value);setErr("");}} onKeyDown={e=>e.key==="Enter"&&attempt()} style={inp}/>
-        </div>
-        {err&&<div style={{color:"#C03058",fontSize:12,marginBottom:14,padding:"8px 10px",background:"rgba(192,48,88,0.1)",borderRadius:5,border:"0.5px solid rgba(192,48,88,0.3)"}}>{err}</div>}
-        <button onClick={attempt} style={{width:"100%",padding:"11px 0",background:"#C9963A",border:"none",borderRadius:6,color:"#06030E",fontSize:14,fontWeight:500,cursor:"pointer"}}>Sign In</button>
-        <div style={{textAlign:"center",marginTop:18,fontSize:11,color:"#2A204A"}}>Restricted access — authorised personnel only</div>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================
-// SIDEBAR
-// ============================================================
-function Sidebar({adminPage, setAdminPage, onSignOut}) {
-  return (
-    <div style={{width:220,flexShrink:0,background:"#0F0830",display:"flex",flexDirection:"column",height:"100%",borderRight:"0.5px solid #1E1650"}}>
-      <div style={{padding:"18px 16px 16px",borderBottom:"0.5px solid #1E1650"}}>
-        <div style={{display:"flex",alignItems:"center",gap:9}}>
-          <div style={{width:28,height:28,background:"#C9963A",borderRadius:5,display:"flex",alignItems:"center",justifyContent:"center",color:"#06030E",fontFamily:"Georgia,serif",fontSize:16,flexShrink:0}}>S</div>
-          <div>
-            <div style={{color:"#FBF5E6",fontSize:13,fontWeight:500}}>SAPI</div>
-            <div style={{color:"#9880B0",fontSize:9.5,letterSpacing:"0.09em",textTransform:"uppercase"}}>Admin Panel</div>
-          </div>
-        </div>
-      </div>
-      <nav style={{flex:1,paddingTop:8}}>
-        {NAV_ITEMS.map(item=>{
-          const active=adminPage===item.key;
-          return (
-            <button key={item.key} onClick={()=>setAdminPage(item.key)} style={{display:"flex",alignItems:"center",gap:9,width:"100%",padding:"9px 16px",background:active?"#1A1540":"transparent",border:"none",borderLeft:`3px solid ${active?"#C9963A":"transparent"}`,color:active?"#EDD98A":"#FBF5E6",fontSize:13,cursor:"pointer",textAlign:"left",fontFamily:"system-ui,sans-serif"}}
-              onMouseEnter={e=>{if(!active)e.currentTarget.style.background="rgba(255,255,255,0.04)";}}
-              onMouseLeave={e=>{if(!active)e.currentTarget.style.background="transparent";}}>
-              <span style={{opacity:active?1:0.55,width:16}}>{item.glyph}</span>{item.label}
-            </button>
-          );
-        })}
-      </nav>
-      <div style={{padding:"14px 16px",borderTop:"0.5px solid #1E1650"}}>
-        <div style={{color:"#6B5E80",fontSize:11,marginBottom:8}}>admin@sapi.ai</div>
-        <button onClick={onSignOut} style={{background:"transparent",border:"none",color:"#C9963A",fontSize:12,cursor:"pointer",padding:0}}>← Sign out</button>
       </div>
     </div>
   );
@@ -826,43 +747,10 @@ function QuestionEditorPage() {
 }
 
 // ============================================================
-// PLACEHOLDER PAGE
-// ============================================================
-function PlaceholderPage({label}) {
-  return (
-    <div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"100%",background:"#F7F4EF"}}>
-      <div style={{textAlign:"center"}}>
-        <div style={{fontSize:32,marginBottom:12,opacity:0.3}}>⊡</div>
-        <div style={{color:"#9880B0",fontSize:14,fontFamily:"system-ui,sans-serif"}}>{label} — available in full admin bundle</div>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================
 // MAIN COMPONENT
 // ============================================================
 function QuestionEditor() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminPage, setAdminPage] = useState("questionEditor");
-
-  if (!isAuthenticated) return <LoginPage onLogin={()=>setIsAuthenticated(true)}/>;
-
-  const renderPage = () => {
-    switch(adminPage) {
-      case "questionEditor": return <QuestionEditorPage/>;
-      default: return <PlaceholderPage label={adminPage}/>;
-    }
-  };
-
-  return (
-    <div style={{display:"flex",height:"100vh",overflow:"hidden"}}>
-      <Sidebar adminPage={adminPage} setAdminPage={setAdminPage} onSignOut={()=>setIsAuthenticated(false)}/>
-      <div style={{flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
-        {renderPage()}
-      </div>
-    </div>
-  );
+  return <QuestionEditorPage />;
 }
 
 export default QuestionEditor;

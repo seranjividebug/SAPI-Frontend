@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SAPI_A1_AdminDashboard from "./SAPI_A1_AdminDashboard";
 
 // ─── Demo seed data ──────────────────────────────────────────────────────────
 const DEMO_SUBMISSIONS = [
@@ -527,11 +529,11 @@ function AdminShell() {
 // ─── Root ──────────────────────────────────────────────────────────────────────
 export default function SAPIAdmin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [adminPage, setAdminPage] = useState('login');
+  const navigate = useNavigate();
 
   if (!isAuthenticated) {
-    return <LoginScreen onLogin={()=>{ setIsAuthenticated(true); setAdminPage('dashboard'); }}/>;
+    return <LoginScreen onLogin={() => { setIsAuthenticated(true); navigate('/admindashboard'); }} />;
   }
 
-  return <AdminShell/>;
+  return <SAPI_A1_AdminDashboard />;
 }

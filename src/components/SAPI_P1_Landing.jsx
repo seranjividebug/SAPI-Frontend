@@ -368,6 +368,31 @@ export default function SAPILanding({ onBegin }) {
             The Sovereign AI<br />Power Index
           </div>
           <div style={s.classification}>For Government & Sovereign Institutions</div>
+          <button
+            onClick={() => navigate('/admin')}
+            style={{
+              fontFamily: "system-ui, sans-serif",
+              fontSize: 10,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+              color: C.void,
+              background: C.gold,
+              border: `1px solid ${C.gold}`,
+              padding: "4px 12px",
+              cursor: "pointer",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#B8862A";
+              e.currentTarget.style.color = C.void;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = C.gold;
+              e.currentTarget.style.color = C.void;
+            }}
+          >
+            Admin
+          </button>
         </div>
       </header>
 

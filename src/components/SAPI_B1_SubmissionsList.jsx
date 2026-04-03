@@ -1,6 +1,30 @@
 import { useState, useMemo } from "react";
 
 // ============================================================
+// KPI CARD COMPONENT
+// ============================================================
+function KpiCard({ icon, value, label, subtext, color }) {
+  return (
+    <div style={{
+      background: '#FFFFFF', border: '0.5px solid #E0D8CC',
+      borderRadius: 8, padding: '16px 18px',
+      display: 'flex', alignItems: 'center', gap: 12,
+    }}>
+      <div style={{
+        width: 44, height: 44, borderRadius: 8,
+        background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        flexShrink: 0,
+      }}>{icon}</div>
+      <div>
+        <div style={{ fontSize: 24, fontWeight: 600, color: '#1A1A2E', fontFamily: 'Georgia, serif', lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: 12, fontWeight: 500, color: '#1A1A2E', marginTop: 2 }}>{label}</div>
+        <div style={{ fontSize: 11, color: '#9880B0', marginTop: 1 }}>{subtext}</div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
 // SEED DATA  (shared — define once in the top-level admin file)
 // ============================================================
 const DEMO_SUBMISSIONS = [
@@ -229,6 +253,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
 
   const totalCount = DEMO_SUBMISSIONS.length;
   const upgradeCount = DEMO_SUBMISSIONS.filter((s) => s.upgradeStatus === "requested").length;
+  const avgScore = (DEMO_SUBMISSIONS.reduce((s, r) => s + r.compositeScore, 0) / totalCount).toFixed(1);
 
   const hasActiveFilters =
     search || filterTier !== "All" || filterStage !== "All" ||
@@ -279,7 +304,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
     { key: "developmentStage", label: "Dev Stage",  sortable: true,  width: "100px" },
     { key: "compositeScore",   label: "Score",      sortable: true,  width: "72px"  },
     { key: "tier",             label: "Tier",       sortable: true,  width: "150px" },
-    { key: "leadStage",        label: "Lead Stage", sortable: true,  width: "120px" },
     { key: "completedAt",      label: "Date",       sortable: true,  width: "100px" },
     { key: "actions",          label: "Actions",    sortable: false, width: "152px" },
   ];
@@ -303,62 +327,67 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
       <Toast visible={toastVisible} />
 
       {/* ── Page header ─────────────────────────────────────── */}
-      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1.25rem" }}>
         <div>
-          <h1 style={{ fontSize: 22, fontWeight: 400, color: "#1A1A2E", margin: "0 0 4px", fontFamily: "Georgia, serif" }}>
-            All submissions
+          <h1 style={{ fontSize: 26, fontWeight: 600, color: "#1A1A2E", margin: "0 0 6px", fontFamily: "Georgia, serif" }}>
+            Submissions
           </h1>
-          <div style={{ fontSize: 12, color: "#9880B0" }}>
-            {totalCount} assessment{totalCount !== 1 ? "s" : ""} completed ·{" "}
-            <span style={{ color: "#C9963A" }}>{upgradeCount} upgrade request{upgradeCount !== 1 ? "s" : ""}</span>
+          <div style={{ fontSize: 13, color: "#6B6577" }}>
+            {totalCount} assessments completed ·{" "}
+            <span style={{ color: "#C9963A", fontWeight: 500 }}>{upgradeCount} upgrade requests</span>
           </div>
         </div>
         <button
           onClick={handleExport}
           style={{
-            padding: "7px 14px", fontSize: 12.5, borderRadius: 6,
-            background: "transparent", border: "0.5px solid #C9963A", color: "#C9963A",
+            padding: "8px 16px", fontSize: 13, borderRadius: 6,
+            background: "#C9963A", border: "none", color: "#FFFFFF",
             cursor: "pointer", fontFamily: "system-ui, sans-serif", whiteSpace: "nowrap",
             letterSpacing: "0.02em", fontWeight: 500,
+            display: "flex", alignItems: "center", gap: 6,
           }}
         >
-          ↓ Export CSV
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
         </button>
       </div>
 
       {/* ── Filter bar ──────────────────────────────────────── */}
       <div style={{
         background: "#FFFFFF", border: "0.5px solid #E0D8CC",
-        borderRadius: 8, padding: "14px 16px", marginBottom: "1.25rem",
+        borderRadius: 8, padding: "12px 16px", marginBottom: "1.25rem",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
 
           {/* Search */}
           <div style={{ position: "relative", flexShrink: 0 }}>
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-              style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
+              style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}>
               <circle cx="7" cy="7" r="4.5" stroke="#B0A8A0" strokeWidth="1.4" />
               <path d="M10.5 10.5L14 14" stroke="#B0A8A0" strokeWidth="1.4" strokeLinecap="round" />
             </svg>
             <input
               type="text"
               value={search}
-              placeholder="Search country, respondent, ministry…"
+              placeholder="Search country, respondent, ministry..."
               onChange={(e) => setSearch(e.target.value)}
               style={{
                 background: "#FFFFFF", border: `0.5px solid ${search ? "#C9963A" : "#E0D8CC"}`,
-                borderRadius: 6, padding: "8px 12px 8px 34px",
+                borderRadius: 6, padding: "9px 12px 9px 36px",
                 fontSize: 13, color: "#1A1A2E", fontFamily: "system-ui, sans-serif",
-                width: 280, outline: "none", transition: "border-color 0.15s",
+                width: 260, outline: "none", transition: "border-color 0.15s",
               }}
             />
           </div>
 
-          <div style={{ width: "0.5px", height: 24, background: "#E0D8CC", flexShrink: 0 }} />
-
           <FilterSelect
             value={filterTier}
             onChange={setFilterTier}
+            placeholder="All tiers"
             options={[
               { value: "All", label: "All tiers" },
               { value: "Sovereign AI Leader", label: "Sovereign AI Leader" },
@@ -372,6 +401,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
           <FilterSelect
             value={filterStage}
             onChange={setFilterStage}
+            placeholder="All dev stages"
             options={[
               { value: "All", label: "All dev stages" },
               { value: "Early", label: "Early" },
@@ -385,6 +415,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
           <FilterSelect
             value={filterUpgrade}
             onChange={setFilterUpgrade}
+            placeholder="All upgrade status"
             options={[
               { value: "All", label: "All upgrade status" },
               { value: "Requested", label: "Requested" },
@@ -392,38 +423,60 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
             ]}
           />
 
-          <FilterSelect
-            value={filterLead}
-            onChange={setFilterLead}
-            options={[
-              { value: "All", label: "All lead stages" },
-              { value: "New", label: "New" },
-              { value: "Contacted", label: "Contacted" },
-              { value: "Proposal Sent", label: "Proposal Sent" },
-              { value: "Won", label: "Won" },
-              { value: "Lost", label: "Lost" },
-            ]}
-          />
+          <div style={{ flex: 1 }} />
 
-          {hasActiveFilters && (
-            <>
-              <div style={{ width: "0.5px", height: 24, background: "#E0D8CC", flexShrink: 0 }} />
-              <button
-                onClick={clearFilters}
-                style={{
-                  background: "none", border: "none", color: "#C9963A",
-                  fontSize: 12, cursor: "pointer", padding: 0,
-                  fontFamily: "system-ui, sans-serif",
-                }}
-              >
-                ✕ Clear filters
-              </button>
-              <span style={{ fontSize: 11, color: "#9880B0", marginLeft: 2 }}>
-                {rows.length} of {totalCount} shown
-              </span>
-            </>
-          )}
+          <button
+            onClick={clearFilters}
+            style={{
+              background: "none", border: "none", color: "#6B6577",
+              fontSize: 13, cursor: "pointer", padding: 0,
+              fontFamily: "system-ui, sans-serif",
+              display: "flex", alignItems: "center", gap: 4,
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Reset Filters
+          </button>
         </div>
+
+        {/* Active filter pills */}
+        {hasActiveFilters && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12, paddingTop: 12, borderTop: "0.5px solid #F0EBE3" }}>
+            {filterTier !== "All" && (
+              <span style={{
+                background: "#F8F9FA", border: "0.5px solid #E0D8CC", borderRadius: 4,
+                padding: "4px 10px", fontSize: 12, color: "#1A1A2E", display: "flex", alignItems: "center", gap: 6,
+              }}>
+                Tier: {filterTier}
+                <button onClick={() => setFilterTier("All")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#6B6577", fontSize: 14 }}>×</button>
+              </span>
+            )}
+            {filterStage !== "All" && (
+              <span style={{
+                background: "#F8F9FA", border: "0.5px solid #E0D8CC", borderRadius: 4,
+                padding: "4px 10px", fontSize: 12, color: "#1A1A2E", display: "flex", alignItems: "center", gap: 6,
+              }}>
+                Dev Stage: {filterStage}
+                <button onClick={() => setFilterStage("All")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#6B6577", fontSize: 14 }}>×</button>
+              </span>
+            )}
+            {filterLead !== "All" && (
+              <span style={{
+                background: "#F8F9FA", border: "0.5px solid #E0D8CC", borderRadius: 4,
+                padding: "4px 10px", fontSize: 12, color: "#1A1A2E", display: "flex", alignItems: "center", gap: 6,
+              }}>
+                Lead: {filterLead}
+                <button onClick={() => setFilterLead("All")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#6B6577", fontSize: 14 }}>×</button>
+              </span>
+            )}
+            <span style={{ fontSize: 12, color: "#9880B0", marginLeft: "auto" }}>
+              Showing {rows.length} of {totalCount}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ── Table ───────────────────────────────────────────── */}
@@ -517,11 +570,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                       <Pill label={row.tier} color={tc} />
                     </td>
 
-                    {/* Lead Stage */}
-                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
-                      <Pill label={row.leadStage} color={sc} />
-                    </td>
-
                     {/* Date */}
                     <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
                       <span style={{ fontSize: 12.5, color: "#6B6577" }}>{fmtDate(row.completedAt)}</span>
@@ -546,24 +594,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                         >
                           View
                         </button>
-                        {row.upgradeStatus === "requested" && (
-                          <button
-                            className="btn-lead"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedLead(row);
-                              setAdminPage("leadDetail");
-                              setSelectedRow(row.id);
-                            }}
-                            style={{
-                              padding: "4px 10px", fontSize: 12, borderRadius: 4,
-                              background: "transparent", border: "0.5px solid #4A7AE0", color: "#4A7AE0",
-                              cursor: "pointer", fontFamily: "system-ui, sans-serif", whiteSpace: "nowrap",
-                            }}
-                          >
-                            Lead ↗
-                          </button>
-                        )}
                       </div>
                     </td>
                   </tr>
@@ -576,14 +606,36 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
         {/* Table footer */}
         {rows.length > 0 && (
           <div style={{
-            padding: "11px 16px", borderTop: "0.5px solid #E8E2DA",
+            padding: "12px 16px", borderTop: "0.5px solid #E8E2DA",
             background: "#FAFAF8", display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            <span style={{ fontSize: 11, color: "#9880B0" }}>
-              {rows.length} submission{rows.length !== 1 ? "s" : ""}
+            <span style={{ fontSize: 12, color: "#6B6577" }}>
+              Showing {rows.length} submissions
             </span>
-            <span style={{ fontSize: 11, color: "#B8B0A8" }}>
-              Prototype — all data is seeded
+            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <button style={{
+                padding: "6px 12px", background: "#FFFFFF", border: "0.5px solid #E0D8CC",
+                borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#6B6577",
+              }}>‹</button>
+              <button style={{
+                padding: "6px 12px", background: "#1A1A2E", border: "none",
+                borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#FFFFFF",
+              }}>1</button>
+              <button style={{
+                padding: "6px 12px", background: "#FFFFFF", border: "0.5px solid #E0D8CC",
+                borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#6B6577",
+              }}>2</button>
+              <button style={{
+                padding: "6px 12px", background: "#FFFFFF", border: "0.5px solid #E0D8CC",
+                borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#6B6577",
+              }}>3</button>
+              <button style={{
+                padding: "6px 12px", background: "#FFFFFF", border: "0.5px solid #E0D8CC",
+                borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#6B6577",
+              }}>Next</button>
+            </div>
+            <span style={{ fontSize: 12, color: "#9880B0" }}>
+              Prototype data
             </span>
           </div>
         )}

@@ -10,7 +10,7 @@ import SAPIResults from './components/SAPI_P7_Results';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
-import SAPIAdmin from './components/SAPI_A1_AdminDashboard';
+import SAPIAdmin from './components/SAPI_Admin_E3';
 import SubmissionsList from './components/SAPI_B1_SubmissionsList';
 import SubmissionDetail from './components/SAPI_B2_SubmissionDetail';
 import LeadsPipeline from './components/SAPI_C1_LeadsPipeline';
@@ -151,6 +151,7 @@ function App() {
           <Route path="/roadmap" element={<SAPIRoadmap />} />
           <Route path="/admin" element={<SAPIAdmin />} />
           <Route path="/admindashboard" element={<SAPIAdmin />} />
+          <Route path="/dashboard" element={<SAPIAdmin />} />
           <Route path="/submissionlist" element={<SubmissionsList />} />
           <Route path="/submissiondetail" element={<SubmissionDetail />} />
           <Route path="/leadspipeline" element={<LeadsPipeline />} />
