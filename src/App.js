@@ -10,6 +10,13 @@ import SAPIResults from './components/SAPI_P7_Results';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
+import SAPIAdmin from './components/SAPI_A1_AdminDashboard';
+import SubmissionsList from './components/SAPI_B1_SubmissionsList';
+import SubmissionDetail from './components/SAPI_B2_SubmissionDetail';
+import LeadsPipeline from './components/SAPI_C1_LeadsPipeline';
+import LeadDetail from './components/SAPI_C2_LeadDetail';
+import LeadDetailCombined from './components/SAPI_C2_B2_Combined';
+import QuestionEditor from './components/SAPI_E1_QuestionEditor';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -142,6 +149,14 @@ function App() {
           <Route path="/scorecard" element={<SAPIScorecard />} />
           <Route path="/peercomparison" element={<SAPIPeerComparison />} />
           <Route path="/roadmap" element={<SAPIRoadmap />} />
+          <Route path="/admin" element={<SAPIAdmin />} />
+          <Route path="/admindashboard" element={<SAPIAdmin />} />
+          <Route path="/submissionlist" element={<SubmissionsList />} />
+          <Route path="/submissiondetail" element={<SubmissionDetail />} />
+          <Route path="/leadspipeline" element={<LeadsPipeline />} />
+          <Route path="/leaddetail" element={<LeadDetail />} />
+          <Route path="/leaddetailcombined" element={<LeadDetailCombined />} />
+          <Route path="/questioneditor" element={<QuestionEditor />} />
         </Routes>
       </div>
     </Router>
