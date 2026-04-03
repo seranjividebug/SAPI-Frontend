@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { submitAssessment } from "../services/assessmentService";
-import { PageLayout, PageHeader, PageFooter } from "../pages/common";
+import { PageLayout } from "../pages/common";
 
 const DIMENSIONS = [
   { name: "Compute Capacity",               shortCode: "D1", weight: 0.175, ids: ["Q1","Q2","Q3","Q4","Q5"] },
