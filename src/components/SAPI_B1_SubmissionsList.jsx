@@ -93,14 +93,6 @@ const tierColor = (tier) => ({
   "Pre-conditions Unmet": "#C03058",
 }[tier] || "#9880B0");
 
-const stageColor = (stage) => ({
-  "New": "#9880B0",
-  "Contacted": "#4A7AE0",
-  "Proposal Sent": "#D4A830",
-  "Won": "#28A868",
-  "Lost": "#C03058",
-}[stage] || "#9880B0");
-
 const scoreColor = (s) => s >= 70 ? "#4A7AE0" : s >= 55 ? "#D4A830" : s >= 40 ? "#C9963A" : "#C03058";
 
 const fmtDate = (iso) =>

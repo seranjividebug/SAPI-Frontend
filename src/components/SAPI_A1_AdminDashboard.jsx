@@ -165,14 +165,6 @@ const tierColor = (tier) => ({
   'Pre-conditions Unmet': '#C03058'
 }[tier] || '#9880B0');
 
-const stageColor = (stage) => ({
-  'New': '#9880B0',
-  'Contacted': '#4A7AE0',
-  'Proposal Sent': '#F0C050',
-  'Won': '#28A868',
-  'Lost': '#C03058'
-}[stage] || '#9880B0');
-
 const shortCountry = (name) =>
   name
     .replace('Republic of ', '')
@@ -182,34 +174,6 @@ const shortCountry = (name) =>
 
 const fmtDate = (iso) =>
   new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-
-const fmtShortDate = (iso) =>
-  new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-
-// ============================================================
-// METRIC CARD
-// ============================================================
-function MetricCard({ label, value, color, subtext }) {
-  return (
-    <div style={{
-      background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-      borderRadius: 8, padding: '1.25rem 1.25rem 1rem',
-      flex: 1, minWidth: 0,
-    }}>
-      <div style={{
-        fontSize: 32, fontFamily: 'Georgia, serif', fontWeight: 400,
-        color, lineHeight: 1, marginBottom: 6,
-      }}>{value}</div>
-      <div style={{
-        fontSize: 11, color: '#6B6577', fontWeight: 500,
-        textTransform: 'uppercase', letterSpacing: '0.07em', lineHeight: 1.4,
-      }}>{label}</div>
-      {subtext && (
-        <div style={{ fontSize: 11, color: '#9880B0', marginTop: 3 }}>{subtext}</div>
-      )}
-    </div>
-  );
-}
 
 
 
