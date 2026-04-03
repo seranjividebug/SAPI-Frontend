@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { key: 'dashboard',      label: 'Dashboard',        glyph: '⊞' },
@@ -9,7 +8,6 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ adminPage, setAdminPage, onSignOut }) {
-  const navigate = useNavigate();
   return (
     <div style={{
       width: 220, flexShrink: 0,

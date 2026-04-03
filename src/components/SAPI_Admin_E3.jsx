@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SAPI_A1_AdminDashboard from "./SAPI_A1_AdminDashboard";
+import SapiA1AdminDashboard from "./SAPI_A1_AdminDashboard";
 
 // ─── Demo seed data ──────────────────────────────────────────────────────────
 const DEMO_SUBMISSIONS = [
@@ -313,7 +313,7 @@ function SubmissionsPage() {
 
 // ─── User Management Screen ───────────────────────────────────────────────────
 function UserMgmtPage({ showToast }) {
-  const [users, setUsers] = useState(DEMO_USERS);
+  const [users] = useState(DEMO_USERS);
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [invite, setInvite] = useState({ name:'', email:'', role:'Viewer' });
 
@@ -449,82 +449,6 @@ function PlaceholderPage({ label }) {
   );
 }
 
-// ─── Shell (Sidebar + Topbar + Router) ───────────────────────────────────────
-function AdminShell() {
-  const [adminPage, setAdminPage] = useState('dashboard');
-  const [toast, setToast] = useState(null);
-
-  const showToast = (msg) => {
-    setToast(msg);
-    setTimeout(()=>setToast(null), 3000);
-  };
-
-  const nav = [
-    { key:'dashboard', label:'Dashboard', icon:'◈' },
-    { key:'submissions', label:'Submissions', icon:'☰' },
-    { key:'leads', label:'Leads Pipeline', icon:'◎' },
-    { key:'questionEditor', label:'Question Editor', icon:'✎' },
-    { key:'userMgmt', label:'Users & Settings', icon:'◉' },
-  ];
-
-  const pageLabels = { leads:'Leads Pipeline', questionEditor:'Question Editor' };
-
-  const renderPage = () => {
-    if (adminPage==='dashboard') return <DashboardPage/>;
-    if (adminPage==='submissions') return <SubmissionsPage/>;
-    if (adminPage==='userMgmt') return <UserMgmtPage showToast={showToast}/>;
-    return <PlaceholderPage label={pageLabels[adminPage]||adminPage}/>;
-  };
-
-  const activeLabel = nav.find(n=>n.key===adminPage)?.label || '';
-
-  return (
-    <div style={S.appWrap}>
-      {/* Sidebar */}
-      <aside style={S.sidebar}>
-        <div style={S.sidebarTop}>
-          <div style={S.sidebarLogo}>
-            <GlobeIcon size={28}/>
-            <div>
-              <div style={S.sidebarWordmark}>SAPI</div>
-              <div style={S.sidebarSubmark}>Admin Panel</div>
-            </div>
-          </div>
-        </div>
-
-        <nav style={{ flex:1, overflowY:'auto' }}>
-          <ul style={S.navList}>
-            {nav.map(n=>(
-              <li key={n.key} style={S.navItem(adminPage===n.key)} onClick={()=>setAdminPage(n.key)}>
-                <span style={{ fontSize:14, opacity:0.8 }}>{n.icon}</span>
-                {n.label}
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div style={S.sidebarBottom}>
-          <div style={S.sidebarEmail}>admin@sapi.ai</div>
-          <button style={S.signOutBtn} onClick={()=>{}}>Sign out</button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <div style={S.main}>
-        {/* Topbar */}
-        <div style={S.topbar}>
-          <span style={S.topbarTitle}>{activeLabel}</span>
-          <span style={S.topbarBadge}>Prototype — Admin Portal v1</span>
-        </div>
-
-        {renderPage()}
-      </div>
-
-      {/* Toast */}
-      {toast && <div style={S.toast}>{toast}</div>}
-    </div>
-  );
-}
 
 // ─── Root ──────────────────────────────────────────────────────────────────────
 export default function SAPIAdmin() {
@@ -535,5 +459,5 @@ export default function SAPIAdmin() {
     return <LoginScreen onLogin={() => { setIsAuthenticated(true); navigate('/admindashboard'); }} />;
   }
 
-  return <SAPI_A1_AdminDashboard />;
+  return <SapiA1AdminDashboard />;
 }

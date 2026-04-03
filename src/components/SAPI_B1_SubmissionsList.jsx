@@ -1,30 +1,6 @@
 import { useState, useMemo } from "react";
 
 // ============================================================
-// KPI CARD COMPONENT
-// ============================================================
-function KpiCard({ icon, value, label, subtext, color }) {
-  return (
-    <div style={{
-      background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-      borderRadius: 8, padding: '16px 18px',
-      display: 'flex', alignItems: 'center', gap: 12,
-    }}>
-      <div style={{
-        width: 44, height: 44, borderRadius: 8,
-        background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        flexShrink: 0,
-      }}>{icon}</div>
-      <div>
-        <div style={{ fontSize: 24, fontWeight: 600, color: '#1A1A2E', fontFamily: 'Georgia, serif', lineHeight: 1 }}>{value}</div>
-        <div style={{ fontSize: 12, fontWeight: 500, color: '#1A1A2E', marginTop: 2 }}>{label}</div>
-        <div style={{ fontSize: 11, color: '#9880B0', marginTop: 1 }}>{subtext}</div>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================
 // SEED DATA  (shared — define once in the top-level admin file)
 // ============================================================
 const DEMO_SUBMISSIONS = [
@@ -253,7 +229,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
 
   const totalCount = DEMO_SUBMISSIONS.length;
   const upgradeCount = DEMO_SUBMISSIONS.filter((s) => s.upgradeStatus === "requested").length;
-  const avgScore = (DEMO_SUBMISSIONS.reduce((s, r) => s + r.compositeScore, 0) / totalCount).toFixed(1);
 
   const hasActiveFilters =
     search || filterTier !== "All" || filterStage !== "All" ||
@@ -515,7 +490,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
               ) : rows.map((row) => {
                 const isSelected = selectedRow === row.id;
                 const tc = tierColor(row.tier);
-                const sc = stageColor(row.leadStage);
 
                 return (
                   <tr
