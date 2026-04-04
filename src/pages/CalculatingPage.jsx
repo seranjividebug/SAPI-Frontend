@@ -115,12 +115,12 @@ export default function CalculatingPage() {
         }));
 
         if (answerArray.length === 0) {
-          console.log("No answers provided, using demo data");
           return;
         }
 
         const userProfile = JSON.parse(localStorage.getItem('sapi_user_profile') || '{}');
-        const response = await submitAssessment(userProfile, answerArray);
+        const profileId = userProfile.profile_id || userProfile.id;
+        const response = await submitAssessment(profileId, answerArray);
         if (response.success) {
           setAssessmentResults(response.data);
           if (response.data.assessment_id) {

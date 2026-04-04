@@ -388,7 +388,7 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
       {/* Dimension progress */}
       <div>
         <div className="flex justify-between items-center mb-1">
-          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70">
+          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70 ml-3">
             Dimension Progress
           </span>
           <span className="font-sans text-[10px] tracking-wide text-sapi-gold">
@@ -408,7 +408,7 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
       {/* Overall progress */}
       <div>
         <div className="flex justify-between items-center mb-1">
-          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70">
+          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70 pl-3">
             Overall Assessment
           </span>
           <span className="font-sans text-[10px] tracking-wide text-sapi-muted">
@@ -460,7 +460,7 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
       onClick={onSelect}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className={`relative flex items-start gap-3.5 py-3.5 px-4.5 rounded-sm cursor-pointer select-none transition-all duration-150 ${
+      className={`relative flex items-start gap-3.5 py-3.5 px-5 rounded-sm cursor-pointer select-none transition-all duration-150 ${
         isSelected
           ? 'bg-sapi-gold/9 border border-sapi-gold/45 border-l-[3px] border-l-sapi-gold'
           : hovered
@@ -505,12 +505,12 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
 export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   const navigate = useNavigate();
   
-  // State for questions from API
-  const [allQuestions, setAllQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // State for questions - start with hardcoded for immediate display, then merge API data
+  const [allQuestions, setAllQuestions] = useState(ALL_QUESTIONS.slice(0, 3)); // Start with first 3
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
-  // Fetch questions from API on mount
+  // Fetch questions from API in the background
   useEffect(() => {
     const loadQuestions = async () => {
       try {
@@ -519,20 +519,28 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
         if (response.success && response.data) {
           // Transform API data to match component structure
           const transformed = transformApiQuestions(response.data);
-          setAllQuestions(transformed);
+          
+          // Merge with hardcoded questions - API data takes precedence
+          const mergedQuestions = ALL_QUESTIONS.map((q, idx) => {
+            const apiQ = transformed.find(tq => tq.id === q.id);
+            return apiQ || q;
+          });
+          setAllQuestions(mergedQuestions);
         } else {
-          setError("Failed to load questions");
+          // Keep using hardcoded questions
+          setAllQuestions(ALL_QUESTIONS);
         }
       } catch (err) {
-        console.error("Error loading questions:", err);
+        console.error('Error loading questions:', err);
         setError(err.message);
-        // Fallback to hardcoded questions if API fails
+        // Fallback to all hardcoded questions
         setAllQuestions(ALL_QUESTIONS);
       } finally {
         setLoading(false);
       }
     };
     
+    // Load immediately but in background
     loadQuestions();
   }, []);
   
@@ -554,7 +562,6 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
     if (storedAnswers) {
       try {
         answersRef.current = JSON.parse(storedAnswers);
-        console.log('Loaded persisted answers:', Object.keys(answersRef.current).length);
       } catch (e) {
         console.error('Failed to parse stored answers:', e);
       }
@@ -579,6 +586,18 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   // reset qIndex when dimension changes
   // (handled by setCurrentPage flow; component remounts)
 
+  // Load previously selected answer when question changes
+  useEffect(() => {
+    if (currentQuestion) {
+      const savedAnswer = answersRef.current[currentQuestion.id];
+      if (savedAnswer) {
+        setSelectedScore(savedAnswer.score);
+      } else {
+        setSelectedScore(null);
+      }
+    }
+  }, [qIndex, currentQuestion]);
+
   function handleSelect(score, optionIndex) {
     setSelectedScore(score);
     // Store answer with question ID, selected option letter, and score
@@ -594,7 +613,6 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
     };
     // Save to localStorage and update state
     saveAnswer(newAnswer);
-    console.log("Selected:", { questionId: currentQ.id, option: optionLetter, score, totalAnswers: Object.keys(answersRef.current).length });
   }
 
   function handleBack() {
@@ -625,7 +643,6 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
         setSubmitting(true);
         // Get all answers from local ref (guaranteed to be up-to-date)
         const allAnswers = answersRef.current;
-        console.log('Submitting all answers:', Object.keys(allAnswers).length, allAnswers);
         await setCurrentPage('calculating', allAnswers);
         // Navigation will happen, no need to setSubmitting(false)
       } else {
@@ -647,7 +664,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       : `Continue to ${DIMENSIONS[dimIndex + 1]?.name}`;
 
   // Show loading state while fetching questions
-  if (loading) {
+  if (loading && allQuestions.length === 0) {
     return (
       <PageLayout>
         <PageHeader showAdmin={false} />
@@ -723,17 +740,17 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       <main className="flex-1 max-w-[800px] w-full mx-auto px-6 py-8 pb-16">
 
         {/* ── Progress & context bar ── */}
-        <div className="bg-sapi-navy border border-sapi-bronze rounded-sm p-4.5 mb-7">
+        <div className="bg-sapi-navy border border-sapi-bronze rounded-sm p-4.5 mb-7 mt-2 px-5">
           {/* Dimension label row */}
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <span className="font-serif text-sm text-sapi-gold tracking-wide">{dim.shortCode}</span>
+              <span className="font-serif text-sm text-sapi-gold tracking-wide mt-2">{dim.shortCode}</span>
               <div className="w-px h-3 bg-sapi-gold/30" />
-              <span className="font-sans text-[11px] tracking-wide uppercase text-sapi-parchment/85">
+              <span className="font-sans text-[11px] tracking-wide uppercase text-sapi-parchment/85 ml-1 mt-2">
                 {dim.name}
               </span>
             </div>
-            <span className="font-sans text-[10px] tracking-wide text-sapi-muted/65">
+            <span className="font-sans text-[10px] tracking-wide text-sapi-muted/65 mt-2">
               Dimension {dimIndex + 1} of 5 · Question {qIndex + 1} of {dimQuestions.length}
             </span>
           </div>
@@ -855,7 +872,6 @@ export function SAPIQuizDemo() {
   const [currentPage, setCurrentPage] = useState("quiz");
 
   function mockSetPage(page) {
-    console.log("→ navigate to:", page, "appState:", appState);
     // In demo, if we navigate to dimIntro after last dim, show a complete message
     if (page === "calculating") {
       alert(

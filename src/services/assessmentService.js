@@ -2,17 +2,17 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 /**
  * Submit assessment answers and get scores
- * POST /api/assessment/submit
- * @param {Object} userProfile - User profile details { country, respondent_name, title, ministry_or_department, contact_email, development_stage }
+ * POST /assessment/submit
+ * @param {string} profileId - Profile UUID
  * @param {Array} answers - Array of { question_id, selected_option }
  */
-export async function submitAssessment(userProfile, answers) {
-  const response = await fetch(`${API_BASE_URL}/api/assessment/submit`, {
+export async function submitAssessment(profileId, answers) {
+  const response = await fetch(`${API_BASE_URL}/assessment/submit`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userProfile, answers }),
+    body: JSON.stringify({ profile_id: profileId, answers }),
   });
   
   if (!response.ok) {
@@ -29,7 +29,7 @@ export async function submitAssessment(userProfile, answers) {
  * @param {string} assessmentId - UUID of the assessment
  */
 export async function getAssessmentResults(assessmentId) {
-  const response = await fetch(`${API_BASE_URL}/api/assessment/${assessmentId}/results`);
+  const response = await fetch(`${API_BASE_URL}/assessment/${assessmentId}/results`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch results: ${response.statusText}`);

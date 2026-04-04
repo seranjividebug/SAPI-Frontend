@@ -9,7 +9,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
  * Example: 82.5
  */
 export async function generateRoadmap(dimensionScores, sapiScore) {
-  const response = await fetch(`${API_BASE_URL}/api/roadmap/generate`, {
+  const response = await fetch(`${API_BASE_URL}/roadmap/generate`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

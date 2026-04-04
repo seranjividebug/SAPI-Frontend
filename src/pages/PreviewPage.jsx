@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { saveProfile } from "../services/profileService";
 import { PageLayout, PageHeader, PageFooter, SAPIGlobe } from "./common";
 
 // ── SVG Flag Components ──────────────────────────────────────────────────────
@@ -111,6 +112,7 @@ const TEXT_FIELDS = [
 
 export default function PreviewPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [form, setForm] = useState({ country:"", name:"", title:"", ministry:"", email:"", developmentStage:"" });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -121,18 +123,44 @@ export default function PreviewPage() {
   const [focusedField, setFocusedField] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const countryRef = useRef(null);
   const stageRef = useRef(null);
 
   useEffect(() => {
+    // Only load saved profile if coming from BriefingPage (back button)
+    // Don't load if coming from /home (fresh start)
+    const fromBriefing = location.state?.from === 'briefing';
+    if (fromBriefing) {
+      const savedProfile = localStorage.getItem('sapi_profile');
+      if (savedProfile) {
+        try {
+          const profile = JSON.parse(savedProfile);
+          // Find country value from label (profile stores full name, dropdown needs value code)
+          const countryObj = COUNTRIES.find(c => c.label === profile.country);
+          setForm({
+            country: countryObj?.value || "",
+            name: profile.respondent_name || "",
+            title: profile.title || "",
+            ministry: profile.ministry_or_department || "",
+            email: profile.contact_email || "",
+            developmentStage: profile.development_stage || ""
+          });
+        } catch (e) {
+          console.error('Failed to parse saved profile:', e);
+        }
+      }
+    }
+    
     function h(e) {
       if (countryRef.current && !countryRef.current.contains(e.target)) setCountryOpen(false);
       if (stageRef.current && !stageRef.current.contains(e.target)) setStageOpen(false);
     }
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
-  }, []);
+  }, [location]);
 
   function validate(id, val) {
     if (!val || !val.trim()) return "Required.";
@@ -153,12 +181,15 @@ export default function PreviewPage() {
     setFocusedField(null);
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     setSubmitted(true);
     setTouched(Object.fromEntries(allIds.map(id => [id, true])));
     const errs = Object.fromEntries(allIds.map(id => [id, validate(id, form[id])]));
     setErrors(errs);
     if (Object.values(errs).some(Boolean)) return;
+    
+    setLoading(true);
+    setApiError("");
     
     const userProfile = {
       country: selectedCountry?.label || form.country,
@@ -168,10 +199,16 @@ export default function PreviewPage() {
       contact_email: form.email,
       development_stage: form.developmentStage
     };
-    localStorage.setItem('sapi_user_profile', JSON.stringify(userProfile));
     
-    setSuccess(true);
-    setTimeout(() => navigate('/briefing'), 2000);
+    try {
+      await saveProfile(userProfile);
+      setSuccess(true);
+      setTimeout(() => navigate('/briefing'), 2000);
+    } catch (err) {
+      setApiError(err.message || "Failed to create profile. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   const selectedCountry = COUNTRIES.find(c => c.value === form.country);
@@ -403,15 +440,35 @@ export default function PreviewPage() {
           </div>
         )}
 
+        {/* API Error */}
+        {apiError && (
+          <div className="mt-6 border border-sapi-crimson/35 border-l-[3px] border-l-sapi-crimson bg-sapi-crimson/5 px-4 py-3.5">
+            <div className="font-sans text-[11px] text-sapi-crimson tracking-wide">
+              {apiError}
+            </div>
+          </div>
+        )}
+
         {/* CTA */}
         <div className="mt-12">
           <button
-            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 ${
+            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 flex items-center justify-center gap-2 ${
               btnHover ? 'bg-[#B8862A]' : 'bg-sapi-gold'
-            }`}
+            } ${loading ? 'opacity-75 cursor-not-allowed' : ''}`}
             onMouseEnter={() => setBtnHover(true)} onMouseLeave={() => setBtnHover(false)}
-            onClick={handleSubmit}>
-            Submit
+            onClick={handleSubmit}
+            disabled={loading}>
+            {loading ? (
+              <>
+                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Submitting...
+              </>
+            ) : (
+              'Submit'
+            )}
           </button>
         </div>
       </div>

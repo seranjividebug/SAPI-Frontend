@@ -123,13 +123,13 @@ export default function SAPICalculating() {
 
         if (answerArray.length === 0) {
           // No answers, use mock data for demo
-          console.log("No answers provided, using demo data");
           return;
         }
 
         // Submit to backend
-        const userProfile = JSON.parse(localStorage.getItem('sapi_user_profile') || '{}');
-        const response = await submitAssessment(userProfile, answerArray);
+        const userProfile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
+        const profileId = userProfile.profile_id || userProfile.id;
+        const response = await submitAssessment(profileId, answerArray);
         if (response.success) {
           setAssessmentResults(response.data);
           // Store assessment ID for later retrieval

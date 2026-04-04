@@ -450,9 +450,11 @@ export default function SAPIResults() {
   // Map API response to component format
   const appState = useMemo(() => {
     if (apiResults) {
+      // Get country from sapi_profile in localStorage
+      const storedProfile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
       return {
         orgProfile: {
-          nationName: "United Kingdom",
+          nationName: storedProfile.country || "Your nation",
           assessmentDate: new Date().toLocaleDateString("en-GB", {
             day: "numeric", month: "long", year: "numeric",
           }),
@@ -523,7 +525,6 @@ export default function SAPIResults() {
 
   const nav = (page, extra) => {
     // Navigate to the requested page
-    console.log("Navigate to:", page, extra);
     navigate(`/${page}`);
   };
 

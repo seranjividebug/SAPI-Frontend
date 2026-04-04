@@ -79,9 +79,14 @@ export default function BriefingPage({ onBegin }) {
   const [beginHover, setBeginHover] = useState(false);
   const [backHover,  setBackHover]  = useState(false);
 
-  // For demo purposes, using mock data since we're not passing appState
-  const orgProfile = { name: "Demo User", title: "Demo Title", ministry: "Demo Ministry", country: "SA" };
-  const { name = "", title = "", ministry = "", country = "" } = orgProfile;
+  // Get profile from localStorage (set by PreviewPage after API call)
+  const profile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
+  const { 
+    respondent_name: name = "", 
+    title = "", 
+    ministry_or_department: ministry = "", 
+    country = ""
+  } = profile;
 
   const countryLabel = COUNTRY_LABELS[country] || country;
   const countryFlag  = COUNTRY_FLAGS[country]  || "";
@@ -95,7 +100,7 @@ export default function BriefingPage({ onBegin }) {
   }
 
   function handleBack() {
-    navigate('/preview');
+    navigate('/preview', { state: { from: 'briefing' } });
   }
 
   return (

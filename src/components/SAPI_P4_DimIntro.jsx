@@ -113,12 +113,8 @@ function SubChip({ label }) {
 function DimGlyph({ number }) {
   return (
     <div className="relative mb-2 select-none">
-      {/* Large ghost number */}
-      <div className="font-serif text-[120px] font-normal text-sapi-gold leading-none opacity-12 absolute -top-7 -left-2 -tracking-wide pointer-events-none">
-        {number}
-      </div>
-      {/* Foreground number */}
-      <div className="font-serif text-[56px] font-normal text-sapi-gold leading-none opacity-90 -tracking-wide relative z-10">
+      {/* Foreground number only */}
+      <div className="font-serif text-[56px] font-normal text-sapi-gold leading-none opacity-90 -tracking-wide">
         {number}
       </div>
     </div>
