@@ -845,7 +845,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
         {/* ── Navigation buttons ── */}
         <div className="flex flex-col gap-2.5">
           <button
-            disabled={selectedScore == null}
+            disabled={selectedScore == null || submitting}
             onMouseEnter={() => setNextHover(true)}
             onMouseLeave={() => setNextHover(false)}
             onClick={handleNext}

@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { submitAssessment } from "../services/assessmentService";
 import { PageLayout } from "../pages/common";
 
 const DIMENSIONS = [
@@ -111,43 +110,35 @@ export default function SAPICalculating() {
   // Get answers from navigation state and memoize
   const answers = useMemo(() => location.state?.answers || {}, [location.state]);
 
-  // Submit to API and calculate scores
+  // Calculate scores (submission already done in QuizWrapper)
   useEffect(() => {
-    const submitAndCalculate = async () => {
+    const calculateScores = () => {
       try {
-        // Transform answers to API format
-        const answerArray = Object.entries(answers).map(([questionId, data]) => ({
-          question_id: parseInt(questionId.replace('Q', '')),
-          selected_option: data.selectedOption || 'a'
-        }));
-
-        if (answerArray.length === 0) {
+        if (Object.keys(answers).length === 0) {
           // No answers, use mock data for demo
           return;
         }
-
-        // Submit to backend
-        const userProfile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
-        const profileId = userProfile.profile_id || userProfile.id;
-        const response = await submitAssessment(profileId, answerArray);
-        if (response.success) {
-          setAssessmentResults(response.data);
-          // Store assessment ID for later retrieval
-          if (response.data.assessment_id) {
-            localStorage.setItem('sapi_assessment_id', response.data.assessment_id);
-          }
-          // Remove preview completion flag since assessment is now complete
-          localStorage.removeItem('sapi_preview_completed');
-        } else {
-          setError("Failed to calculate scores");
-        }
+        
+        // Just calculate and display - submission already done in QuizWrapper
+        const { dimScores, composite } = computeAllScores(answers);
+        const tier = getTier(composite);
+        
+        // Store results
+        setAssessmentResults({
+          dimensionScores: dimScores,
+          compositeScore: composite,
+          tier: tier
+        });
+        
+        // Remove preview completion flag since assessment is now complete
+        localStorage.removeItem('sapi_preview_completed');
       } catch (err) {
-        console.error("Assessment submission error:", err);
+        console.error("Score calculation error:", err);
         setError(err.message);
       }
     };
 
-    submitAndCalculate();
+    calculateScores();
   }, [answers]);
 
   // Use API results or fallback to local calculation

@@ -72,16 +72,26 @@ function QuizWrapper({ currentDimension, setCurrentDimension }) {
       const { submitAssessment } = await import('./services/assessmentService');
       
       // Get user profile from localStorage (stored during preview step)
-      const userProfile = JSON.parse(localStorage.getItem('sapi_user_profile') || '{}');
+      const userProfile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
+      const profileId = userProfile.profile_id || userProfile.id;
+      
+      if (!profileId) {
+        console.error('No profile ID found in localStorage');
+        return null;
+      }
       
       const answerArray = Object.entries(allAnswers).map(([questionId, data]) => ({
         question_id: parseInt(questionId.replace('Q', '')),
         selected_option: data.selectedOption
       }));
       
-      const response = await submitAssessment(userProfile, answerArray);
+      const response = await submitAssessment(profileId, answerArray);
       if (response.success) {
         setAssessmentResults(response.data);
+        // Store assessment ID for later retrieval
+        if (response.data.assessment_id) {
+          localStorage.setItem('sapi_assessment_id', response.data.assessment_id);
+        }
         return response.data;
       }
     } catch (error) {

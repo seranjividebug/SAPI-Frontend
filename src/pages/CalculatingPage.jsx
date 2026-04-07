@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { submitAssessment } from "../services/assessmentService";
 import { PageLayout } from "./common";
 
 // ── Dimension metadata ────────────────────────────────────────────────────────
@@ -107,32 +106,24 @@ export default function CalculatingPage() {
   const answers = useMemo(() => location.state?.answers || {}, [location.state]);
 
   useEffect(() => {
-    const submitAndCalculate = async () => {
-      try {
-        const answerArray = Object.entries(answers).map(([questionId, data]) => ({
-          question_id: parseInt(questionId.replace('Q', '')),
-          selected_option: data.selectedOption || 'a'
-        }));
-
-        if (answerArray.length === 0) {
-          return;
-        }
-
-        const userProfile = JSON.parse(localStorage.getItem('sapi_user_profile') || '{}');
-        const profileId = userProfile.profile_id || userProfile.id;
-        const response = await submitAssessment(profileId, answerArray);
-        if (response.success) {
-          setAssessmentResults(response.data);
-          if (response.data.assessment_id) {
-            localStorage.setItem('sapi_assessment_id', response.data.assessment_id);
-          }
-        }
-      } catch (err) {
-        console.error("Assessment submission error:", err);
+    // Assessment already submitted in QuizWrapper, just calculate and display scores
+    const calculateScores = () => {
+      if (Object.keys(answers).length === 0) {
+        return;
       }
+      
+      const { dimScores, composite } = computeAllScores(answers);
+      const tier = getTier(composite);
+      
+      // Store results for navigation
+      setAssessmentResults({
+        dimensionScores: dimScores,
+        compositeScore: composite,
+        tier: tier
+      });
     };
 
-    submitAndCalculate();
+    calculateScores();
   }, [answers]);
 
   const { dimScores, composite } = useMemo(() => {
