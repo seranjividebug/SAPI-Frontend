@@ -96,6 +96,131 @@ const tierColor = (tier) => ({
 
 const scoreColor = (s) => s >= 70 ? "#4A7AE0" : s >= 55 ? "#D4A830" : s >= 40 ? "#C9963A" : "#C03058";
 
+// ============================================================
+// FLAG COMPONENTS
+// ============================================================
+const GhanaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="5.33" fill="#CE1126"/>
+    <rect y="5.33" width="24" height="5.33" fill="#FCD116"/>
+    <rect y="10.67" width="24" height="5.33" fill="#006B3F"/>
+    <polygon points="12,6.5 13.5,9.5 10.5,9.5" fill="#000"/>
+  </svg>
+);
+
+const IndiaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="5.33" fill="#FF9932"/>
+    <rect y="5.33" width="24" height="5.33" fill="#FFFFFF"/>
+    <rect y="10.67" width="24" height="5.33" fill="#138808"/>
+    <circle cx="12" cy="8" r="2" fill="#000080" stroke="#000080" strokeWidth="0.3"/>
+  </svg>
+);
+
+const RwandaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="8" fill="#00A1DE"/>
+    <rect y="8" width="24" height="8" fill="#FAD201"/>
+    <rect y="12" width="24" height="4" fill="#00A1DE"/>
+    <circle cx="8" cy="5" r="2" fill="#E5BE01"/>
+  </svg>
+);
+
+const UAEFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="6" height="16" fill="#FF0000"/>
+    <rect x="6" width="18" height="5.33" fill="#00732F"/>
+    <rect x="6" y="5.33" width="18" height="5.33" fill="#FFFFFF"/>
+    <rect x="6" y="10.67" width="18" height="5.33" fill="#000000"/>
+  </svg>
+);
+
+const KenyaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="4" fill="#000000"/>
+    <rect y="4" width="24" height="1" fill="#FFFFFF"/>
+    <rect y="5" width="24" height="6" fill="#CE1126"/>
+    <rect y="11" width="24" height="1" fill="#FFFFFF"/>
+    <rect y="12" width="24" height="4" fill="#006600"/>
+    <circle cx="12" cy="8" r="2.5" fill="#000"/>
+  </svg>
+);
+
+const UnitedKingdomFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#012169"/>
+    <path d="M0 0 L24 16 M24 0 L0 16" stroke="#FFFFFF" strokeWidth="2"/>
+    <path d="M0 0 L24 16 M24 0 L0 16" stroke="#C8102E" strokeWidth="1.2"/>
+    <path d="M12 0 V16 M0 8 H24" stroke="#FFFFFF" strokeWidth="3"/>
+    <path d="M12 0 V16 M0 8 H24" stroke="#C8102E" strokeWidth="1.8"/>
+  </svg>
+);
+
+const AzerbaijanFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="5.33" fill="#0092C6"/>
+    <rect y="5.33" width="24" height="5.33" fill="#DA2D2D"/>
+    <rect y="10.67" width="24" height="5.33" fill="#00C6A0"/>
+    <circle cx="12" cy="8" r="2.5" fill="#FFFFFF"/>
+    <path d="M12 8 L14 7.5 L13.5 8.5 Z" fill="#FFFFFF"/>
+  </svg>
+);
+
+const KazakhstanFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#00AFCA"/>
+    <circle cx="6" cy="8" r="2.5" fill="#FEC50C"/>
+    <path d="M9 6 L10 8 L9 10" stroke="#FEC50C" strokeWidth="0.8" fill="none"/>
+  </svg>
+);
+
+const QatarFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#8B1C3D"/>
+    <rect width="6" height="16" fill="#FFFFFF"/>
+    <path d="M6 0 L10 2 L6 4 L10 6 L6 8 L10 10 L6 12 L10 14 L6 16" fill="#FFFFFF"/>
+  </svg>
+);
+
+const NigeriaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="8" height="16" fill="#008751"/>
+    <rect x="8" width="8" height="16" fill="#FFFFFF"/>
+    <rect x="16" width="8" height="16" fill="#008751"/>
+  </svg>
+);
+
+const SingaporeFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="8" fill="#ED2939"/>
+    <rect y="8" width="24" height="8" fill="#FFFFFF"/>
+    <circle cx="6" cy="5" r="2.5" fill="#FFFFFF"/>
+    <polygon points="6,3 7,4 6.5,4.5" fill="#FFFFFF"/>
+  </svg>
+);
+
+const SaudiArabiaFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#006C35"/>
+    <text x="12" y="10" fontSize="8" fill="#FFFFFF" textAnchor="middle">لا إله</text>
+  </svg>
+);
+
+const countryFlagComponents = {
+  'Kingdom of Saudi Arabia': SaudiArabiaFlag,
+  'Republic of Singapore': SingaporeFlag,
+  'Federal Republic of Nigeria': NigeriaFlag,
+  'Republic of Kenya': KenyaFlag,
+  'United Arab Emirates': UAEFlag,
+  'Republic of Rwanda': RwandaFlag,
+  'Republic of India': IndiaFlag,
+  'Republic of Ghana': GhanaFlag,
+  'United Kingdom': UnitedKingdomFlag,
+  'Republic of Azerbaijan': AzerbaijanFlag,
+  'Republic of Kazakhstan': KazakhstanFlag,
+  'State of Qatar': QatarFlag,
+};
+
 const fmtDate = (iso) => {
   // Display exactly as received from API without conversion
   if (typeof iso === 'string' && iso.includes('/')) {
@@ -571,7 +696,13 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                   >
                     {/* Country */}
                     <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
-                      <span style={{ fontSize: 13, color: "#1A1A2E", fontWeight: 500 }}>{row.country}</span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        {(() => {
+                          const FlagComponent = countryFlagComponents[row.country];
+                          return FlagComponent ? <FlagComponent /> : <span style={{ fontSize: 16 }}>🏳️</span>;
+                        })()}
+                        <span style={{ fontSize: 13, color: "#1A1A2E", fontWeight: 500 }}>{row.country}</span>
+                      </div>
                     </td>
 
                     {/* Respondent */}

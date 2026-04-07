@@ -110,6 +110,42 @@ const KenyaFlag = () => (
   </svg>
 );
 
+const UnitedKingdomFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#012169"/>
+    <path d="M0 0 L24 16 M24 0 L0 16" stroke="#FFFFFF" strokeWidth="2"/>
+    <path d="M0 0 L24 16 M24 0 L0 16" stroke="#C8102E" strokeWidth="1.2"/>
+    <path d="M12 0 V16 M0 8 H24" stroke="#FFFFFF" strokeWidth="3"/>
+    <path d="M12 0 V16 M0 8 H24" stroke="#C8102E" strokeWidth="1.8"/>
+  </svg>
+);
+
+const AzerbaijanFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="5.33" fill="#0092C6"/>
+    <rect y="5.33" width="24" height="5.33" fill="#DA2D2D"/>
+    <rect y="10.67" width="24" height="5.33" fill="#00C6A0"/>
+    <circle cx="12" cy="8" r="2.5" fill="#FFFFFF"/>
+    <path d="M12 8 L14 7.5 L13.5 8.5 Z" fill="#FFFFFF"/>
+  </svg>
+);
+
+const KazakhstanFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#00AFCA"/>
+    <circle cx="6" cy="8" r="2.5" fill="#FEC50C"/>
+    <path d="M9 6 L10 8 L9 10" stroke="#FEC50C" strokeWidth="0.8" fill="none"/>
+  </svg>
+);
+
+const QatarFlag = () => (
+  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+    <rect width="24" height="16" fill="#8B1C3D"/>
+    <rect width="6" height="16" fill="#FFFFFF"/>
+    <path d="M6 0 L10 2 L6 4 L10 6 L6 8 L10 10 L6 12 L10 14 L6 16" fill="#FFFFFF"/>
+  </svg>
+);
+
 const NigeriaFlag = () => (
   <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
     <rect width="8" height="16" fill="#008751"/>
@@ -143,6 +179,10 @@ const countryFlagComponents = {
   'Republic of Rwanda': RwandaFlag,
   'Republic of India': IndiaFlag,
   'Republic of Ghana': GhanaFlag,
+  'United Kingdom': UnitedKingdomFlag,
+  'Republic of Azerbaijan': AzerbaijanFlag,
+  'Republic of Kazakhstan': KazakhstanFlag,
+  'State of Qatar': QatarFlag,
 };
 
 // Helper to get auth token
@@ -1231,7 +1271,13 @@ export default function SAPIAdmin() {
   }, []);
 
   const handleSignOut = () => {
-    setAdminPage('login');
+    // Clear auth data from storage
+    localStorage.removeItem('sapi_token');
+    localStorage.removeItem('sapi_current_user');
+    sessionStorage.removeItem('sapi_token');
+    
+    // Redirect to login page
+    window.location.href = '/login';
   };
 
   const pageTitle = {

@@ -8,6 +8,15 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({ adminPage, setAdminPage, onSignOut }) {
+  // Get user email from localStorage
+  const userEmail = (() => {
+    try {
+      const user = JSON.parse(localStorage.getItem('sapi_current_user') || '{}');
+      return user.email || 'admin@sapi.ai';
+    } catch {
+      return 'admin@sapi.ai';
+    }
+  })();
   return (
     <div style={{
       width: 220, flexShrink: 0,
@@ -64,13 +73,13 @@ export default function Sidebar({ adminPage, setAdminPage, onSignOut }) {
 
       <div style={{ padding: '14px 16px', borderTop: '0.5px solid #1E1650' }}>
         <div style={{ color: '#6B5E80', fontSize: 11, marginBottom: 8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          admin@sapi.ai
+          {userEmail}
         </div>
         <button
           onClick={onSignOut}
           style={{ background: 'transparent', border: 'none', color: '#C9963A', fontSize: 12, cursor: 'pointer', padding: 0, fontFamily: 'system-ui, sans-serif' }}
         >
-          ← Sign out
+          Sign out
         </button>
       </div>
     </div>
