@@ -104,3 +104,151 @@ export function getCurrentUser() {
   const user = localStorage.getItem('sapi_current_user');
   return user ? JSON.parse(user) : null;
 }
+
+/**
+ * Get users list
+ * @param {string} token - Auth token
+ * @param {Object} params - Query parameters
+ * @param {number} params.role - Role ID to filter users (e.g., 1 for admin)
+ * @param {number} params.page - Page number
+ * @param {number} params.limit - Items per page
+ * @returns {Promise<Object>} - Response with users data
+ */
+export async function getUsers(token, params = {}) {
+  const queryParams = new URLSearchParams();
+  if (params.role !== undefined) queryParams.append('role', params.role);
+  if (params.page !== undefined) queryParams.append('page', params.page);
+  if (params.limit !== undefined) queryParams.append('limit', params.limit);
+
+  const url = `${API_BASE_URL}/auth/users${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to fetch users');
+  }
+
+  return data;
+}
+
+/**
+ * Create a new user (Admin only)
+ * @param {string} token - Admin auth token
+ * @param {Object} userData - User data
+ * @param {string} userData.full_name - User's full name
+ * @param {string} userData.email - User's email
+ * @param {number} userData.role - User's role ID
+ * @returns {Promise<Object>} - Response with user data
+ */
+export async function createUser(token, userData) {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      full_name: userData.full_name,
+      email: userData.email,
+      role: userData.role,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to create user');
+  }
+
+  // Do NOT store token - admin stays logged in
+  return data;
+}
+
+/**
+ * Get user by ID
+ * @param {string} token - Auth token
+ * @param {string} userId - User ID
+ * @returns {Promise<Object>} - Response with user data
+ */
+export async function getUserById(token, userId) {
+  const response = await fetch(`${API_BASE_URL}/auth/users/${userId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to fetch user');
+  }
+
+  return data;
+}
+
+/**
+ * Update user
+ * @param {string} token - Auth token
+ * @param {string} userId - User ID
+ * @param {Object} userData - User data to update
+ * @param {string} userData.full_name - User's full name
+ * @param {string} userData.email - User's email
+ * @param {number} userData.role - User's role ID
+ * @returns {Promise<Object>} - Response with updated user data
+ */
+export async function updateUser(token, userId, userData) {
+  const response = await fetch(`${API_BASE_URL}/auth/users/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      full_name: userData.full_name,
+      email: userData.email,
+      role: userData.role,
+    }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to update user');
+  }
+
+  return data;
+}
+
+/**
+ * Delete user
+ * @param {string} token - Auth token
+ * @param {string} userId - User ID
+ * @returns {Promise<Object>} - Response with success message
+ */
+export async function deleteUser(token, userId) {
+  const response = await fetch(`${API_BASE_URL}/auth/users/${userId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to delete user');
+  }
+
+  return data;
+}

@@ -210,7 +210,7 @@ function RadarChart({ scores }) {
       })}
       {/* Dimension labels */}
       {dimOrder.map((d, i) => {
-        const lRadius = r + 26;
+        const lRadius = r + 32;
         const a = angle(i);
         const lx = cx + lRadius * Math.cos(a);
         const ly = cy + lRadius * Math.sin(a);
@@ -218,11 +218,51 @@ function RadarChart({ scores }) {
         return (
           <g key={i}>
             <text x={lx} y={ly + labelDy(i)} textAnchor={labelAnchor(i)} dominantBaseline="middle" fontSize="11" fontFamily="system-ui, -apple-system, sans-serif" fill="#1A1A2E" fontWeight="500">{dimLabels[i]}</text>
-            <text x={lx} y={ly + labelDy(i) + 13} textAnchor={labelAnchor(i)} dominantBaseline="middle" fontSize="10" fontFamily="Georgia, serif" fill={bandColor(sc)}>{sc}</text>
+            <text x={lx} y={ly + labelDy(i) + 15} textAnchor={labelAnchor(i)} dominantBaseline="middle" fontSize="11" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="600" fill={bandColor(sc)}>{sc}</text>
           </g>
         );
       })}
     </svg>
+  );
+}
+
+// =============================================================
+// COMPOSITE SCORE CARD
+// =============================================================
+function CompositeScoreCard({ score, tier }) {
+  const tc = tierColor(tier);
+  return (
+    <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", marginBottom:14, flex:"0 0 auto" }}>
+      <div style={{ padding:"20px 24px", background:"#F7F4EF", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+        {/* Left - Title */}
+        <div>
+          <div style={{ fontSize:16, fontWeight:600, color:"#1A1A2E", marginBottom:4 }}>Composite Score</div>
+          <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:8 }}>
+            <span style={{ fontSize:11, color:tc, display:"flex", alignItems:"center", gap:4 }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={tc} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              {tier}
+            </span>
+          </div>
+        </div>
+        {/* Right - Circular Score Badge */}
+        <div style={{ 
+          width:80, 
+          height:80, 
+          borderRadius:"50%", 
+          border:`3px solid ${tc}`, 
+          display:"flex", 
+          flexDirection:"column", 
+          alignItems:"center", 
+          justifyContent:"center",
+          background:"#FFFFFF"
+        }}>
+          <div style={{ fontFamily:"Georgia, serif", fontSize:28, color:"#1A1A2E", lineHeight:1 }}>{score}</div>
+          <div style={{ fontSize:9, color:tc, marginTop:2 }}>{tier}</div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -240,15 +280,15 @@ function OrgProfileCard({ sub }) {
     { label:"Completed",         value:`${fmtDate(sub.completedAt)} at ${fmtTime(sub.completedAt)} UTC` },
   ];
   return (
-    <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", marginBottom:14 }}>
-      <div style={{ padding:"11px 16px", background:"#F7F4EF", borderBottom:"0.5px solid #E0D8CC" }}>
-        <span style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em" }}>Organisation Profile</span>
+    <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", flex:1, display:"flex", flexDirection:"column" }}>
+      <div style={{ padding:"14px 20px", background:"#F7F4EF", borderBottom:"0.5px solid #E0D8CC" }}>
+        <span style={{ fontSize:12, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em" }}>Organisation Profile</span>
       </div>
-      <div style={{ padding:"6px 0" }}>
+      <div style={{ padding:"12px 0", flex:1 }}>
         {rows.map((row, i) => (
-          <div key={i} style={{ display:"flex", alignItems:"flex-start", padding:"8px 16px", borderBottom: i < rows.length-1 ? "0.5px solid #F0EBE3" : "none" }}>
-            <div style={{ width:148, flexShrink:0, fontSize:12, color:"#6B6577", paddingTop:1 }}>{row.label}</div>
-            <div style={{ fontSize:13, color:"#1A1A2E", flex:1 }}>{row.value}</div>
+          <div key={i} style={{ display:"flex", alignItems:"center", padding:"12px 20px", borderBottom: i < rows.length-1 ? "0.5px solid #F0EBE3" : "none" }}>
+            <div style={{ width:160, flexShrink:0, fontSize:13, color:"#6B6577" }}>{row.label}</div>
+            <div style={{ fontSize:14, color:"#1A1A2E", flex:1 }}>{row.value}</div>
           </div>
         ))}
       </div>
@@ -259,27 +299,63 @@ function OrgProfileCard({ sub }) {
 // =============================================================
 // DIMENSION SCORES PANEL
 // =============================================================
-function DimensionScoresPanel({ scores }) {
+function DimensionScoresPanel({ scores, onDimensionClick, selectedDim }) {
+  const [hoveredDim, setHoveredDim] = useState(null);
+  
   return (
-    <div style={{ marginBottom:14 }}>
+    <div style={{ display:"flex", flexDirection:"column", height:"100%" }}>
       {/* Score cards */}
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(5, 1fr)", gap:10, marginBottom:14 }}>
-        {DIMS.map(dim => {
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(5, 1fr)", gap:10, marginBottom:14, flex:"0 0 auto" }}>
+        {DIMS.map((dim) => {
           const s = scores[dim.key] || 0;
           const bc = bandColor(s);
+          const isSelected = selectedDim === dim.key;
+          const isHovered = hoveredDim === dim.key;
+          const isActive = isSelected || isHovered;
+          
           return (
-            <div key={dim.key} style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, padding:"14px 14px 12px", textAlign:"center" }}>
+            <div 
+              key={dim.key} 
+              onClick={() => onDimensionClick && onDimensionClick(dim.key)}
+              onMouseEnter={() => setHoveredDim(dim.key)}
+              onMouseLeave={() => setHoveredDim(null)}
+              style={{ 
+                background:"#FFFFFF", 
+                border:`0.5px solid ${isActive ? bc : '#E0D8CC'}`, 
+                borderRadius:8, 
+                padding:"14px 14px 12px", 
+                textAlign:"center",
+                cursor: "pointer",
+                transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transform: isActive ? "scale(1.05)" : "scale(1)",
+                boxShadow: isActive ? `0 4px 16px ${bc}40` : "none",
+                position: "relative",
+                overflow: "hidden"
+              }}
+            >
+              {isActive && (
+                <div style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: "3px",
+                  background: bc
+                }} />
+              )}
               <div style={{ fontSize:11, color:"#6B6577", fontWeight:500, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:8, lineHeight:1.3 }}>{dim.label.replace("Directed Intelligence","Dir. Intelligence")}</div>
-              <div style={{ fontFamily:"Georgia, serif", fontSize:28, color:bc, lineHeight:1, marginBottom:9 }}>{s}</div>
+              <div style={{ fontFamily:"system-ui, -apple-system, sans-serif", fontSize:28, fontWeight:600, color:bc, lineHeight:1, marginBottom:9 }}>{s}</div>
               <Pill label={bandLabel(s)} color={bc} />
             </div>
           );
         })}
       </div>
       {/* Radar chart */}
-      <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, padding:"16px 20px 10px", display:"flex", flexDirection:"column", alignItems:"center" }}>
-        <div style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em", alignSelf:"flex-start", marginBottom:2 }}>Dimension Radar</div>
-        <RadarChart scores={scores} />
+      <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, padding:"16px 20px", display:"flex", flexDirection:"column", alignItems:"center", flex:"1 1 auto" }}>
+        <div style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em", alignSelf:"flex-start", marginBottom:8 }}>Dimension Radar</div>
+        <div style={{ flex:1, display:"flex", alignItems:"center", justifyContent:"center", width:"100%" }}>
+          <RadarChart scores={scores} />
+        </div>
       </div>
     </div>
   );
@@ -288,10 +364,24 @@ function DimensionScoresPanel({ scores }) {
 // =============================================================
 // Q&A ACCORDION
 // =============================================================
-function QAAccordion({ answers }) {
+function QAAccordion({ answers, openDim, onToggleDim }) {
   const [open, setOpen] = useState({});
+  
+  // Sync with external openDim
+  useEffect(() => {
+    if (openDim) {
+      setOpen(prev => ({ ...prev, [openDim]: true }));
+    }
+  }, [openDim]);
 
-  const toggle = (key) => setOpen(prev => ({ ...prev, [key]: !prev[key] }));
+  const toggle = (key) => {
+    setOpen(prev => {
+      const newOpen = !prev[key];
+      const newState = { ...prev, [key]: newOpen };
+      if (onToggleDim) onToggleDim(key, newOpen);
+      return newState;
+    });
+  };
 
   return (
     <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", marginBottom:14 }}>
@@ -392,7 +482,7 @@ function AdminToolsPanel({ submission, onUpdateSub, onViewLead, showToast }) {
     
 
       {/* Quick stats */}
-      <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden" }}>
+      {/* <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden" }}>
         <div style={{ padding:"11px 16px", background:"#F7F4EF", borderBottom:"0.5px solid #E0D8CC" }}>
           <span style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em" }}>Quick Reference</span>
         </div>
@@ -412,7 +502,7 @@ function AdminToolsPanel({ submission, onUpdateSub, onViewLead, showToast }) {
             );
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
@@ -420,8 +510,9 @@ function AdminToolsPanel({ submission, onUpdateSub, onViewLead, showToast }) {
 // =============================================================
 // SUBMISSION DETAIL — main B2 page component
 // =============================================================
-function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPage, setSelectedLead }) {
+function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPage, setSelectedLead, onBack }) {
   const [toast, setToast] = useState({ visible:false, msg:"" });
+  const [selectedDim, setSelectedDim] = useState(null);
 
   const showToast = (msg) => {
     setToast({ visible:true, msg });
@@ -437,61 +528,120 @@ function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPag
   const tc = tierColor(submission.tier);
   // const sc = stageColor(submission.leadStage); // Unused
 
+  const handleDimensionClick = (dimKey) => {
+    setSelectedDim(dimKey === selectedDim ? null : dimKey);
+  };
+
+  const handleAccordionToggle = (dimKey, isOpen) => {
+    if (isOpen) {
+      setSelectedDim(dimKey);
+    }
+  };
+
   return (
     <div style={{ minHeight:"100vh", background:"#F7F4EF", fontFamily:"system-ui, -apple-system, sans-serif" }}>
+      <style>{`
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-card {
+          animation: fadeInUp 0.5s ease-out forwards;
+        }
+        .animate-card:nth-child(1) { animation-delay: 0.1s; }
+        .animate-card:nth-child(2) { animation-delay: 0.2s; }
+        .animate-card:nth-child(3) { animation-delay: 0.3s; }
+        .hover-lift {
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+      `}</style>
 
       {/* ── Page header ───────────────────────────────────── */}
-      <div style={{ background:"#FFFFFF", borderBottom:"0.5px solid #E0D8CC", padding:"14px 24px 0" }}>
-        {/* Breadcrumb */}
-        <button onClick={() => setAdminPage("submissions")} style={{ display:"inline-flex", alignItems:"center", gap:5, background:"none", border:"none", cursor:"pointer", color:"#9880B0", fontSize:12, padding:0, fontFamily:"system-ui, sans-serif", marginBottom:12 }}>
-          <span style={{ fontSize:14, lineHeight:1 }}>←</span> Back to Submissions
+      <div style={{ background:"#FFFFFF", borderBottom:"0.5px solid #E0D8CC", padding:"16px 24px" }}>
+        {/* Back Button */}
+        <button 
+          onClick={() => {
+            onBack?.();
+          }}
+          style={{ 
+            display:"inline-flex", 
+            alignItems:"center", 
+            gap:8, 
+            background:"#F7F4EF", 
+            border:"0.5px solid #E0D8CC", 
+            borderRadius:6,
+            cursor:"pointer", 
+            color:"#6B6577", 
+            fontSize:12, 
+            padding:"8px 14px", 
+            fontFamily:"system-ui, sans-serif",
+            transition:"all 0.15s ease",
+            marginBottom:16
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#F0EBE3";
+            e.currentTarget.style.borderColor = "#D4CBB8";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#F7F4EF";
+            e.currentTarget.style.borderColor = "#E0D8CC";
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Assessments
         </button>
 
-        <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", paddingBottom:16 }}>
-          {/* Left: title block */}
-          <div style={{ flex:1, marginRight:24 }}>
-            <h1 style={{ fontFamily:"Georgia, serif", fontSize:24, fontWeight:400, color:"#1A1A2E", margin:"0 0 4px" }}>{submission.country}</h1>
-            <div style={{ fontSize:13, color:"#1A1A2E", marginBottom:2 }}>{submission.respondentName}</div>
-            <div style={{ fontSize:12, color:"#6B6577" }}>{submission.title} · {submission.ministry}</div>
+        {/* Page Title */}
+        <h1 style={{ fontFamily:"Georgia, serif", fontSize:22, fontWeight:600, color:"#1A1A2E", margin:0 }}>
+          Assessment Details
+        </h1>
+        <p style={{ fontSize:13, color:"#6B6577", margin:"8px 0 0" }}>
+          View comprehensive assessment results including dimension scores, organisation profile, and detailed question responses.
+        </p>
+      </div>
+
+      {/* ── Body content ──────────────────────────────────── */}
+      <div style={{ padding:"16px 24px 32px" }}>
+
+        {/* Top row - Two columns - equal height */}
+        <div style={{ display:"flex", gap:16, marginBottom:14, alignItems:"stretch" }}>
+          {/* Left column - Composite Score + Org Profile */}
+          <div style={{ flex:"0 0 40%", display:"flex", flexDirection:"column", background:"#FFFFFF", borderRadius:8, padding:16 }} className="animate-card">
+            <div className="hover-lift">
+              <CompositeScoreCard score={submission.compositeScore} tier={submission.tier} />
+            </div>
+            <div style={{ flex:1, display:"flex", flexDirection:"column" }} className="hover-lift">
+              <OrgProfileCard sub={submission} />
+            </div>
           </div>
 
-          {/* Right: score badge + actions */}
-          <div style={{ display:"flex", flexDirection:"column", alignItems:"flex-end", gap:10, flexShrink:0 }}>
-            <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-              {/* Composite score */}
-              <div style={{ textAlign:"right" }}>
-                <div style={{ fontFamily:"Georgia, serif", fontSize:36, lineHeight:1, color:"#C9963A" }}>{submission.compositeScore}</div>
-                <div style={{ fontSize:10, color:"#9880B0", marginTop:2 }}>Composite Score</div>
-              </div>
-              {/* Tier pill */}
-              <Pill label={submission.tier} color={tc} size="lg" />
+          {/* Right column - Dimension Scores */}
+          <div style={{ flex:"1 1 auto", display:"flex", flexDirection:"column" }} className="animate-card">
+            <div className="hover-lift" style={{ height:"100%" }}>
+              <DimensionScoresPanel 
+                scores={submission.scores} 
+                selectedDim={selectedDim}
+                onDimensionClick={handleDimensionClick}
+              />
             </div>
           </div>
         </div>
-      </div>
 
-  
-
-      {/* ── Body content ──────────────────────────────────── */}
-      <div style={{ display:"flex", gap:16, padding:"16px 24px 32px", alignItems:"flex-start" }}>
-
-        {/* Main content column */}
-        <div style={{ flex:1, minWidth:0 }}>
-          <OrgProfileCard sub={submission} />
-          <DimensionScoresPanel scores={submission.scores} />
-          <QAAccordion answers={submission.answers} />
-        </div>
-
-        {/* Admin tools sidebar */}
-        <div style={{ width:280, flexShrink:0 }}>
-          <AdminToolsPanel
-            key={submission.id}
-            submission={submission}
-            onUpdateSub={updateSub}
-            onViewLead={() => { setSelectedLead && setSelectedLead(submission); setAdminPage("leadDetail"); }}
-            showToast={showToast}
+        {/* Bottom - Q&A Accordion full width */}
+        <div className="animate-card hover-lift">
+          <QAAccordion 
+            answers={submission.answers} 
+            openDim={selectedDim}
+            onToggleDim={handleAccordionToggle}
           />
         </div>
+
       </div>
 
       <Toast visible={toast.visible} msg={toast.msg} />
