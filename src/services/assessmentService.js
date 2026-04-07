@@ -30,11 +30,27 @@ export async function submitAssessment(profileId, answers) {
  */
 export async function getAssessmentResults(assessmentId) {
   const response = await fetch(`${API_BASE_URL}/assessment/${assessmentId}/results`);
-  
+
   if (!response.ok) {
     throw new Error(`Failed to fetch results: ${response.statusText}`);
   }
-  
+
+  const data = await response.json();
+  return data;
+}
+
+/**
+ * Get assessment details by ID
+ * GET /api/assessment/:id/details
+ * @param {string} assessmentId - UUID of the assessment
+ */
+export async function getAssessmentDetails(assessmentId) {
+  const response = await fetch(`${API_BASE_URL}/assessment/${assessmentId}/details`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch assessment details: ${response.statusText}`);
+  }
+
   const data = await response.json();
   return data;
 }

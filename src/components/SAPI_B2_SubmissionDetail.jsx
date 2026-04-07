@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAssessmentDetails } from "../services/assessmentService";
 
 // =============================================================
 // SEED DATA
@@ -388,32 +389,6 @@ function AdminToolsPanel({ submission, onUpdateSub, onViewLead, showToast }) {
   return (
     <div style={{ position:"sticky", top:20 }}>
       {/* Notes */}
-      <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", marginBottom:12 }}>
-        <div style={{ padding:"11px 16px", background:"#F7F4EF", borderBottom:"0.5px solid #E0D8CC" }}>
-          <span style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em" }}>Admin Notes</span>
-        </div>
-        <div style={{ padding:"14px 16px" }}>
-          <textarea
-            value={noteText}
-            onChange={e => { setNoteText(e.target.value); setNoteSaved(false); }}
-            placeholder="Add notes about this respondent, meeting context, follow-up actions…"
-            rows={6}
-            style={{ width:"100%", padding:"9px 10px", background:"#FAFAF8", border:"0.5px solid #E0D8CC", borderRadius:5, fontSize:12.5, color:"#1A1A2E", fontFamily:"system-ui, sans-serif", lineHeight:1.55, resize:"vertical", outline:"none", boxSizing:"border-box" }}
-          />
-          {submission.adminNotes && (
-            <p style={{ fontSize:11, color:"#9880B0", fontStyle:"italic", margin:"6px 0 10px" }}>
-              Last saved: {submission.adminNotes.slice(0, 60)}{submission.adminNotes.length > 60 ? "…" : ""}
-            </p>
-          )}
-          <button
-            onClick={handleSaveNote}
-            style={{ padding:"7px 14px", background: noteSaved ? "#28A86815" : "#C9963A", border: noteSaved ? "0.5px solid #28A868" : "none", borderRadius:5, color: noteSaved ? "#28A868" : "#06030E", fontSize:12.5, fontWeight:500, cursor:"pointer", fontFamily:"system-ui, sans-serif", transition:"all 0.18s" }}
-          >
-            {noteSaved ? "✓ Saved" : "Save note"}
-          </button>
-        </div>
-      </div>
-
     
 
       {/* Quick stats */}
@@ -528,37 +503,112 @@ function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPag
 // STANDALONE PREVIEW WRAPPER
 // =============================================================
 export default function B2_PreviewApp() {
-  const [submissions, setSubmissions] = useState(DEMO_SUBMISSIONS_INIT);
-  const [selectedId, setSelectedId] = useState("sub_001");
+  const [submission, setSubmission] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const submission = submissions.find(s => s.id === selectedId) || submissions[0];
+  useEffect(() => {
+    const fetchAssessmentDetails = async () => {
+      try {
+        // Get assessment_id from localStorage
+        const assessmentId = localStorage.getItem('sapi_assessment_id');
 
-  const shortCountry = (c) => c.replace("Kingdom of ","").replace("Republic of ","").replace("Federal Republic of ","").replace("United Arab Emirates","UAE");
+        if (!assessmentId) {
+          setError('No assessment ID found in localStorage');
+          setLoading(false);
+          return;
+        }
+
+        // Fetch assessment details from API
+        const response = await getAssessmentDetails(assessmentId);
+
+        if (!response.success || !response.data) {
+          setError('Failed to fetch assessment details');
+          setLoading(false);
+          return;
+        }
+
+        // Transform API response to match component format
+        const data = response.data;
+        const transformedSubmission = {
+          id: data.assessment_id,
+          country: data.country,
+          respondentName: data.respondent_name,
+          title: data.title,
+          ministry: data.ministry_or_department,
+          email: data.contact_email,
+          developmentStage: data.development_stage,
+          completedAt: data.created_at,
+          compositeScore: data.sapi_score,
+          tier: data.tier,
+          scores: {
+            compute: Math.round(data.dimensions.compute_capacity.score),
+            capital: Math.round(data.dimensions.capital_formation.score),
+            regulatory: Math.round(data.dimensions.regulatory_readiness.score),
+            data: Math.round(data.dimensions.data_sovereignty.score),
+            di: Math.round(data.dimensions.directed_intelligence.score)
+          },
+          // Build answers object from dimension_breakdown
+          answers: {}
+        };
+
+        // Populate answers from dimension_breakdown
+        data.dimension_breakdown.forEach(dimension => {
+          dimension.questions.forEach(q => {
+            const qKey = `q${q.question_id}`;
+            transformedSubmission.answers[qKey] = q.score;
+          });
+        });
+
+        setSubmission(transformedSubmission);
+      } catch (err) {
+        setError(err.message || 'An error occurred while fetching assessment details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssessmentDetails();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F7F4EF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 16, color: "#6B6577" }}>Loading assessment details...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F7F4EF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+        <div style={{ textAlign: "center", padding: "20px 40px", background: "#FFFFFF", borderRadius: 8, border: "0.5px solid #E0D8CC" }}>
+          <div style={{ fontSize: 16, color: "#C03058", marginBottom: 8 }}>Error</div>
+          <div style={{ fontSize: 14, color: "#6B6577" }}>{error}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!submission) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F7F4EF", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 16, color: "#6B6577" }}>No assessment data available</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ fontFamily:"system-ui, -apple-system, sans-serif" }}>
-      {/* Demo picker strip */}
-      {/* <div style={{ background:"#0F0830", borderBottom:"0.5px solid #1E1650", padding:"8px 20px", display:"flex", alignItems:"center", gap:14, flexWrap:"wrap" }}>
-        <span style={{ color:"#9880B0", fontSize:11, letterSpacing:"0.06em", textTransform:"uppercase", flexShrink:0 }}>Preview submission</span>
-        <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-          {submissions.map(s => (
-            <button
-              key={s.id}
-              onClick={() => setSelectedId(s.id)}
-              style={{ padding:"4px 10px", borderRadius:4, fontSize:11.5, cursor:"pointer", fontFamily:"system-ui, sans-serif", border:`0.5px solid ${s.id === selectedId ? "#C9963A" : "#2A204A"}`, background: s.id === selectedId ? "#C9963A18" : "transparent", color: s.id === selectedId ? "#EDD98A" : "#9880B0", transition:"all 0.12s" }}
-            >
-              {shortCountry(s.country)}
-            </button>
-          ))}
-        </div>
-        <span style={{ marginLeft:"auto", fontSize:10.5, color:"#2A204A" }}>Admin Panel · B2 Submission Detail</span>
-      </div> */}
-
+    <div style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
       <SubmissionDetail
         key={submission.id}
         submission={submission}
-        submissions={submissions}
-        setSubmissions={setSubmissions}
+        submissions={[submission]}
+        setSubmissions={() => {}}
         setAdminPage={() => {}}
         setSelectedLead={() => {}}
       />

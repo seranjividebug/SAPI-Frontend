@@ -753,6 +753,8 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                           className="btn-view"
                           onClick={(e) => {
                             e.stopPropagation();
+                            // Store assessment_id in localStorage for detail page
+                            localStorage.setItem('sapi_assessment_id', row.id);
                             setSelectedSubmission(row);
                             setAdminPage("submissionDetail");
                             setSelectedRow(row.id);
