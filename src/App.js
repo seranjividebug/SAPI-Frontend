@@ -5,7 +5,6 @@ import SAPIBriefing from './components/SAPI_P3_Briefing';
 import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
 import SAPICalculating from './components/SAPI_P6_Calculating';
-import SAPIResults from './components/SAPI_P7_Results';
 import P7Results from './pages/common/result';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 // ─── Scoring Utilities ────────────────────────────────────────────────────────
 
@@ -537,12 +537,11 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
         {/* ─── EMAIL CAPTURE PANEL ─────────────────────────────────────────── */}
         <div style={{
           background: "#0F0830",
+          border: "1px solid rgba(107,69,8,0.2)",
           borderLeft: "3px solid #C9963A",
           borderRadius: "0 8px 8px 0",
           padding: "32px 36px",
           marginBottom: "40px",
-          border: "1px solid rgba(107,69,8,0.2)",
-          borderLeft: "3px solid #C9963A",
         }}>
           {!emailSubmitted ? (
             <>
