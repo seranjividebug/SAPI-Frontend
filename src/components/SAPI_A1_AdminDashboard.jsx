@@ -3,156 +3,13 @@ import SubmissionsList from './SAPI_B1_SubmissionsList';
 import SubmissionDetail from './SAPI_B2_SubmissionDetail';
 import QuestionEditor from './SAPI_E1_QuestionEditor';
 import Sidebar from './SAPI_Sidebar';
-
-// ============================================================
-// SEED DATA
-// ============================================================
-const DEMO_SUBMISSIONS = [
-  {
-    id: "sub_001",
-    country: "Kingdom of Saudi Arabia",
-    respondentName: "H.E. Faisal Al-Ibrahim",
-    title: "Minister of Economy and Planning",
-    ministry: "Ministry of Economy and Planning",
-    email: "f.alibrahim@mep.gov.sa",
-    developmentStage: "Advanced",
-    completedAt: "2026-03-14T09:22:00Z",
-    compositeScore: 71.4,
-    tier: "Advanced",
-    scores: { compute: 78, capital: 82, regulatory: 65, data: 60, di: 68 },
-    answers: { q1: 95, q2: 70, q3: 90, q4: 75, q5: 75, q6: 95, q7: 90, q8: 65, q9: 90, q10: 95, q11: 60, q12: 90, q13: 60, q14: 65, q15: 60, q16: 25, q17: 65, q18: 60, q19: 65, q20: 70, q21: 65, q22: 65, q23: 65, q24: 35, q25: 90, q26: 60, q27: 55, q28: 55, q29: 55, q30: 60 },
-    upgradeStatus: "requested",
-    requestedTier: "Tier 2",
-    adminNotes: "High-value lead. Minister attended SAPI launch event.",
-    leadStage: "Proposal Sent"
-  },
-  {
-    id: "sub_002",
-    country: "Republic of Singapore",
-    respondentName: "Dr. Janice Tan",
-    title: "Deputy Secretary, Smart Nation",
-    ministry: "Smart Nation and Digital Government Office",
-    email: "janice_tan@smartnation.gov.sg",
-    developmentStage: "Leading",
-    completedAt: "2026-03-15T14:05:00Z",
-    compositeScore: 83.2,
-    tier: "Sovereign AI Leader",
-    scores: { compute: 85, capital: 88, regulatory: 90, data: 80, di: 78 },
-    answers: { q1: 95, q2: 95, q3: 90, q4: 75, q5: 95, q6: 95, q7: 90, q8: 95, q9: 90, q10: 95, q11: 95, q12: 90, q13: 90, q14: 90, q15: 90, q16: 90, q17: 90, q18: 90, q19: 90, q20: 95, q21: 90, q22: 90, q23: 65, q24: 65, q25: 90, q26: 90, q27: 90, q28: 55, q29: 55, q30: 60 },
-    upgradeStatus: "none",
-    requestedTier: null,
-    adminNotes: "",
-    leadStage: "New"
-  },
-  {
-    id: "sub_003",
-    country: "Federal Republic of Nigeria",
-    respondentName: "Hon. Bosun Tijani",
-    title: "Minister of Communications, Innovation and Digital Economy",
-    ministry: "Federal Ministry of Communications",
-    email: "minister@fmcide.gov.ng",
-    developmentStage: "Developing",
-    completedAt: "2026-03-17T11:30:00Z",
-    compositeScore: 38.6,
-    tier: "Nascent",
-    scores: { compute: 28, capital: 35, regulatory: 42, data: 30, di: 45 },
-    answers: { q1: 25, q2: 15, q3: 35, q4: 30, q5: 25, q6: 45, q7: 25, q8: 35, q9: 30, q10: 40, q11: 35, q12: 60, q13: 30, q14: 40, q15: 30, q16: 25, q17: 35, q18: 30, q19: 35, q20: 40, q21: 40, q22: 30, q23: 35, q24: 10, q25: 65, q26: 30, q27: 30, q28: 25, q29: 25, q30: 60 },
-    upgradeStatus: "requested",
-    requestedTier: "Tier 2",
-    adminNotes: "Introduced via GIZ partnership.",
-    leadStage: "Contacted"
-  },
-  {
-    id: "sub_004",
-    country: "Republic of Kenya",
-    respondentName: "Eliud Owalo",
-    title: "Cabinet Secretary, Information & Digital Economy",
-    ministry: "Ministry of Information, Communications and Digital Economy",
-    email: "cs@ict.go.ke",
-    developmentStage: "Emerging",
-    completedAt: "2026-03-18T08:14:00Z",
-    compositeScore: 29.1,
-    tier: "Nascent",
-    scores: { compute: 22, capital: 28, regulatory: 35, data: 25, di: 32 },
-    answers: { q1: 25, q2: 15, q3: 10, q4: 30, q5: 25, q6: 20, q7: 25, q8: 10, q9: 30, q10: 40, q11: 10, q12: 30, q13: 30, q14: 40, q15: 30, q16: 25, q17: 35, q18: 30, q19: 10, q20: 15, q21: 40, q22: 30, q23: 35, q24: 10, q25: 35, q26: 30, q27: 30, q28: 25, q29: 25, q30: 30 },
-    upgradeStatus: "none",
-    requestedTier: null,
-    adminNotes: "",
-    leadStage: "New"
-  },
-  {
-    id: "sub_005",
-    country: "United Arab Emirates",
-    respondentName: "H.E. Omar Al Olama",
-    title: "Minister of State for Artificial Intelligence",
-    ministry: "Ministry of AI, Digital Economy and Remote Work Applications",
-    email: "minister.ai@uaecabinet.ae",
-    developmentStage: "Leading",
-    completedAt: "2026-03-19T10:00:00Z",
-    compositeScore: 78.9,
-    tier: "Advanced",
-    scores: { compute: 85, capital: 88, regulatory: 75, data: 72, di: 70 },
-    answers: { q1: 95, q2: 95, q3: 90, q4: 75, q5: 95, q6: 95, q7: 90, q8: 65, q9: 60, q10: 95, q11: 95, q12: 90, q13: 60, q14: 65, q15: 60, q16: 60, q17: 65, q18: 60, q19: 65, q20: 70, q21: 65, q22: 65, q23: 65, q24: 65, q25: 65, q26: 60, q27: 90, q28: 55, q29: 55, q30: 60 },
-    upgradeStatus: "requested",
-    requestedTier: "Tier 3",
-    adminNotes: "Priority account. Met Asim at WEF Davos.",
-    leadStage: "Won"
-  },
-  {
-    id: "sub_006",
-    country: "Republic of Rwanda",
-    respondentName: "Paula Ingabire",
-    title: "Minister of ICT and Innovation",
-    ministry: "Ministry of ICT and Innovation",
-    email: "minister@minict.gov.rw",
-    developmentStage: "Developing",
-    completedAt: "2026-03-20T13:45:00Z",
-    compositeScore: 46.3,
-    tier: "Developing",
-    scores: { compute: 40, capital: 42, regulatory: 55, data: 38, di: 50 },
-    answers: { q1: 50, q2: 40, q3: 35, q4: 30, q5: 50, q6: 45, q7: 25, q8: 35, q9: 60, q10: 40, q11: 35, q12: 60, q13: 60, q14: 40, q15: 60, q16: 25, q17: 65, q18: 30, q19: 35, q20: 40, q21: 40, q22: 30, q23: 35, q24: 35, q25: 65, q26: 30, q27: 55, q28: 55, q29: 25, q30: 60 },
-    upgradeStatus: "none",
-    requestedTier: null,
-    adminNotes: "",
-    leadStage: "New"
-  },
-  {
-    id: "sub_007",
-    country: "Republic of India",
-    respondentName: "Sh. S. Krishnan",
-    title: "Secretary, Ministry of Electronics and Information Technology",
-    ministry: "MeitY",
-    email: "secretary@meity.gov.in",
-    developmentStage: "Advanced",
-    completedAt: "2026-03-21T07:30:00Z",
-    compositeScore: 62.7,
-    tier: "Advanced",
-    scores: { compute: 65, capital: 70, regulatory: 68, data: 52, di: 58 },
-    answers: { q1: 75, q2: 70, q3: 65, q4: 50, q5: 50, q6: 70, q7: 55, q8: 65, q9: 60, q10: 70, q11: 60, q12: 90, q13: 60, q14: 65, q15: 60, q16: 60, q17: 65, q18: 60, q19: 65, q20: 40, q21: 65, q22: 65, q23: 65, q24: 35, q25: 65, q26: 60, q27: 55, q28: 55, q29: 55, q30: 60 },
-    upgradeStatus: "requested",
-    requestedTier: "Tier 2",
-    adminNotes: "Referred via UK FCDO digital programme.",
-    leadStage: "Contacted"
-  },
-  {
-    id: "sub_008",
-    country: "Republic of Ghana",
-    respondentName: "Ursula Owusu-Ekuful",
-    title: "Minister for Communications and Digitalisation",
-    ministry: "Ministry of Communications and Digitalisation",
-    email: "minister@moc.gov.gh",
-    developmentStage: "Emerging",
-    completedAt: "2026-03-22T15:10:00Z",
-    compositeScore: 33.4,
-    tier: "Nascent",
-    scores: { compute: 28, capital: 30, regulatory: 40, data: 28, di: 36 },
-    answers: { q1: 25, q2: 15, q3: 35, q4: 30, q5: 25, q6: 20, q7: 25, q8: 35, q9: 30, q10: 40, q11: 10, q12: 30, q13: 30, q14: 40, q15: 30, q16: 25, q17: 35, q18: 30, q19: 35, q20: 15, q21: 40, q22: 30, q23: 35, q24: 10, q25: 35, q26: 30, q27: 30, q28: 25, q29: 25, q30: 30 },
-    upgradeStatus: "none",
-    requestedTier: null,
-    adminNotes: "",
-    leadStage: "New"
-  }
-];
+import { 
+  getDashboardAssessments, 
+  getDashboardFilters,
+  exportDashboardCSV,
+  updateAssessmentStatus,
+  getDashboardStats
+} from '../services/dashboardService';
 
 // ============================================================
 // HELPERS
@@ -266,27 +123,247 @@ const countryFlagComponents = {
   'Republic of Ghana': GhanaFlag,
 };
 
+// Helper to get auth token
+const getAuthToken = () => localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+
+// Transform API assessment to component format
+const transformAssessment = (assessment) => ({
+  id: assessment.id,
+  country: assessment.country,
+  respondentName: assessment.respondentName,
+  title: assessment.title,
+  ministry: assessment.ministry,
+  email: assessment.email || '',
+  developmentStage: assessment.developmentStage,
+  completedAt: assessment.date,
+  compositeScore: assessment.score,
+  tier: assessment.tier,
+  scores: {
+    compute: assessment.dimensionScores?.computeCapacity || 0,
+    capital: assessment.dimensionScores?.capitalFormation || 0,
+    regulatory: assessment.dimensionScores?.regulatoryReadiness || 0,
+    data: assessment.dimensionScores?.dataSovereignty || 0,
+    di: assessment.dimensionScores?.directedIntelligence || 0
+  },
+  answers: assessment.answers || {},
+  upgradeStatus: assessment.upgradeStatus || 'none',
+  requestedTier: assessment.requestedTier || null,
+  adminNotes: assessment.adminNotes || '',
+  leadStage: assessment.leadStage || 'New'
+});
+
 function Dashboard({ setAdminPage, setSelectedSubmission }) {
-  const total = DEMO_SUBMISSIONS.length;
-  const upgradeReqs = DEMO_SUBMISSIONS.filter(s => s.upgradeStatus === 'requested').length;
-  const avgScore = (DEMO_SUBMISSIONS.reduce((s, r) => s + r.compositeScore, 0) / total).toFixed(1);
-  const completed = DEMO_SUBMISSIONS.filter(s => s.upgradeStatus !== 'none' || s.leadStage !== 'New').length;
-  const completionRate = Math.round((completed / total) * 100);
+  const [submissions, setSubmissions] = useState([]);
+  const [allSubmissions, setAllSubmissions] = useState([]);
+  const [filters, setFilters] = useState({ countries: [], tiers: [], developmentStages: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Dashboard stats state
+  const [stats, setStats] = useState({
+    totalAssessments: { value: 0, change: 0 },
+    avgSapiScore: { value: 0, change: 0 },
+    completionRate: { value: 0, change: 0 },
+    upgradeRequests: { value: 0, weeklyNew: 0 }
+  });
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
+  
+  // Filter loading state
+  const [filterLoading, setFilterLoading] = useState(false);
+  
+  // Filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedScoreRange, setSelectedScoreRange] = useState('');
+  
+  // Fetch dashboard data
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const token = getAuthToken();
+      
+      try {
+        setLoading(true);
+        
+        // Fetch all data in parallel
+        const [assessmentsRes, filtersRes, statsRes] = await Promise.all([
+          getDashboardAssessments(token, { page: currentPage, limit: itemsPerPage }).catch(() => null),
+          getDashboardFilters(token).catch(() => null),
+          getDashboardStats(token).catch(() => null)
+        ]);
+        
+        if (assessmentsRes?.success) {
+          const transformedSubmissions = assessmentsRes.data.data.map(transformAssessment);
+          setSubmissions(transformedSubmissions);
+          setAllSubmissions(transformedSubmissions);
+          setTotalPages(assessmentsRes.data.totalPages || 1);
+        } else {
+          setSubmissions([]);
+          setAllSubmissions([]);
+          setTotalPages(1);
+        }
+        
+        if (filtersRes?.success) {
+          setFilters(filtersRes.data);
+        }
+        
+        if (statsRes?.success) {
+          setStats(statsRes.data);
+        }
+        
+        setError(null);
+      } catch (err) {
+        console.error('Dashboard fetch error:', err);
+        setError('Failed to load dashboard data');
+        setSubmissions([]);
+        setAllSubmissions([]);
+        setTotalPages(1);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchDashboardData();
+  }, [currentPage]);
+  
+  // Apply filters when they change
+  useEffect(() => {
+    const fetchFilteredAssessments = async () => {
+      const token = getAuthToken();
+      
+      try {
+        setFilterLoading(true);
+        const filterParams = {
+          page: currentPage,
+          limit: itemsPerPage,
+          search: searchQuery,
+          country: selectedCountry
+        };
+        
+        // Parse score range
+        if (selectedScoreRange) {
+          const ranges = {
+            '90-100 (Excellent)': { min: 90, max: 100 },
+            '70-89 (Good)': { min: 70, max: 89 },
+            '50-69 (Average)': { min: 50, max: 69 },
+            'Below 50 (Needs Improvement)': { min: 0, max: 49 }
+          };
+          const range = ranges[selectedScoreRange];
+          if (range) {
+            filterParams.scoreMin = range.min;
+            filterParams.scoreMax = range.max;
+          }
+        }
+        
+        const response = await getDashboardAssessments(token, filterParams);
+        
+        if (response?.success) {
+          const transformedSubmissions = response.data.data.map(transformAssessment);
+          setSubmissions(transformedSubmissions);
+          setTotalPages(response.data.totalPages || 1);
+        }
+      } catch (err) {
+        console.error('Filter fetch error:', err);
+      } finally {
+        setFilterLoading(false);
+      }
+    };
+    
+    // Debounce search
+    const timeoutId = setTimeout(fetchFilteredAssessments, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, selectedCountry, selectedScoreRange, currentPage]);
+  
+  // Calculate derived values from ALL submissions (not filtered)
+  const total = allSubmissions.length;
+  const upgradeReqs = allSubmissions.filter(s => s.upgradeStatus === 'requested').length;
+  const avgScore = total > 0 ? (allSubmissions.reduce((s, r) => s + r.compositeScore, 0) / total).toFixed(1) : '0.0';
+  const completed = allSubmissions.filter(s => s.upgradeStatus !== 'none' || s.leadStage !== 'New').length;
+  const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  // Get unique countries from all submissions for filter dropdown
+  const uniqueCountries = [...new Set(allSubmissions.map(s => s.country))].sort();
 
   const todayStr = new Date().toLocaleDateString('en-GB', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   });
+  
+  if (loading) {
+    return (
+      <div style={{ padding: '1.5rem 2rem', fontFamily: 'system-ui, -apple-system, sans-serif', background: '#F8F9FA', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 16, color: '#6B6577' }}>Loading dashboard...</div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (error) {
+    return (
+      <div style={{ padding: '1.5rem 2rem', fontFamily: 'system-ui, -apple-system, sans-serif', background: '#F8F9FA', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 16, color: '#C03058', marginBottom: 8 }}>{error}</div>
+          <button 
+            onClick={() => window.location.reload()} 
+            style={{ padding: '8px 16px', background: '#1A1A2E', color: '#FFFFFF', border: 'none', borderRadius: 6, cursor: 'pointer' }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-  // Top scoring countries
-  const topCountries = [...DEMO_SUBMISSIONS]
+  // Top scoring countries from ALL submissions
+  const topCountries = [...allSubmissions]
     .sort((a, b) => b.compositeScore - a.compositeScore)
     .slice(0, 5);
+  
+  // Handle CSV export
+  const handleExportCSV = async () => {
+    const token = getAuthToken();
+    try {
+      const blob = await exportDashboardCSV(token, {
+        search: searchQuery,
+        country: selectedCountry
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `dashboard-export-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Export error:', err);
+      alert('Failed to export CSV');
+    }
+  };
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(DEMO_SUBMISSIONS.length / itemsPerPage);
-  const paginatedData = DEMO_SUBMISSIONS.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  // Handle status update
+  const handleUpdateStatus = async (submissionId, newStatus) => {
+    const token = getAuthToken();
+    try {
+      const response = await updateAssessmentStatus(token, submissionId, { leadStage: newStatus });
+      
+      if (response?.success) {
+        // Update local state
+        setSubmissions(prev => prev.map(sub => 
+          sub.id === submissionId ? { ...sub, leadStage: newStatus } : sub
+        ));
+        setAllSubmissions(prev => prev.map(sub => 
+          sub.id === submissionId ? { ...sub, leadStage: newStatus } : sub
+        ));
+      }
+    } catch (err) {
+      console.error('Status update error:', err);
+      alert('Failed to update status');
+    }
+  };
 
   return (
     <div style={{ padding: '1.5rem 2rem', fontFamily: 'system-ui, -apple-system, sans-serif', background: '#F8F9FA', minHeight: '100vh' }}>
@@ -298,66 +375,48 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
           </h1>
           <div style={{ fontSize: 13, color: '#6B6577' }}>{todayStr}</div>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '8px 14px', background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-            borderRadius: 6, fontSize: 12, color: '#1A1A2E', cursor: 'pointer'
-          }}>
-            <span>↓</span> Export CSV
-          </button>
-          <button style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '8px 14px', background: '#1A1A2E', border: 'none',
-            borderRadius: 6, fontSize: 12, color: '#FFFFFF', cursor: 'pointer'
-          }}>
-            <span>↓</span> Export PDF
-          </button>
-        </div>
       </div>
 
       {/* KPI Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
         <KpiCard 
           icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C9963A" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>}
-          value={total} 
+          value={stats.totalAssessments.value} 
           label="Total Assessments" 
-          trend="+12%" 
-          trendLabel="from last month" 
           color="#C9963A"
         />
         <KpiCard 
           icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4A7AE0" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>}
-          value={avgScore} 
+          value={stats.avgSapiScore.value} 
           label="Avg SAPI Score" 
-          trend="No change" 
-          trendLabel="composite weighted mean" 
           color="#4A7AE0"
         />
         <KpiCard 
           icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#28A868" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>}
-          value={`${completionRate}%`} 
+          value={`${stats.completionRate.value}%`} 
           label="Completion Rate" 
-          trend="No change" 
           trendLabel="assessments completed" 
           color="#28A868"
         />
-        <KpiCard 
+        {/* <KpiCard 
           icon={<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4A830" strokeWidth="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>}
           value={upgradeReqs} 
           label="Upgrade Requests" 
           trend="22 new" 
           trendLabel="upgrades this week" 
           color="#D4A830"
-        />
+        /> */}
       </div>
 
       {/* Filters */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 10 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', flex: 1 }}>
         <div style={{ position: 'relative' }}>
           <input
             type="text"
             placeholder="Search country, name or ministry..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               padding: '9px 12px 9px 32px', fontSize: 13,
               border: '0.5px solid #D0C8BC', borderRadius: 6,
@@ -365,43 +424,74 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
               width: 280, outline: 'none',
             }}
           />
-          <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9880B0', fontSize: 14 }}>🔍</span>
+          <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9880B0', fontSize: 14 }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="5" stroke="#9880B0" strokeWidth="1.5"/>
+              <path d="M11 11L14 14" stroke="#9880B0" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </span>
         </div>
-        <select style={{
-          padding: '9px 12px', fontSize: 13,
-          border: '0.5px solid #D0C8BC', borderRadius: 6,
-          background: '#FFFFFF', color: '#1A1A2E',
-        }}>
-          <option>All countries</option>
-          {DEMO_SUBMISSIONS.map(s => <option key={s.id}>{shortCountry(s.country)}</option>)}
+        <select 
+          value={selectedCountry}
+          onChange={(e) => setSelectedCountry(e.target.value)}
+          style={{
+            padding: '6px 9px', fontSize: 13,
+            border: '0.5px solid #D0C8BC', borderRadius: 6,
+            background: '#FFFFFF', color: '#1A1A2E',
+            position: 'relative', zIndex: 20,
+            flex: 1, minWidth: 140,
+          }}
+        >
+          <option value="">All countries</option>
+          {uniqueCountries.map(country => (
+            <option key={country} value={country}>{shortCountry(country)}</option>
+          ))}
         </select>
-        <select style={{
-          padding: '9px 12px', fontSize: 13,
-          border: '0.5px solid #D0C8BC', borderRadius: 6,
-          background: '#FFFFFF', color: '#1A1A2E',
-        }}>
-          <option>All score ranges</option>
+        <select 
+          value={selectedScoreRange}
+          onChange={(e) => setSelectedScoreRange(e.target.value)}
+          style={{
+            padding: '6px 9px', fontSize: 13,
+            border: '0.5px solid #D0C8BC', borderRadius: 6,
+            background: '#FFFFFF', color: '#1A1A2E',
+            position: 'relative', zIndex: 20,
+            flex: 1, minWidth: 140,
+          }}
+        >
+          <option value="">All score ranges</option>
           <option>90-100 (Excellent)</option>
           <option>70-89 (Good)</option>
           <option>50-69 (Average)</option>
           <option>Below 50 (Needs Improvement)</option>
         </select>
         <select style={{
-          padding: '9px 12px', fontSize: 13,
+          padding: '7px 10px', fontSize: 13,
           border: '0.5px solid #D0C8BC', borderRadius: 6,
           background: '#FFFFFF', color: '#1A1A2E',
+          position: 'relative', zIndex: 20,
+          flex: 1, minWidth: 140,
         }}>
           <option>All dates</option>
           <option>Last 7 days</option>
           <option>Last 30 days</option>
           <option>Last 90 days</option>
         </select>
-        <button style={{
-          display: 'flex', alignItems: 'center', gap: 4,
-          padding: '9px 12px', background: 'transparent', border: 'none',
-          color: '#6B6577', fontSize: 12, cursor: 'pointer'
-        }}>
-          <span>↺</span> Reset Filters
+        </div>
+        <button 
+          onClick={handleExportCSV}
+          style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            padding: '9px 16px', background: '#C9963A', border: 'none',
+            borderRadius: 6, fontSize: 13, color: '#FFFFFF', cursor: 'pointer',
+            flexShrink: 0,
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Export CSV
         </button>
       </div>
 
@@ -412,13 +502,30 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
           background: '#FFFFFF', border: '0.5px solid #E0D8CC',
           borderRadius: 8, overflow: 'hidden',
         }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+          <div style={{ overflowX: 'auto', position: 'relative' }}>
+            {filterLoading && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                zIndex: 5,
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ 
+                    width: 40, height: 40, border: '3px solid #E0D8CC', 
+                    borderTop: '3px solid #C9963A', borderRadius: '50%',
+                    animation: 'spin 1s linear infinite', margin: '0 auto 8px'
+                  }} />
+                  <div style={{ fontSize: 13, color: '#6B6577' }}>Loading...</div>
+                </div>
+              </div>
+            )}
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 900 }}>
             <thead>
-              <tr style={{ background: '#F8F9FA', borderBottom: '0.5px solid #E0D8CC' }}>
+              <tr style={{ background: '#F2ECCF', borderBottom: '0.5px solid #E0D8CC' }}>
                 {['COUNTRY', 'RESPONDENT', 'MINISTRY', 'SCORE', 'TIER', 'DATE', 'ACTIONS'].map(h => (
                   <th key={h} style={{
                     padding: '12px 14px', textAlign: 'left',
-                    fontSize: 10, fontWeight: 600, color: '#6B6577',
+                    fontSize: 10, fontWeight: 600, color: '#1A1A2E',
                     textTransform: 'uppercase', letterSpacing: '0.05em',
                     fontFamily: 'system-ui, sans-serif',
                     whiteSpace: 'nowrap',
@@ -427,7 +534,14 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.map((sub, i) => (
+              {submissions.length === 0 && !filterLoading ? (
+                <tr>
+                  <td colSpan={7} style={{ padding: '40px 14px', textAlign: 'center' }}>
+                    <div style={{ fontSize: 14, color: '#6B6577' }}>No records found</div>
+                  </td>
+                </tr>
+              ) : (
+                submissions.map((sub, i) => (
                 <tr 
                   key={sub.id}
                   onClick={() => { setSelectedSubmission(sub); setAdminPage('submissionDetail'); }}
@@ -435,10 +549,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                     background: i % 2 === 0 ? '#FFFFFF' : '#FAFBFC',
                     borderBottom: '0.5px solid #F0EBE3',
                     cursor: 'pointer',
-                    transition: 'background 0.1s',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#FBF5E6'}
-                  onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? '#FFFFFF' : '#FAFBFC'}
                 >
                   <td style={{ padding: '12px 14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -458,7 +569,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   </td>
                   <td style={{ padding: '12px 14px' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                      <span style={{ color: '#C9963A', fontFamily: 'Georgia, serif', fontSize: 18, fontWeight: 600 }}>
+                      <span style={{ color: '#C9963A', fontFamily: 'system-ui, -apple-system, sans-serif', fontSize: 18, fontWeight: 600 }}>
                         {sub.compositeScore}
                       </span>
                       <span style={{ color: '#9880B0', fontSize: 11 }}>/100</span>
@@ -476,15 +587,32 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                     {fmtDate(sub.completedAt)}
                   </td>
                   <td style={{ padding: '12px 14px' }}>
-                    <button style={{
-                      background: 'transparent', border: 'none',
-                      color: '#4A7AE0', fontSize: 12, cursor: 'pointer'
-                    }}>View →</button>
+                    <button 
+                      style={{
+                        padding: '6px 16px', 
+                        background: 'transparent', 
+                        border: '1px solid #C9963A',
+                        borderRadius: 4, 
+                        fontSize: 12, 
+                        color: '#C9963A', 
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#C9963A';
+                        e.currentTarget.style.color = '#FFFFFF';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = '#C9963A';
+                      }}
+                    >View</button>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
+          </div>
           
           {/* Pagination */}
           <div style={{
@@ -492,7 +620,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             padding: '12px 16px', borderTop: '0.5px solid #E0D8CC', background: '#FAFBFC'
           }}>
             <div style={{ fontSize: 12, color: '#6B6577' }}>
-              Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, DEMO_SUBMISSIONS.length)} of {DEMO_SUBMISSIONS.length} results
+              Showing {total > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to {Math.min(currentPage * itemsPerPage, total)} of {total} results
             </div>
             <div style={{ display: 'flex', gap: 4 }}>
               <button 
@@ -526,16 +654,6 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   opacity: currentPage === totalPages ? 0.5 : 1,
                 }}
               >→</button>
-            </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button style={{
-                padding: '6px 14px', background: '#1A1A2E', border: 'none',
-                borderRadius: 4, fontSize: 12, color: '#FFFFFF', cursor: 'pointer'
-              }}>Export CSV</button>
-              <button style={{
-                padding: '6px 14px', background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-                borderRadius: 4, fontSize: 12, color: '#1A1A2E', cursor: 'pointer'
-              }}>Export PDF</button>
             </div>
           </div>
         </div>
@@ -586,7 +704,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             <h3 style={{ fontSize: 14, fontWeight: 600, color: '#1A1A2E', margin: '0 0 14px' }}>
               Tier Distribution
             </h3>
-            <TierDistributionChart submissions={DEMO_SUBMISSIONS} />
+            <TierDistributionChart submissions={allSubmissions} />
           </div>
 
           {/* Completion Rate Chart */}
@@ -600,7 +718,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 80 }}>
               <div style={{
                 width: 80, height: 80, borderRadius: '50%',
-                background: `conic-gradient(#28A868 ${completionRate * 3.6}deg, #F0EBE3 0deg)`,
+                background: `conic-gradient(#28A868 ${stats.completionRate.value * 3.6}deg, #F0EBE3 0deg)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 position: 'relative',
               }}>
@@ -608,7 +726,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   width: 60, height: 60, borderRadius: '50%',
                   background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <span style={{ fontSize: 16, fontWeight: 600, color: '#1A1A2E' }}>{completionRate}%</span>
+                  <span style={{ fontSize: 16, fontWeight: 600, color: '#1A1A2E' }}>{stats.completionRate.value}%</span>
                 </div>
               </div>
             </div>
@@ -624,16 +742,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             </div>
           </div>
 
-          {/* Submissions Over Time */}
-          <div style={{
-            background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-            borderRadius: 8, padding: '16px',
-          }}>
-            <h3 style={{ fontSize: 14, fontWeight: 600, color: '#1A1A2E', margin: '0 0 14px' }}>
-              Submissions Over Time
-            </h3>
-            <MiniLineChart data={DEMO_SUBMISSIONS} />
-          </div>
+         
         </div>
       </div>
     </div>
@@ -642,7 +751,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
 
 // KPI Card Component
 function KpiCard({ icon, value, label, trend, trendLabel, color }) {
-  const isPositive = trend.includes('+') || trend.includes('No change');
+  const isPositive = trend?.includes('+') || trend?.includes('No change') || false;
   return (
     <div style={{
       background: '#FFFFFF', border: '0.5px solid #E0D8CC',
@@ -656,18 +765,20 @@ function KpiCard({ icon, value, label, trend, trendLabel, color }) {
       </div>
       <div style={{
         fontSize: 32, fontWeight: 600, color: '#1A1A2E',
-        fontFamily: 'Georgia, serif', lineHeight: 1, marginBottom: 4,
+        fontFamily: 'system-ui, -apple-system, sans-serif', lineHeight: 1, marginBottom: 4,
       }}>{value}</div>
       <div style={{ fontSize: 12, fontWeight: 500, color: '#6B6577', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
         {label}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{
-          fontSize: 11, color: isPositive ? '#28A868' : '#C03058',
-          fontWeight: 500,
-        }}>{trend}</span>
-        <span style={{ fontSize: 11, color: '#9880B0' }}>{trendLabel}</span>
-      </div>
+      {trend && trendLabel && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{
+            fontSize: 11, color: isPositive ? '#28A868' : '#C03058',
+            fontWeight: 500,
+          }}>{trend}</span>
+          <span style={{ fontSize: 11, color: '#9880B0' }}>{trendLabel}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -786,10 +897,9 @@ function UsersSettingsPage() {
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 0, borderBottom: '0.5px solid #E0D8CC', marginBottom: 24 }}>
-        {[
+        {[ 
           { key: 'users', label: 'Users', count: users.length },
           { key: 'settings', label: 'Settings' },
-          { key: 'security', label: 'Security' },
         ].map(tab => (
           <button
             key={tab.key}
@@ -996,41 +1106,6 @@ function UsersSettingsPage() {
         </div>
       )}
 
-      {/* Security Tab */}
-      {activeTab === 'security' && (
-        <div style={{ maxWidth: 600 }}>
-          {[ 
-            { label: 'Two-Factor Authentication', desc: 'Require 2FA for all admin users', enabled: true },
-            { label: 'Password Expiry', desc: 'Force password reset every 90 days', enabled: false },
-            { label: 'Login Notifications', desc: 'Email alerts for new device logins', enabled: true },
-            { label: 'Session Timeout', desc: 'Auto-logout after 30 minutes of inactivity', enabled: true },
-          ].map((setting, idx) => (
-            <div key={idx} style={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '16px 0', borderBottom: '0.5px solid #F0EBE3',
-            }}>
-              <div>
-                <div style={{ color: '#1A1A2E', fontWeight: 500, fontSize: 14 }}>{setting.label}</div>
-                <div style={{ color: '#9880B0', fontSize: 12, marginTop: 2 }}>{setting.desc}</div>
-              </div>
-              <button style={{
-                width: 44, height: 24, borderRadius: 12,
-                background: setting.enabled ? '#C9963A' : '#D0C8BC',
-                border: 'none', cursor: 'pointer',
-                position: 'relative',
-              }}>
-                <span style={{
-                  position: 'absolute', top: 2,
-                  left: setting.enabled ? 22 : 2,
-                  width: 20, height: 20, borderRadius: '50%',
-                  background: '#FFFFFF',
-                  transition: 'left 0.2s',
-                }} />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Add/Edit Modal */}
       {showAddModal && (

@@ -330,6 +330,7 @@ export default function SAPIRoadmap() {
   
   // API data states
   const [roadmapData, setRoadmapData] = useState(null);
+  const [assessmentData, setAssessmentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
@@ -353,6 +354,7 @@ export default function SAPIRoadmap() {
         }
         
         const apiData = assessmentResponse.data;
+        setAssessmentData(apiData);
         
         // Calculate composite score
         const scores = [
@@ -393,7 +395,7 @@ export default function SAPIRoadmap() {
   const compositeScore = roadmapData?.dimension_scorecard 
     ? Math.round(roadmapData.dimension_scorecard.reduce((sum, d) => sum + (Number(d.score) || 0), 0) / roadmapData.dimension_scorecard.length)
     : 0;
-  const country = "United Arab Emirates";
+  const country = assessmentData?.country || assessmentData?.country_name || "-";
 
   // Transform API roadmap data to component format
   const { bottom3, phases, priorityPanel } = useMemo(() => {

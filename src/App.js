@@ -110,7 +110,6 @@ function QuizWrapper({ currentDimension, setCurrentDimension }) {
         } else if (page === 'calculating') {
           // Submit assessment before navigating
           const allAnswers = finalAnswers || answers;
-          console.log('Submitting answers:', Object.keys(allAnswers).length, allAnswers);
           await submitToApi(allAnswers);
           navigate('/calculating', { state: { answers: allAnswers } });
         }
@@ -127,37 +126,37 @@ function App() {
       <div className="App">
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
-          <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
+          <Route path="/home" element={<LandingPage />} />
+          <Route path="/preview" element={<PreviewPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/briefing" element={<ProtectedRoute allowedRole={2}><BriefingWrapper setCurrentDimension={setCurrentDimension} /></ProtectedRoute>} />
+          <Route path="/briefing" element={<BriefingWrapper setCurrentDimension={setCurrentDimension} />} />
           <Route 
             path="/dimintro" 
-            element={<ProtectedRoute allowedRole={2}><DimIntroWrapper 
+            element={<DimIntroWrapper 
               currentDimension={currentDimension} 
               setCurrentDimension={setCurrentDimension}
-            /></ProtectedRoute>} 
+            />} 
           />
           <Route 
             path="/quiz" 
-            element={<ProtectedRoute allowedRole={2}><QuizWrapper 
+            element={<QuizWrapper 
               currentDimension={currentDimension}
               setCurrentDimension={setCurrentDimension}
-            /></ProtectedRoute>} 
+            />} 
           />
-          <Route path="/calculating" element={<ProtectedRoute allowedRole={2}><SAPICalculating /></ProtectedRoute>} />
-          <Route path="/results" element={<ProtectedRoute allowedRole={2}><SAPIResults /></ProtectedRoute>} />
-          <Route path="/scorecard" element={<ProtectedRoute allowedRole={2}><SAPIScorecard /></ProtectedRoute>} />
-          <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
-          <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
-          <Route path="/admin" element={<SapiA1AdminDashboard />} />
-          <Route path="/admindashboard" element={<SapiA1AdminDashboard />} />
-          <Route path="/dashboard" element={<SapiA1AdminDashboard />} />
-          <Route path="/submissionlist" element={<SubmissionsList />} />
-          <Route path="/submissiondetail" element={<SubmissionDetail />} />
-          <Route path="/leadspipeline" element={<LeadsPipeline />} />
+          <Route path="/calculating" element={<SAPICalculating />} />
+          <Route path="/results" element={<SAPIResults />} />
+          <Route path="/scorecard" element={<SAPIScorecard />} />
+          <Route path="/peercomparison" element={<SAPIPeerComparison />} />
+          <Route path="/roadmap" element={<SAPIRoadmap />} />
+          <Route path="/admin" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
+          <Route path="/submissionlist" element={<ProtectedRoute allowedRole={1}><SubmissionsList /></ProtectedRoute>} />
+          <Route path="/submissiondetail" element={<ProtectedRoute allowedRole={1}><SubmissionDetail /></ProtectedRoute>} />
+          <Route path="/leadspipeline" element={<ProtectedRoute allowedRole={1}><LeadsPipeline /></ProtectedRoute>} />
           <Route path="/leaddetail" element={<LeadDetail />} />
           <Route path="/leaddetailcombined" element={<LeadDetailCombined />} />
           <Route path="/questioneditor" element={<QuestionEditor />} />

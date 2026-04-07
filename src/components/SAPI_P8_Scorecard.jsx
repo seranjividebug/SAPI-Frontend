@@ -674,7 +674,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
       D5: apiData.directed_intelligence,
     },
     orgProfile: {
-      nationName: "United Kingdom",
+      nationName: apiData?.country || apiData?.country_name || "-",
       assessmentDate: new Date().toLocaleDateString("en-GB", {
         day: "numeric", month: "long", year: "numeric",
       }),

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { getDashboardAssessments, exportDashboardCSV } from "../services/dashboardService";
 
 // ============================================================
 // SEED DATA  (shared — define once in the top-level admin file)
@@ -100,6 +101,33 @@ const fmtDate = (iso) =>
 
 const truncMin = (str, n) =>
   str && str.length > n ? str.slice(0, n) + "…" : (str || "");
+
+// Helper to get auth token
+const getAuthToken = () => localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+
+// Transform API assessment to component format
+const transformAssessment = (assessment) => ({
+  id: assessment.id,
+  country: assessment.country,
+  respondentName: assessment.respondentName,
+  title: assessment.title,
+  ministry: assessment.ministry,
+  developmentStage: assessment.developmentStage,
+  completedAt: assessment.date,
+  compositeScore: assessment.score,
+  tier: assessment.tier,
+  scores: {
+    compute: assessment.dimensionScores?.computeCapacity || 0,
+    capital: assessment.dimensionScores?.capitalFormation || 0,
+    regulatory: assessment.dimensionScores?.regulatoryReadiness || 0,
+    data: assessment.dimensionScores?.dataSovereignty || 0,
+    di: assessment.dimensionScores?.directedIntelligence || 0
+  },
+  upgradeStatus: assessment.upgradeStatus || 'none',
+  requestedTier: assessment.requestedTier || null,
+  adminNotes: assessment.adminNotes || '',
+  leadStage: assessment.leadStage || 'New'
+});
 
 // ============================================================
 // TOAST
@@ -209,6 +237,10 @@ function ColHeader({ col, sortKey, sortDir, onSort }) {
 // B1 — SUBMISSIONS LIST
 // ============================================================
 export default function SubmissionsList({ setAdminPage, setSelectedSubmission, setSelectedLead }) {
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
   const [search, setSearch] = useState("");
   const [filterTier, setFilterTier] = useState("All");
   const [filterStage, setFilterStage] = useState("All");
@@ -219,8 +251,31 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
   const [selectedRow, setSelectedRow] = useState(null);
   const [toastVisible, setToastVisible] = useState(false);
 
-  const totalCount = DEMO_SUBMISSIONS.length;
-  const upgradeCount = DEMO_SUBMISSIONS.filter((s) => s.upgradeStatus === "requested").length;
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = getAuthToken();
+      try {
+        setLoading(true);
+        const response = await getDashboardAssessments(token, { page: 1, limit: 100 });
+        if (response?.success) {
+          const transformedData = response.data.data.map(transformAssessment);
+          setSubmissions(transformedData);
+        } else {
+          setSubmissions([]);
+        }
+        setError(null);
+      } catch (err) {
+        console.error('Fetch error:', err);
+        setError('Failed to load assessments');
+        setSubmissions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   const hasActiveFilters =
     search || filterTier !== "All" || filterStage !== "All" ||
@@ -236,18 +291,36 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
     else { setSortKey(key); setSortDir("asc"); }
   };
 
-  const handleExport = () => {
-    setToastVisible(true);
-    setTimeout(() => setToastVisible(false), 3200);
+  const handleExport = async () => {
+    const token = getAuthToken();
+    try {
+      const blob = await exportDashboardCSV(token, {
+        search: search,
+        country: filterTier !== "All" ? undefined : undefined,
+        developmentStage: filterStage !== "All" ? filterStage : undefined,
+        tier: filterTier !== "All" ? filterTier : undefined,
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `assessments-export-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Export error:', err);
+      alert('Failed to export CSV');
+    }
   };
 
   const rows = useMemo(() => {
-    let r = [...DEMO_SUBMISSIONS];
+    let r = [...submissions];
     const s = search.toLowerCase().trim();
     if (s) r = r.filter((x) =>
-      x.country.toLowerCase().includes(s) ||
-      x.respondentName.toLowerCase().includes(s) ||
-      x.ministry.toLowerCase().includes(s)
+      x.country?.toLowerCase().includes(s) ||
+      x.respondentName?.toLowerCase().includes(s) ||
+      x.ministry?.toLowerCase().includes(s)
     );
     if (filterTier !== "All") r = r.filter((x) => x.tier === filterTier);
     if (filterStage !== "All") r = r.filter((x) => x.developmentStage === filterStage);
@@ -257,12 +330,13 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
 
     r.sort((a, b) => {
       const d = sortDir === "asc" ? 1 : -1;
-      const av = a[sortKey], bv = b[sortKey];
+      const av = a[sortKey] ?? '';
+      const bv = b[sortKey] ?? '';
       if (typeof av === "string") return av.localeCompare(bv) * d;
       return (av - bv) * d;
     });
     return r;
-  }, [search, filterTier, filterStage, filterUpgrade, filterLead, sortKey, sortDir]);
+  }, [search, filterTier, filterStage, filterUpgrade, filterLead, sortKey, sortDir, submissions]);
 
   const COLUMNS = [
     { key: "country",          label: "Country",    sortable: true,  width: "160px" },
@@ -288,6 +362,35 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
     ::-webkit-scrollbar-thumb { background: #D4CBB8; border-radius: 3px; }
   `;
 
+  const totalCount = submissions.length;
+  const upgradeCount = submissions.filter((s) => s.upgradeStatus === "requested").length;
+
+  if (loading) {
+    return (
+      <div style={{ padding: "1.75rem 2rem 2.5rem", fontFamily: "system-ui, -apple-system, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 14, color: "#6B6577" }}>Loading assessments...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: "1.75rem 2rem 2.5rem", fontFamily: "system-ui, -apple-system, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 14, color: "#C03058", marginBottom: 8 }}>{error}</div>
+          <button 
+            onClick={() => window.location.reload()} 
+            style={{ padding: "8px 16px", background: "#1A1A2E", color: "#FFFFFF", border: "none", borderRadius: 6, cursor: "pointer" }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: "1.75rem 2rem 2.5rem", fontFamily: "system-ui, -apple-system, sans-serif" }}>
       <style>{rowHoverStyles}</style>
@@ -297,30 +400,12 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "1.25rem" }}>
         <div>
           <h1 style={{ fontSize: 26, fontWeight: 600, color: "#1A1A2E", margin: "0 0 6px", fontFamily: "Georgia, serif" }}>
-            Submissions
+            Assessments
           </h1>
           <div style={{ fontSize: 13, color: "#6B6577" }}>
             {totalCount} assessments completed ·{" "}
-            <span style={{ color: "#C9963A", fontWeight: 500 }}>{upgradeCount} upgrade requests</span>
           </div>
         </div>
-        <button
-          onClick={handleExport}
-          style={{
-            padding: "8px 16px", fontSize: 13, borderRadius: 6,
-            background: "#C9963A", border: "none", color: "#FFFFFF",
-            cursor: "pointer", fontFamily: "system-ui, sans-serif", whiteSpace: "nowrap",
-            letterSpacing: "0.02em", fontWeight: 500,
-            display: "flex", alignItems: "center", gap: 6,
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Export CSV
-        </button>
       </div>
 
       {/* ── Filter bar ──────────────────────────────────────── */}
@@ -379,33 +464,26 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
             ]}
           />
 
-          <FilterSelect
-            value={filterUpgrade}
-            onChange={setFilterUpgrade}
-            placeholder="All upgrade status"
-            options={[
-              { value: "All", label: "All upgrade status" },
-              { value: "Requested", label: "Requested" },
-              { value: "Not requested", label: "Not requested" },
-            ]}
-          />
+          
 
           <div style={{ flex: 1 }} />
 
           <button
-            onClick={clearFilters}
+            onClick={handleExport}
             style={{
-              background: "none", border: "none", color: "#6B6577",
-              fontSize: 13, cursor: "pointer", padding: 0,
-              fontFamily: "system-ui, sans-serif",
-              display: "flex", alignItems: "center", gap: 4,
+              padding: "8px 16px", fontSize: 13, borderRadius: 6,
+              background: "#C9963A", border: "none", color: "#FFFFFF",
+              cursor: "pointer", fontFamily: "system-ui, sans-serif", whiteSpace: "nowrap",
+              letterSpacing: "0.02em", fontWeight: 500,
+              display: "flex", alignItems: "center", gap: 6,
             }}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="23 4 23 10 17 10"></polyline>
-              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Reset Filters
+            Export CSV
           </button>
         </div>
 
@@ -460,11 +538,11 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={9}>
+                  <td colSpan={8}>
                     <div style={{ textAlign: "center", padding: "60px 20px" }}>
                       <div style={{ fontSize: 28, marginBottom: 12, opacity: 0.2 }}>≡</div>
                       <div style={{ fontSize: 14, color: "#6B6577", marginBottom: 8 }}>
-                        No submissions match your filters
+                        No assessments match your filters
                       </div>
                       <button
                         onClick={clearFilters}
@@ -576,7 +654,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
             background: "#FAFAF8", display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <span style={{ fontSize: 12, color: "#6B6577" }}>
-              Showing {rows.length} submissions
+              Showing {rows.length} assessments
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
               <button style={{
@@ -600,9 +678,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                 borderRadius: 4, fontSize: 12, cursor: "pointer", color: "#6B6577",
               }}>Next</button>
             </div>
-            <span style={{ fontSize: 12, color: "#9880B0" }}>
-              Prototype data
-            </span>
           </div>
         )}
       </div>

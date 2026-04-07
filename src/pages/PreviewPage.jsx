@@ -202,6 +202,7 @@ export default function PreviewPage() {
     
     try {
       await saveProfile(userProfile);
+      localStorage.setItem('sapi_preview_completed', 'true');
       setSuccess(true);
       setTimeout(() => navigate('/briefing'), 2000);
     } catch (err) {

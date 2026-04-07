@@ -437,28 +437,24 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
 export default function QuizPage({ appState, setAppState, setCurrentPage }) {
   const navigate = useNavigate();
   const didFetch = useRef(false);
-
-  // ── Route protection ───────────────────────────────────────────────────────
-  useEffect(() => {
-    const profile = localStorage.getItem('sapi_user_profile');
-    if (!profile) {
-      navigate('/preview', { replace: true });
-    }
-  }, [navigate]);
-
+  const [checkingAccess, setCheckingAccess] = useState(true);
   const [allQuestions, setAllQuestions] = useState(ALL_QUESTIONS);
   const [selectedScore, setSelectedScore] = useState(null);
   const [selectedOptIndex, setSelectedOptIndex] = useState(null);
   const [nextHover, setNextHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
 
-  const { currentDimension = 0, answers = {} } = appState || {};
-  const dim = DIMENSIONS[currentDimension] || DIMENSIONS[0];
-  const dimQuestions = allQuestions.filter(q => q.dimIndex === currentDimension);
-  const currentQuestionIndex = answers[currentDimension]?.currentQuestionIndex || 0;
-  const currentQuestion = dimQuestions[currentQuestionIndex] || dimQuestions[0];
-  const answeredCount = Object.keys(answers[currentDimension] || {}).filter(k => k !== "currentQuestionIndex").length;
+  // ── Route protection ───────────────────────────────────────────────────────
+  useEffect(() => {
+    const previewCompleted = localStorage.getItem('sapi_preview_completed');
+    if (!previewCompleted) {
+      navigate('/preview', { replace: true });
+    } else {
+      setCheckingAccess(false);
+    }
+  }, [navigate]);
 
+  // ── Fetch questions ─────────────────────────────────────────────────────────
   useEffect(() => {
     if (didFetch.current) return;
     didFetch.current = true;
@@ -469,6 +465,15 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
     }).catch(() => {});
   }, []);
 
+  // Calculate derived values
+  const { currentDimension = 0, answers = {} } = appState || {};
+  const dim = DIMENSIONS[currentDimension] || DIMENSIONS[0];
+  const dimQuestions = allQuestions.filter(q => q.dimIndex === currentDimension);
+  const currentQuestionIndex = answers[currentDimension]?.currentQuestionIndex || 0;
+  const currentQuestion = dimQuestions[currentQuestionIndex] || dimQuestions[0];
+  const answeredCount = Object.keys(answers[currentDimension] || {}).filter(k => k !== "currentQuestionIndex").length;
+
+  // ── Load saved answer for current question ────────────────────────────────────
   useEffect(() => {
     if (currentQuestion && answers[currentDimension] && answers[currentDimension][currentQuestion.id]) {
       const saved = answers[currentDimension][currentQuestion.id];
@@ -479,6 +484,19 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
       setSelectedOptIndex(null);
     }
   }, [currentQuestion, answers, currentDimension]);
+
+  // Show loading while checking access
+  if (checkingAccess) {
+    return (
+      <PageLayout>
+        <PageHeader showAdmin={false} />
+        <div className="max-w-[800px] mx-auto px-8 py-16 text-center">
+          <div className="font-serif text-sapi-parchment text-lg">Loading...</div>
+        </div>
+        <PageFooter />
+      </PageLayout>
+    );
+  }
 
   const globalQNum = getQuestionsBeforeDim(currentDimension, allQuestions) + currentQuestionIndex + 1;
   const totalInDim = dimQuestions.length;

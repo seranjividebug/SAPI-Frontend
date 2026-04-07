@@ -136,6 +136,8 @@ export default function SAPICalculating() {
           if (response.data.assessment_id) {
             localStorage.setItem('sapi_assessment_id', response.data.assessment_id);
           }
+          // Remove preview completion flag since assessment is now complete
+          localStorage.removeItem('sapi_preview_completed');
         } else {
           setError("Failed to calculate scores");
         }

@@ -414,56 +414,7 @@ function AdminToolsPanel({ submission, onUpdateSub, onViewLead, showToast }) {
         </div>
       </div>
 
-      {/* Lead management */}
-      <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden", marginBottom:12 }}>
-        <div style={{ padding:"11px 16px", background:"#F7F4EF", borderBottom:"0.5px solid #E0D8CC" }}>
-          <span style={{ fontSize:11, fontWeight:500, color:"#6B6577", textTransform:"uppercase", letterSpacing:"0.08em" }}>Lead Management</span>
-        </div>
-        <div style={{ padding:"14px 16px" }}>
-          {submission.upgradeStatus === "none" ? (
-            <div>
-              <p style={{ fontSize:12, color:"#6B6577", margin:"0 0 12px", lineHeight:1.5 }}>This respondent has not requested an upgrade. Convert to a lead to begin engagement.</p>
-              <button
-                onClick={handleConvertLead}
-                style={{ padding:"8px 14px", background:"transparent", border:"0.5px solid #C9963A", borderRadius:5, color:"#C9963A", fontSize:12.5, fontWeight:500, cursor:"pointer", fontFamily:"system-ui, sans-serif" }}
-              >
-                Convert to lead →
-              </button>
-            </div>
-          ) : (
-            <div>
-              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
-                <div style={{ width:7, height:7, borderRadius:"50%", background:"#28A868", flexShrink:0 }} />
-                <span style={{ fontSize:12, color:"#28A868" }}>Active lead</span>
-                {submission.requestedTier && (
-                  <span style={{ fontSize:11, color:"#9880B0" }}>— Requested {submission.requestedTier}</span>
-                )}
-              </div>
-
-              <div style={{ marginBottom:12 }}>
-                <label style={{ display:"block", fontSize:11, color:"#6B6577", fontWeight:500, textTransform:"uppercase", letterSpacing:"0.07em", marginBottom:6 }}>Lead Stage</label>
-                <div style={{ position:"relative" }}>
-                  <select
-                    value={submission.leadStage}
-                    onChange={handleStageChange}
-                    style={{ appearance:"none", WebkitAppearance:"none", width:"100%", padding:"8px 28px 8px 10px", background:"#FFFFFF", border:`0.5px solid ${stageColor(submission.leadStage)}60`, borderRadius:5, fontSize:12.5, color:"#1A1A2E", fontFamily:"system-ui, sans-serif", cursor:"pointer", outline:"none" }}
-                  >
-                    {LEAD_STAGES.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <span style={{ position:"absolute", right:10, top:"50%", transform:"translateY(-50%)", fontSize:10, color:"#9880B0", pointerEvents:"none" }}>▾</span>
-                </div>
-              </div>
-
-              <button
-                onClick={onViewLead}
-                style={{ padding:"7px 14px", background:"transparent", border:"0.5px solid #4A7AE0", borderRadius:5, color:"#4A7AE0", fontSize:12.5, fontWeight:500, cursor:"pointer", fontFamily:"system-ui, sans-serif" }}
-              >
-                View lead record →
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+    
 
       {/* Quick stats */}
       <div style={{ background:"#FFFFFF", border:"0.5px solid #E0D8CC", borderRadius:8, overflow:"hidden" }}>
@@ -540,30 +491,11 @@ function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPag
               {/* Tier pill */}
               <Pill label={submission.tier} color={tc} size="lg" />
             </div>
-            <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-              <span style={{ fontSize:11, color:"#9880B0" }}>{fmtDate(submission.completedAt)}</span>
-              <button onClick={handleExportPDF} style={{ padding:"5px 12px", background:"transparent", border:"0.5px solid #C8C0B0", borderRadius:5, color:"#6B6577", fontSize:12, cursor:"pointer", fontFamily:"system-ui, sans-serif" }}>
-                Export PDF ↗
-              </button>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* ── Upgrade alert banner ──────────────────────────── */}
-      {submission.upgradeStatus === "requested" && (
-        <div style={{ background:"#FFFBF2", border:"0.5px solid #C9963A", borderLeft:"3px solid #C9963A", margin:"16px 24px 0", borderRadius:6, padding:"10px 16px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
-            <div style={{ width:7, height:7, borderRadius:"50%", background:"#C9963A", flexShrink:0 }} />
-            <span style={{ fontSize:12.5, color:"#7A5A1A" }}>
-              This respondent has requested a <strong>{submission.requestedTier}</strong> upgrade
-            </span>
-          </div>
-          <button onClick={() => { setSelectedLead && setSelectedLead(submission); setAdminPage("leadDetail"); }} style={{ background:"none", border:"none", cursor:"pointer", color:"#C9963A", fontSize:12.5, fontWeight:500, fontFamily:"system-ui, sans-serif", padding:0, flexShrink:0 }}>
-            View lead record →
-          </button>
-        </div>
-      )}
+  
 
       {/* ── Body content ──────────────────────────────────── */}
       <div style={{ display:"flex", gap:16, padding:"16px 24px 32px", alignItems:"flex-start" }}>
@@ -606,7 +538,7 @@ export default function B2_PreviewApp() {
   return (
     <div style={{ fontFamily:"system-ui, -apple-system, sans-serif" }}>
       {/* Demo picker strip */}
-      <div style={{ background:"#0F0830", borderBottom:"0.5px solid #1E1650", padding:"8px 20px", display:"flex", alignItems:"center", gap:14, flexWrap:"wrap" }}>
+      {/* <div style={{ background:"#0F0830", borderBottom:"0.5px solid #1E1650", padding:"8px 20px", display:"flex", alignItems:"center", gap:14, flexWrap:"wrap" }}>
         <span style={{ color:"#9880B0", fontSize:11, letterSpacing:"0.06em", textTransform:"uppercase", flexShrink:0 }}>Preview submission</span>
         <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
           {submissions.map(s => (
@@ -620,7 +552,7 @@ export default function B2_PreviewApp() {
           ))}
         </div>
         <span style={{ marginLeft:"auto", fontSize:10.5, color:"#2A204A" }}>Admin Panel · B2 Submission Detail</span>
-      </div>
+      </div> */}
 
       <SubmissionDetail
         key={submission.id}

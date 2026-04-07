@@ -2,8 +2,8 @@ import React from 'react';
 
 const NAV_ITEMS = [
   { key: 'dashboard',      label: 'Dashboard',        glyph: '⊞' },
-  { key: 'submissions',    label: 'Submissions',       glyph: '≡' },
-  { key: 'questionEditor', label: 'Question Editor',   glyph: '✎' },
+  { key: 'submissions',    label: 'Assessments',       glyph: '≡' },
+  // { key: 'questionEditor', label: 'Question Editor',   glyph: '✎' },
   { key: 'userMgmt',       label: 'Users & Settings',  glyph: '⚙' },
 ];
 

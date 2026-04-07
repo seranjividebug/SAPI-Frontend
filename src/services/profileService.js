@@ -9,15 +9,14 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api
 export async function getProfileFromAPI() {
   const token = getToken();
   
-  if (!token) {
-    throw new Error('Authentication required. Please log in.');
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_BASE_URL}/profile`, {
     method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: headers,
   });
 
   if (response.status === 404) {
@@ -39,17 +38,10 @@ export async function getProfileFromAPI() {
  * @returns {Promise<Object>} - Created profile
  */
 export async function createProfile(profileData) {
-  const token = getToken();
-  
-  if (!token) {
-    throw new Error('Authentication required. Please log in.');
-  }
-
   const response = await fetch(`${API_BASE_URL}/profile`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
     },
     body: JSON.stringify(profileData),
   });
@@ -79,16 +71,17 @@ export async function createProfile(profileData) {
 export async function updateProfile(profileId, profileData) {
   const token = getToken();
   
-  if (!token) {
-    throw new Error('Authentication required. Please log in.');
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_BASE_URL}/profile/${profileId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
+    headers: headers,
     body: JSON.stringify(profileData),
   });
 
@@ -119,24 +112,19 @@ export async function saveProfile(profileData) {
   } catch (err) {
     // If GET fails with 404, profile doesn't exist - that's okay
     // If GET fails with other error, we need to handle it
-    console.log('GET profile error:', err.message);
   }
   
   if (existingProfile && existingProfile.profile_id) {
     // Profile exists - update it
-    console.log('Profile exists, updating:', existingProfile.profile_id);
     return updateProfile(existingProfile.profile_id, profileData);
   } else {
     // No profile - create new, but handle case where profile was created since last check
     try {
-      console.log('No profile found, creating new');
       return await createProfile(profileData);
     } catch (err) {
       // If error says profile already exists, try to get ID and update
       const errMsg = err.message?.toLowerCase() || '';
-      console.log('Create failed with error:', errMsg);
       if (errMsg.includes('already has') || errMsg.includes('already exists') || errMsg.includes('use put')) {
-        console.log('Profile already exists, fetching and updating...');
         const freshProfile = await getProfileFromAPI();
         if (freshProfile && freshProfile.profile_id) {
           return updateProfile(freshProfile.profile_id, profileData);

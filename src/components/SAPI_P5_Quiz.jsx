@@ -505,11 +505,36 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
 export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   const navigate = useNavigate();
   
+  // ── Route protection state ───────────────────────────────────────────────────
+  const [checkingAccess, setCheckingAccess] = useState(true);
+  
   // State for questions - start with hardcoded for immediate display, then merge API data
-  const [allQuestions, setAllQuestions] = useState(ALL_QUESTIONS.slice(0, 3)); // Start with first 3
+  const [allQuestions, setAllQuestions] = useState(ALL_QUESTIONS.slice(0, 3));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [qIndex, setQIndex] = useState(0);
+  const [selectedScore, setSelectedScore] = useState(null);
+  const [nextHover, setNextHover]   = useState(false);
+  const [backHover, setBackHover]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   
+  // Local ref to accumulate all answers across dimensions
+  const answersRef = useRef(appState?.answers || {});
+
+  // Get current dimension from props or default to 0 - MUST be before useEffect that uses dimQuestions
+  const dimIndex = appState?.currentDimension ?? 0;
+  const dimQuestions = getDimQuestions(dimIndex, allQuestions);
+  
+  // ── Route protection check ───────────────────────────────────────────────────
+  useEffect(() => {
+    const previewCompleted = localStorage.getItem('sapi_preview_completed');
+    if (!previewCompleted) {
+      navigate('/preview', { replace: true });
+    } else {
+      setCheckingAccess(false);
+    }
+  }, [navigate]);
+
   // Fetch questions from API in the background
   useEffect(() => {
     const loadQuestions = async () => {
@@ -543,19 +568,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
     // Load immediately but in background
     loadQuestions();
   }, []);
-  
-  // Get current dimension from props or default to 0
-  const dimIndex = appState?.currentDimension ?? 0;
-  const dimQuestions = getDimQuestions(dimIndex, allQuestions);
-  const [qIndex, setQIndex] = useState(0);
-  const [selectedScore, setSelectedScore] = useState(null);
-  const [nextHover, setNextHover]   = useState(false);
-  const [backHover, setBackHover]   = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  
-  // Local ref to accumulate all answers across dimensions
-  const answersRef = useRef(appState?.answers || {});
-  
+
   // Load persisted answers from localStorage on mount
   useEffect(() => {
     const storedAnswers = localStorage.getItem('sapi_answers');
@@ -567,7 +580,20 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       }
     }
   }, []);
-  
+
+  // Load previously selected answer when question changes
+  useEffect(() => {
+    const currentQuestion = dimQuestions[qIndex];
+    if (currentQuestion) {
+      const savedAnswer = answersRef.current[currentQuestion.id];
+      if (savedAnswer) {
+        setSelectedScore(savedAnswer.score);
+      } else {
+        setSelectedScore(null);
+      }
+    }
+  }, [qIndex, dimQuestions]);
+
   // Save answers to localStorage whenever they change
   const saveAnswer = (newAnswer) => {
     answersRef.current = { ...answersRef.current, ...newAnswer };
@@ -578,25 +604,26 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
     }
   };
 
-  const currentQuestion    = dimQuestions[qIndex];
-  const isLastInDim        = qIndex === dimQuestions.length - 1;
-  const isLastDimension    = dimIndex === 4;
-  const answeredCount      = 0; // Mock data
+  // Show loading while checking access
+  if (checkingAccess) {
+    return (
+      <PageLayout>
+        <PageHeader showAdmin={false} />
+        <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="font-sans text-sm text-sapi-muted tracking-wide mt-6">
+            Loading...
+          </div>
+        </div>
+        <PageFooter />
+      </PageLayout>
+    );
+  }
 
-  // reset qIndex when dimension changes
-  // (handled by setCurrentPage flow; component remounts)
-
-  // Load previously selected answer when question changes
-  useEffect(() => {
-    if (currentQuestion) {
-      const savedAnswer = answersRef.current[currentQuestion.id];
-      if (savedAnswer) {
-        setSelectedScore(savedAnswer.score);
-      } else {
-        setSelectedScore(null);
-      }
-    }
-  }, [qIndex, currentQuestion]);
+  // Derived values (dimIndex and dimQuestions already declared above)
+  const currentQuestion = dimQuestions[qIndex];
+  const isLastInDim = qIndex === dimQuestions.length - 1;
+  const isLastDimension = dimIndex === 4;
+  const answeredCount = 0; // Mock data
 
   function handleSelect(score, optionIndex) {
     setSelectedScore(score);
