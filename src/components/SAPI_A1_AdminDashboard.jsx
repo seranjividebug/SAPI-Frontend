@@ -29,8 +29,30 @@ const shortCountry = (name) =>
     .replace('Kingdom of ', '')
     .replace('United Arab Emirates', 'UAE');
 
-const fmtDate = (iso) =>
-  new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const fmtDate = (iso) => {
+  // Display exactly as received from API without conversion
+  if (typeof iso === 'string' && iso.includes('/')) {
+    // Format: DD/MM/YYYY HH:MM:SS -> DD MMM YYYY HH:MM AM/PM
+    const [datePart, timePart] = iso.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthName = monthNames[parseInt(month, 10) - 1];
+    const [hours24, minutes] = timePart.split(':');
+    const hours = parseInt(hours24, 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    return `${day} ${monthName} ${year} ${hours12}:${minutes} ${ampm}`;
+  }
+  
+  // Fallback for ISO format - show as-is
+  const date = new Date(iso);
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' });
+  const year = date.getUTCFullYear();
+  const hours = String(date.getUTCHours()).padStart(2, '0');
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  return `${day} ${month} ${year} ${hours}:${minutes}`;
+};
 
 
 

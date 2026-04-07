@@ -96,8 +96,32 @@ const tierColor = (tier) => ({
 
 const scoreColor = (s) => s >= 70 ? "#4A7AE0" : s >= 55 ? "#D4A830" : s >= 40 ? "#C9963A" : "#C03058";
 
-const fmtDate = (iso) =>
-  new Date(iso).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+const fmtDate = (iso) => {
+  // Display exactly as received from API without conversion
+  if (typeof iso === 'string' && iso.includes('/')) {
+    // Format: DD/MM/YYYY HH:MM:SS -> DD MMM YYYY HH:MM AM/PM
+    const [datePart, timePart] = iso.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthName = monthNames[parseInt(month, 10) - 1];
+    const [hours24, minutes] = timePart.split(':');
+    const hours = parseInt(hours24, 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    return `${day} ${monthName} ${year} ${hours12}:${minutes} ${ampm}`;
+  }
+  
+  // Fallback for ISO format
+  const date = new Date(iso);
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  const month = date.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' });
+  const year = date.getUTCFullYear();
+  const hours = date.getUTCHours();
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const hours12 = hours % 12 || 12;
+  return `${day} ${month} ${year} ${hours12}:${minutes} ${ampm}`;
+};
 
 const truncMin = (str, n) =>
   str && str.length > n ? str.slice(0, n) + "…" : (str || "");
@@ -278,11 +302,11 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
   }, []);
 
   const hasActiveFilters =
-    search || filterTier !== "All" || filterStage !== "All" ||
+    search || filterStage !== "All" ||
     filterUpgrade !== "All" || filterLead !== "All";
 
   const clearFilters = () => {
-    setSearch(""); setFilterTier("All"); setFilterStage("All");
+    setSearch(""); setFilterStage("All");
     setFilterUpgrade("All"); setFilterLead("All");
   };
 
@@ -296,9 +320,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
     try {
       const blob = await exportDashboardCSV(token, {
         search: search,
-        country: filterTier !== "All" ? undefined : undefined,
         developmentStage: filterStage !== "All" ? filterStage : undefined,
-        tier: filterTier !== "All" ? filterTier : undefined,
       });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -322,7 +344,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
       x.respondentName?.toLowerCase().includes(s) ||
       x.ministry?.toLowerCase().includes(s)
     );
-    if (filterTier !== "All") r = r.filter((x) => x.tier === filterTier);
     if (filterStage !== "All") r = r.filter((x) => x.developmentStage === filterStage);
     if (filterUpgrade === "Requested") r = r.filter((x) => x.upgradeStatus === "requested");
     if (filterUpgrade === "Not requested") r = r.filter((x) => x.upgradeStatus !== "requested");
@@ -336,7 +357,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
       return (av - bv) * d;
     });
     return r;
-  }, [search, filterTier, filterStage, filterUpgrade, filterLead, sortKey, sortDir, submissions]);
+  }, [search, filterStage, filterUpgrade, filterLead, sortKey, sortDir, submissions]);
 
   const COLUMNS = [
     { key: "country",          label: "Country",    sortable: true,  width: "160px" },
@@ -437,20 +458,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
           </div>
 
           <FilterSelect
-            value={filterTier}
-            onChange={setFilterTier}
-            placeholder="All tiers"
-            options={[
-              { value: "All", label: "All tiers" },
-              { value: "Sovereign AI Leader", label: "Sovereign AI Leader" },
-              { value: "Advanced", label: "Advanced" },
-              { value: "Developing", label: "Developing" },
-              { value: "Nascent", label: "Nascent" },
-              { value: "Pre-conditions Unmet", label: "Pre-conditions Unmet" },
-            ]}
-          />
-
-          <FilterSelect
             value={filterStage}
             onChange={setFilterStage}
             placeholder="All dev stages"
@@ -463,8 +470,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
               { value: "Leading", label: "Leading" },
             ]}
           />
-
-          
 
           <div style={{ flex: 1 }} />
 
@@ -490,15 +495,6 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
         {/* Active filter pills */}
         {hasActiveFilters && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12, paddingTop: 12, borderTop: "0.5px solid #F0EBE3" }}>
-            {filterTier !== "All" && (
-              <span style={{
-                background: "#F8F9FA", border: "0.5px solid #E0D8CC", borderRadius: 4,
-                padding: "4px 10px", fontSize: 12, color: "#1A1A2E", display: "flex", alignItems: "center", gap: 6,
-              }}>
-                Tier: {filterTier}
-                <button onClick={() => setFilterTier("All")} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#6B6577", fontSize: 14 }}>×</button>
-              </span>
-            )}
             {filterStage !== "All" && (
               <span style={{
                 background: "#F8F9FA", border: "0.5px solid #E0D8CC", borderRadius: 4,
@@ -615,7 +611,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                     </td>
 
                     {/* Date */}
-                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
+                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle", whiteSpace: "nowrap" }}>
                       <span style={{ fontSize: 12.5, color: "#6B6577" }}>{fmtDate(row.completedAt)}</span>
                     </td>
 
