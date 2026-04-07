@@ -6,6 +6,7 @@ import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
 import SAPICalculating from './components/SAPI_P6_Calculating';
 import SAPIResults from './components/SAPI_P7_Results';
+import P7Results from './pages/common/result';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
@@ -54,6 +55,35 @@ function DimIntroWrapper({ currentDimension, setCurrentDimension }) {
           navigate('/briefing');
         } else {
           setCurrentDimension(currentDimension - 1);
+        }
+      }}
+    />
+  );
+}
+
+// Wrapper component for P7Results to provide required props
+function ResultsWrapper() {
+  const [appState, setAppState] = useState({
+    scores: {},
+    compositeScore: null,
+    tier: null,
+    orgProfile: {},
+    email: '',
+    emailCaptured: false
+  });
+
+  return (
+    <P7Results 
+      appState={appState}
+      setAppState={setAppState}
+      setCurrentPage={(page) => {
+        // Handle navigation from results page
+        if (page === 'scorecard') {
+          window.location.href = '/scorecard';
+        } else if (page === 'roadmap') {
+          window.location.href = '/roadmap';
+        } else if (page === 'upgrade') {
+          window.location.href = '/peercomparison';
         }
       }}
     />
@@ -157,7 +187,7 @@ function App() {
             />} 
           />
           <Route path="/calculating" element={<SAPICalculating />} />
-          <Route path="/results" element={<SAPIResults />} />
+          <Route path="/results" element={<ResultsWrapper />} />
           <Route path="/scorecard" element={<SAPIScorecard />} />
           <Route path="/peercomparison" element={<SAPIPeerComparison />} />
           <Route path="/roadmap" element={<SAPIRoadmap />} />
