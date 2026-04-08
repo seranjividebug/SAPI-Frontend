@@ -255,28 +255,40 @@ const truncMin = (str, n) =>
 const getAuthToken = () => localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
 
 // Transform API assessment to component format
-const transformAssessment = (assessment) => ({
-  id: assessment.id,
-  country: assessment.country,
-  respondentName: assessment.respondentName,
-  title: assessment.title,
-  ministry: assessment.ministry,
-  developmentStage: assessment.developmentStage,
-  completedAt: assessment.date,
-  compositeScore: assessment.score,
-  tier: assessment.tier,
-  scores: {
-    compute: assessment.dimensionScores?.computeCapacity || 0,
-    capital: assessment.dimensionScores?.capitalFormation || 0,
-    regulatory: assessment.dimensionScores?.regulatoryReadiness || 0,
-    data: assessment.dimensionScores?.dataSovereignty || 0,
-    di: assessment.dimensionScores?.directedIntelligence || 0
-  },
-  upgradeStatus: assessment.upgradeStatus || 'none',
-  requestedTier: assessment.requestedTier || null,
-  adminNotes: assessment.adminNotes || '',
-  leadStage: assessment.leadStage || 'New'
-});
+const transformAssessment = (assessment) => {
+  // Extract first question text from dimension_breakdown if available
+  let questionText = "";
+  if (assessment.dimension_breakdown && assessment.dimension_breakdown.length > 0) {
+    const firstDim = assessment.dimension_breakdown[0];
+    if (firstDim.questions && firstDim.questions.length > 0) {
+      questionText = firstDim.questions[0].question_text || "";
+    }
+  }
+  
+  return {
+    id: assessment.id,
+    country: assessment.country,
+    respondentName: assessment.respondentName,
+    title: assessment.title,
+    ministry: assessment.ministry,
+    developmentStage: assessment.developmentStage,
+    completedAt: assessment.date,
+    compositeScore: assessment.score,
+    tier: assessment.tier,
+    question: questionText,
+    scores: {
+      compute: assessment.dimensionScores?.computeCapacity || 0,
+      capital: assessment.dimensionScores?.capitalFormation || 0,
+      regulatory: assessment.dimensionScores?.regulatoryReadiness || 0,
+      data: assessment.dimensionScores?.dataSovereignty || 0,
+      di: assessment.dimensionScores?.directedIntelligence || 0
+    },
+    upgradeStatus: assessment.upgradeStatus || 'none',
+    requestedTier: assessment.requestedTier || null,
+    adminNotes: assessment.adminNotes || '',
+    leadStage: assessment.leadStage || 'New'
+  };
+};
 
 // ============================================================
 // TOAST
@@ -489,10 +501,11 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
     { key: "respondentName",   label: "Respondent", sortable: true,  width: "176px" },
     { key: "ministry",         label: "Ministry",   sortable: false, width: "180px" },
     { key: "developmentStage", label: "Dev Stage",  sortable: true,  width: "100px" },
+    { key: "completedAt",      label: "Date",       sortable: true,  width: "100px" },
+    { key: "question",         label: "Question",   sortable: false, width: "200px" },
     { key: "compositeScore",   label: "Score",      sortable: true,  width: "72px"  },
     { key: "tier",             label: "Tier",       sortable: true,  width: "150px" },
-    { key: "completedAt",      label: "Date",       sortable: true,  width: "100px" },
-    { key: "actions",          label: "Actions",    sortable: false, width: "152px" },
+    { key: "actions",          label: "Actions",    sortable: false, width: "100px" },
   ];
 
   const rowHoverStyles = `
@@ -659,7 +672,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={8}>
+                  <td colSpan={9}>
                     <div style={{ textAlign: "center", padding: "60px 20px" }}>
                       <div style={{ fontSize: 28, marginBottom: 12, opacity: 0.2 }}>≡</div>
                       <div style={{ fontSize: 14, color: "#6B6577", marginBottom: 8 }}>
@@ -726,24 +739,31 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission, s
                       </span>
                     </td>
 
+                    {/* Date */}
+                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle", whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: 12.5, color: "#6B6577" }}>{fmtDate(row.completedAt)}</span>
+                    </td>
+
+                    {/* Question */}
+                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
+                      <span style={{ fontSize: 12, color: "#6B6577" }}>{truncMin(row.question, 35)}</span>
+                    </td>
+
                     {/* Score */}
                     <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
-                      <span style={{
-                        fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 400,
-                        color: scoreColor(row.compositeScore),
-                      }}>
-                        {row.compositeScore}
-                      </span>
+                      <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                        <span style={{
+                          fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 400,
+                          color: scoreColor(row.compositeScore),
+                        }}>
+                          {row.compositeScore}
+                        </span>
+                      </div>
                     </td>
 
                     {/* Tier */}
                     <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle" }}>
                       <Pill label={row.tier} color={tc} />
-                    </td>
-
-                    {/* Date */}
-                    <td style={{ padding: "0 14px", height: 52, verticalAlign: "middle", whiteSpace: "nowrap" }}>
-                      <span style={{ fontSize: 12.5, color: "#6B6577" }}>{fmtDate(row.completedAt)}</span>
                     </td>
 
                     {/* Actions */}

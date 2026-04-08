@@ -10,6 +10,14 @@ import {
   updateAssessmentStatus,
   getDashboardStats
 } from '../services/dashboardService';
+import { getAssessmentDetails } from '../services/assessmentService';
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+} from '../services/authService';
 
 // ============================================================
 // HELPERS
@@ -54,9 +62,25 @@ const fmtDate = (iso) => {
   return `${day} ${month} ${year} ${hours}:${minutes}`;
 };
 
-
-
-
+// Helper to format created_at with AM/PM
+const formatCreatedAt = (dateStr) => {
+  if (!dateStr || dateStr === '-') return '-';
+  
+  // Parse DD/MM/YYYY HH:MM:SS format
+  if (typeof dateStr === 'string' && dateStr.includes('/')) {
+    const [datePart, timePart] = dateStr.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const [hours24, minutes, seconds] = timePart.split(':');
+    
+    const hours = parseInt(hours24, 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    
+    return `${day}/${month}/${year} ${hours12}:${minutes}:${seconds} ${ampm}`;
+  }
+  
+  return dateStr;
+};
 
 // ============================================================
 // DASHBOARD - Professional Design
@@ -427,6 +451,27 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
     }
   };
 
+  // Handle view assessment details
+  const handleViewAssessment = async (submissionId) => {
+    try {
+      const response = await getAssessmentDetails(submissionId);
+      
+      if (response?.success) {
+        // Store the detailed data and navigate to detail view
+        setSelectedSubmission({
+          id: submissionId,
+          details: response.data
+        });
+        setAdminPage('submissionDetail');
+      } else {
+        alert('Failed to load assessment details');
+      }
+    } catch (err) {
+      console.error('View assessment error:', err);
+      alert('Failed to load assessment details');
+    }
+  };
+
   return (
     <div style={{ padding: '1.5rem 2rem', fontFamily: 'system-ui, -apple-system, sans-serif', background: '#F8F9FA', minHeight: '100vh' }}>
       {/* Header */}
@@ -577,18 +622,16 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                     borderTop: '3px solid #C9963A', borderRadius: '50%',
                     animation: 'spin 1s linear infinite', margin: '0 auto 8px'
                   }} />
-                  <div style={{ fontSize: 13, color: '#6B6577' }}>Loading...</div>
                 </div>
               </div>
             )}
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 900 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ background: '#F2ECCF', borderBottom: '0.5px solid #E0D8CC' }}>
-                {['COUNTRY', 'RESPONDENT', 'MINISTRY', 'SCORE', 'TIER', 'DATE', 'ACTIONS'].map(h => (
-                  <th key={h} style={{
-                    padding: '12px 14px', textAlign: 'left',
-                    fontSize: 10, fontWeight: 600, color: '#1A1A2E',
-                    textTransform: 'uppercase', letterSpacing: '0.05em',
+              <tr style={{ background: '#FAFBFC', borderBottom: '0.5px solid #E0D8CC' }}>
+                {['Country', 'Respondent', 'Ministry', 'Score', 'Tier', 'Date', 'Actions'].map((h) => (
+                  <th key={h} style={{ 
+                    padding: '10px 14px', textAlign: 'left', fontSize: 11, fontWeight: 600, 
+                    color: '#6B6577', textTransform: 'uppercase', letterSpacing: '0.04em',
                     fontFamily: 'system-ui, sans-serif',
                     whiteSpace: 'nowrap',
                   }}>{h}</th>
@@ -606,7 +649,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                 submissions.map((sub, i) => (
                 <tr 
                   key={sub.id}
-                  onClick={() => { setSelectedSubmission(sub); setAdminPage('submissionDetail'); }}
+                  onClick={() => handleViewAssessment(sub.id)}
                   style={{
                     background: i % 2 === 0 ? '#FFFFFF' : '#FAFBFC',
                     borderBottom: '0.5px solid #F0EBE3',
@@ -650,6 +693,10 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   </td>
                   <td style={{ padding: '12px 14px' }}>
                     <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewAssessment(sub.id);
+                      }}
                       style={{
                         padding: '6px 16px', 
                         background: 'transparent', 
@@ -728,7 +775,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             borderRadius: 8, padding: '16px',
           }}>
             <h3 style={{ fontSize: 14, fontWeight: 600, color: '#1A1A2E', margin: '0 0 14px' }}>
-              Top Scoring Countries
+              Top 5 Scoring Countries
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {topCountries.map((country, idx) => (
@@ -916,28 +963,182 @@ function MiniLineChart({ data }) {
 // ============================================================
 function UsersSettingsPage() {
   const [activeTab, setActiveTab] = useState('users');
-  const [users, setUsers] = useState([
-    { id: 1, name: 'Admin User', email: 'admin@sapi.ai', role: 'Super Admin', status: 'Active', lastLogin: '2026-04-03' },
-    { id: 2, name: 'John Smith', email: 'john@example.com', role: 'Editor', status: 'Active', lastLogin: '2026-04-02' },
-    { id: 3, name: 'Sarah Chen', email: 'sarah@example.com', role: 'Viewer', status: 'Inactive', lastLogin: '2026-03-28' },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
+    role: '1',
+  });
 
   const roles = ['Super Admin', 'Admin', 'Editor', 'Viewer'];
-
-  const handleSaveUser = (user) => {
-    if (user.id) {
-      setUsers(users.map(u => u.id === user.id ? user : u));
-    } else {
-      setUsers([...users, { ...user, id: Date.now() }]);
-    }
-    setShowAddModal(false);
-    setEditingUser(null);
+  const roleMapping = {
+    'Super Admin': 1,
+    'Admin': 1,
+    'Editor': 2,
+    'Viewer': 3,
+  };
+  const reverseRoleMapping = {
+    1: 'Admin',
+    2: 'Editor',
+    3: 'Viewer',
   };
 
-  const handleDeleteUser = (id) => {
-    setUsers(users.filter(u => u.id !== id));
+  // Fetch users on mount
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const token = localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+      if (!token) {
+        setError('Authentication required');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await getUsers(token, { role: 1, page: 1, limit: 10 });
+        
+        if (response?.success && response?.data?.users) {
+          // Map API response to component format
+          const mappedUsers = response.data.users.map(user => ({
+            id: user.id,
+            name: user.full_name,
+            email: user.email,
+            role: reverseRoleMapping[user.role] || 'Viewer',
+            status: 'Active',
+            lastLogin: user.created_at || '-',
+          }));
+          setUsers(mappedUsers);
+        } else {
+          setUsers([]);
+        }
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch users:', err);
+        setError('Failed to load users');
+        setUsers([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleSaveUser = async (userData) => {
+    const token = localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+    
+    if (editingUser) {
+      // For editing, call updateUser API
+      try {
+        const updateData = {
+          full_name: editingUser.name,
+          email: editingUser.email,
+          role: roleMapping[editingUser.role] || 1,
+        };
+
+        const response = await updateUser(token, editingUser.id, updateData);
+        
+        if (response?.success) {
+          // Update local state with response data
+          const apiUser = response.data?.user || {};
+          setUsers(users.map(u => u.id === editingUser.id ? {
+            ...u,
+            name: apiUser.full_name || editingUser.name,
+            email: apiUser.email || editingUser.email,
+            role: reverseRoleMapping[apiUser.role] || editingUser.role,
+          } : u));
+          setShowAddModal(false);
+          setEditingUser(null);
+        } else {
+          alert(response?.message || 'Failed to update user');
+        }
+      } catch (err) {
+        console.error('Failed to update user:', err);
+        alert(err.message || 'Failed to update user');
+      }
+    } else {
+      // For new user, call createUser API (admin stays logged in)
+      try {
+        const userData = {
+          full_name: formData.full_name,
+          email: formData.email,
+          role: parseInt(formData.role, 10),
+        };
+
+        const response = await createUser(token, userData);
+        
+        if (response?.success) {
+          // Add new user to local state using API response data
+          const apiUser = response.data?.user || {};
+          const newUser = {
+            id: apiUser.id || Date.now().toString(),
+            name: apiUser.full_name || formData.full_name,
+            email: apiUser.email || formData.email,
+            role: reverseRoleMapping[apiUser.role || parseInt(formData.role, 10)] || 'Viewer',
+            status: 'Active',
+            lastLogin: apiUser.created_at || '-',
+          };
+          setUsers([...users, newUser]);
+          setShowAddModal(false);
+          setFormData({ full_name: '', email: '', role: '1' });
+        } else {
+          alert(response?.message || 'Failed to create user');
+        }
+      } catch (err) {
+        console.error('Failed to create user:', err);
+        alert(err.message || 'Failed to create user');
+      }
+    }
+  };
+
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this user?')) return;
+    
+    const token = localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+    
+    try {
+      const response = await deleteUser(token, id);
+      
+      if (response?.success) {
+        setUsers(users.filter(u => u.id !== id));
+      } else {
+        alert(response?.message || 'Failed to delete user');
+      }
+    } catch (err) {
+      console.error('Failed to delete user:', err);
+      alert(err.message || 'Failed to delete user');
+    }
+  };
+
+  const handleEditClick = async (user) => {
+    const token = localStorage.getItem('sapi_token') || sessionStorage.getItem('sapi_token');
+    
+    try {
+      const response = await getUserById(token, user.id);
+      
+      if (response?.success && response?.data?.user) {
+        const apiUser = response.data.user;
+        setEditingUser({
+          id: apiUser.id,
+          name: apiUser.full_name,
+          email: apiUser.email,
+          role: reverseRoleMapping[apiUser.role] || 'Viewer',
+        });
+      } else {
+        // Fallback to local data if API fails
+        setEditingUser(user);
+      }
+      setShowAddModal(true);
+    } catch (err) {
+      console.error('Failed to fetch user details:', err);
+      // Fallback to local data
+      setEditingUser(user);
+      setShowAddModal(true);
+    }
   };
 
   const roleColors = {
@@ -948,9 +1149,9 @@ function UsersSettingsPage() {
   };
 
   return (
-    <div style={{ padding: '1.75rem 2rem 2.5rem', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div style={{ padding: '1rem 2rem 1.5rem', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Header */}
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '1rem' }}>
         <h1 style={{ fontSize: 22, fontWeight: 400, color: '#1A1A2E', margin: '0 0 4px', fontFamily: 'Georgia, serif' }}>
           Users & Settings
         </h1>
@@ -958,7 +1159,7 @@ function UsersSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 0, borderBottom: '0.5px solid #E0D8CC', marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 0, borderBottom: '0.5px solid #E0D8CC', marginBottom: 16 }}>
         {[ 
           { key: 'users', label: 'Users', count: users.length },
           { key: 'settings', label: 'Settings' },
@@ -1006,14 +1207,14 @@ function UsersSettingsPage() {
                   width: 240, outline: 'none',
                 }}
               />
-              <select style={{
+              {/* <select style={{
                 padding: '8px 12px', fontSize: 13,
                 border: '0.5px solid #D0C8BC', borderRadius: 6,
                 background: '#FFFFFF', color: '#1A1A2E',
               }}>
                 <option value="">All Roles</option>
                 {roles.map(r => <option key={r}>{r}</option>)}
-              </select>
+              </select> */}
               <select style={{
                 padding: '8px 12px', fontSize: 13,
                 border: '0.5px solid #D0C8BC', borderRadius: 6,
@@ -1037,85 +1238,118 @@ function UsersSettingsPage() {
             </button>
           </div>
 
-          {/* Users Table */}
-          <div style={{
-            background: '#FFFFFF', border: '0.5px solid #E0D8CC',
-            borderRadius: 8, overflow: 'hidden',
-          }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ background: '#F0EBE3' }}>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>User</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Role</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Status</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Last Login</th>
-                  <th style={{ padding: '10px 14px', textAlign: 'right', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user, i) => (
-                  <tr key={user.id} style={{
-                    background: i % 2 === 0 ? '#FFFFFF' : '#FDFAF6',
-                    borderBottom: '0.5px solid #F0EBE3',
-                  }}>
-                    <td style={{ padding: '12px 14px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{
-                          width: 36, height: 36, borderRadius: '50%',
-                          background: '#C9963A20',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: '#C9963A', fontSize: 14, fontWeight: 500,
-                        }}>{user.name.charAt(0)}</div>
-                        <div>
-                          <div style={{ color: '#1A1A2E', fontWeight: 500 }}>{user.name}</div>
-                          <div style={{ color: '#9880B0', fontSize: 11 }}>{user.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td style={{ padding: '12px 14px' }}>
-                      <span style={{
-                        background: `${roleColors[user.role]}20`, color: roleColors[user.role],
-                        border: `0.5px solid ${roleColors[user.role]}50`,
-                        padding: '3px 10px', borderRadius: 4,
-                        fontSize: 11, fontWeight: 500,
-                      }}>{user.role}</span>
-                    </td>
-                    <td style={{ padding: '12px 14px' }}>
-                      <span style={{
-                        display: 'flex', alignItems: 'center', gap: 4,
-                        color: user.status === 'Active' ? '#28A868' : '#6B6577',
-                        fontSize: 12,
-                      }}>
-                        <span style={{
-                          width: 6, height: 6, borderRadius: '50%',
-                          background: user.status === 'Active' ? '#28A868' : '#6B6577',
-                        }} />
-                        {user.status}
-                      </span>
-                    </td>
-                    <td style={{ padding: '12px 14px', color: '#6B6577', fontSize: 12 }}>{user.lastLogin}</td>
-                    <td style={{ padding: '12px 14px', textAlign: 'right' }}>
-                      <button
-                        onClick={() => { setEditingUser(user); setShowAddModal(true); }}
-                        style={{
-                          background: 'transparent', border: 'none',
-                          color: '#4A7AE0', fontSize: 12, cursor: 'pointer',
-                          marginRight: 12,
-                        }}
-                      >Edit</button>
-                      <button
-                        onClick={() => handleDeleteUser(user.id)}
-                        style={{
-                          background: 'transparent', border: 'none',
-                          color: '#C94646', fontSize: 12, cursor: 'pointer',
-                        }}
-                      >Delete</button>
-                    </td>
+          {loading && (
+            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+              <div style={{ 
+                width: 40, height: 40, border: '3px solid #E0D8CC', 
+                borderTop: '3px solid #C9963A', borderRadius: '50%',
+                animation: 'spin 1s linear infinite', margin: '0 auto 16px'
+              }} />
+              <div style={{ fontSize: 14, color: '#6B6577' }}>Loading users...</div>
+            </div>
+          )}
+
+          {error && !loading && (
+            <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+              <div style={{ fontSize: 14, color: '#C03058', marginBottom: 12 }}>{error}</div>
+              <button 
+                onClick={() => window.location.reload()}
+                style={{ padding: '8px 16px', background: '#1A1A2E', color: '#FFFFFF', border: 'none', borderRadius: 6, cursor: 'pointer' }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {!loading && !error && (
+            /* Users Table */
+            <div style={{
+              background: '#FFFFFF', border: '0.5px solid #E0D8CC',
+              borderRadius: 8, overflow: 'hidden',
+            }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                <thead>
+                  <tr style={{ background: '#F0EBE3' }}>
+                    <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>User</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Role</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Status</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'left', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Created At</th>
+                    <th style={{ padding: '10px 14px', textAlign: 'right', fontSize: 10.5, fontWeight: 500, color: '#1A1A2E', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {users.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={{ padding: '40px 14px', textAlign: 'center' }}>
+                        <div style={{ fontSize: 14, color: '#6B6577' }}>No users found</div>
+                      </td>
+                    </tr>
+                  ) : (
+                    users.map((user, i) => (
+                      <tr key={user.id} style={{
+                        background: i % 2 === 0 ? '#FFFFFF' : '#FDFAF6',
+                        borderBottom: '0.5px solid #F0EBE3',
+                      }}>
+                        <td style={{ padding: '12px 14px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div style={{
+                              width: 36, height: 36, borderRadius: '50%',
+                              background: '#C9963A20',
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              color: '#C9963A', fontSize: 14, fontWeight: 500,
+                            }}>{user.name.charAt(0)}</div>
+                            <div>
+                              <div style={{ color: '#1A1A2E', fontWeight: 500 }}>{user.name}</div>
+                              <div style={{ color: '#9880B0', fontSize: 11 }}>{user.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ padding: '12px 14px' }}>
+                          <span style={{
+                            background: `${roleColors[user.role]}20`, color: roleColors[user.role],
+                            border: `0.5px solid ${roleColors[user.role]}50`,
+                            padding: '3px 10px', borderRadius: 4,
+                            fontSize: 11, fontWeight: 500,
+                          }}>{user.role}</span>
+                        </td>
+                        <td style={{ padding: '12px 14px' }}>
+                          <span style={{
+                            display: 'flex', alignItems: 'center', gap: 4,
+                            color: user.status === 'Active' ? '#28A868' : '#6B6577',
+                            fontSize: 12,
+                          }}>
+                            <span style={{
+                              width: 6, height: 6, borderRadius: '50%',
+                              background: user.status === 'Active' ? '#28A868' : '#6B6577',
+                            }} />
+                            {user.status}
+                          </span>
+                        </td>
+                        <td style={{ padding: '12px 14px', color: '#6B6577', fontSize: 12 }}>{formatCreatedAt(user.lastLogin)}</td>
+                        <td style={{ padding: '12px 14px', textAlign: 'right' }}>
+                          <button
+                            onClick={() => handleEditClick(user)}
+                            style={{
+                              background: 'transparent', border: 'none',
+                              color: '#4A7AE0', fontSize: 12, cursor: 'pointer',
+                              marginRight: 12,
+                            }}
+                          >Edit</button>
+                          <button
+                            onClick={() => handleDeleteUser(user.id)}
+                            style={{
+                              background: 'transparent', border: 'none',
+                              color: '#C94646', fontSize: 12, cursor: 'pointer',
+                            }}
+                          >Delete</button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
 
@@ -1125,8 +1359,8 @@ function UsersSettingsPage() {
           {[ 
             { label: 'Organization Name', value: 'SAPI Organization', type: 'text' },
             { label: 'Support Email', value: 'support@sapi.ai', type: 'email' },
-            { label: 'Default Language', value: 'English', type: 'select', options: ['English', 'French', 'Spanish', 'Arabic'] },
-            { label: 'Timezone', value: 'UTC+05:30', type: 'select', options: ['UTC', 'UTC+05:30', 'UTC+08:00', 'UTC-05:00'] },
+            // { label: 'Default Language', value: 'English', type: 'select', options: ['English', 'French', 'Spanish', 'Arabic'] },
+            // { label: 'Timezone', value: 'UTC+05:30', type: 'select', options: ['UTC', 'UTC+05:30', 'UTC+08:00', 'UTC-05:00'] },
           ].map((field, idx) => (
             <div key={idx} style={{ marginBottom: 20 }}>
               <label style={{ display: 'block', fontSize: 12, color: '#6B6577', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
@@ -1184,13 +1418,21 @@ function UsersSettingsPage() {
               {editingUser ? 'Edit User' : 'Add User'}
             </h3>
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 12, color: '#6B6577', marginBottom: 6 }}>Name</label>
+              <label style={{ display: 'block', fontSize: 12, color: '#6B6577', marginBottom: 6 }}>Full Name</label>
               <input
                 type="text"
-                defaultValue={editingUser?.name || ''}
+                value={editingUser ? editingUser.name : formData.full_name}
+                onChange={(e) => {
+                  if (editingUser) {
+                    setEditingUser({ ...editingUser, name: e.target.value });
+                  } else {
+                    setFormData({ ...formData, full_name: e.target.value });
+                  }
+                }}
                 style={{
                   width: '100%', padding: '10px 12px', fontSize: 13,
                   border: '0.5px solid #D0C8BC', borderRadius: 6,
+                  color: '#1A1A2E', background: '#FFFFFF',
                 }}
               />
             </div>
@@ -1198,28 +1440,54 @@ function UsersSettingsPage() {
               <label style={{ display: 'block', fontSize: 12, color: '#6B6577', marginBottom: 6 }}>Email</label>
               <input
                 type="email"
-                defaultValue={editingUser?.email || ''}
+                value={editingUser ? editingUser.email : formData.email}
+                onChange={(e) => {
+                  if (editingUser) {
+                    setEditingUser({ ...editingUser, email: e.target.value });
+                  } else {
+                    setFormData({ ...formData, email: e.target.value });
+                  }
+                }}
+                disabled={!!editingUser}
                 style={{
                   width: '100%', padding: '10px 12px', fontSize: 13,
                   border: '0.5px solid #D0C8BC', borderRadius: 6,
+                  color: '#1A1A2E',
+                  background: editingUser ? '#F5F5F5' : '#FFFFFF',
                 }}
               />
             </div>
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: 'block', fontSize: 12, color: '#6B6577', marginBottom: 6 }}>Role</label>
               <select
-                defaultValue={editingUser?.role || 'Viewer'}
+                value={editingUser ? roleMapping[editingUser.role]?.toString() || '1' : formData.role}
+                onChange={(e) => {
+                  const roleValue = e.target.value;
+                  if (editingUser) {
+                    const roleName = reverseRoleMapping[parseInt(roleValue, 10)] || 'Viewer';
+                    setEditingUser({ ...editingUser, role: roleName });
+                  } else {
+                    setFormData({ ...formData, role: roleValue });
+                  }
+                }}
                 style={{
                   width: '100%', padding: '10px 12px', fontSize: 13,
                   border: '0.5px solid #D0C8BC', borderRadius: 6,
+                  color: '#1A1A2E', background: '#FFFFFF',
                 }}
               >
-                {roles.map(r => <option key={r}>{r}</option>)}
+                <option value="1">Admin</option>
+                <option value="2">Editor</option>
+                <option value="3">Viewer</option>
               </select>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <button
-                onClick={() => { setShowAddModal(false); setEditingUser(null); }}
+                onClick={() => { 
+                  setShowAddModal(false); 
+                  setEditingUser(null); 
+                  setFormData({ full_name: '', email: '', role: '1' });
+                }}
                 style={{
                   background: 'transparent', color: '#6B6577',
                   border: '0.5px solid #D0C8BC', borderRadius: 6,
@@ -1227,7 +1495,18 @@ function UsersSettingsPage() {
                 }}
               >Cancel</button>
               <button
-                onClick={() => handleSaveUser(editingUser || { name: '', email: '', role: 'Viewer', status: 'Active', lastLogin: '-' })}
+                onClick={() => {
+                  if (editingUser) {
+                    handleSaveUser({
+                      id: editingUser.id,
+                      name: editingUser.name,
+                      email: editingUser.email,
+                      role: editingUser.role,
+                    });
+                  } else {
+                    handleSaveUser();
+                  }
+                }}
                 style={{
                   background: '#C9963A', color: '#FFFFFF',
                   border: 'none', borderRadius: 6,

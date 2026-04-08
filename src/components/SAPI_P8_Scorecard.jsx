@@ -685,11 +685,25 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   function transformApiAnswers(data) {
     // Map question scores from API to Q1, Q2, etc. format
     const answers = {};
-    if (data.question_scores) {
+    
+    // Use dimension_sub_indicators if available (new API format)
+    if (data.dimension_sub_indicators && Array.isArray(data.dimension_sub_indicators)) {
+      data.dimension_sub_indicators.forEach((dim) => {
+        if (dim.sub_indicators && Array.isArray(dim.sub_indicators)) {
+          dim.sub_indicators.forEach((sub) => {
+            const qKey = `Q${sub.question_id}`;
+            answers[qKey] = sub.score;
+          });
+        }
+      });
+    }
+    // Fallback to question_scores if dimension_sub_indicators not available
+    else if (data.question_scores) {
       data.question_scores.forEach((qs, index) => {
         answers[`Q${index + 1}`] = qs.score;
       });
     }
+    
     return answers;
   }
   
