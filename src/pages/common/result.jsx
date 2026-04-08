@@ -1,8 +1,20 @@
 import { useState, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PageHeader } from "./PageHeader";
 import { PageFooter } from "./PageFooter";
 import { getAssessmentResults, generateDimensionAnalysisPDF } from "../../services/assessmentService";
+
+// ── Override Chrome Autofill White Background ───────────────────────────────
+const autofillStyles = `
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0a0a12 inset !important;
+    -webkit-text-fill-color: #F5F3EE !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+`;
 
 // ─── Scoring Utilities ────────────────────────────────────────────────────────
 
@@ -32,33 +44,33 @@ function calcComposite(scores) {
 
 const DEMO_SCORES = { D1: 58, D2: 44, D3: 67, D4: 51, D5: 39 };
 
-const TIER_META = {
-  leader: {
-    label: "SOVEREIGN AI LEADER",
-    colour: "#28A868",
-    editorial: "Your nation operates at the frontier of sovereign AI capability.",
-  },
-  advanced: {
-    label: "ADVANCED",
-    colour: "#F0C050",
-    editorial: "Significant capacity exists — strategic gaps remain in high-leverage dimensions.",
-  },
-  developing: {
-    label: "DEVELOPING",
-    colour: "#F0C050",
-    editorial: "Foundational conditions are present. The window to accelerate is now.",
-  },
-  nascent: {
-    label: "NASCENT",
-    colour: "#C03058",
-    editorial: "Structural investment in AI sovereignty is urgently required.",
-  },
-  preConditions: {
-    label: "PRE-CONDITIONS UNMET",
-    colour: "#C03058",
-    editorial: "Immediate sovereign action is required to avoid strategic displacement.",
-  },
-};
+// const TIER_META = {
+//   leader: {
+//     label: "SOVEREIGN AI LEADER",
+//     colour: "#28A868",
+//     editorial: "Your nation operates at the frontier of sovereign AI capability.",
+//   },
+//   advanced: {
+//     label: "ADVANCED",
+//     colour: "#F0C050",
+//     editorial: "Significant capacity exists — strategic gaps remain in high-leverage dimensions.",
+//   },
+//   developing: {
+//     label: "DEVELOPING",
+//     colour: "#F0C050",
+//     editorial: "Foundational conditions are present. The window to accelerate is now.",
+//   },
+//   nascent: {
+//     label: "NASCENT",
+//     colour: "#C03058",
+//     editorial: "Structural investment in AI sovereignty is urgently required.",
+//   },
+//   preConditions: {
+//     label: "PRE-CONDITIONS UNMET",
+//     colour: "#C03058",
+//     editorial: "Immediate sovereign action is required to avoid strategic displacement.",
+//   },
+// };
 
 const DIMENSIONS = [
   {
@@ -243,10 +255,9 @@ function LockIcon() {
   );
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
 export default function P7Results({ appState: appStateProp, setAppState, setCurrentPage }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // API data state
   const [apiResults, setApiResults] = useState(null);
@@ -313,7 +324,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   const rawScores = appState.scores;
   const composite = appState.compositeScore ?? Math.round(calcComposite(rawScores));
   const tier = appState.tier ?? getTier(composite);
-  const tierMeta = TIER_META[tier] || TIER_META.preConditions;
+  // const tierMeta = TIER_META[tier] || TIER_META.preConditions;
   const country = appState.orgProfile?.country || "Your Nation";
 
   // Score count-up
@@ -359,18 +370,42 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{
-      background: "#06030E",
-      minHeight: "auto",
-      fontFamily: "system-ui, -apple-system, sans-serif",
-      color: "#FBF5E6",
-      paddingBottom: "40px",
-    }}>
+    <>
+      <style>{autofillStyles}</style>
+      <div style={{
+        background: "#06030E",
+        minHeight: "auto",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        color: "#FBF5E6",
+        paddingBottom: "40px",
+      }}>
 
       <PageHeader showAdmin={false} />
 
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 40px" }}>
+
+        {/* Back to Results */}
+        <button
+          onClick={() => navigate('/results')}
+          style={{
+            background: "transparent",
+            border: "none",
+            padding: "0 0 16px 0",
+            color: "#9880B0",
+            fontSize: "12px",
+            fontWeight: 500,
+            letterSpacing: "0.1em",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.color = "#C9963A"}
+          onMouseLeave={(e) => e.currentTarget.style.color = "#9880B0"}
+        >
+          <span style={{ fontSize: "14px" }}>←</span> BACK TO RESULTS
+        </button>
 
         {/* Hero Score Card */}
         <div style={{
@@ -481,22 +516,22 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
               alignItems: "center",
               gap: "8px",
               padding: "8px 20px",
-              background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
-              border: `1.5px solid ${tierMeta.colour}`,
+              // background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
+              // border: `1.5px solid ${tierMeta.colour}`,
               borderRadius: "20px",
               fontSize: "12px",
               letterSpacing: "0.15em",
-              color: tierMeta.colour,
+              // color: tierMeta.colour,
               fontWeight: 600,
             }}>
               <span style={{
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                background: tierMeta.colour,
-                boxShadow: `0 0 8px ${tierMeta.colour}`,
+                // background: tierMeta.colour,
+                // boxShadow: `0 0 8px ${tierMeta.colour}`,
               }} />
-              {tierMeta.label}
+              {/* {tierMeta.label} */}
             </span>
           </div>
 
@@ -512,7 +547,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
             margin: "0 auto",
             lineHeight: 1.7,
           }}>
-            {tierMeta.editorial}
+            {/* {tierMeta.editorial} */}
           </div>
         </div>
 
@@ -1062,5 +1097,6 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
     
       <PageFooter />
     </div>
+    </>
   );
 }

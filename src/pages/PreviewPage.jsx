@@ -3,6 +3,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { saveProfile } from "../services/profileService";
 import { PageLayout, PageHeader, PageFooter, SAPIGlobe } from "./common";
 
+// ── Override Chrome Autofill White Background ───────────────────────────────
+const autofillStyles = `
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0a0a12 inset !important;
+    -webkit-text-fill-color: #F5F3EE !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+`;
+
 // ── SVG Flag Components ──────────────────────────────────────────────────────
 const UKFlag = () => (
   <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
@@ -119,6 +131,8 @@ export default function PreviewPage() {
   const [btnHover, setBtnHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
+  const [visibleCount, setVisibleCount] = useState(5);
   const [stageOpen, setStageOpen] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
   const [submitted, setSubmitted] = useState(false);
@@ -214,6 +228,11 @@ export default function PreviewPage() {
 
   const selectedCountry = COUNTRIES.find(c => c.value === form.country);
   const selectedStage = STAGES.find(s => s.value === form.developmentStage);
+  
+  const filteredCountries = COUNTRIES.filter(c => 
+    c.label.toLowerCase().includes(countrySearch.toLowerCase()) ||
+    c.value.toLowerCase().includes(countrySearch.toLowerCase())
+  );
 
   const inputClass = (id) => {
     const hasError = errors[id] && touched[id];
@@ -285,6 +304,7 @@ export default function PreviewPage() {
 
   return (
     <PageLayout>
+      <style>{autofillStyles}</style>
       <PageHeader showAdmin={false} />
 
       {/* Progress nav */}
@@ -339,7 +359,7 @@ export default function PreviewPage() {
           <div ref={countryRef}>
             <FieldLabel id="country" required>Country / Nation</FieldLabel>
             <button type="button" className={triggerClass("country", countryOpen)}
-              onClick={() => { setCountryOpen(o => !o); setStageOpen(false); setTouched(p => ({ ...p, country:true })); }}>
+              onClick={() => { setCountryOpen(o => !o); setStageOpen(false); setTouched(p => ({ ...p, country:true })); if (!countryOpen) setCountrySearch(""); }}>
               <span className="flex items-center gap-2.5">
                 {selectedCountry
                   ? <><span className="leading-none"><selectedCountry.Flag /></span><span>{selectedCountry.label}</span></>
@@ -349,13 +369,30 @@ export default function PreviewPage() {
             </button>
 
             {countryOpen && (
-              <div className="bg-sapi-midnight border border-sapi-gold border-t-0 rounded-b-sm overflow-hidden relative z-[300]">
-                {COUNTRIES.map((c, i) => (
+              <div className="bg-sapi-midnight border border-sapi-gold border-t-0 rounded-b-sm overflow-hidden relative z-[300] max-h-[300px] flex flex-col">
+                <div className="p-2 border-b border-sapi-bronze">
+                  <input
+                    type="text"
+                    value={countrySearch}
+                    onChange={(e) => { setCountrySearch(e.target.value); setVisibleCount(5); }}
+                    placeholder="Search country..."
+                    className="w-full bg-sapi-midnight border border-sapi-bronze rounded-sm px-3 py-2 text-sapi-parchment text-[13px] placeholder:text-sapi-muted/70 focus:outline-none focus:border-sapi-gold bg-[#0a0a12]"
+                    autoComplete="off"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </div>
+                <div className="overflow-y-auto flex-1" onScroll={(e) => {
+                  const { scrollTop, scrollHeight, clientHeight } = e.target;
+                  if (scrollTop + clientHeight >= scrollHeight - 10) {
+                    setVisibleCount(prev => Math.min(prev + 5, filteredCountries.length));
+                  }
+                }}>
+                  {filteredCountries.slice(0, visibleCount).map((c, i) => (
                   <button key={c.value} type="button"
                     className={`w-full border-none text-left cursor-pointer flex items-stretch transition-colors duration-100 ${
                       form.country === c.value ? 'bg-sapi-gold/10' : 'bg-transparent'
                     } ${i > 0 ? 'border-t border-sapi-bronze' : ''}`}
-                    onClick={() => { handleChange("country", c.value); setErrors(p => ({ ...p, country:null })); setCountryOpen(false); }}>
+                    onClick={() => { handleChange("country", c.value); setErrors(p => ({ ...p, country:null })); setCountryOpen(false); setCountrySearch(""); }}>
                     <div className="w-11 flex-shrink-0 flex items-center justify-center border-r border-sapi-bronze py-3">
                       <c.Flag />
                     </div>
@@ -374,6 +411,7 @@ export default function PreviewPage() {
                     )}
                   </button>
                 ))}
+                </div>
               </div>
             )}
             <ErrMsg id="country" />

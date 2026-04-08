@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SubmissionsList from './SAPI_B1_SubmissionsList';
 import SubmissionDetail from './SAPI_B2_SubmissionDetail';
 import QuestionEditor from './SAPI_E1_QuestionEditor';
@@ -264,7 +264,21 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
   // Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [countryDropdownOpen, setCountryDropdownOpen] = useState(false);
+  const [countrySearch, setCountrySearch] = useState('');
+  const countryDropdownRef = useRef(null);
   const [selectedScoreRange, setSelectedScoreRange] = useState('');
+  
+  // Close country dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (countryDropdownRef.current && !countryDropdownRef.current.contains(e.target)) {
+        setCountryDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   
   // Fetch dashboard data
   useEffect(() => {
@@ -538,22 +552,72 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
             </svg>
           </span>
         </div>
-        <select 
-          value={selectedCountry}
-          onChange={(e) => setSelectedCountry(e.target.value)}
-          style={{
-            padding: '6px 9px', fontSize: 13,
-            border: '0.5px solid #D0C8BC', borderRadius: 6,
-            background: '#FFFFFF', color: '#1A1A2E',
-            position: 'relative', zIndex: 20,
-            flex: 1, minWidth: 140,
-          }}
-        >
-          <option value="">All countries</option>
-          {uniqueCountries.map(country => (
-            <option key={country} value={country}>{shortCountry(country)}</option>
-          ))}
-        </select>
+        {/* Country Searchable Dropdown */}
+        <div ref={countryDropdownRef} style={{ position: 'relative', flex: 1, minWidth: 140 }}>
+          <button
+            onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
+            style={{
+              padding: '6px 9px', fontSize: 13,
+              border: '0.5px solid #D0C8BC', borderRadius: 6,
+              background: '#FFFFFF', color: '#1A1A2E',
+              width: '100%', textAlign: 'left', cursor: 'pointer',
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            }}
+          >
+            <span>{selectedCountry ? shortCountry(selectedCountry) : 'All countries'}</span>
+            <span style={{ fontSize: 10, color: '#9880B0' }}>{countryDropdownOpen ? '▲' : '▼'}</span>
+          </button>
+          {countryDropdownOpen && (
+            <div style={{
+              position: 'absolute', top: '100%', left: 0, right: 0,
+              background: '#FFFFFF', border: '0.5px solid #D0C8BC',
+              borderRadius: 6, marginTop: 4, zIndex: 100,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)', maxHeight: 250,
+              display: 'flex', flexDirection: 'column',
+            }}>
+              <div style={{ padding: 8, borderBottom: '0.5px solid #E5E5E5' }}>
+                <input
+                  type="text"
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  placeholder="Search country..."
+                  style={{
+                    padding: '6px 8px', fontSize: 12,
+                    border: '0.5px solid #D0C8BC', borderRadius: 4,
+                    background: '#FFFFFF', color: '#1A1A2E',
+                    width: '100%', boxSizing: 'border-box',
+                  }}
+                  autoComplete="off"
+                />
+              </div>
+              <div style={{ overflowY: 'auto', maxHeight: 200 }}>
+                <div
+                  onClick={() => { setSelectedCountry(''); setCountryDropdownOpen(false); setCountrySearch(''); }}
+                  style={{
+                    padding: '8px 12px', fontSize: 13, cursor: 'pointer',
+                    background: selectedCountry === '' ? '#F5F3EE' : 'transparent',
+                  }}
+                >
+                  All countries
+                </div>
+                {uniqueCountries.filter(c => 
+                  c.toLowerCase().includes(countrySearch.toLowerCase())
+                ).map(country => (
+                  <div
+                    key={country}
+                    onClick={() => { setSelectedCountry(country); setCountryDropdownOpen(false); setCountrySearch(''); }}
+                    style={{
+                      padding: '8px 12px', fontSize: 13, cursor: 'pointer',
+                      background: selectedCountry === country ? '#F5F3EE' : 'transparent',
+                    }}
+                  >
+                    {shortCountry(country)}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
         <select 
           value={selectedScoreRange}
           onChange={(e) => setSelectedScoreRange(e.target.value)}
