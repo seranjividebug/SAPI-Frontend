@@ -652,7 +652,7 @@ function SubmissionDetail({ submission, submissions, setSubmissions, setAdminPag
 // =============================================================
 // STANDALONE PREVIEW WRAPPER
 // =============================================================
-export default function B2_PreviewApp() {
+export default function B2_PreviewApp({ submission: submissionProp, onBack }) {
   const [submission, setSubmission] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -660,16 +660,55 @@ export default function B2_PreviewApp() {
   useEffect(() => {
     const fetchAssessmentDetails = async () => {
       try {
-        // Get assessment_id from localStorage
-        const assessmentId = localStorage.getItem('sapi_assessment_id');
+        // If submission data is passed via props (with details from Dashboard), use it
+        if (submissionProp?.details) {
+          const data = submissionProp.details;
+          const transformedSubmission = {
+            id: data.assessment_id,
+            country: data.country,
+            respondentName: data.respondent_name,
+            title: data.title,
+            ministry: data.ministry_or_department,
+            email: data.contact_email,
+            developmentStage: data.development_stage,
+            completedAt: data.created_at,
+            compositeScore: data.sapi_score,
+            tier: data.tier,
+            scores: {
+              compute: Math.round(data.dimensions.compute_capacity.score),
+              capital: Math.round(data.dimensions.capital_formation.score),
+              regulatory: Math.round(data.dimensions.regulatory_readiness.score),
+              data: Math.round(data.dimensions.data_sovereignty.score),
+              di: Math.round(data.dimensions.directed_intelligence.score)
+            },
+            answers: {}
+          };
 
-        if (!assessmentId) {
-          setError('No assessment ID found in localStorage');
+          // Populate answers from dimension_breakdown
+          if (data.dimension_breakdown) {
+            data.dimension_breakdown.forEach(dimension => {
+              dimension.questions.forEach(q => {
+                const qKey = `q${q.question_id}`;
+                transformedSubmission.answers[qKey] = q.score;
+              });
+            });
+          }
+
+          setSubmission(transformedSubmission);
           setLoading(false);
           return;
         }
 
-        // Fetch assessment details from API
+        // Fallback: Get assessment_id from localStorage
+        const assessmentId = localStorage.getItem('sapi_assessment_id');
+
+        if (!assessmentId) {
+          setError('No assessment ID found');
+          setLoading(false);
+          return;
+        }
+
+        // Fetch assessment details from API only if not provided via props
         const response = await getAssessmentDetails(assessmentId);
 
         if (!response.success || !response.data) {
@@ -761,6 +800,7 @@ export default function B2_PreviewApp() {
         setSubmissions={() => {}}
         setAdminPage={() => {}}
         setSelectedLead={() => {}}
+        onBack={onBack}
       />
     </div>
   );

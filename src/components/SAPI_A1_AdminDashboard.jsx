@@ -10,6 +10,7 @@ import {
   updateAssessmentStatus,
   getDashboardStats
 } from '../services/dashboardService';
+import { getAssessmentDetails } from '../services/assessmentService';
 import {
   getUsers,
   getUserById,
@@ -450,6 +451,27 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
     }
   };
 
+  // Handle view assessment details
+  const handleViewAssessment = async (submissionId) => {
+    try {
+      const response = await getAssessmentDetails(submissionId);
+      
+      if (response?.success) {
+        // Store the detailed data and navigate to detail view
+        setSelectedSubmission({
+          id: submissionId,
+          details: response.data
+        });
+        setAdminPage('submissionDetail');
+      } else {
+        alert('Failed to load assessment details');
+      }
+    } catch (err) {
+      console.error('View assessment error:', err);
+      alert('Failed to load assessment details');
+    }
+  };
+
   return (
     <div style={{ padding: '1.5rem 2rem', fontFamily: 'system-ui, -apple-system, sans-serif', background: '#F8F9FA', minHeight: '100vh' }}>
       {/* Header */}
@@ -600,18 +622,16 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                     borderTop: '3px solid #C9963A', borderRadius: '50%',
                     animation: 'spin 1s linear infinite', margin: '0 auto 8px'
                   }} />
-                  <div style={{ fontSize: 13, color: '#6B6577' }}>Loading...</div>
                 </div>
               </div>
             )}
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 900 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
-              <tr style={{ background: '#F2ECCF', borderBottom: '0.5px solid #E0D8CC' }}>
-                {['COUNTRY', 'RESPONDENT', 'MINISTRY', 'SCORE', 'TIER', 'DATE', 'ACTIONS'].map(h => (
-                  <th key={h} style={{
-                    padding: '12px 14px', textAlign: 'left',
-                    fontSize: 10, fontWeight: 600, color: '#1A1A2E',
-                    textTransform: 'uppercase', letterSpacing: '0.05em',
+              <tr style={{ background: '#FAFBFC', borderBottom: '0.5px solid #E0D8CC' }}>
+                {['Country', 'Respondent', 'Ministry', 'Score', 'Tier', 'Date', 'Actions'].map((h) => (
+                  <th key={h} style={{ 
+                    padding: '10px 14px', textAlign: 'left', fontSize: 11, fontWeight: 600, 
+                    color: '#6B6577', textTransform: 'uppercase', letterSpacing: '0.04em',
                     fontFamily: 'system-ui, sans-serif',
                     whiteSpace: 'nowrap',
                   }}>{h}</th>
@@ -629,7 +649,7 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                 submissions.map((sub, i) => (
                 <tr 
                   key={sub.id}
-                  onClick={() => { setSelectedSubmission(sub); setAdminPage('submissionDetail'); }}
+                  onClick={() => handleViewAssessment(sub.id)}
                   style={{
                     background: i % 2 === 0 ? '#FFFFFF' : '#FAFBFC',
                     borderBottom: '0.5px solid #F0EBE3',
@@ -673,6 +693,10 @@ function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   </td>
                   <td style={{ padding: '12px 14px' }}>
                     <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewAssessment(sub.id);
+                      }}
                       style={{
                         padding: '6px 16px', 
                         background: 'transparent', 
