@@ -54,3 +54,25 @@ export async function getAssessmentDetails(assessmentId) {
   const data = await response.json();
   return data;
 }
+
+/**
+ * Generate dimension analysis PDF
+ * POST /api/pdf/dimension-analysis
+ * @param {string} assessmentId - UUID of the assessment
+ */
+export async function generateDimensionAnalysisPDF(assessmentId) {
+  const response = await fetch(`${API_BASE_URL}/pdf/dimension-analysis`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ assessmentId }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to generate PDF: ${response.statusText}`);
+  }
+
+  const blob = await response.blob();
+  return blob;
+}

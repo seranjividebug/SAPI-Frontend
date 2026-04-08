@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { PageHeader } from "./PageHeader";
 import { PageFooter } from "./PageFooter";
+import { getAssessmentResults, generateDimensionAnalysisPDF } from "../../services/assessmentService";
 
 // ─── Scoring Utilities ────────────────────────────────────────────────────────
 
@@ -243,19 +245,75 @@ function LockIcon() {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function P7Results({ appState, setAppState, setCurrentPage }) {
-  const rawScores =
-    appState.scores && Object.keys(appState.scores).length > 0
-      ? appState.scores
-      : DEMO_SCORES;
+export default function P7Results({ appState: appStateProp, setAppState, setCurrentPage }) {
+  const location = useLocation();
 
-  const composite =
-    appState.compositeScore != null
-      ? appState.compositeScore
-      : Math.round(calcComposite(rawScores));
+  // API data state
+  const [apiResults, setApiResults] = useState(null);
 
+  // Fetch results from API
+  useEffect(() => {
+    const fetchResults = async () => {
+      // If we have appState from props with scores, use that
+      if (appStateProp?.scores && Object.keys(appStateProp.scores).length > 0) {
+        setApiResults(null);
+        return;
+      }
+
+      // Otherwise fetch from API
+      const id = localStorage.getItem('sapi_assessment_id') || location.state?.assessmentId;
+
+      if (!id) return;
+
+      try {
+        const response = await getAssessmentResults(id);
+        if (response.success) {
+          setApiResults(response.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch results:', err);
+      }
+    };
+
+    fetchResults();
+  }, [appStateProp, location.state]);
+
+  // Build appState from API data or props
+  const appState = useMemo(() => {
+    if (apiResults) {
+      const storedProfile = JSON.parse(localStorage.getItem('sapi_profile') || '{}');
+      return {
+        orgProfile: {
+          country: storedProfile.country || "Your Nation",
+          nationName: storedProfile.country || "Your Nation",
+        },
+        scores: {
+          D1: apiResults.compute_capacity ?? DEMO_SCORES.D1,
+          D2: apiResults.capital_formation ?? DEMO_SCORES.D2,
+          D3: apiResults.regulatory_readiness ?? DEMO_SCORES.D3,
+          D4: apiResults.data_sovereignty ?? DEMO_SCORES.D4,
+          D5: apiResults.directed_intelligence ?? DEMO_SCORES.D5,
+        },
+        compositeScore: apiResults.sapi_score ?? null,
+        tier: apiResults.tier ?? null,
+        emailCaptured: false,
+        email: "",
+      };
+    }
+    return appStateProp || {
+      orgProfile: { country: "Your Nation", nationName: "Your Nation" },
+      scores: DEMO_SCORES,
+      compositeScore: null,
+      tier: null,
+      emailCaptured: false,
+      email: "",
+    };
+  }, [apiResults, appStateProp]);
+
+  const rawScores = appState.scores;
+  const composite = appState.compositeScore ?? Math.round(calcComposite(rawScores));
   const tier = appState.tier ?? getTier(composite);
-  const tierMeta = TIER_META[tier];
+  const tierMeta = TIER_META[tier] || TIER_META.preConditions;
   const country = appState.orgProfile?.country || "Your Nation";
 
   // Score count-up
@@ -314,72 +372,145 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 40px" }}>
 
-        {/* Hero Score */}
+        {/* Hero Score Card */}
         <div style={{
-          textAlign: "center",
-          padding: "60px 0 40px",
+          background: "linear-gradient(145deg, #0A0514 0%, #14102C 100%)",
+          border: "1px solid rgba(107,69,8,0.25)",
+          borderRadius: "16px",
+          padding: "48px 40px",
+          marginBottom: "32px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
         }}>
+          {/* Header Row */}
           <div style={{
-            fontSize: "11px",
-            letterSpacing: "0.2em",
-            color: "#9880B0",
-            marginBottom: "28px",
-            fontWeight: 500,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginBottom: "32px",
+            flexWrap: "wrap",
+            gap: "16px",
           }}>
-            COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
+            <div style={{
+              fontSize: "10px",
+              letterSpacing: "0.25em",
+              color: "#9880B0",
+              fontWeight: 500,
+            }}>
+              COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
+            </div>
+            {/* Generate PDF Button */}
+            <button
+              onClick={async () => {
+                const id = localStorage.getItem('sapi_assessment_id') || location.state?.assessmentId;
+                if (id) {
+                  try {
+                    const blob = await generateDimensionAnalysisPDF(id);
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `SAPI-Dimension-Analysis-${id}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                  } catch (err) {
+                    console.error('PDF generation error:', err);
+                    alert('Failed to generate PDF. Please try again.');
+                  }
+                } else {
+                  alert('No assessment ID found');
+                }
+              }}
+              style={{
+                background: "#C9963A",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 20px",
+                color: "#06030E",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                cursor: "pointer",
+                transition: "opacity 0.2s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            >
+              GENERATE PDF
+            </button>
           </div>
 
-          {/* Score number */}
-          <div style={{ position: "relative", display: "inline-block" }}>
+          {/* Score Display */}
+          <div style={{
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "center",
+            gap: "12px",
+            marginBottom: "28px",
+          }}>
             <span style={{
               fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(72px, 10vw, 96px)",
+              fontSize: "clamp(80px, 12vw, 120px)",
               fontWeight: 700,
               color: "#EDD98A",
               lineHeight: 1,
-              letterSpacing: "-0.03em",
+              letterSpacing: "-0.04em",
+              textShadow: "0 2px 20px rgba(237,217,138,0.15)",
             }}>
               {displayScore}
             </span>
             <span style={{
               fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(24px, 3.5vw, 32px)",
+              fontSize: "clamp(28px, 4vw, 36px)",
               fontWeight: 400,
-              color: "rgba(237,217,138,0.4)",
-              marginLeft: "6px",
+              color: "rgba(237,217,138,0.35)",
               lineHeight: 1,
             }}>
               / 100
             </span>
           </div>
 
-          {/* Tier badge */}
-          <div style={{ marginTop: "24px" }}>
+          {/* Tier Badge */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "20px",
+          }}>
             <span style={{
-              display: "inline-block",
-              padding: "6px 18px",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 20px",
+              background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
               border: `1.5px solid ${tierMeta.colour}`,
-              borderRadius: "3px",
-              fontSize: "11px",
-              letterSpacing: "0.18em",
+              borderRadius: "20px",
+              fontSize: "12px",
+              letterSpacing: "0.15em",
               color: tierMeta.colour,
-              fontWeight: 500,
+              fontWeight: 600,
             }}>
+              <span style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: tierMeta.colour,
+                boxShadow: `0 0 8px ${tierMeta.colour}`,
+              }} />
               {tierMeta.label}
             </span>
           </div>
 
-          {/* Editorial line */}
+          {/* Editorial Line */}
           <div style={{
-            marginTop: "20px",
+            textAlign: "center",
             fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontSize: "15px",
             fontWeight: 400,
-            color: "#EDD98A",
-            opacity: 0.8,
-            maxWidth: "480px",
-            margin: "20px auto 0",
-            lineHeight: 1.6,
+            color: "#FBF5E6",
+            opacity: 0.75,
+            maxWidth: "520px",
+            margin: "0 auto",
+            lineHeight: 1.7,
           }}>
             {tierMeta.editorial}
           </div>
