@@ -562,19 +562,21 @@ export default function SAPIResults() {
             </div>
           </div>
 
-          <div style={{ textAlign: "right" }}>
-            <div style={{
-              fontFamily: "Georgia, serif", fontSize: 13,
-              color: C.parchment, opacity: 0.9, letterSpacing: "0.04em",
-            }}>
-              {nationName}
-            </div>
-            <div style={{
-              fontFamily: "system-ui, sans-serif", fontSize: 8.5,
-              color: C.muted, opacity: 0.6, letterSpacing: "0.1em",
-              textTransform: "uppercase", marginTop: 2,
-            }}>
-              {date} · Tier 1 Assessment
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <div style={{ textAlign: "right" }}>
+              <div style={{
+                fontFamily: "Georgia, serif", fontSize: 13,
+                color: C.parchment, opacity: 0.9, letterSpacing: "0.04em",
+              }}>
+                {nationName}
+              </div>
+              <div style={{
+                fontFamily: "system-ui, sans-serif", fontSize: 8.5,
+                color: C.muted, opacity: 0.6, letterSpacing: "0.1em",
+                textTransform: "uppercase", marginTop: 2,
+              }}>
+                {date} · Tier 1 Assessment
+              </div>
             </div>
           </div>
         </div>
@@ -691,7 +693,37 @@ export default function SAPIResults() {
             alignItems: "center",
             justifyContent: "center",
             padding: "36px 32px",
+            position: "relative",
           }}>
+            {/* Report Button - Top Right of Radar Panel */}
+            <button
+              onClick={() => navigate('/results-report')}
+              style={{
+                position: "absolute",
+                top: 20,
+                right: 20,
+                padding: "8px 16px",
+                background: "#C9963A",
+                border: "none",
+                borderRadius: 4,
+                fontFamily: "system-ui, sans-serif",
+                fontSize: 11,
+                fontWeight: 500,
+                color: "#06030E",
+                cursor: "pointer",
+                transition: "opacity 0.2s ease",
+                zIndex: 10,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.85";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
+            >
+              Report
+            </button>
+
             <div style={{
               fontFamily: "system-ui, sans-serif", fontSize: 9,
               letterSpacing: "0.22em", textTransform: "uppercase",

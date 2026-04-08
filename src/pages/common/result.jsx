@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { PageHeader } from "./PageHeader";
+import { PageFooter } from "./PageFooter";
 
 // ─── Scoring Utilities ────────────────────────────────────────────────────────
 
@@ -301,110 +303,13 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
   return (
     <div style={{
       background: "#06030E",
-      minHeight: "100vh",
+      minHeight: "auto",
       fontFamily: "system-ui, -apple-system, sans-serif",
       color: "#FBF5E6",
-      paddingBottom: "80px",
+      paddingBottom: "40px",
     }}>
 
-      {/* ─── HEADER ─────────────────────────────────────────────────────────── */}
-      <header style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "20px 40px",
-        borderBottom: "1px solid rgba(107,69,8,0.18)",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <SAPILogo />
-          <div>
-            <div style={{
-              fontFamily: "Georgia, serif",
-              fontSize: "11px",
-              letterSpacing: "0.18em",
-              color: "#C9963A",
-              fontWeight: 500,
-            }}>
-              THE SOVEREIGN AI POWER INDEX
-            </div>
-            <div style={{
-              fontSize: "10px",
-              letterSpacing: "0.1em",
-              color: "#9880B0",
-              marginTop: "1px",
-            }}>
-              TIER 1 ASSESSMENT
-            </div>
-          </div>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          {/* Classification badge */}
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            padding: "5px 12px",
-            border: "1px solid rgba(201,150,58,0.35)",
-            borderRadius: "3px",
-          }}>
-            <div style={{
-              width: "6px",
-              height: "6px",
-              borderRadius: "50%",
-              background: "#C9963A",
-            }} />
-            <span style={{
-              fontSize: "10px",
-              letterSpacing: "0.14em",
-              color: "#C9963A",
-              fontWeight: 500,
-            }}>
-              CLASSIFICATION: RESTRICTED
-            </span>
-          </div>
-
-          {/* Download button */}
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => !emailCaptured && setDownloadTooltip(!downloadTooltip)}
-              onBlur={() => setDownloadTooltip(false)}
-              style={{
-                background: "transparent",
-                border: "1px solid rgba(107,69,8,0.35)",
-                borderRadius: "4px",
-                padding: "6px 14px",
-                color: emailCaptured ? "#C9963A" : "#9880B0",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                cursor: emailCaptured ? "pointer" : "not-allowed",
-                fontFamily: "system-ui, sans-serif",
-                opacity: emailCaptured ? 1 : 0.55,
-              }}
-            >
-              Download Report
-            </button>
-            {downloadTooltip && !emailCaptured && (
-              <div style={{
-                position: "absolute",
-                top: "calc(100% + 8px)",
-                right: 0,
-                background: "#1A1540",
-                border: "1px solid rgba(107,69,8,0.3)",
-                borderRadius: "4px",
-                padding: "8px 12px",
-                width: "180px",
-                fontSize: "11px",
-                color: "#9880B0",
-                lineHeight: 1.5,
-                zIndex: 10,
-              }}>
-                Save your report to unlock download.
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <PageHeader showAdmin={false} />
 
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
       <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 40px" }}>
@@ -427,17 +332,19 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
           {/* Score number */}
           <div style={{ position: "relative", display: "inline-block" }}>
             <span style={{
-              fontFamily: "Georgia, serif",
+              fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontSize: "clamp(72px, 10vw, 96px)",
+              fontWeight: 700,
               color: "#EDD98A",
               lineHeight: 1,
-              letterSpacing: "-0.02em",
+              letterSpacing: "-0.03em",
             }}>
               {displayScore}
             </span>
             <span style={{
-              fontFamily: "Georgia, serif",
+              fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
               fontSize: "clamp(24px, 3.5vw, 32px)",
+              fontWeight: 400,
               color: "rgba(237,217,138,0.4)",
               marginLeft: "6px",
               lineHeight: 1,
@@ -465,9 +372,9 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
           {/* Editorial line */}
           <div style={{
             marginTop: "20px",
-            fontFamily: "Georgia, serif",
-            fontStyle: "italic",
+            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontSize: "15px",
+            fontWeight: 400,
             color: "#EDD98A",
             opacity: 0.8,
             maxWidth: "480px",
@@ -506,11 +413,13 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
                   {d.short.toUpperCase()}
                 </div>
                 <div style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "28px",
+                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+                  fontSize: "32px",
+                  fontWeight: 600,
                   color: "#EDD98A",
                   lineHeight: 1,
                   marginBottom: "10px",
+                  letterSpacing: "-0.02em",
                 }}>
                   {s}
                 </div>
@@ -701,14 +610,21 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
         </div>
 
         {/* ─── ZONE B: GATED RESULTS ────────────────────────────────────────── */}
-        <div style={{ position: "relative", marginBottom: "48px" }}>
+        <div style={{ 
+          position: "relative", 
+          marginBottom: zoneRevealed ? "48px" : "16px",
+          minHeight: zoneRevealed ? "auto" : "120px",
+          maxHeight: zoneRevealed ? "none" : "120px",
+          overflow: "hidden",
+        }}>
 
           {/* Radar + Scorecard content */}
           <div style={{
-            opacity: zoneRevealed ? 1 : 0.15,
-            filter: zoneRevealed ? "none" : "blur(3px)",
+            opacity: zoneRevealed ? 1 : 0,
+            filter: zoneRevealed ? "none" : "blur(8px)",
             transition: "opacity 0.6s ease, filter 0.6s ease",
             pointerEvents: zoneRevealed ? "auto" : "none",
+            display: zoneRevealed ? "block" : "none",
           }}>
 
             {/* Section header */}
@@ -1011,180 +927,9 @@ export default function P7Results({ appState, setAppState, setCurrentPage }) {
             </div>
           )}
         </div>
-
-        {/* ─── ZONE C: UPGRADE HOOK ─────────────────────────────────────────── */}
-        <div>
-          <div style={{
-            fontSize: "10px",
-            letterSpacing: "0.18em",
-            color: "#9880B0",
-            marginBottom: "24px",
-            fontWeight: 500,
-            borderBottom: "1px solid rgba(107,69,8,0.18)",
-            paddingBottom: "14px",
-          }}>
-            NEXT STEPS
-          </div>
-
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "16px",
-          }}>
-            {/* Card 1 — Roadmap */}
-            <div style={{
-              background: "#0F0830",
-              border: "1px solid rgba(107,69,8,0.22)",
-              borderRadius: "8px",
-              padding: "28px",
-            }}>
-              {/* Icon */}
-              <div style={{ marginBottom: "16px" }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 12h16M14 6l6 6-6 6"
-                    stroke="#C9963A" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "16px",
-                color: "#FBF5E6",
-                marginBottom: "10px",
-                lineHeight: 1.35,
-              }}>
-                12–18 Month Improvement Roadmap
-              </div>
-              <div style={{
-                fontSize: "13px",
-                color: "#9880B0",
-                marginBottom: "24px",
-                lineHeight: 1.65,
-              }}>
-                Your lowest-scoring dimensions have been mapped to targeted sovereign
-                interventions. Review your prioritised action plan.
-              </div>
-
-              {emailCaptured ? (
-                <button
-                  onClick={() => setCurrentPage && setCurrentPage("roadmap")}
-                  style={{
-                    background: "transparent",
-                    border: "1px solid rgba(107,69,8,0.4)",
-                    borderRadius: "4px",
-                    padding: "10px 20px",
-                    color: "#FBF5E6",
-                    fontSize: "12px",
-                    letterSpacing: "0.08em",
-                    cursor: "pointer",
-                    fontFamily: "system-ui, sans-serif",
-                    fontWeight: 500,
-                    width: "100%",
-                    transition: "border-color 0.15s, background 0.15s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.borderColor = "rgba(201,150,58,0.5)";
-                    e.target.style.background = "rgba(201,150,58,0.05)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.borderColor = "rgba(107,69,8,0.4)";
-                    e.target.style.background = "transparent";
-                  }}
-                >
-                  View Roadmap
-                </button>
-              ) : (
-                <div style={{
-                  fontSize: "11px",
-                  color: "rgba(152,128,176,0.5)",
-                  fontStyle: "italic",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                }}>
-                  <LockIcon />
-                  Save your report to unlock
-                </div>
-              )}
-            </div>
-
-            {/* Card 2 — Tier 2 */}
-            <div style={{
-              background: "#0F0830",
-              border: "1.5px solid rgba(201,150,58,0.35)",
-              borderRadius: "8px",
-              padding: "28px",
-              position: "relative",
-              overflow: "hidden",
-            }}>
-              {/* Subtle gold glow corner */}
-              <div style={{
-                position: "absolute",
-                top: "-40px",
-                right: "-40px",
-                width: "120px",
-                height: "120px",
-                borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(201,150,58,0.08) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }} />
-
-              <div style={{
-                fontSize: "9px",
-                letterSpacing: "0.18em",
-                color: "#C9963A",
-                marginBottom: "14px",
-                fontWeight: 500,
-              }}>
-                TIER 2 PRACTITIONER ASSESSMENT
-              </div>
-
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "16px",
-                color: "#FBF5E6",
-                marginBottom: "10px",
-                lineHeight: 1.35,
-              }}>
-                Go deeper. Work with a sovereign AI expert.
-              </div>
-
-              <div style={{
-                fontSize: "13px",
-                color: "#9880B0",
-                marginBottom: "24px",
-                lineHeight: 1.65,
-              }}>
-                The Tier 2 engagement delivers named peer benchmarks, ministerial
-                workshops, and a fully costed implementation programme.
-              </div>
-
-              <button
-                onClick={() => setCurrentPage && setCurrentPage("upgrade")}
-                style={{
-                  background: "#C9963A",
-                  border: "none",
-                  borderRadius: "4px",
-                  padding: "11px 20px",
-                  color: "#06030E",
-                  fontSize: "12px",
-                  letterSpacing: "0.1em",
-                  cursor: "pointer",
-                  fontFamily: "system-ui, sans-serif",
-                  fontWeight: 500,
-                  width: "100%",
-                  transition: "opacity 0.15s",
-                }}
-                onMouseEnter={(e) => (e.target.style.opacity = "0.88")}
-                onMouseLeave={(e) => (e.target.style.opacity = "1")}
-              >
-                Request Tier 2 Briefing
-              </button>
-            </div>
-          </div>
-        </div>
-
       </div>
     
+      <PageFooter />
     </div>
   );
 }
