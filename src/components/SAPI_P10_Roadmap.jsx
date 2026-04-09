@@ -9,14 +9,10 @@ function SAPIGlobe({ size = 32 }) {
     <img
       src="/logo.png"
       alt="SAPI Logo"
+      className="object-contain bg-transparent rounded-full p-0.5 box-border"
       style={{
         width: size,
         height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
-        padding: '2px',
-        boxSizing: 'border-box',
         WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
         maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
       }}
@@ -492,9 +488,9 @@ export default function SAPIRoadmap() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
         <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 14, color: C.muted, letterSpacing: "0.1em", marginTop: 24 }}>
+        <div className="font-sans text-sm text-sapi-muted tracking-[0.1em] mt-6">
           Generating your roadmap…
         </div>
       </div>
@@ -503,14 +499,14 @@ export default function SAPIRoadmap() {
 
   if (error) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
         <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, color: C.crimson, marginTop: 24, marginBottom: 16 }}>
+        <div className="font-serif text-lg text-sapi-crimson mt-6 mb-4">
           {error}
         </div>
         <button 
           onClick={() => navigate('/')}
-          style={{ background: C.gold, color: C.void, border: "none", padding: "12px 24px", fontFamily: "system-ui, sans-serif", fontSize: 12, cursor: "pointer", borderRadius: 3 }}
+          className="bg-sapi-gold text-sapi-void border-none px-6 py-3 font-sans text-xs cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -523,138 +519,56 @@ export default function SAPIRoadmap() {
   const totalInterventions = phases.reduce((n, p) => n + p.cards.length, 0);
 
   return (
-    <div style={{
-      minHeight:       "100vh",
-      backgroundColor: C.void,
-      color:           C.parchment,
-      fontFamily:      "system-ui, -apple-system, sans-serif",
-    }}>
+    <div className="min-h-screen bg-sapi-void text-sapi-parchment font-sans">
 
       {/* ── App Header ── */}
-      <header style={{
-        borderBottom:    `1px solid ${C.bronze}`,
-        backgroundColor: C.navy,
-        position:        "sticky",
-        top:             0,
-        zIndex:          100,
-      }}>
-        <div style={{
-          maxWidth:       1100,
-          margin:         "0 auto",
-          padding:        "18px 32px",
-          display:        "flex",
-          alignItems:     "center",
-          justifyContent: "space-between",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
+        <div className="max-w-[1100px] mx-auto px-8 py-4.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <SAPIGlobe size={32} />
-            <span style={{
-              fontFamily:    "Georgia, serif",
-              fontSize:      11,
-              letterSpacing: "0.14em",
-              color:         C.parchment,
-              opacity:       0.9,
-              textTransform: "uppercase",
-            }}>
+            <span className="font-serif text-[11px] tracking-[0.14em] text-sapi-parchment opacity-90 uppercase">
               The Sovereign AI Power Index
             </span>
           </div>
-          <span style={{
-            fontSize:      10,
-            letterSpacing: "0.15em",
-            color:         C.crimson,
-            textTransform: "uppercase",
-            border:        `1px solid ${C.crimson}`,
-            padding:       "3px 10px",
-            opacity:       0.85,
-          }}>
+          <span
+            className="text-[10px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2.5 py-0.5 opacity-85"
+          >
             Classification: Restricted
           </span>
         </div>
       </header>
 
       {/* ── Page body ── */}
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 32px 80px" }}>
+      <main className="max-w-[1100px] mx-auto px-8 py-12 pb-20">
 
         {/* ── Page header row ── */}
-        <div style={{
-          display:        "flex",
-          alignItems:     "flex-start",
-          justifyContent: "space-between",
-          marginBottom:   40,
-          flexWrap:       "wrap",
-          gap:            16,
-        }}>
+        <div className="flex items-start justify-between mb-10 flex-wrap gap-4">
           {/* Back + Title */}
           <div>
             <button
               onClick={() => navigate("/results")}
-              style={{
-                display:        "flex",
-                alignItems:     "center",
-                gap:            6,
-                background:     "none",
-                border:         "none",
-                cursor:         "pointer",
-                color:          C.muted,
-                fontSize:       12,
-                letterSpacing:  "0.10em",
-                textTransform:  "uppercase",
-                padding:        0,
-                marginBottom:   16,
-              }}
+              className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-sapi-muted text-xs tracking-[0.1em] uppercase p-0 mb-4 hover:text-sapi-gold transition-colors"
             >
-              <span style={{ fontSize: 14 }}>←</span> Back to Results
+              <span className="text-sm">←</span> Back to Results
             </button>
-            <h1 style={{
-              fontFamily:    "Georgia, serif",
-              fontSize:      28,
-              fontWeight:    500,
-              letterSpacing: "0.08em",
-              color:         C.parchment,
-              margin:        0,
-              textTransform: "uppercase",
-            }}>
+            <h1 className="font-serif text-[28px] font-medium tracking-[0.08em] text-sapi-parchment m-0 uppercase">
               Sovereign AI Roadmap
             </h1>
           </div>
 
           {/* Nation + Score badge */}
-          <div style={{
-            display:       "flex",
-            alignItems:    "center",
-            gap:           16,
-            flexWrap:      "wrap",
-          }}>
-            <span style={{
-              fontSize:      14,
-              color:         C.muted,
-              letterSpacing: "0.06em",
-            }}>
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="text-sm text-sapi-muted tracking-[0.06em]">
               {country}
             </span>
-            <div style={{
-              backgroundColor: C.midnight,
-              border:          `1px solid ${C.bronzeStr}`,
-              padding:         "8px 20px",
-              display:         "flex",
-              alignItems:      "center",
-              gap:             10,
-            }}>
-              <span style={{
-                fontFamily: "Georgia, serif",
-                fontSize:   22,
-                color:      C.paleGold,
-                fontWeight: 500,
-              }}>
+            <div
+              className="flex items-center gap-2.5 py-2 px-5"
+              style={{ backgroundColor: C.midnight, border: `1px solid ${C.bronzeStr}` }}
+            >
+              <span className="font-serif text-[22px] text-sapi-paleGold font-medium">
                 {Math.round(compositeScore)}
               </span>
-              <span style={{
-                fontSize:      10,
-                letterSpacing: "0.12em",
-                color:         C.muted,
-                textTransform: "uppercase",
-              }}>
+              <span className="text-[10px] tracking-[0.12em] text-sapi-muted uppercase">
                 SAPI Score
               </span>
             </div>
@@ -662,62 +576,30 @@ export default function SAPIRoadmap() {
         </div>
 
         {/* ── Intro line ── */}
-        <p style={{
-          fontSize:     12,
-          color:        C.muted,
-          letterSpacing:"0.04em",
-          lineHeight:   1.7,
-          marginBottom: 48,
-          maxWidth:     640,
-          borderLeft:   `2px solid ${C.bronze}`,
-          paddingLeft:  16,
-        }}>
+        <p
+          className="text-xs text-sapi-muted tracking-[0.04em] leading-[1.7] mb-12 max-w-[640px] border-l-2 border-sapi-bronze pl-4"
+        >
           Your personalised roadmap is generated from the three lowest-scoring dimensions in your
           assessment. Interventions are ranked by impact on composite SAPI score.
         </p>
 
         {/* ── Priority Interventions Panel ── */}
-        <section style={{ marginBottom: 56 }}>
-          <div style={{
-            backgroundColor: C.midnight,
-            border:          `1px solid ${C.gold}`,
-            borderLeft:      `3px solid ${C.gold}`,
-            padding:         "28px 32px",
-          }}>
-            <div style={{
-              display:       "flex",
-              alignItems:    "center",
-              gap:           10,
-              marginBottom:  24,
-            }}>
-              <span style={{
-                fontFamily:    "Georgia, serif",
-                fontSize:      11,
-                letterSpacing: "0.16em",
-                color:         C.gold,
-                textTransform: "uppercase",
-              }}>
+        <section className="mb-14">
+          <div
+            className="py-7 px-8"
+            style={{ backgroundColor: C.midnight, border: `1px solid ${C.gold}`, borderLeft: `3px solid ${C.gold}` }}
+          >
+            <div className="flex items-center gap-2.5 mb-6">
+              <span className="font-serif text-[11px] tracking-[0.16em] text-sapi-gold uppercase">
                 Priority Interventions
               </span>
-              <div style={{
-                height:          1,
-                flex:            1,
-                backgroundColor: C.bronzeStr,
-              }} />
-              <span style={{
-                fontSize:      10,
-                color:         C.muted,
-                letterSpacing: "0.10em",
-              }}>
+              <div className="h-px flex-1" style={{ backgroundColor: C.bronzeStr }} />
+              <span className="text-[10px] text-sapi-muted tracking-[0.1em]">
                 Immediate action required
               </span>
             </div>
 
-            <div style={{
-              display:             "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap:                 20,
-            }}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
               {priorityPanel.map((card, i) => (
                 <PriorityCard key={i} card={card} rank={i + 1} />
               ))}
@@ -727,23 +609,11 @@ export default function SAPIRoadmap() {
 
         {/* ── Three-Column Phase Layout ── */}
         <section>
-          <div style={{
-            fontFamily:    "Georgia, serif",
-            fontSize:      11,
-            letterSpacing: "0.16em",
-            color:         C.muted,
-            textTransform: "uppercase",
-            marginBottom:  24,
-          }}>
+          <div className="font-serif text-[11px] tracking-[0.16em] text-sapi-muted uppercase mb-6">
             Full Intervention Programme
           </div>
 
-          <div style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap:                 20,
-            alignItems:          "start",
-          }}>
+          <div className="grid grid-cols-3 gap-5 items-start">
             {phases.map((phase, pi) => (
               <PhaseColumn
                 key={pi}
@@ -756,28 +626,12 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Upgrade Hook ── */}
-        <section style={{ marginTop: 64 }}>
-          <div style={{
-            backgroundColor: C.navy,
-            border:          `1px solid ${C.bronzeStr}`,
-            borderTop:       `2px solid ${C.gold}`,
-            padding:         "32px 40px",
-            display:         "flex",
-            alignItems:      "center",
-            justifyContent:  "space-between",
-            flexWrap:        "wrap",
-            gap:             24,
-          }}>
-            <div style={{ maxWidth: 560 }}>
-              <p style={{
-                fontFamily:    "Georgia, serif",
-                fontSize:      15,
-                color:         C.parchment,
-                lineHeight:    1.65,
-                margin:        0,
-                marginBottom:  8,
-                letterSpacing: "0.02em",
-              }}>
+        <section className="mt-16">
+          <div
+            className="py-8 px-10 flex items-center justify-between flex-wrap gap-6 bg-sapi-navy border border-sapi-bronze border-t-2 border-t-sapi-gold"
+          >
+            <div className="max-w-[560px]">
+              <p className="font-serif text-[15px] text-sapi-parchment leading-[1.65] m-0 mb-2">
                 Your roadmap identifies{" "}
                 <span style={{ color: C.paleGold }}>{totalInterventions} critical interventions</span>.
               </p>
@@ -797,19 +651,7 @@ export default function SAPIRoadmap() {
 
             <button
               onClick={() => setCurrentPage("upgrade")}
-              style={{
-                backgroundColor: C.gold,
-                color:           C.void,
-                border:          "none",
-                padding:         "14px 32px",
-                cursor:          "pointer",
-                fontFamily:      "system-ui, sans-serif",
-                fontSize:        12,
-                letterSpacing:   "0.12em",
-                textTransform:   "uppercase",
-                fontWeight:      500,
-                flexShrink:      0,
-              }}
+              className="bg-sapi-gold text-sapi-void border-none px-8 py-3.5 cursor-pointer font-sans text-xs tracking-[0.12em] uppercase font-medium flex-shrink-0 hover:opacity-90 transition-opacity"
             >
               Upgrade to Tier 2 →
             </button>
@@ -817,19 +659,8 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Confidentiality notice ── */}
-        <div style={{
-          marginTop:    40,
-          padding:      "14px 20px",
-          borderLeft:   `3px solid ${C.gold}`,
-          backgroundColor: "rgba(201,150,58,0.05)",
-        }}>
-          <p style={{
-            fontSize:     11,
-            color:        C.muted,
-            lineHeight:   1.6,
-            margin:       0,
-            letterSpacing:"0.03em",
-          }}>
+        <div className="mt-10 py-3.5 px-5 border-l-[3px] border-sapi-gold bg-sapi-gold/[0.05]">
+          <p className="text-[11px] text-sapi-muted leading-[1.6] m-0 tracking-[0.03em]">
             This roadmap is generated exclusively from self-reported assessment data and is intended
             for internal policy planning purposes only. SAPI Tier 1 recommendations are indicative.
             Tier 2–4 assessments incorporate primary research, in-country verification, and
@@ -845,43 +676,26 @@ export default function SAPIRoadmap() {
 function PriorityCard({ card, rank }) {
   const band = card.band;
   return (
-    <div style={{
-      backgroundColor: C.navy,
-      border:          `1px solid ${C.bronzeStr}`,
-      padding:         "18px 20px",
-      position:        "relative",
-    }}>
+    <div
+      className="py-4.5 px-5 relative"
+      style={{ backgroundColor: C.navy, border: `1px solid ${C.bronzeStr}` }}
+    >
       {/* Rank */}
-      <div style={{
-        position:        "absolute",
-        top:             -1,
-        right:           16,
-        backgroundColor: C.gold,
-        color:           C.void,
-        fontSize:        10,
-        fontFamily:      "Georgia, serif",
-        letterSpacing:   "0.10em",
-        padding:         "2px 8px",
-      }}>
+      <div
+        className="absolute -top-px right-4 font-serif text-[10px] tracking-[0.1em] px-2 py-0.5"
+        style={{ backgroundColor: C.gold, color: C.void }}
+      >
         #{rank}
       </div>
 
       {/* Dim badge + band */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+      <div className="flex items-center gap-2 mb-3">
         <DimBadge code={card.dimCode} color={card.dimColor} />
         <BandPill band={band} />
       </div>
 
       {/* Title */}
-      <p style={{
-        fontFamily:    "Georgia, serif",
-        fontSize:      13,
-        color:         C.parchment,
-        lineHeight:    1.55,
-        margin:        0,
-        marginBottom:  10,
-        fontWeight:    500,
-      }}>
+      <p className="font-serif text-[13px] text-sapi-parchment leading-[1.55] m-0 mb-2.5 font-medium">
         {card.title}
       </p>
 
@@ -894,44 +708,30 @@ function PriorityCard({ card, rank }) {
 // ── Phase Column ──────────────────────────────────────────────────────────────
 function PhaseColumn({ phase, accent, icon }) {
   return (
-    <div style={{
-      backgroundColor: C.navy,
-      border:          `1px solid ${C.bronzeStr}`,
-      borderTop:       `2px solid ${accent}`,
-    }}>
+    <div
+      style={{ backgroundColor: C.navy, border: `1px solid ${C.bronzeStr}`, borderTop: `2px solid ${accent}` }}
+    >
       {/* Phase header */}
-      <div style={{
-        padding:      "18px 20px 16px",
-        borderBottom: `1px solid ${C.bronze}`,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+      <div
+        className="py-4.5 px-5 pb-4"
+        style={{ borderBottom: `1px solid ${C.bronze}` }}
+      >
+        <div className="flex items-center gap-2 mb-1.5">
           <span style={{ color: accent, fontSize: 14 }}>{icon}</span>
-          <span style={{
-            fontFamily:    "Georgia, serif",
-            fontSize:      12,
-            letterSpacing: "0.12em",
-            color:         C.parchment,
-            textTransform: "uppercase",
-          }}>
+          <span className="font-serif text-xs tracking-[0.12em] text-sapi-parchment uppercase">
             {phase.label}
           </span>
         </div>
-        <span style={{
-          display:         "inline-block",
-          backgroundColor: "rgba(0,0,0,0.3)",
-          border:          `1px solid ${C.bronze}`,
-          padding:         "2px 10px",
-          fontSize:        10,
-          letterSpacing:   "0.10em",
-          color:           accent,
-          textTransform:   "uppercase",
-        }}>
+        <span
+          className="inline-block px-2.5 py-0.5 text-[10px] tracking-[0.1em] uppercase"
+          style={{ backgroundColor: "rgba(0,0,0,0.3)", border: `1px solid ${C.bronze}`, color: accent }}
+        >
           {phase.timeline}
         </span>
       </div>
 
       {/* Cards */}
-      <div style={{ padding: "12px 12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+      <div className="py-3 px-3 pb-4 flex flex-col gap-2.5">
         {phase.cards.map((card, i) => (
           <InterventionCard key={i} card={card} />
         ))}
@@ -943,39 +743,23 @@ function PhaseColumn({ phase, accent, icon }) {
 // ── Intervention Card ─────────────────────────────────────────────────────────
 function InterventionCard({ card }) {
   return (
-    <div style={{
-      backgroundColor: C.midnight,
-      border:          `1px solid ${C.bronze}`,
-      padding:         "14px 16px",
-    }}>
+    <div
+      className="py-3.5 px-4"
+      style={{ backgroundColor: C.midnight, border: `1px solid ${C.bronze}` }}
+    >
       {/* Dim badge + band */}
-      <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
+      <div className="flex items-center gap-1.5 mb-2.5">
         <DimBadge code={card.dimCode} color={card.dimColor} />
         <BandPill band={card.band} />
       </div>
 
       {/* Title */}
-      <p style={{
-        fontFamily:    "Georgia, serif",
-        fontSize:      12,
-        color:         C.parchment,
-        lineHeight:    1.55,
-        margin:        0,
-        marginBottom:  8,
-        fontWeight:    500,
-      }}>
+      <p className="font-serif text-xs text-sapi-parchment leading-[1.55] m-0 mb-2 font-medium">
         {card.title}
       </p>
 
       {/* Description */}
-      <p style={{
-        fontSize:     11,
-        color:        C.muted,
-        lineHeight:   1.65,
-        margin:       0,
-        marginBottom: 12,
-        letterSpacing:"0.01em",
-      }}>
+      <p className="text-[11px] text-sapi-muted leading-[1.65] m-0 mb-3 tracking-[0.01em]">
         {card.desc}
       </p>
 
@@ -988,18 +772,10 @@ function InterventionCard({ card }) {
 // ── Dimension Badge ───────────────────────────────────────────────────────────
 function DimBadge({ code, color }) {
   return (
-    <span style={{
-      display:         "inline-flex",
-      alignItems:      "center",
-      backgroundColor: `${color}22`,
-      border:          `1px solid ${color}55`,
-      color:           color,
-      fontSize:        9,
-      letterSpacing:   "0.12em",
-      padding:         "2px 7px",
-      textTransform:   "uppercase",
-      fontFamily:      "system-ui, sans-serif",
-    }}>
+    <span
+      className="inline-flex items-center text-[9px] tracking-[0.12em] uppercase px-1.5 py-0.5 font-sans"
+      style={{ backgroundColor: `${color}22`, border: `1px solid ${color}55`, color }}
+    >
       {code}
     </span>
   );
@@ -1009,17 +785,10 @@ function DimBadge({ code, color }) {
 function BandPill({ band }) {
   const bc = bandColor(band);
   return (
-    <span style={{
-      display:         "inline-flex",
-      alignItems:      "center",
-      backgroundColor: `${bc}18`,
-      border:          `1px solid ${bc}44`,
-      color:           bc,
-      fontSize:        9,
-      letterSpacing:   "0.10em",
-      padding:         "2px 7px",
-      textTransform:   "uppercase",
-    }}>
+    <span
+      className="inline-flex items-center text-[9px] tracking-[0.1em] uppercase px-1.5 py-0.5"
+      style={{ backgroundColor: `${bc}18`, border: `1px solid ${bc}44`, color: bc }}
+    >
       {bandLabel(band)}
     </span>
   );
@@ -1028,35 +797,18 @@ function BandPill({ band }) {
 // ── Score Arrow ───────────────────────────────────────────────────────────────
 function ScoreArrow({ score, target }) {
   return (
-    <div style={{
-      display:     "flex",
-      alignItems:  "center",
-      gap:         6,
-      paddingTop:  4,
-      borderTop:   `1px solid ${C.bronze}`,
-    }}>
-      <span style={{
-        fontFamily: "Georgia, serif",
-        fontSize:   13,
-        color:      C.crimson,
-      }}>
+    <div
+      className="flex items-center gap-1.5 pt-1"
+      style={{ borderTop: `1px solid ${C.bronze}` }}
+    >
+      <span className="font-serif text-[13px] text-sapi-crimson">
         {Math.round(score)}
       </span>
-      <span style={{ color: C.muted, fontSize: 11 }}>→</span>
-      <span style={{
-        fontFamily: "Georgia, serif",
-        fontSize:   13,
-        color:      C.emerald,
-      }}>
+      <span className="text-[11px] text-sapi-muted">→</span>
+      <span className="font-serif text-[13px] text-sapi-emerald">
         {target}
       </span>
-      <span style={{
-        fontSize:      9,
-        color:         C.muted,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        marginLeft:    2,
-      }}>
+      <span className="text-[9px] text-sapi-muted tracking-[0.08em] uppercase ml-0.5">
         target
       </span>
     </div>

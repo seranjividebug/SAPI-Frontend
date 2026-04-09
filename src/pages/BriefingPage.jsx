@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageLayout, PageHeader, PageFooter } from "./common";
 
+// Helper to capitalize first letter
+const capitalize = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+
 // ── Dimension data ───────────────────────────────────────────────────────────
 const DIMENSIONS = [
   { num: "01",  name: "Compute Capacity",               questions: 5 },
@@ -62,7 +65,7 @@ const INSTRUCTIONS = [
 // ── Sub-components ───────────────────────────────────────────────────────────
 function SectionLabel({ children }) {
   return (
-    <div className="font-sans text-[10px] tracking-super-wide text-sapi-gold uppercase mb-4">
+    <div className="font-sans text-[12px] tracking-super-wide text-sapi-gold uppercase mb-4">
       {children}
     </div>
   );
@@ -110,7 +113,7 @@ export default function BriefingPage({ onBegin }) {
       {/* ── Step indicator ── */}
       <div className="max-w-container mx-auto px-8 pt-5 flex items-center justify-between flex-wrap gap-4">
         <button
-          className={`bg-none border-none cursor-pointer font-sans text-[11px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
+          className={`bg-none border-none cursor-pointer font-sans text-[13px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
           onClick={handleBack}
@@ -130,7 +133,7 @@ export default function BriefingPage({ onBegin }) {
             <div key={step.n} className="flex items-center gap-1.5">
               {i > 0 && <div className="w-5 h-px bg-sapi-bronze mx-0.5" />}
               <div className="flex items-center gap-1.5">
-                <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center font-sans text-[10px] font-medium ${
+                <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center font-sans text-[12px] font-medium ${
                   step.active ? 'bg-sapi-gold text-sapi-void border border-sapi-gold' : 'bg-transparent text-sapi-muted border border-sapi-bronze/40'
                 }`}>
                   {step.n === 1 ? (
@@ -139,7 +142,7 @@ export default function BriefingPage({ onBegin }) {
                     </svg>
                   ) : step.n}
                 </div>
-                <span className={`font-sans text-[11px] tracking-wide uppercase ${step.active ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>{step.label}</span>
+                <span className={`font-sans text-[13px] tracking-wide uppercase ${step.active ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>{step.label}</span>
               </div>
             </div>
           ))}
@@ -149,12 +152,12 @@ export default function BriefingPage({ onBegin }) {
       {/* ── Body ── */}
       <div className="max-w-[700px] mx-auto px-8 pt-14 pb-25">
         {/* Step label */}
-        <div className="font-sans text-[10px] tracking-super-wide text-sapi-gold uppercase mb-5">
+        <div className="font-sans text-[12px] tracking-super-wide text-sapi-gold uppercase mb-5">
           Step 2 of 3 &nbsp;·&nbsp; Assessment Briefing
         </div>
 
         {/* Title */}
-        <h1 className="font-serif text-[30px] font-normal text-sapi-parchment tracking-wide leading-tight mb-7">
+        <h1 className="font-serif text-[32px] font-normal text-sapi-parchment tracking-wide leading-tight mb-7">
           Your Tier 1 Sovereign AI<br />Readiness Assessment
         </h1>
 
@@ -164,16 +167,16 @@ export default function BriefingPage({ onBegin }) {
             <span className="text-2xl leading-none flex-shrink-0">{countryFlag}</span>
           )}
           <div>
-            <div className="font-serif text-[15px] text-sapi-parchment tracking-wide mb-1">
-              Welcome, <span className="text-sapi-paleGold">{name || "Respondent"}</span>
-              {ministry ? ` from ${ministry}` : ""}
-              {countryLabel ? `, ${countryLabel}` : ""}.
+            <div className="font-serif text-[17px] text-sapi-parchment tracking-wide mb-1">
+              Welcome, <span className="text-sapi-paleGold">{capitalize(name) || "Respondent"}</span>
+              {ministry ? ` from ${capitalize(ministry)}` : ""}
+              {countryLabel ? `, ${capitalize(countryLabel)}` : ""}.
             </div>
-            {title && (
+            {/* {title && (
               <div className="font-sans text-[11px] text-sapi-muted tracking-wide">
-                {title}
+                {capitalize(title)}
               </div>
-            )}
+            )} */}
           </div>
         </div>
 
@@ -185,10 +188,10 @@ export default function BriefingPage({ onBegin }) {
             { value: "5",       label: "Dimensions" },
           ].map(({ value, label }) => (
             <div key={label} className="bg-sapi-midnight border border-sapi-bronze border-b-2 border-b-sapi-bronze/40 px-5 py-5.5 text-center">
-              <div className="font-serif text-[32px] text-sapi-paleGold font-normal leading-none mb-2 mt-2 mb-2">
+              <div className="font-sans text-[34px] text-sapi-paleGold font-medium leading-none mb-2 mt-2 mb-2">
                 {value}
               </div>
-              <div className="font-sans text-[10px] text-sapi-muted tracking-extra-wide uppercase mb-2">
+              <div className="font-sans text-[12px] text-sapi-muted tracking-extra-wide uppercase mb-2">
                 {label}
               </div>
             </div>
@@ -197,7 +200,7 @@ export default function BriefingPage({ onBegin }) {
 
         {/* ── Section: What this assessment measures ── */}
         <SectionLabel>What this assessment measures</SectionLabel>
-        <p className="font-sans text-[13px] text-sapi-muted leading-relaxed mb-5 tracking-wide">
+        <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-5 tracking-wide">
           The SAPI Tier 1 assessment evaluates your nation's sovereign AI readiness across five dimensions, each representing a distinct institutional condition required for durable AI capacity. Your responses generate a composite SAPI score — calculated as a weighted geometric mean — which maps your nation to one of five readiness tiers.
         </p>
 
@@ -205,13 +208,13 @@ export default function BriefingPage({ onBegin }) {
         <div className="flex flex-col gap-px mb-11 border border-sapi-bronze">
           {DIMENSIONS.map((d, i) => (
             <div key={d.num} className={`px-4.5 py-3.5 flex items-center gap-4 ${i % 2 === 0 ? 'bg-sapi-navy' : 'bg-sapi-midnight'} ${i < DIMENSIONS.length - 1 ? 'border-b border-sapi-bronze' : ''}`}>
-              <div className="font-serif text-xl text-sapi-gold font-normal leading-none opacity-65 w-7 flex-shrink-0 pl-2">
+              <div className="font-sans text-[22px] text-sapi-gold font-medium leading-none opacity-65 w-7 flex-shrink-0 pl-2">
                 {d.num}
               </div>
-              <div className="font-serif text-[13px] text-sapi-parchment flex-1">
+              <div className="font-serif text-[15px] text-sapi-parchment flex-1">
                 {d.name}
               </div>
-              <div className="font-sans text-[11px] text-sapi-muted tracking-wide whitespace-nowrap pr-3">
+              <div className="font-sans text-[13px] text-sapi-muted tracking-wide whitespace-nowrap pr-3">
                 {d.questions} questions
               </div>
             </div>
@@ -226,7 +229,7 @@ export default function BriefingPage({ onBegin }) {
           {INSTRUCTIONS.map(({ icon, text }, i) => (
             <div key={i} className="flex items-start gap-3.5">
               <div className="flex-shrink-0 mt-0.5">{icon}</div>
-              <p className="font-sans text-[13px] text-sapi-muted leading-relaxed m-0 tracking-wide">
+              <p className="font-sans text-[15px] text-sapi-muted leading-relaxed m-0 tracking-wide">
                 {text}
               </p>
             </div>
@@ -237,10 +240,10 @@ export default function BriefingPage({ onBegin }) {
 
         {/* ── Section: How your score is used ── */}
         <SectionLabel>How your score is used</SectionLabel>
-        <p className="font-sans text-[13px] text-sapi-muted leading-relaxed mb-4 tracking-wide">
+        <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-4 tracking-wide">
           Scoring is fully automated. Upon submission, your five dimension scores and composite SAPI score are calculated instantly and mapped to a readiness tier — from <em className="text-sapi-parchment">Pre-conditions Unmet</em> through to <em className="text-sapi-parchment">Sovereign AI Leader</em>.
         </p>
-        <p className="font-sans text-[13px] text-sapi-muted leading-relaxed m-0 tracking-wide">
+        <p className="font-sans text-[15px] text-sapi-muted leading-relaxed m-0 tracking-wide">
           Your results include a prioritised 12–18 month improvement roadmap with targeted interventions for your lowest-scoring dimensions, and a clear pathway to Tier 2 deep-dive assessment where required.
         </p>
 
@@ -248,10 +251,10 @@ export default function BriefingPage({ onBegin }) {
 
         {/* ── Confidentiality box ── */}
         <div className="border border-sapi-gold/25 border-l-[3px] border-l-sapi-gold bg-sapi-gold/5 px-5 py-4 mb-13 mt-10">
-          <div className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-gold mb-2">
+          <div className="font-sans text-[12px] tracking-extra-wide uppercase text-sapi-gold mb-2">
             Data Classification
           </div>
-          <p className="font-sans text-xs text-sapi-muted leading-relaxed m-0">
+          <p className="font-sans text-[13px] text-sapi-muted leading-relaxed m-0">
             Your responses are used solely to generate your Tier 1 SAPI assessment report. No individual data is shared with third parties without your explicit consent.{" "}
             <em className="text-sapi-parchment">Classification: Restricted.</em>
           </p>
@@ -260,7 +263,7 @@ export default function BriefingPage({ onBegin }) {
         {/* ── CTAs ── */}
         <div className="flex flex-col gap-3 mt-10">
           <button
-            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 ${
+            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 ${
               beginHover ? 'bg-[#B8862A]' : 'bg-sapi-gold'
             }`}
             onMouseEnter={() => setBeginHover(true)}
@@ -271,7 +274,7 @@ export default function BriefingPage({ onBegin }) {
           </button>
 
           <button
-            className={`w-full bg-transparent border px-12 py-3.5 font-sans text-xs tracking-extra-wide uppercase font-normal cursor-pointer rounded-sm transition-colors duration-150 ${
+            className={`w-full bg-transparent border px-12 py-3.5 font-sans text-[13px] tracking-extra-wide uppercase font-normal cursor-pointer rounded-sm transition-colors duration-150 ${
               backHover ? 'text-sapi-parchment border-sapi-bronze/40' : 'text-sapi-muted border-sapi-bronze'
             }`}
             onMouseEnter={() => setBackHover(true)}
@@ -282,7 +285,7 @@ export default function BriefingPage({ onBegin }) {
           </button>
         </div>
 
-        <div className="font-sans text-[11px] text-sapi-muted tracking-wide text-center mt-3.5 opacity-55 leading-relaxed">
+        <div className="font-sans text-[13px] text-sapi-muted tracking-wide text-center mt-3.5 opacity-55 leading-relaxed">
           Estimated completion: 12–15 minutes &nbsp;·&nbsp; Results delivered immediately
         </div>
       </div>

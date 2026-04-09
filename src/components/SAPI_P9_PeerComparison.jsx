@@ -8,14 +8,10 @@ function SAPIGlobe({ size = 32 }) {
     <img
       src="/logo.png"
       alt="SAPI Logo"
+      className="object-contain bg-transparent rounded-full p-0.5 box-border"
       style={{
         width: size,
         height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
-        padding: '2px',
-        boxSizing: 'border-box',
         WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
         maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
       }}
@@ -114,21 +110,11 @@ function extractScores(scores = {}) {
 function HBar({ value, color }) {
   const pct = Math.max(0, Math.min(100, value));
   return (
-    <div style={{
-      position: "relative",
-      height: 7,
-      background: "rgba(107,69,8,0.18)",
-      borderRadius: 2,
-      flex: 1,
-      overflow: "hidden",
-    }}>
-      <div style={{
-        position: "absolute",
-        left: 0, top: 0, bottom: 0,
-        width: `${pct}%`,
-        background: color,
-        borderRadius: 2,
-      }} />
+    <div className="relative h-[7px] bg-sapi-bronze/18 rounded-[2px] flex-1 overflow-hidden">
+      <div
+        className="absolute left-0 top-0 bottom-0 rounded-[2px]"
+        style={{ width: `${pct}%`, background: color }}
+      />
     </div>
   );
 }
@@ -136,37 +122,23 @@ function HBar({ value, color }) {
 // ── Scale tick row ───────────────────────────────────────────────────────────
 function ScaleRuler() {
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      gap: 12,
-      marginTop: 10,
-    }}>
+    <div className="flex items-center gap-3 mt-2.5">
       {/* label column spacer */}
-      <div style={{ width: 108, flexShrink: 0 }} />
+      <div className="w-[108px] flex-shrink-0" />
       {/* tick marks */}
-      <div style={{ flex: 1, position: "relative", height: 14 }}>
+      <div className="flex-1 relative h-3.5">
         {[0, 25, 50, 75, 100].map(tick => (
           <span
             key={tick}
-            style={{
-              position: "absolute",
-              left: `${tick}%`,
-              transform: "translateX(-50%)",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 9,
-              color: C.muted,
-              letterSpacing: "0.06em",
-              opacity: 0.45,
-              userSelect: "none",
-            }}
+            className="absolute -translate-x-1/2 font-sans text-[9px] text-sapi-muted tracking-[0.06em] opacity-45 select-none"
+            style={{ left: `${tick}%` }}
           >
             {tick}
           </span>
         ))}
       </div>
       {/* value column spacer */}
-      <div style={{ width: 30, flexShrink: 0 }} />
+      <div className="w-[30px] flex-shrink-0" />
     </div>
   );
 }
@@ -182,90 +154,42 @@ function DimensionRow({ dim, yourScore, median, topQ }) {
   ];
 
   return (
-    <div style={{
-      background: C.navy,
-      border: `1px solid ${C.bronze}`,
-      padding: "20px 24px 18px",
-      marginBottom: 6,
-    }}>
+    <div className="bg-sapi-navy border border-sapi-bronze py-5 px-6 pb-4.5 mb-1.5">
       {/* ── Row header ── */}
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        marginBottom: 16,
-        gap: 12,
-        flexWrap: "wrap",
-      }}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-          <span style={{
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            fontSize: 13,
-            color: C.gold,
-            opacity: 0.55,
-          }}>
+      <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
+        <div className="flex items-baseline gap-2.5">
+          <span className="font-serif text-[13px] text-sapi-gold opacity-55">
             {dim.num}
           </span>
-          <span style={{
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            fontSize: 15,
-            color: C.parchment,
-            letterSpacing: "0.01em",
-          }}>
+          <span className="font-serif text-[15px] text-sapi-parchment tracking-[0.01em]">
             {dim.name}
           </span>
         </div>
 
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          fontFamily: "system-ui, sans-serif",
-          fontSize: 10,
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          color: status.color,
-          whiteSpace: "nowrap",
-        }}>
-          <span style={{ fontSize: 9, opacity: 0.9 }}>{status.glyph}</span>
+        <div
+          className="flex items-center gap-1.5 font-sans text-[10px] tracking-[0.14em] uppercase whitespace-nowrap"
+          style={{ color: status.color }}
+        >
+          <span className="text-[9px] opacity-90">{status.glyph}</span>
           <span>{status.text}</span>
-          <span style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: 11,
-            letterSpacing: "0.04em",
-            opacity: 0.7,
-          }}>
+          <span className="font-serif text-[11px] tracking-[0.04em] opacity-70">
             ({status.delta} pts)
           </span>
         </div>
       </div>
 
       {/* ── Bar rows ── */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+      <div className="flex flex-col gap-2">
         {barRows.map(({ label, value, color }) => (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{
-              width: 108,
-              flexShrink: 0,
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 10,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: C.muted,
-              opacity: 0.7,
-            }}>
+          <div key={label} className="flex items-center gap-3">
+            <div className="w-[108px] flex-shrink-0 font-sans text-[10px] tracking-[0.12em] uppercase text-sapi-muted opacity-70">
               {label}
             </div>
             <HBar value={value} color={color} />
-            <div style={{
-              width: 30,
-              flexShrink: 0,
-              fontFamily: "'Georgia', 'Times New Roman', serif",
-              fontSize: 13,
-              color: color,
-              textAlign: "right",
-              letterSpacing: "-0.01em",
-            }}>
+            <div
+              className="w-[30px] flex-shrink-0 font-serif text-[13px] text-right tracking-[-0.01em]"
+              style={{ color }}
+            >
               {Math.round(value)}
             </div>
           </div>
@@ -280,14 +204,7 @@ function DimensionRow({ dim, yourScore, median, topQ }) {
 // ── Shared section label ──────────────────────────────────────────────────────
 function SectionLabel({ children }) {
   return (
-    <div style={{
-      fontFamily: "system-ui, sans-serif",
-      fontSize: 10,
-      letterSpacing: "0.22em",
-      color: C.gold,
-      textTransform: "uppercase",
-      marginBottom: 14,
-    }}>
+    <div className="font-sans text-[10px] tracking-[0.22em] text-sapi-gold uppercase mb-3.5">
       {children}
     </div>
   );
@@ -352,9 +269,9 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
         <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 14, color: C.muted, letterSpacing: "0.1em", marginTop: 24 }}>
+        <div className="font-sans text-sm text-sapi-muted tracking-[0.1em] mt-6">
           Loading peer comparison data…
         </div>
       </div>
@@ -363,14 +280,14 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
 
   if (error || !appState) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
         <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, color: C.crimson, marginTop: 24, marginBottom: 16 }}>
+        <div className="font-serif text-lg text-sapi-crimson mt-6 mb-4">
           {error || "Unable to load peer comparison"}
         </div>
         <button 
           onClick={() => navigate('/')}
-          style={{ background: C.gold, color: C.void, border: "none", padding: "12px 24px", fontFamily: "system-ui, sans-serif", fontSize: 12, cursor: "pointer", borderRadius: 3 }}
+          className="bg-sapi-gold text-sapi-void border-none px-6 py-3 font-sans text-xs cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -388,49 +305,28 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
   const dimScores = extractScores(scores);
 
   return (
-    <div style={{
-      background: C.void,
-      minHeight: "100vh",
-      color: C.parchment,
-      fontFamily: "'Georgia', 'Times New Roman', serif",
-    }}>
+    <div className="bg-sapi-void min-h-screen text-sapi-parchment font-serif">
 
       {/* ── Header ── */}
-      <header style={{ borderBottom: `1px solid ${C.bronze}`, padding: "20px 0" }}>
-        <div style={{
-          maxWidth: 1100, margin: "0 auto", padding: "0 32px",
-          display: "flex", alignItems: "center", gap: 16,
-        }}>
+      <header className="border-b border-sapi-bronze py-5">
+        <div className="max-w-[1100px] mx-auto px-8 flex items-center gap-4">
           <SAPIGlobe size={32} />
-          <div style={{
-            fontFamily: "'Georgia', serif", fontSize: 11, letterSpacing: "0.2em",
-            color: C.parchment, textTransform: "uppercase", lineHeight: 1.5,
-          }}>
+          <div className="font-serif text-[11px] tracking-[0.2em] text-sapi-parchment uppercase leading-[1.5]">
             The Sovereign AI<br />Power Index
           </div>
-          <div style={{
-            marginLeft: "auto", fontFamily: "system-ui, sans-serif", fontSize: 10,
-            letterSpacing: "0.16em", color: C.muted, textTransform: "uppercase",
-            border: `1px solid ${C.bronze}`, padding: "4px 10px",
-          }}>
+          <div className="ml-auto font-sans text-[10px] tracking-[0.16em] text-sapi-muted uppercase border border-sapi-bronze px-2.5 py-1">
             Classification: Restricted
           </div>
         </div>
       </header>
 
       {/* ── Main content ── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 32px 80px" }}>
+      <div className="max-w-[1100px] mx-auto px-8 py-8 pb-20">
 
         {/* ── Back button ── */}
         <button
-          style={{
-            background: "none", border: "none", cursor: "pointer",
-            color: backHover ? C.gold : C.muted,
-            fontFamily: "system-ui, sans-serif", fontSize: 11,
-            letterSpacing: "0.14em", textTransform: "uppercase",
-            display: "flex", alignItems: "center", gap: 6,
-            padding: 0, transition: "color 0.15s", marginBottom: 36,
-          }}
+          className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold"
+          style={{ color: backHover ? C.gold : C.muted }}
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
           onClick={() => nav("results")}
@@ -443,56 +339,27 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
         </button>
 
         {/* ── Page heading ── */}
-        <div style={{ marginBottom: 6 }}>
+        <div className="mb-1.5">
           <SectionLabel>Analysis Module</SectionLabel>
-          <h1 style={{
-            fontFamily: "'Georgia', 'Times New Roman', serif",
-            fontSize: 30,
-            fontWeight: 400,
-            color: C.parchment,
-            margin: "0 0 16px",
-            letterSpacing: "0.015em",
-            lineHeight: 1.2,
-          }}>
+          <h1 className="font-serif text-[30px] font-normal text-sapi-parchment m-0 mb-4 tracking-[0.015em] leading-[1.2]">
             Peer Comparison
           </h1>
         </div>
 
         {/* ── Stage context line ── */}
-        <p style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: 13,
-          color: C.muted,
-          lineHeight: 1.7,
-          margin: "0 0 0",
-          letterSpacing: "0.02em",
-        }}>
+        <p className="font-sans text-[13px] text-sapi-muted leading-[1.7] m-0 tracking-[0.02em]">
           Your nation is assessed at the{" "}
-          <span style={{ color: C.parchment, fontStyle: "italic" }}>{stage}</span>{" "}
+          <span className="text-sapi-parchment italic">{stage}</span>{" "}
           stage. Peer data shown below is aggregated from nations at this development stage.
           Named-country benchmarks are available at Tier 2.
         </p>
 
         {/* ── Divider ── */}
-        <div style={{ borderTop: `1px solid ${C.bronze}`, margin: "28px 0" }} />
+        <div className="border-t border-sapi-bronze my-7" />
 
         {/* ── Legend ── */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 28,
-          marginBottom: 20,
-          flexWrap: "wrap",
-        }}>
-          <div style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 10,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: C.muted,
-            opacity: 0.6,
-            marginRight: 4,
-          }}>
+        <div className="flex items-center gap-7 mb-5 flex-wrap">
+          <div className="font-sans text-[10px] tracking-[0.18em] uppercase text-sapi-muted opacity-60 mr-1">
             Legend
           </div>
           {[
@@ -500,19 +367,9 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
             { color: C.muted,   label: "Peer Median"  },
             { color: C.emerald, label: "Top Quartile" },
           ].map(({ color, label }) => (
-            <div key={label} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{
-                width: 9, height: 9,
-                borderRadius: "50%",
-                background: color,
-                flexShrink: 0,
-              }} />
-              <span style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 11,
-                color: C.muted,
-                letterSpacing: "0.1em",
-              }}>
+            <div key={label} className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
+              <span className="font-sans text-[11px] text-sapi-muted tracking-[0.1em]">
                 {label}
               </span>
             </div>
@@ -520,7 +377,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
         </div>
 
         {/* ── Per-dimension rows ── */}
-        <div style={{ marginBottom: 40 }}>
+        <div className="mb-10">
           {DIMENSIONS.map(dim => (
             <DimensionRow
               key={dim.key}
@@ -533,62 +390,23 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
         </div>
 
         {/* ── Upgrade hook card ── */}
-        <div style={{
-          background: C.navy,
-          border: `1px solid ${C.gold}`,
-          padding: "30px 30px 28px",
-          position: "relative",
-        }}>
+        <div className="bg-sapi-navy border border-sapi-gold p-7 pb-7 relative">
           {/* Gold top accent line */}
-          <div style={{
-            position: "absolute",
-            top: -1, left: -1, right: -1,
-            height: 2,
-            background: `linear-gradient(90deg, ${C.gold} 0%, rgba(201,150,58,0.3) 100%)`,
-            pointerEvents: "none",
-          }} />
+          <div
+            className="absolute -top-px -left-px -right-px h-0.5 pointer-events-none"
+            style={{ background: `linear-gradient(90deg, ${C.gold} 0%, rgba(201,150,58,0.3) 100%)` }}
+          />
 
-          <div style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 16,
-            marginBottom: 18,
-            flexWrap: "wrap",
-          }}>
+          <div className="flex items-start gap-4 mb-4.5 flex-wrap">
             {/* Tier badge */}
-            <div style={{
-              border: `1px solid ${C.gold}`,
-              color: C.gold,
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 9,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              padding: "4px 10px",
-              flexShrink: 0,
-              alignSelf: "flex-start",
-            }}>
+            <div className="border border-sapi-gold text-sapi-gold font-sans text-[9px] tracking-[0.22em] uppercase px-2.5 py-1 flex-shrink-0 self-start">
               Tier 2
             </div>
             <div>
-              <h3 style={{
-                fontFamily: "'Georgia', 'Times New Roman', serif",
-                fontSize: 18,
-                fontWeight: 400,
-                color: C.parchment,
-                margin: "0 0 10px",
-                letterSpacing: "0.01em",
-                lineHeight: 1.35,
-              }}>
+              <h3 className="font-serif text-lg font-normal text-sapi-parchment m-0 mb-2.5 tracking-[0.01em] leading-[1.35]">
                 Benchmark against named peer nations
               </h3>
-              <p style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 13,
-                color: C.muted,
-                lineHeight: 1.72,
-                margin: 0,
-                letterSpacing: "0.02em",
-              }}>
+              <p className="font-sans text-[13px] text-sapi-muted leading-[1.72] m-0 tracking-[0.02em]">
                 Tier 1 peer data is aggregated by development stage. Upgrade to Tier 2 to see
                 your nation benchmarked against specific peer nations by region, income level,
                 and dimension profile.
@@ -597,22 +415,10 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
           </div>
 
           <button
+            className="inline-flex items-center gap-2 border-none px-7 py-3.5 font-sans text-[11px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded transition-colors duration-150 hover:bg-[#B8862A]"
             style={{
               background: upgradeHover ? "#B8862A" : C.gold,
               color: C.void,
-              border: "none",
-              padding: "13px 30px",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 11,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              fontWeight: 500,
-              cursor: "pointer",
-              borderRadius: 3,
-              transition: "background 0.15s",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
             }}
             onMouseEnter={() => setUpgradeHover(true)}
             onMouseLeave={() => setUpgradeHover(false)}
@@ -629,21 +435,12 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
       </div>
 
       {/* ── Footer ── */}
-      <footer style={{ borderTop: `1px solid ${C.bronze}` }}>
-        <div style={{
-          maxWidth: 1100, margin: "0 auto", padding: "18px 32px",
-          display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8,
-        }}>
-          <span style={{
-            fontFamily: "system-ui, sans-serif", fontSize: 11,
-            color: C.muted, letterSpacing: "0.1em", opacity: 0.5,
-          }}>
+      <footer className="border-t border-sapi-bronze">
+        <div className="max-w-[1100px] mx-auto px-8 py-4.5 flex justify-between flex-wrap gap-2">
+          <span className="font-sans text-[11px] text-sapi-muted tracking-[0.1em] opacity-50">
             © 2026 The Sovereign AI Power Index. All rights reserved.
           </span>
-          <span style={{
-            fontFamily: "system-ui, sans-serif", fontSize: 11,
-            color: C.muted, letterSpacing: "0.1em", opacity: 0.5,
-          }}>
+          <span className="font-sans text-[11px] text-sapi-muted tracking-[0.1em] opacity-50">
             SAPI · Tier 1 · v1.0
           </span>
         </div>

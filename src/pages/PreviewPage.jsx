@@ -17,7 +17,7 @@ const autofillStyles = `
 
 // ── SVG Flag Components ──────────────────────────────────────────────────────
 const UKFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="16" fill="#012169"/>
     <path d="M0 0 L24 16 M24 0 L0 16" stroke="#FFF" strokeWidth="2"/>
     <path d="M0 0 L24 16 M24 0 L0 16" stroke="#C8102E" strokeWidth="1.2"/>
@@ -27,7 +27,7 @@ const UKFlag = () => (
 );
 
 const UAEFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="6" height="16" fill="#FF0000"/>
     <rect x="6" width="18" height="5.33" fill="#00732F"/>
     <rect x="6" y="5.33" width="18" height="5.33" fill="#FFFFFF"/>
@@ -36,14 +36,14 @@ const UAEFlag = () => (
 );
 
 const SaudiFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="16" fill="#006C35"/>
     <text x="12" y="9" fontSize="6" fill="#FFFFFF" textAnchor="middle" fontFamily="Arial">لا إله</text>
   </svg>
 );
 
 const AzerbaijanFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="5.33" fill="#0092C7"/>
     <rect y="5.33" width="24" height="5.33" fill="#E4002B"/>
     <rect y="10.67" width="24" height="5.33" fill="#00B04F"/>
@@ -53,7 +53,7 @@ const AzerbaijanFlag = () => (
 );
 
 const KazakhstanFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="16" fill="#00AFCA"/>
     <circle cx="6" cy="8" r="3" fill="#FDC82F"/>
     <path d="M6 5 L6.5 7 L8 7 L7 8.5 L7.5 10 L6 9 L4.5 10 L5 8.5 L4 7 L5.5 7 Z" fill="#FDC82F"/>
@@ -61,7 +61,7 @@ const KazakhstanFlag = () => (
 );
 
 const QatarFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="6" height="16" fill="#FFF"/>
     <rect x="6" width="18" height="16" fill="#8D1B3D"/>
     <path d="M6 2 L10 1 L10 3 L6 2 M6 4 L10 3 L10 5 L6 4 M6 6 L10 5 L10 7 L6 6 M6 8 L10 7 L10 9 L6 8 M6 10 L10 9 L10 11 L6 10 M6 12 L10 11 L10 13 L6 12 M6 14 L10 13 L10 15 L6 14" fill="#FFF"/>
@@ -69,7 +69,7 @@ const QatarFlag = () => (
 );
 
 const SingaporeFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="8" fill="#ED2939"/>
     <rect y="8" width="24" height="8" fill="#FFFFFF"/>
     <circle cx="6" cy="5" r="2.5" fill="#FFFFFF"/>
@@ -78,7 +78,7 @@ const SingaporeFlag = () => (
 );
 
 const IndiaFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="5.33" fill="#FF9932"/>
     <rect y="5.33" width="24" height="5.33" fill="#FFFFFF"/>
     <rect y="10.67" width="24" height="5.33" fill="#138808"/>
@@ -87,7 +87,7 @@ const IndiaFlag = () => (
 );
 
 const RwandaFlag = () => (
-  <svg width="24" height="16" viewBox="0 0 24 16" style={{ borderRadius: 2, flexShrink: 0 }}>
+  <svg width="24" height="16" viewBox="0 0 24 16" className="rounded-sm flex-shrink-0">
     <rect width="24" height="8" fill="#00A1DE"/>
     <rect y="8" width="24" height="8" fill="#FAD201"/>
     <rect y="12" width="24" height="4" fill="#00A1DE"/>
@@ -237,7 +237,7 @@ export default function PreviewPage() {
   const inputClass = (id) => {
     const hasError = errors[id] && touched[id];
     const isFocused = focusedField === id;
-    return `w-full box-border bg-sapi-midnight text-sapi-parchment outline-none px-4 py-3.5 font-sans text-sm tracking-wide rounded-sm caret-sapi-gold transition-colors duration-150 border ${
+    return `w-full box-border bg-sapi-midnight text-sapi-parchment outline-none px-4 py-3.5 font-sans text-[15px] tracking-wide rounded-sm caret-sapi-gold transition-colors duration-150 border ${
       hasError 
         ? 'border-sapi-crimson border-b-2' 
         : isFocused 
@@ -248,7 +248,7 @@ export default function PreviewPage() {
 
   const triggerClass = (id, isOpen) => {
     const hasError = errors[id] && touched[id];
-    return `w-full box-border bg-sapi-midnight outline-none px-4 py-3.5 font-sans text-sm tracking-wide rounded-sm text-left cursor-pointer flex justify-between items-center transition-colors duration-150 border ${
+    return `w-full box-border bg-sapi-midnight outline-none px-4 py-3.5 font-sans text-[15px] tracking-wide rounded-sm text-left cursor-pointer flex justify-between items-center transition-colors duration-150 border ${
       hasError 
         ? 'border-sapi-crimson border-b-2 text-sapi-parchment' 
         : isOpen 
@@ -265,7 +265,7 @@ export default function PreviewPage() {
   );
 
   const FieldLabel = ({ id, children, required }) => (
-    <label className={`block font-sans text-[10px] tracking-extra-wide uppercase mb-2 transition-colors duration-150 ${
+    <label className={`block font-sans text-[12px] tracking-extra-wide uppercase mb-2 transition-colors duration-150 ${
       errors[id] && touched[id] ? 'text-sapi-crimson' : 'text-sapi-muted'
     }`}>
       {children}{required && <span className="text-sapi-crimson ml-1">*</span>}
@@ -273,7 +273,7 @@ export default function PreviewPage() {
   );
 
   const ErrMsg = ({ id }) => errors[id] && touched[id]
-    ? <div className="font-sans text-[11px] text-sapi-crimson mt-2 tracking-wide">{errors[id]}</div>
+    ? <div className="font-sans text-[13px] text-sapi-crimson mt-2 tracking-wide">{errors[id]}</div>
     : null;
 
   // ── Success screen ──
@@ -283,19 +283,19 @@ export default function PreviewPage() {
         <SAPIGlobe size={48} />
         {selectedCountry && <div className="text-4xl leading-none"><selectedCountry.Flag /></div>}
         <div className="w-12 h-px bg-sapi-bronze" />
-        <div className="font-serif text-[22px] text-sapi-parchment tracking-wide">
+        <div className="font-serif text-[24px] text-sapi-parchment tracking-wide">
           Profile received, {form.name.split(" ")[0]}.
         </div>
-        <div className="font-sans text-[13px] text-sapi-muted max-w-[400px] leading-relaxed">
+        <div className="font-sans text-[15px] text-sapi-muted max-w-[400px] leading-relaxed">
           {form.title}<br/>{form.ministry}<br/>{selectedCountry ? selectedCountry.label : form.country}
         </div>
-        <div className="font-sans text-[11px] text-sapi-gold tracking-extra-wide uppercase">
+        <div className="font-sans text-[13px] text-sapi-gold tracking-extra-wide uppercase">
           Development Stage: {form.developmentStage}
         </div>
         <div className="w-12 h-px bg-sapi-bronze" />
-        <div className="font-sans text-xs text-sapi-muted">Proceeding to Assessment Briefing…</div>
+        <div className="font-sans text-[13px] text-sapi-muted">Proceeding to Assessment Briefing…</div>
         <button onClick={() => navigate('/')}
-          className="bg-transparent border border-sapi-bronze text-sapi-muted px-7 py-2.5 font-sans text-[11px] tracking-extra-wide uppercase cursor-pointer mt-2 rounded-sm hover:border-sapi-gold hover:text-sapi-gold transition-colors">
+          className="bg-transparent border border-sapi-bronze text-sapi-muted px-7 py-2.5 font-sans text-[13px] tracking-extra-wide uppercase cursor-pointer mt-2 rounded-sm hover:border-sapi-gold hover:text-sapi-gold transition-colors">
           ← Edit Profile
         </button>
       </PageLayout>
@@ -311,7 +311,7 @@ export default function PreviewPage() {
       <div className="max-w-container mx-auto px-8 pt-5 flex items-center justify-between flex-wrap gap-4">
         <button
           onClick={() => navigate('/')}
-          className={`bg-none border-none cursor-pointer font-sans text-[11px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
+          className={`bg-none border-none cursor-pointer font-sans text-[13px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
           onMouseEnter={() => setBackHover(true)} onMouseLeave={() => setBackHover(false)}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2.5L4.5 7L9 11.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
           Back
@@ -321,12 +321,12 @@ export default function PreviewPage() {
             <div key={step.n} className="flex items-center gap-1.5">
               {i > 0 && <div className="w-5 h-px bg-sapi-bronze mx-0.5" />}
               <div className="flex items-center gap-1.5">
-                <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center font-sans text-[10px] font-medium ${
+                <div className={`w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center font-sans text-[12px] font-medium ${
                   step.active ? 'bg-sapi-gold text-sapi-void border border-sapi-gold' : 'bg-transparent text-sapi-muted border border-sapi-bronze/40'
                 }`}>
                   {step.n}
                 </div>
-                <span className={`font-sans text-[11px] tracking-wide uppercase ${step.active ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>{step.label}</span>
+                <span className={`font-sans text-[13px] tracking-wide uppercase ${step.active ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>{step.label}</span>
               </div>
             </div>
           ))}
@@ -335,20 +335,20 @@ export default function PreviewPage() {
 
       {/* Body */}
       <div className="max-w-[620px] mx-auto px-8 pt-14 pb-24">
-        <div className="font-sans text-[10px] tracking-extra-wide text-sapi-gold uppercase mb-4">
+        <div className="font-sans text-[12px] tracking-extra-wide text-sapi-gold uppercase mb-4">
           Step 1 of 3 &nbsp;·&nbsp; Organisation Profile
         </div>
-        <h1 className="font-serif text-[30px] font-normal text-sapi-parchment tracking-wide leading-tight mb-3.5">
+        <h1 className="font-serif text-[32px] font-normal text-sapi-parchment tracking-wide leading-tight mb-3.5">
           Tell us about your institution.
         </h1>
-        <p className="font-sans text-[13px] text-sapi-muted leading-relaxed mb-11 tracking-wide">
+        <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-11 tracking-wide">
           Your profile personalises the assessment output and calibrates the roadmap to your institution's development stage and sovereign context.
         </p>
 
         {/* Confidentiality box */}
         <div className="border border-sapi-gold/25 border-l-[3px] border-l-sapi-gold bg-sapi-gold/5 px-5 py-4 mb-12">
-          <div className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-gold mb-2">Data Classification</div>
-          <p className="font-sans text-xs text-sapi-muted leading-relaxed m-0">
+          <div className="font-sans text-[12px] tracking-extra-wide uppercase text-sapi-gold mb-2">Data Classification</div>
+          <p className="font-sans text-[13px] text-sapi-muted leading-relaxed m-0">
             Your responses are used solely to generate your Tier 1 SAPI assessment report. No individual data is shared with third parties without your explicit consent.{" "}
             <em className="text-sapi-parchment">Classification: Restricted.</em>
           </p>
@@ -376,7 +376,7 @@ export default function PreviewPage() {
                     value={countrySearch}
                     onChange={(e) => { setCountrySearch(e.target.value); setVisibleCount(5); }}
                     placeholder="Search country..."
-                    className="w-full bg-sapi-midnight border border-sapi-bronze rounded-sm px-3 py-2 text-sapi-parchment text-[13px] placeholder:text-sapi-muted/70 focus:outline-none focus:border-sapi-gold bg-[#0a0a12]"
+                    className="w-full bg-sapi-midnight border border-sapi-bronze rounded-sm px-3 py-2 text-sapi-parchment text-[15px] placeholder:text-sapi-muted/70 focus:outline-none focus:border-sapi-gold bg-[#0a0a12] font-sans"
                     autoComplete="off"
                     onClick={(e) => e.stopPropagation()}
                   />
@@ -397,12 +397,12 @@ export default function PreviewPage() {
                       <c.Flag />
                     </div>
                     <div className="py-3 px-4 flex-1">
-                      <div className={`font-sans text-[13px] tracking-wide mb-0.5 ${
+                      <div className={`font-sans text-[15px] tracking-wide mb-0.5 ${
                         form.country === c.value ? 'text-sapi-paleGold font-medium' : 'text-sapi-parchment font-normal'
                       }`}>
                         {c.label}
                       </div>
-                      <div className="font-sans text-[11px] text-sapi-muted tracking-wide">{c.sub}</div>
+                      <div className="font-sans text-[13px] text-sapi-muted tracking-wide">{c.sub}</div>
                     </div>
                     {form.country === c.value && (
                       <div className="flex items-center pr-3.5">
@@ -447,7 +447,7 @@ export default function PreviewPage() {
                       form.developmentStage === stage.value ? 'bg-sapi-gold/10' : 'bg-transparent'
                     } ${i > 0 ? 'border-t border-sapi-bronze' : ''}`}
                     onClick={() => { handleChange("developmentStage", stage.value); setErrors(p => ({ ...p, developmentStage:null })); setTouched(p => ({ ...p, developmentStage:true })); setStageOpen(false); }}>
-                    <div className={`font-sans text-[13px] tracking-wide mb-1 flex items-center gap-2 ${
+                    <div className={`font-sans text-[15px] tracking-wide mb-1 flex items-center gap-2 ${
                       form.developmentStage === stage.value ? 'text-sapi-paleGold font-medium' : 'text-sapi-parchment font-normal'
                     }`}>
                       {stage.label}
@@ -455,14 +455,14 @@ export default function PreviewPage() {
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="#C9963A" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       )}
                     </div>
-                    <div className="font-sans text-[11px] text-sapi-muted leading-relaxed tracking-wide">{stage.description}</div>
+                    <div className="font-sans text-[13px] text-sapi-muted leading-relaxed tracking-wide">{stage.description}</div>
                   </button>
                 ))}
               </div>
             )}
 
             {selectedStage && !stageOpen && (
-              <div className="font-sans text-[11px] text-sapi-muted mt-2 leading-relaxed tracking-wide px-px">
+              <div className="font-sans text-[13px] text-sapi-muted mt-2 leading-relaxed tracking-wide px-px">
                 {selectedStage.description}
               </div>
             )}
@@ -473,7 +473,7 @@ export default function PreviewPage() {
         {/* Validation banner */}
         {submitted && Object.values(errors).some(Boolean) && (
           <div className="mt-9 border border-sapi-crimson/35 border-l-[3px] border-l-sapi-crimson bg-sapi-crimson/5 px-4 py-3.5">
-            <div className="font-sans text-[11px] text-sapi-crimson tracking-wide uppercase">
+            <div className="font-sans text-[13px] text-sapi-crimson tracking-wide uppercase">
               All fields are required. Please complete the form before proceeding.
             </div>
           </div>
@@ -482,7 +482,7 @@ export default function PreviewPage() {
         {/* API Error */}
         {apiError && (
           <div className="mt-6 border border-sapi-crimson/35 border-l-[3px] border-l-sapi-crimson bg-sapi-crimson/5 px-4 py-3.5">
-            <div className="font-sans text-[11px] text-sapi-crimson tracking-wide">
+            <div className="font-sans text-[13px] text-sapi-crimson tracking-wide">
               {apiError}
             </div>
           </div>
@@ -491,7 +491,7 @@ export default function PreviewPage() {
         {/* CTA */}
         <div className="mt-12">
           <button
-            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 flex items-center justify-center gap-2 ${
+            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 flex items-center justify-center gap-2 ${
               btnHover ? 'bg-[#B8862A]' : 'bg-sapi-gold'
             } ${loading ? 'opacity-75 cursor-not-allowed' : ''}`}
             onMouseEnter={() => setBtnHover(true)} onMouseLeave={() => setBtnHover(false)}

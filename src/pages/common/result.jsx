@@ -165,7 +165,7 @@ function RadarChart({ scores }) {
   };
 
   return (
-    <svg width="300" height="300" viewBox="0 0 300 300" style={{ overflow: "visible" }}>
+    <svg width="300" height="300" viewBox="0 0 300 300" className="overflow-visible">
       {/* Grid rings */}
       {gridLevels.map((level) => (
         <polygon
@@ -175,14 +175,14 @@ function RadarChart({ scores }) {
             return `${v.x},${v.y}`;
           }).join(" ")}
           fill="none"
-          stroke={level === 1.0 ? "#2E2560" : "#1E1845"}
+          stroke={level === 1.0 ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.15)"}
           strokeWidth={level === 1.0 ? 1 : 0.8}
         />
       ))}
       {/* Axes */}
       {maxVerts.map((v, i) => (
         <line key={i} x1={cx} y1={cy} x2={v.x} y2={v.y}
-          stroke="#231D5A" strokeWidth="0.8" />
+          stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" />
       ))}
       {/* Score fill */}
       <polygon
@@ -205,7 +205,7 @@ function RadarChart({ scores }) {
         const { lx, ly, anchor } = labelOffset(i);
         return (
           <text key={d.key} x={lx} y={ly} textAnchor={anchor}
-            fontSize="10.5" fill="#9880B0"
+            fontSize="12.5" fill="white"
             fontFamily="system-ui, sans-serif" letterSpacing="0.06em">
             {d.short.toUpperCase()}
           </text>
@@ -247,10 +247,10 @@ function LockIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <rect x="3" y="7" width="10" height="8" rx="1.5"
-        stroke="#9880B0" strokeWidth="1.2" />
+        stroke="white" strokeWidth="1.2" />
       <path d="M5 7V5a3 3 0 016 0v2"
-        stroke="#9880B0" strokeWidth="1.2" strokeLinecap="round" />
-      <circle cx="8" cy="11.5" r="1" fill="#9880B0" />
+        stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="8" cy="11.5" r="1" fill="white" />
     </svg>
   );
 }
@@ -330,6 +330,12 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   // Score count-up
   const [displayScore, setDisplayScore] = useState(0);
   useEffect(() => {
+    // Only animate if composite is a valid number
+    if (isNaN(composite) || composite === null || composite === undefined) {
+      setDisplayScore(0);
+      return;
+    }
+
     let start = null;
     const duration = 1500;
     const raf = (ts) => {
@@ -372,237 +378,139 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   return (
     <>
       <style>{autofillStyles}</style>
-      <div style={{
-        background: "#06030E",
-        minHeight: "auto",
-        fontFamily: "system-ui, -apple-system, sans-serif",
-        color: "#FBF5E6",
-        paddingBottom: "40px",
-      }}>
+      <div className="bg-sapi-void min-h-auto font-sans text-sapi-parchment pb-10">
 
       <PageHeader showAdmin={false} />
 
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
-      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 40px" }}>
+      <div className="max-w-[900px] mx-auto px-10">
 
         {/* Back to Results */}
         <button
           onClick={() => navigate('/results')}
-          style={{
-            background: "transparent",
-            border: "none",
-            padding: "0 0 16px 0",
-            color: "#9880B0",
-            fontSize: "12px",
-            fontWeight: 500,
-            letterSpacing: "0.1em",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.color = "#C9963A"}
-          onMouseLeave={(e) => e.currentTarget.style.color = "#9880B0"}
+          className="bg-transparent border-none pb-4 mt-2 text-sapi-muted text-[13px] font-medium tracking-[0.1em] cursor-pointer flex items-center gap-2 hover:text-sapi-gold transition-colors"
         >
-          <span style={{ fontSize: "14px" }}>←</span> BACK TO RESULTS
+          <span className="text-[15px]">←</span> BACK TO RESULTS
         </button>
 
         {/* Hero Score Card */}
-        <div style={{
-          background: "linear-gradient(145deg, #0A0514 0%, #14102C 100%)",
-          border: "1px solid rgba(107,69,8,0.25)",
-          borderRadius: "16px",
-          padding: "48px 40px",
-          marginBottom: "32px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-        }}>
+        <div
+          className="rounded-2xl p-12 px-10 mb-8"
+          style={{
+            background: "linear-gradient(145deg, #0A0514 0%, #14102C 100%)",
+            border: "1px solid rgba(107,69,8,0.25)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+          }}
+        >
           {/* Header Row */}
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            marginBottom: "32px",
-            flexWrap: "wrap",
-            gap: "16px",
-          }}>
-            <div style={{
-              fontSize: "10px",
-              letterSpacing: "0.25em",
-              color: "#9880B0",
-              fontWeight: 500,
-            }}>
-              COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
+          <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <div className="text-[12px] tracking-[0.25em] text-sapi-muted font-medium">
+                COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
+              </div>
             </div>
             {/* Generate PDF Button */}
-            <button
-              onClick={async () => {
-                const id = localStorage.getItem('sapi_assessment_id') || location.state?.assessmentId;
-                if (id) {
-                  try {
-                    const blob = await generateDimensionAnalysisPDF(id);
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-                    link.download = `SAPI-Dimension-Analysis-${id}.pdf`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    window.URL.revokeObjectURL(url);
-                  } catch (err) {
-                    console.error('PDF generation error:', err);
-                    alert('Failed to generate PDF. Please try again.');
+            <div className="flex items-center gap-3">
+              <button
+                onClick={async () => {
+                  const id = localStorage.getItem('sapi_assessment_id') || location.state?.assessmentId;
+                  if (id) {
+                    try {
+                      const blob = await generateDimensionAnalysisPDF(id);
+                      const url = window.URL.createObjectURL(blob);
+                      const link = document.createElement('a');
+                      link.href = url;
+                      link.download = `SAPI-Dimension-Analysis-${id}.pdf`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      window.URL.revokeObjectURL(url);
+                    } catch (err) {
+                      console.error('PDF generation error:', err);
+                      alert('Failed to generate PDF. Please try again.');
+                    }
+                  } else {
+                    alert('No assessment ID found');
                   }
-                } else {
-                  alert('No assessment ID found');
-                }
-              }}
-              style={{
-                background: "#C9963A",
-                border: "none",
-                borderRadius: "6px",
-                padding: "10px 20px",
-                color: "#06030E",
-                fontSize: "11px",
-                fontWeight: 600,
-                letterSpacing: "0.08em",
-                cursor: "pointer",
-                transition: "opacity 0.2s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              GENERATE PDF
-            </button>
+                }}
+                className="bg-sapi-gold border-none rounded-md px-5 py-2.5 text-sapi-void text-[13px] font-semibold tracking-[0.08em] cursor-pointer hover:opacity-85 transition-opacity"
+              >
+                GENERATE PDF
+              </button>
+            </div>
           </div>
 
           {/* Score Display */}
-          <div style={{
-            display: "flex",
-            alignItems: "baseline",
-            justifyContent: "center",
-            gap: "12px",
-            marginBottom: "28px",
-          }}>
-            <span style={{
-              fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(80px, 12vw, 120px)",
-              fontWeight: 700,
-              color: "#EDD98A",
-              lineHeight: 1,
-              letterSpacing: "-0.04em",
-              textShadow: "0 2px 20px rgba(237,217,138,0.15)",
-            }}>
+          <div className="flex items-baseline justify-center gap-3 mb-7">
+            <span
+              className="font-sans font-bold text-sapi-paleGold leading-none tracking-[-0.04em]"
+              style={{
+                fontSize: "clamp(80px, 12vw, 120px)",
+                textShadow: "0 2px 20px rgba(237,217,138,0.15)",
+              }}
+            >
               {displayScore}
             </span>
-            <span style={{
-              fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-              fontSize: "clamp(28px, 4vw, 36px)",
-              fontWeight: 400,
-              color: "rgba(237,217,138,0.35)",
-              lineHeight: 1,
-            }}>
+            <span
+              className="font-sans font-normal leading-none"
+              style={{
+                fontSize: "clamp(28px, 4vw, 36px)",
+                color: "rgba(237,217,138,0.35)",
+              }}
+            >
               / 100
             </span>
           </div>
 
           {/* Tier Badge */}
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "20px",
-          }}>
-            <span style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "8px 20px",
-              // background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
-              // border: `1.5px solid ${tierMeta.colour}`,
-              borderRadius: "20px",
-              fontSize: "12px",
-              letterSpacing: "0.15em",
-              // color: tierMeta.colour,
-              fontWeight: 600,
-            }}>
-              <span style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                // background: tierMeta.colour,
-                // boxShadow: `0 0 8px ${tierMeta.colour}`,
-              }} />
+          <div className="flex justify-center mb-5">
+            <span
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-[20px] text-[13px] tracking-[0.15em] font-semibold"
+              style={{
+                // background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
+                // border: `1.5px solid ${tierMeta.colour}`,
+                // color: tierMeta.colour,
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{
+                  // background: tierMeta.colour,
+                  // boxShadow: `0 0 8px ${tierMeta.colour}`,
+                }}
+              />
               {/* {tierMeta.label} */}
             </span>
           </div>
 
           {/* Editorial Line */}
-          <div style={{
-            textAlign: "center",
-            fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-            fontSize: "15px",
-            fontWeight: 400,
-            color: "#FBF5E6",
-            opacity: 0.75,
-            maxWidth: "520px",
-            margin: "0 auto",
-            lineHeight: 1.7,
-          }}>
+          <div className="text-center font-sans text-[17px] font-normal text-sapi-parchment opacity-75 max-w-[520px] mx-auto leading-[1.7]">
             {/* {tierMeta.editorial} */}
           </div>
         </div>
 
         {/* ── Dimension Score Strip ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(5, 1fr)",
-          gap: "10px",
-          marginBottom: "40px",
-        }}>
+        <div className="grid grid-cols-5 gap-2.5 mb-10">
           {DIMENSIONS.map((d) => {
             const s = rawScores[d.key];
             const bc = getBandColour(s);
             return (
-              <div key={d.key} style={{
-                background: "#0F0830",
-                border: "1px solid rgba(107,69,8,0.2)",
-                borderRadius: "6px",
-                padding: "16px 12px",
-                textAlign: "center",
-              }}>
-                <div style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.14em",
-                  color: "#9880B0",
-                  marginBottom: "10px",
-                  fontWeight: 500,
-                }}>
+              <div key={d.key} className="bg-sapi-navy border border-sapi-bronze/20 rounded-md py-4 px-3 text-center">
+                <div className="text-[11px] tracking-[0.14em] text-sapi-muted mb-2.5 font-medium">
                   {d.short.toUpperCase()}
                 </div>
-                <div style={{
-                  fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-                  fontSize: "32px",
-                  fontWeight: 600,
-                  color: "#EDD98A",
-                  lineHeight: 1,
-                  marginBottom: "10px",
-                  letterSpacing: "-0.02em",
-                }}>
+                <div className="font-sans text-[34px] font-semibold text-sapi-paleGold leading-none mb-2.5 tracking-[-0.02em]">
                   {s}
                 </div>
-                <div style={{
-                  width: "100%",
-                  height: "3px",
-                  background: "rgba(255,255,255,0.06)",
-                  borderRadius: "2px",
-                  overflow: "hidden",
-                }}>
-                  <div style={{
-                    width: `${s}%`,
-                    height: "100%",
-                    background: bc,
-                    borderRadius: "2px",
-                    transition: "width 1.2s cubic-bezier(0.4,0,0.2,1)",
-                  }} />
+                <div className="w-full h-[3px] bg-white/[0.06] rounded-[2px] overflow-hidden">
+                  <div
+                    className="h-full rounded-[2px] transition-[width] duration-[1.2s]"
+                    style={{
+                      width: `${s}%`,
+                      background: bc,
+                      transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
+                    }}
+                  />
                 </div>
               </div>
             );
@@ -610,46 +518,24 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
         </div>
 
         {/* ─── EMAIL CAPTURE PANEL ─────────────────────────────────────────── */}
-        <div style={{
-          background: "#0F0830",
-          border: "1px solid rgba(107,69,8,0.2)",
-          borderLeft: "3px solid #C9963A",
-          borderRadius: "0 8px 8px 0",
-          padding: "32px 36px",
-          marginBottom: "40px",
-        }}>
+        <div className="bg-sapi-navy border border-sapi-bronze/20 border-l-[3px] border-l-sapi-gold rounded-r-lg py-8 px-9 mb-10">
           {!emailSubmitted ? (
             <>
-              <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
-                <div style={{ marginTop: "2px", flexShrink: 0 }}>
+              <div className="flex items-start gap-4">
+                <div className="mt-0.5 flex-shrink-0">
                   <EnvelopeLockIcon />
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{
-                    fontFamily: "Georgia, serif",
-                    fontSize: "18px",
-                    color: "#FBF5E6",
-                    marginBottom: "8px",
-                    lineHeight: 1.35,
-                  }}>
+                <div className="flex-1">
+                  <div className="font-serif text-[19px] text-sapi-parchment mb-2 leading-[1.35]">
                     Your classified report has been prepared.
                   </div>
-                  <div style={{
-                    fontSize: "13px",
-                    color: "#9880B0",
-                    marginBottom: "24px",
-                    lineHeight: 1.6,
-                  }}>
+                  <div className="text-[15px] text-sapi-muted mb-6 leading-[1.6]">
                     Enter your institutional email address to save your results
                     and receive your secure access link.
                   </div>
 
                   {/* Input + button row */}
-                  <div style={{
-                    display: "flex",
-                    gap: "10px",
-                    flexWrap: "wrap",
-                  }}>
+                  <div className="flex gap-2.5 flex-wrap">
                     <input
                       type="email"
                       value={emailInput}
@@ -659,19 +545,9 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                       }}
                       onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()}
                       placeholder="minister@government.gov"
+                      className="flex-1 min-w-[220px] bg-sapi-void rounded px-4 py-3 text-sapi-parchment text-[15px] font-sans outline-none shadow-none transition-colors"
                       style={{
-                        flex: "1",
-                        minWidth: "220px",
-                        background: "#06030E",
                         border: `1px solid ${emailError ? "#C03058" : "rgba(107,69,8,0.4)"}`,
-                        borderRadius: "4px",
-                        padding: "12px 16px",
-                        color: "#FBF5E6",
-                        fontSize: "13px",
-                        fontFamily: "system-ui, sans-serif",
-                        outline: "none",
-                        boxShadow: "none",
-                        transition: "border-color 0.2s, box-shadow 0.2s",
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = "#C9963A";
@@ -686,22 +562,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                     />
                     <button
                       onClick={handleEmailSubmit}
-                      style={{
-                        background: "#C9963A",
-                        border: "none",
-                        borderRadius: "4px",
-                        padding: "12px 24px",
-                        color: "#06030E",
-                        fontSize: "12px",
-                        letterSpacing: "0.1em",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        fontFamily: "system-ui, sans-serif",
-                        whiteSpace: "nowrap",
-                        transition: "opacity 0.15s",
-                      }}
-                      onMouseEnter={(e) => (e.target.style.opacity = "0.88")}
-                      onMouseLeave={(e) => (e.target.style.opacity = "1")}
+                      className="bg-sapi-gold border-none rounded px-6 py-3 text-sapi-void text-[13px] tracking-[0.1em] font-medium cursor-pointer font-sans whitespace-nowrap hover:opacity-88 transition-opacity"
                     >
                       Save My Report
                     </button>
@@ -709,65 +570,33 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
 
                   {/* Validation error */}
                   {emailError && (
-                    <div style={{
-                      marginTop: "8px",
-                      fontSize: "12px",
-                      color: "#C03058",
-                    }}>
+                    <div className="mt-2 text-[13px] text-sapi-crimson">
                       {emailError}
                     </div>
                   )}
 
                   {/* Trust signals */}
-                  <div style={{
-                    marginTop: "16px",
-                    display: "flex",
-                    gap: "24px",
-                    flexWrap: "wrap",
-                  }}>
+                  {/* <div className="mt-4 flex gap-6 flex-wrap">
                     {["No account creation required", "Secured access link dispatched instantly"].map((t) => (
-                      <div key={t} style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                        fontSize: "11px",
-                        color: "rgba(152,128,176,0.7)",
-                      }}>
-                        <div style={{
-                          width: "4px",
-                          height: "4px",
-                          borderRadius: "50%",
-                          background: "rgba(201,150,58,0.5)",
-                        }} />
+                      <div key={t} className="flex items-center gap-1.5 text-[13px] text-sapi-muted/70">
+                        <div className="w-1 h-1 rounded-full bg-sapi-gold/50" />
                         {t}
                       </div>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </>
           ) : (
             /* Confirmed state */
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "14px",
-            }}>
+            <div className="flex items-center gap-3.5">
               <TickIcon />
               <div>
-                <div style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "15px",
-                  color: "#EDD98A",
-                  marginBottom: "4px",
-                }}>
+                <div className="font-serif text-[17px] text-sapi-paleGold mb-1">
                   Your secure access link has been dispatched to{" "}
-                  <span style={{ color: "#C9963A" }}>{confirmedEmail}</span>
+                  <span className="text-sapi-gold">{confirmedEmail}</span>
                 </div>
-                <div style={{
-                  fontSize: "12px",
-                  color: "rgba(152,128,176,0.7)",
-                }}>
+                <div className="text-[13px] text-sapi-muted/70">
                   Your full results are now unlocked below.
                 </div>
               </div>
@@ -776,56 +605,38 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
         </div>
 
         {/* ─── ZONE B: GATED RESULTS ────────────────────────────────────────── */}
-        <div style={{ 
-          position: "relative", 
-          marginBottom: zoneRevealed ? "48px" : "16px",
-          minHeight: zoneRevealed ? "auto" : "120px",
-          maxHeight: zoneRevealed ? "none" : "120px",
-          overflow: "hidden",
-        }}>
+        <div
+          className="relative overflow-hidden"
+          style={{
+            marginBottom: zoneRevealed ? "48px" : "16px",
+            minHeight: zoneRevealed ? "auto" : "120px",
+            maxHeight: zoneRevealed ? "none" : "120px",
+          }}
+        >
 
           {/* Radar + Scorecard content */}
-          <div style={{
-            opacity: zoneRevealed ? 1 : 0,
-            filter: zoneRevealed ? "none" : "blur(8px)",
-            transition: "opacity 0.6s ease, filter 0.6s ease",
-            pointerEvents: zoneRevealed ? "auto" : "none",
-            display: zoneRevealed ? "block" : "none",
-          }}>
+          <div
+            className="transition-all duration-[0.6s] ease-[ease]"
+            style={{
+              opacity: zoneRevealed ? 1 : 0,
+              filter: zoneRevealed ? "none" : "blur(8px)",
+              pointerEvents: zoneRevealed ? "auto" : "none",
+              display: zoneRevealed ? "block" : "none",
+            }}
+          >
 
             {/* Section header */}
-            <div style={{
-              fontSize: "10px",
-              letterSpacing: "0.18em",
-              color: "#9880B0",
-              marginBottom: "32px",
-              fontWeight: 500,
-              borderBottom: "1px solid rgba(107,69,8,0.18)",
-              paddingBottom: "14px",
-            }}>
+            <div className="text-[12px] tracking-[0.18em] text-sapi-muted mb-8 font-medium border-b border-sapi-bronze/18 pb-3.5">
               DIMENSION ANALYSIS
             </div>
 
             {/* Radar chart + legend row */}
-            <div style={{
-              display: "flex",
-              gap: "48px",
-              alignItems: "center",
-              marginBottom: "48px",
-              flexWrap: "wrap",
-            }}>
-              <div style={{ flexShrink: 0 }}>
+            <div className="flex gap-12 items-center mb-12 flex-wrap">
+              <div className="flex-shrink-0">
                 <RadarChart scores={rawScores} />
               </div>
-              <div style={{ flex: 1, minWidth: "200px" }}>
-                <div style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "13px",
-                  color: "#9880B0",
-                  fontStyle: "italic",
-                  marginBottom: "20px",
-                  lineHeight: 1.7,
-                }}>
+              <div className="flex-1 min-w-[200px]">
+                <div className="font-serif text-[15px] text-sapi-muted italic mb-5 leading-[1.7]">
                   Each axis represents a dimension of sovereign AI readiness.
                   The gold polygon reflects your nation's current capability profile.
                 </div>
@@ -834,27 +645,15 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                   const s = rawScores[d.key];
                   const bc = getBandColour(s);
                   return (
-                    <div key={d.key} style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginBottom: "10px",
-                    }}>
-                      <div style={{
-                        width: "8px",
-                        height: "8px",
-                        borderRadius: "50%",
-                        background: bc,
-                        flexShrink: 0,
-                      }} />
-                      <div style={{ fontSize: "11px", color: "#9880B0", flex: 1 }}>
+                    <div key={d.key} className="flex items-center gap-2.5 mb-2.5">
+                      <div
+                        className="w-2 h-2 rounded-full flex-shrink-0"
+                        style={{ background: bc }}
+                      />
+                      <div className="text-[13px] text-sapi-muted flex-1">
                         {d.full}
                       </div>
-                      <div style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: "14px",
-                        color: "#EDD98A",
-                      }}>
+                      <div className="font-sans text-[15px] text-sapi-paleGold font-medium">
                         {s}
                       </div>
                     </div>
@@ -864,7 +663,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
             </div>
 
             {/* Dimension scorecard rows */}
-            <div style={{ marginBottom: "40px" }}>
+            <div className="mb-10">
               {DIMENSIONS.map((d, idx) => {
                 const s = rawScores[d.key];
                 const bc = getBandColour(s);
@@ -872,10 +671,9 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                   <div
                     key={d.key}
                     onClick={() => zoneRevealed && setCurrentPage && setCurrentPage("scorecard")}
+                    className={`py-5 transition-all ${zoneRevealed ? 'cursor-pointer' : 'cursor-default'}`}
                     style={{
-                      padding: "20px 0",
                       borderBottom: idx < 4 ? "1px solid rgba(107,69,8,0.15)" : "none",
-                      cursor: zoneRevealed ? "pointer" : "default",
                     }}
                     onMouseEnter={(e) => {
                       if (zoneRevealed) {
@@ -896,198 +694,56 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                       e.currentTarget.style.borderRadius = "0";
                     }}
                   >
-                    <div style={{
-                      display: "flex",
-                      alignItems: "baseline",
-                      justifyContent: "space-between",
-                      marginBottom: "10px",
-                      gap: "16px",
-                      flexWrap: "wrap",
-                    }}>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: "12px" }}>
-                        <span style={{
-                          fontFamily: "Georgia, serif",
-                          fontSize: "11px",
-                          color: "rgba(152,128,176,0.5)",
-                          letterSpacing: "0.1em",
-                        }}>
+                    <div className="flex items-baseline justify-between mb-2.5 gap-4 flex-wrap">
+                      <div className="flex items-baseline gap-3">
+                        <span className="font-sans text-[13px] text-sapi-muted/50 tracking-[0.1em]">
                           {d.num}
                         </span>
-                        <span style={{
-                          fontSize: "13px",
-                          letterSpacing: "0.06em",
-                          color: "#FBF5E6",
-                          fontWeight: 500,
-                        }}>
+                        <span className="text-[15px] tracking-[0.06em] text-sapi-parchment font-medium">
                           {d.full.toUpperCase()}
                         </span>
                       </div>
-                      <span style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: "22px",
-                        color: "#EDD98A",
-                        lineHeight: 1,
-                      }}>
+                      <span className="font-sans text-[24px] text-sapi-paleGold leading-none font-medium">
                         {s}
                       </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div style={{
-                      width: "100%",
-                      height: "4px",
-                      background: "rgba(255,255,255,0.06)",
-                      borderRadius: "2px",
-                      overflow: "hidden",
-                      marginBottom: "12px",
-                    }}>
-                      <div style={{
-                        width: `${s}%`,
-                        height: "100%",
-                        background: bc,
-                        borderRadius: "2px",
-                        transition: "width 1s cubic-bezier(0.4,0,0.2,1) 0.2s",
-                      }} />
+                    <div className="w-full h-1 bg-white/[0.06] rounded-[2px] overflow-hidden mb-3">
+                      <div
+                        className="h-full rounded-[2px] transition-[width] duration-1000"
+                        style={{
+                          width: `${s}%`,
+                          background: bc,
+                          transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
+                          transitionDelay: "0.2s",
+                        }}
+                      />
                     </div>
 
                     {/* Editorial insight */}
-                    <div style={{
-                      fontFamily: "Georgia, serif",
-                      fontStyle: "italic",
-                      fontSize: "12.5px",
-                      color: "rgba(152,128,176,0.8)",
-                      lineHeight: 1.65,
-                    }}>
+                    <div className="font-serif italic text-[15px] text-sapi-muted/80 leading-[1.65]">
                       {d.insight}
                     </div>
                   </div>
                 );
               })}
             </div>
-
-            {/* Peer comparison teaser */}
-            <div style={{
-              position: "relative",
-              background: "#0F0830",
-              border: "1px solid rgba(107,69,8,0.2)",
-              borderRadius: "8px",
-              padding: "28px",
-              overflow: "hidden",
-              marginBottom: "12px",
-            }}>
-              {/* Blurred background bars (decorative) */}
-              <div style={{
-                position: "absolute",
-                inset: 0,
-                padding: "40px 28px 20px",
-                filter: "blur(6px)",
-                opacity: 0.25,
-                pointerEvents: "none",
-              }}>
-                {[72, 58, 81, 45, 63, 38].map((v, i) => (
-                  <div key={i} style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    marginBottom: "6px",
-                  }}>
-                    <div style={{ width: "60px", height: "6px", background: "#2A2060", borderRadius: "2px" }} />
-                    <div style={{ width: `${v}%`, height: "6px", background: "#C9963A", borderRadius: "2px" }} />
-                  </div>
-                ))}
-              </div>
-
-              {/* Foreground lock card */}
-              <div style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
-                <div style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  marginBottom: "14px",
-                }}>
-                  <LockIcon />
-                  <span style={{
-                    fontSize: "10px",
-                    letterSpacing: "0.18em",
-                    color: "#9880B0",
-                    fontWeight: 500,
-                  }}>
-                    PEER COMPARISON — TIER 2
-                  </span>
-                </div>
-                <div style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "16px",
-                  color: "#FBF5E6",
-                  marginBottom: "10px",
-                  lineHeight: 1.4,
-                }}>
-                  See how {country} ranks against nations at equivalent development stages.
-                </div>
-                <div style={{
-                  fontSize: "13px",
-                  color: "#9880B0",
-                  marginBottom: "20px",
-                  lineHeight: 1.6,
-                }}>
-                  Named country benchmarks are available in the Tier 2 practitioner assessment.
-                </div>
-                <button
-                  onClick={() => setCurrentPage && setCurrentPage("upgrade")}
-                  style={{
-                    background: "transparent",
-                    border: "1px solid rgba(201,150,58,0.5)",
-                    borderRadius: "4px",
-                    padding: "8px 20px",
-                    color: "#C9963A",
-                    fontSize: "11px",
-                    letterSpacing: "0.1em",
-                    cursor: "pointer",
-                    fontFamily: "system-ui, sans-serif",
-                    fontWeight: 500,
-                    transition: "background 0.15s, border-color 0.15s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = "rgba(201,150,58,0.08)";
-                    e.target.style.borderColor = "#C9963A";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = "transparent";
-                    e.target.style.borderColor = "rgba(201,150,58,0.5)";
-                  }}
-                >
-                  Explore Tier 2 →
-                </button>
-              </div>
-            </div>
           </div>
 
           {/* Frosted gate overlay */}
           {!emailCaptured && (
-            <div style={{
-              position: "absolute",
-              inset: 0,
-              background: "rgba(6,3,14,0.72)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              borderRadius: "8px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "12px",
-              zIndex: 5,
-              transition: "opacity 0.6s ease",
-              opacity: emailCaptured ? 0 : 1,
-              pointerEvents: emailCaptured ? "none" : "auto",
-            }}>
-              <div style={{ marginBottom: "4px" }}><LockIcon /></div>
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: "15px",
-                color: "#9880B0",
-                textAlign: "center",
-              }}>
+            <div
+              className="absolute inset-0 backdrop-blur-[8px] rounded-lg flex flex-col items-center justify-center gap-3 z-[5] transition-opacity duration-[0.6s]"
+              style={{
+                background: "rgba(6,3,14,0.72)",
+                WebkitBackdropFilter: "blur(8px)",
+                opacity: emailCaptured ? 0 : 1,
+                pointerEvents: emailCaptured ? "none" : "auto",
+              }}
+            >
+              <div className="mb-1"><LockIcon /></div>
+              <div className="font-serif text-[17px] text-sapi-muted text-center">
                 Save your report to unlock your full dimension analysis.
               </div>
             </div>

@@ -42,15 +42,10 @@ function SAPIGlobeAnimated({ size = 117 }) {
     <img
       src="/logo.png"
       alt="SAPI Logo"
-      className="animate-[globeBreathe_2.8s_ease-in-out_infinite]"
+      className="animate-[globeBreathe_2.8s_ease-in-out_infinite] object-contain bg-transparent rounded-full p-2 box-border"
       style={{
         width: size,
         height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
-        padding: '8px',
-        boxSizing: 'border-box',
         WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
         maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
       }}
@@ -83,12 +78,10 @@ function DimBar({ dim, score, active, staggerIndex }) {
       {/* Bar track */}
       <div className="h-[3px] bg-sapi-bronze rounded-sm overflow-hidden border border-sapi-bronze/45">
         <div
-          className="h-full rounded-sm shadow-[0_0_8px_rgba(201,150,58,0.4)]"
+          className="h-full rounded-sm shadow-[0_0_8px_rgba(201,150,58,0.4)] rounded-[2px]"
           style={{
-            height: "100%",
             width: active ? `${Math.min(score, 100)}%` : "0%",
             background: 'linear-gradient(90deg, #C9963A 0%, #EDD98A 85%, #FFF8E0 100%)',
-            borderRadius: 2,
             transition: `width ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}s`,
           }}
         />
@@ -336,8 +329,7 @@ export function SAPICalculatingDemo() {
         <div className="font-serif text-5xl text-sapi-paleGold">
           {composite.toFixed(1)}
         </div>
-        <div className="font-sans text-[13px] tracking-[0.14em] uppercase"
-             style={{ color: tier.color }}>
+        <div className="font-sans text-[13px] tracking-[0.14em] uppercase" style={{ color: tier.color }}>
           {tier.label}
         </div>
         <div className="font-sans text-xs text-sapi-muted mt-2">

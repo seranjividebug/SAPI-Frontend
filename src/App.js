@@ -10,12 +10,9 @@ import P7Results from './pages/common/result';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
-import SapiA1AdminDashboard from './components/SAPI_A1_AdminDashboard';
-import SubmissionsList from './components/SAPI_B1_SubmissionsList';
-import SubmissionDetail from './components/SAPI_B2_SubmissionDetail';
-import LeadsPipeline from './components/SAPI_C1_LeadsPipeline';
-import LeadDetail from './components/SAPI_C2_LeadDetail';
-import LeadDetailCombined from './components/SAPI_C2_B2_Combined';
+import AdminDashboard from './components/AdminDashboard';
+import SubmissionsList from './pages/admin/SubmissionsList';
+import SubmissionDetail from './pages/admin/SubmissionDetail';
 import QuestionEditor from './components/SAPI_E1_QuestionEditor';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -192,14 +189,14 @@ function App() {
           <Route path="/scorecard" element={<SAPIScorecard />} />
           <Route path="/peercomparison" element={<SAPIPeerComparison />} />
           <Route path="/roadmap" element={<SAPIRoadmap />} />
-          <Route path="/admin" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/submissionlist" element={<ProtectedRoute allowedRole={1}><SubmissionsList /></ProtectedRoute>} />
           <Route path="/submissiondetail" element={<ProtectedRoute allowedRole={1}><SubmissionDetail /></ProtectedRoute>} />
-          <Route path="/leadspipeline" element={<ProtectedRoute allowedRole={1}><LeadsPipeline /></ProtectedRoute>} />
-          <Route path="/leaddetail" element={<LeadDetail />} />
-          <Route path="/leaddetailcombined" element={<LeadDetailCombined />} />
+          <Route path="/leadspipeline" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/leaddetail" element={<Navigate to="/admin" replace />} />
+          <Route path="/leaddetailcombined" element={<Navigate to="/admin" replace />} />
           <Route path="/questioneditor" element={<QuestionEditor />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
