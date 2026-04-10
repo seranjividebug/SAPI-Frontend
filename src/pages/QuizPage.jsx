@@ -369,7 +369,7 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
     <div className="flex flex-col gap-2">
       {/* Global composite progress */}
       <div className="relative">
-        <div className="flex justify-between text-[10px] tracking-wide text-sapi-muted mb-1.5">
+        <div className="flex justify-between text-[12px] tracking-wide text-sapi-muted mb-1.5">
           <span>Overall Progress</span>
           <span>{Math.round(globalPct)}%</span>
         </div>
@@ -382,7 +382,7 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
       </div>
       {/* Dimension progress */}
       <div className="relative">
-        <div className="flex justify-between text-[10px] tracking-wide text-sapi-gold mb-1.5">
+        <div className="flex justify-between text-[12px] tracking-wide text-sapi-gold mb-1.5">
           <span>This Dimension</span>
           <span>{Math.round(dimPct)}%</span>
         </div>
@@ -415,7 +415,7 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
           : 'bg-sapi-navy border-sapi-bronze'
       }`}
     >
-      <span className={`flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center font-sans text-xs font-medium transition-colors duration-150 ${
+      <span className={`flex-shrink-0 w-6 h-6 rounded-full border flex items-center justify-center font-sans text-[18px] font-medium transition-colors duration-150 ${
         isSelected
           ? 'bg-sapi-gold text-sapi-void border-sapi-gold'
           : hover
@@ -424,7 +424,7 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
       }`}>
         {letters[optIndex] || optIndex + 1}
       </span>
-      <span className={`font-sans text-sm leading-snug pt-0.5 ${
+      <span className={`font-sans text-[24px] leading-snug pt-0.5 ${
         isSelected ? 'text-sapi-parchment' : 'text-sapi-muted'
       }`}>
         {label}
@@ -491,7 +491,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
       <PageLayout>
         <PageHeader showAdmin={false} />
         <div className="max-w-[800px] mx-auto px-8 py-16 text-center">
-          <div className="font-serif text-sapi-parchment text-lg">Loading...</div>
+          <div className="font-serif text-sapi-parchment text-[19px]">Loading...</div>
         </div>
         <PageFooter />
       </PageLayout>
@@ -633,7 +633,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
       <PageLayout>
         <PageHeader showAdmin={false} />
         <div className="max-w-[800px] mx-auto px-8 py-16 text-center">
-          <div className="font-serif text-sapi-parchment text-lg">Loading assessment...</div>
+          <div className="font-serif text-sapi-parchment text-[19px]">Loading assessment...</div>
         </div>
         <PageFooter />
       </PageLayout>
@@ -651,16 +651,16 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
             <span className="font-serif text-[13px] text-sapi-gold tracking-wide">
               The Sovereign AI Power Index
             </span>
-            <span className="font-sans text-[10px] text-sapi-muted tracking-wide opacity-65">
+            <span className="font-sans text-[15px] text-sapi-muted tracking-wide opacity-65">
               Tier 1 Assessment · {30 - globalQNum} questions remaining
             </span>
           </div>
 
           {/* Q counter pill */}
-          <div className="flex items-center gap-2 bg-sapi-gold/8 border border-sapi-gold/20 rounded-full px-3 py-1">
-            <span className="font-sans text-[11px] text-sapi-muted tracking-wide">Q</span>
-            <span className="font-serif text-base text-sapi-paleGold leading-none">{globalQNum}</span>
-            <span className="font-sans text-[10px] text-sapi-muted opacity-50">/ 30</span>
+          <div className="flex items-center gap-2 bg-sapi-gold/8 border border-sapi-gold/20 rounded-full px-4 py-1">
+            <span className="font-sans text-[13px] text-sapi-muted tracking-wide">Q</span>
+            <span className="font-serif text-[18px] text-sapi-paleGold leading-none">{globalQNum}</span>
+            <span className="font-sans text-[12px] text-sapi-muted opacity-50">/ 30</span>
           </div>
         </div>
       </div>
@@ -672,13 +672,13 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
           {/* Dimension label row */}
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
-              <span className="font-serif text-[13px] text-sapi-gold tracking-wide">{dim.shortCode}</span>
+              <span className="font-serif text-[15px] text-sapi-gold tracking-wide">{dim.shortCode}</span>
               <div className="w-px h-3.5 bg-sapi-gold/30" />
-              <span className="font-sans text-[11px] tracking-wide uppercase text-sapi-parchment opacity-85">
+              <span className="font-sans text-[13px] tracking-wide uppercase text-sapi-parchment opacity-85">
                 {dim.name}
               </span>
             </div>
-            <span className="font-sans text-[10px] tracking-wide text-sapi-muted opacity-65">
+            <span className="font-sans text-[12px] tracking-wide text-sapi-muted opacity-65">
               Dimension {currentDimension + 1} of 5&nbsp;&nbsp;·&nbsp;&nbsp;Question {currentQuestionIndex + 1} of {dimQuestions.length}
             </span>
           </div>
@@ -701,17 +701,17 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
         <div className="bg-sapi-navy border border-sapi-bronze rounded-sm p-7 pb-6 mb-5">
           {/* Question number */}
           <div className="flex items-center gap-2.5 mb-5">
-            <span className="font-sans text-[10px] tracking-super-wide uppercase text-sapi-gold opacity-75">
+            <span className="font-sans text-[12px] tracking-super-wide uppercase text-sapi-gold opacity-75">
               Question {globalQNum}
             </span>
             <div className="flex-1 h-px bg-sapi-gold/15" />
-            <span className="font-sans text-[9px] tracking-wide text-sapi-muted opacity-50">
+            <span className="font-sans text-[11px] tracking-wide text-sapi-muted opacity-50">
               {answeredCount} / {dimQuestions.length} answered in this dimension
             </span>
           </div>
 
           {/* Question text */}
-          <p className="font-serif text-[17px] text-sapi-parchment leading-relaxed tracking-wide mb-7 font-normal">
+          <p className="font-serif text-[21px] text-sapi-parchment leading-relaxed tracking-wide mb-7 font-normal">
             {currentQuestion.text}
           </p>
 
@@ -737,7 +737,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
               <path d="M6 3.5V6" stroke="#9880B0" strokeWidth="1.2" strokeLinecap="round" />
               <circle cx="6" cy="8.2" r="0.6" fill="#9880B0" />
             </svg>
-            <span className="font-sans text-[11px] text-sapi-muted tracking-wide">
+            <span className="font-sans text-[13px] text-sapi-muted tracking-wide">
               Select an option to proceed
             </span>
           </div>
@@ -750,7 +750,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
             onMouseEnter={() => setNextHover(true)}
             onMouseLeave={() => setNextHover(false)}
             onClick={handleNext}
-            className={`w-full px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium rounded-sm transition-all duration-150 flex items-center justify-center gap-2.5 ${
+            className={`w-full px-12 py-4 font-sans text-[13px] tracking-extra-wide uppercase font-medium rounded-sm transition-all duration-150 flex items-center justify-center gap-2.5 ${
               selectedScore == null
                 ? 'bg-sapi-gold/15 text-sapi-gold/40 border border-sapi-gold/20 cursor-not-allowed'
                 : nextHover
@@ -774,7 +774,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
             onMouseEnter={() => setBackHover(true)}
             onMouseLeave={() => setBackHover(false)}
             onClick={handleBack}
-            className={`w-full px-12 py-3.5 font-sans text-xs tracking-extra-wide uppercase font-normal rounded-sm transition-colors duration-150 ${
+            className={`w-full px-12 py-3.5 font-sans text-[13px] tracking-extra-wide uppercase font-normal rounded-sm transition-colors duration-150 ${
               backHover ? 'text-sapi-parchment border border-sapi-bronze/60 bg-transparent' : 'text-sapi-muted border border-sapi-bronze bg-transparent'
             }`}
           >

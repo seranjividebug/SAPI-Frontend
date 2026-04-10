@@ -341,14 +341,14 @@ export default function PreviewPage() {
         <h1 className="font-serif text-[32px] font-normal text-sapi-parchment tracking-wide leading-tight mb-3.5">
           Tell us about your institution.
         </h1>
-        <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-11 tracking-wide">
+        <p className="font-sans text-[16px] text-sapi-muted leading-relaxed mb-11 tracking-wide">
           Your profile personalises the assessment output and calibrates the roadmap to your institution's development stage and sovereign context.
         </p>
 
         {/* Confidentiality box */}
         <div className="border border-sapi-gold/25 border-l-[3px] border-l-sapi-gold bg-sapi-gold/5 px-5 py-4 mb-12">
-          <div className="font-sans text-[12px] tracking-extra-wide uppercase text-sapi-gold mb-2">Data Classification</div>
-          <p className="font-sans text-[13px] text-sapi-muted leading-relaxed m-0">
+          <div className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-gold mb-2">Data Classification</div>
+          <p className="font-sans text-[14px] text-sapi-muted leading-relaxed m-0">
             Your responses are used solely to generate your Tier 1 SAPI assessment report. No individual data is shared with third parties without your explicit consent.{" "}
             <em className="text-sapi-parchment">Classification: Restricted.</em>
           </p>

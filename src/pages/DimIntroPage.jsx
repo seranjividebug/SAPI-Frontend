@@ -109,7 +109,7 @@ function DimensionProgressBar({ currentIndex }) {
 // ── Sub-indicator Chip ────────────────────────────────────────────────────────
 function SubChip({ label }) {
   return (
-    <div className="font-sans text-[13px] tracking-wide text-sapi-muted border border-sapi-bronze/35 bg-sapi-navy px-2.5 py-1 rounded-sm whitespace-nowrap leading-snug">
+    <div className="font-sans text-[17px] tracking-wide text-sapi-muted border border-sapi-bronze/35 bg-sapi-navy px-2.5 py-1 rounded-sm whitespace-nowrap leading-snug">
       {label}
     </div>
   );

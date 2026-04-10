@@ -388,10 +388,10 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
       {/* Dimension progress */}
       <div>
         <div className="flex justify-between items-center mb-1">
-          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70 ml-3">
+          <span className="font-sans text-[12px] tracking-wide uppercase text-sapi-muted opacity-70 ml-3">
             Dimension Progress
           </span>
-          <span className="font-sans text-[10px] tracking-wide text-sapi-gold">
+          <span className="font-sans text-[12px] tracking-wide text-sapi-gold">
             {questionIndexInDim + 1} / {totalInDim}
           </span>
         </div>
@@ -408,10 +408,10 @@ function DualProgressBar({ dimIndex, questionIndexInDim, totalInDim, questionsBe
       {/* Overall progress */}
       <div>
         <div className="flex justify-between items-center mb-1">
-          <span className="font-sans text-[10px] tracking-wide uppercase text-sapi-muted opacity-70 pl-3">
+          <span className="font-sans text-[12px] tracking-wide uppercase text-sapi-muted opacity-70 pl-3">
             Overall Assessment
           </span>
-          <span className="font-sans text-[10px] tracking-wide text-sapi-muted">
+          <span className="font-sans text-[12px] tracking-wide text-sapi-muted">
             {questionsBeforeDim + questionIndexInDim + 1} / 30
           </span>
         </div>
@@ -438,7 +438,7 @@ function DimensionStepper({ currentDimIndex }) {
             <div className={`h-1 w-full rounded-sm transition-all duration-200 ${
               isComplete ? 'bg-sapi-gold' : isCurrent ? 'bg-transparent border border-sapi-gold' : 'bg-sapi-bronze/20'
             }`} />
-            <span className={`font-sans text-[9px] tracking-wide uppercase whitespace-nowrap ${
+            <span className={`font-sans text-[11px] tracking-wide uppercase whitespace-nowrap ${
               isComplete ? 'text-sapi-gold opacity-80' : isCurrent ? 'text-sapi-paleGold' : 'text-sapi-muted opacity-40'
             }`}>
               {dim.shortCode}
@@ -474,7 +474,7 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
           ? 'bg-sapi-gold border border-sapi-gold'
           : 'bg-sapi-bronze/20 border border-sapi-bronze/35'
       }`}>
-        <span className={`font-sans text-[10px] font-medium tracking-wide leading-none ${
+        <span className={`font-sans text-[14px] font-medium tracking-wide leading-none ${
           isSelected ? 'text-sapi-void' : 'text-sapi-muted'
         }`}>
           {letters[optIndex]}
@@ -482,7 +482,7 @@ function AnswerCard({ label, optIndex, isSelected, onSelect }) {
       </div>
 
       {/* Answer text */}
-      <span className={`font-sans text-sm leading-snug pt-0.5 transition-colors duration-150 flex-1 ${
+      <span className={`font-sans text-[17px] leading-snug pt-0.5 transition-colors duration-150 flex-1 ${
         isSelected ? 'text-sapi-parchment' : hovered ? 'text-sapi-parchment' : 'text-sapi-parchment/80'
       }`}>
         {label}
@@ -610,7 +610,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       <PageLayout>
         <PageHeader showAdmin={false} />
         <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="font-sans text-sm text-sapi-muted tracking-wide mt-6">
+          <div className="font-sans text-[15px] text-sapi-muted tracking-wide mt-6">
             Loading...
           </div>
         </div>
@@ -696,7 +696,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       <PageLayout>
         <PageHeader showAdmin={false} />
         <div className="flex-1 flex flex-col items-center justify-center">
-          <div className="font-sans text-sm text-sapi-muted tracking-wide mt-6">
+          <div className="font-sans text-[15px] text-sapi-muted tracking-wide mt-6">
             Loading assessment questions…
           </div>
         </div>
@@ -711,15 +711,15 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       <PageLayout>
         <PageHeader showAdmin={false} />
         <div className="flex-1 flex flex-col items-center justify-center px-8">
-          <div className="font-serif text-lg text-sapi-crimson mt-6 mb-4">
+          <div className="font-serif text-[19px] text-sapi-crimson mt-6 mb-4">
             Unable to load questions
           </div>
-          <div className="font-sans text-sm text-sapi-muted mb-6 text-center">
+          <div className="font-sans text-[15px] text-sapi-muted mb-6 text-center">
             {error}
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="bg-sapi-gold text-sapi-void border-none px-8 py-3 font-sans text-xs tracking-extra-wide uppercase cursor-pointer rounded-sm"
+            className="bg-sapi-gold text-sapi-void border-none px-8 py-3 font-sans text-[13px] tracking-extra-wide uppercase cursor-pointer rounded-sm"
           >
             Retry
           </button>
@@ -736,7 +736,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       {/* Submitting loader overlay */}
       {submitting && (
         <div className="fixed inset-0 bg-sapi-void/85 backdrop-blur-sm flex flex-col items-center justify-center z-[9999]">
-          <div className="font-sans text-sm text-sapi-paleGold tracking-wide mt-6">
+          <div className="font-sans text-[15px] text-sapi-paleGold tracking-wide mt-6">
             Submitting assessment…
           </div>
         </div>
@@ -746,19 +746,19 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
       <div className="max-w-container mx-auto px-8 py-5">
         <div className="flex items-center justify-between flex-wrap gap-4 border-b border-sapi-bronze pb-4">
           <div className="flex items-center gap-3">
-            <span className="font-serif text-[13px] text-sapi-gold tracking-wide">
+            <span className="font-serif text-[15px] text-sapi-gold tracking-wide">
               The Sovereign AI Power Index
             </span>
-            <span className="font-sans text-[10px] text-sapi-muted tracking-wide opacity-65">
+            <span className="font-sans text-[12px] text-sapi-muted tracking-wide opacity-65">
               Tier 1 Assessment · {30 - globalQNum} questions remaining
             </span>
           </div>
 
           {/* Q counter pill */}
-          <div className="flex items-center gap-2 bg-sapi-gold/8 border border-sapi-gold/20 rounded-full px-3 py-1">
-            <span className="font-sans text-[11px] text-sapi-muted tracking-wide">Q</span>
-            <span className="font-serif text-base text-sapi-paleGold leading-none">{globalQNum}</span>
-            <span className="font-sans text-[10px] text-sapi-muted opacity-50">/ 30</span>
+          <div className="flex items-center gap-2 bg-sapi-gold/8 border border-sapi-gold/20 rounded-full px-4 py-1">
+            <span className="font-sans text-[13px] text-sapi-muted tracking-wide">Q</span>
+            <span className="font-serif text-[18px] text-sapi-paleGold leading-none">{globalQNum}</span>
+            <span className="font-sans text-[12px] text-sapi-muted opacity-50">/ 30</span>
           </div>
         </div>
       </div>
@@ -771,13 +771,13 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
           {/* Dimension label row */}
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <span className="font-serif text-sm text-sapi-gold tracking-wide mt-2">{dim.shortCode}</span>
+              <span className="font-serif text-[15px] text-sapi-gold tracking-wide mt-2">{dim.shortCode}</span>
               <div className="w-px h-3 bg-sapi-gold/30" />
-              <span className="font-sans text-[11px] tracking-wide uppercase text-sapi-parchment/85 ml-1 mt-2">
+              <span className="font-sans text-[13px] tracking-wide uppercase text-sapi-parchment/85 ml-1 mt-2">
                 {dim.name}
               </span>
             </div>
-            <span className="font-sans text-[10px] tracking-wide text-sapi-muted/65 mt-2">
+            <span className="font-sans text-[12px] tracking-wide text-sapi-muted/65 mt-2">
               Dimension {dimIndex + 1} of 5 · Question {qIndex + 1} of {dimQuestions.length}
             </span>
           </div>
@@ -800,17 +800,17 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
         <div className="bg-sapi-navy border border-sapi-bronze rounded-sm p-7 pb-6 mb-5">
           {/* Question number */}
           <div className="flex items-center gap-2.5 mb-5">
-            <span className="font-sans text-[10px] tracking-super-wide uppercase text-sapi-gold/75">
+            <span className="font-sans text-[12px] tracking-super-wide uppercase text-sapi-gold/75">
               Question {globalQNum}
             </span>
             <div className="flex-1 h-px bg-sapi-gold/15" />
-            <span className="font-sans text-[9px] tracking-wide text-sapi-muted/50">
+            <span className="font-sans text-[11px] tracking-wide text-sapi-muted/50">
               {answeredCount} / {dimQuestions.length} answered in this dimension
             </span>
           </div>
 
           {/* Question text */}
-          <p className="font-serif text-[17px] text-sapi-parchment leading-relaxed tracking-wide mb-7">
+          <p className="font-serif text-[21px] text-sapi-parchment leading-relaxed tracking-wide mb-7">
             {currentQuestion?.text}
           </p>
 
@@ -836,7 +836,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
               <path d="M6 3.5V6" stroke="#9880B0" strokeWidth="1.2" strokeLinecap="round" />
               <circle cx="6" cy="8.2" r="0.6" fill="#9880B0" />
             </svg>
-            <span className="font-sans text-[11px] text-sapi-muted tracking-wide">
+            <span className="font-sans text-[13px] text-sapi-muted tracking-wide">
               Select an option to proceed
             </span>
           </div>
@@ -849,7 +849,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
             onMouseEnter={() => setNextHover(true)}
             onMouseLeave={() => setNextHover(false)}
             onClick={handleNext}
-            className={`w-full px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium rounded-sm transition-all duration-150 flex items-center justify-center gap-2.5 ${
+            className={`w-full px-12 py-4 font-sans text-[13px] tracking-extra-wide uppercase font-medium rounded-sm transition-all duration-150 flex items-center justify-center gap-2.5 ${
               selectedScore == null
                 ? 'bg-sapi-gold/15 text-sapi-gold/40 border border-sapi-gold/20 cursor-not-allowed'
                 : nextHover
@@ -873,7 +873,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
             onMouseEnter={() => setBackHover(true)}
             onMouseLeave={() => setBackHover(false)}
             onClick={handleBack}
-            className={`w-full px-12 py-3.5 font-sans text-xs tracking-extra-wide uppercase font-normal rounded-sm transition-colors duration-150 border ${
+            className={`w-full px-12 py-3.5 font-sans text-[13px] tracking-extra-wide uppercase font-normal rounded-sm transition-colors duration-150 border ${
               backHover ? 'text-sapi-parchment border-sapi-bronze/60' : 'text-sapi-muted border-sapi-bronze'
             }`}
           >
