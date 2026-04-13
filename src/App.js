@@ -10,6 +10,7 @@ import P7Results from './pages/common/result';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
+import SAPIArcDashboard from './pages/PowerArc';
 import AdminDashboard from './components/AdminDashboard';
 import SubmissionsList from './pages/admin/SubmissionsList';
 import SubmissionDetail from './pages/admin/SubmissionDetail';
@@ -189,6 +190,7 @@ function App() {
           <Route path="/scorecard" element={<ProtectedRoute allowedRole={2}><SAPIScorecard /></ProtectedRoute>} />
           <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
           <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
+          <Route path="/powerarc" element={<SAPIArcDashboard />} />
           <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
