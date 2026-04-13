@@ -388,19 +388,9 @@ export default function SAPIRoadmap() {
     fetchData();
   }, []);
   
-  // Use sapi_score from API response if available, otherwise calculate from dimension scores
-  const compositeScore = assessmentData?.sapi_score 
-    ? Number(assessmentData.sapi_score)
-    : (assessmentData ? (() => {
-        const scores = [
-          Number(assessmentData.compute_capacity) || 0,
-          Number(assessmentData.capital_formation) || 0,
-          Number(assessmentData.regulatory_readiness) || 0,
-          Number(assessmentData.data_sovereignty) || 0,
-          Number(assessmentData.directed_intelligence) || 0,
-        ];
-        return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length * 10) / 10;
-      })() : 0);
+  const compositeScore = roadmapData?.dimension_scorecard 
+    ? Math.round(roadmapData.dimension_scorecard.reduce((sum, d) => sum + (Number(d.score) || 0), 0) / roadmapData.dimension_scorecard.length)
+    : 0;
   const country = assessmentData?.country || assessmentData?.country_name || "-";
 
   // Transform API roadmap data to component format
@@ -467,22 +457,8 @@ export default function SAPIRoadmap() {
       return null;
     };
     
-    // Get scores for all dimensions from dimension_scorecard
+    // Get scores for dimensions
     const scoreMap = {};
-    const dimNameMap = {
-      1: "Compute Capacity",
-      2: "Capital Formation",
-      3: "Regulatory Readiness",
-      4: "Data Sovereignty",
-      5: "Directed Intelligence Maturity"
-    };
-    if (roadmapData.dimension_scorecard) {
-      roadmapData.dimension_scorecard.forEach(d => {
-        const dimName = dimNameMap[d.dimension_id] || d.dimension_name;
-        scoreMap[dimName] = Number(d.score) || 0;
-      });
-    }
-    // Also add bottom3 scores as fallback
     bottom3List.forEach(d => { scoreMap[d.key] = d.score; });
     
     // Fill phases
@@ -514,7 +490,7 @@ export default function SAPIRoadmap() {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
         <SAPIGlobe size={64} />
-        <div className="font-sans text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
+        <div className="font-sans text-sm text-sapi-muted tracking-[0.1em] mt-6">
           Generating your roadmap…
         </div>
       </div>
@@ -525,12 +501,12 @@ export default function SAPIRoadmap() {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
         <SAPIGlobe size={64} />
-        <div className="font-serif text-[19px] text-sapi-crimson mt-6 mb-4">
+        <div className="font-serif text-lg text-sapi-crimson mt-6 mb-4">
           {error}
         </div>
         <button 
           onClick={() => navigate('/')}
-          className="bg-sapi-gold text-sapi-void border-none px-6 py-3 font-sans text-[13px] cursor-pointer rounded hover:opacity-90"
+          className="bg-sapi-gold text-sapi-void border-none px-6 py-3 font-sans text-xs cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -547,16 +523,15 @@ export default function SAPIRoadmap() {
 
       {/* ── App Header ── */}
       <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
-        <div className="max-w-container mx-auto px-8 py-7 pb-6 flex items-center gap-5">
-          <SAPIGlobe size={56} />
-          <div className="font-serif text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
-            The Sovereign AI<br />Power Index
-          </div>
-          <div className="ml-auto font-serif text-[12px] tracking-extra-wide text-sapi-muted uppercase border border-sapi-bronze px-2.5 py-1">
-            For Government & Sovereign Institutions
+        <div className="max-w-[1100px] mx-auto px-8 py-4.5 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <SAPIGlobe size={32} />
+            <span className="font-serif text-[11px] tracking-[0.14em] text-sapi-parchment opacity-90 uppercase">
+              The Sovereign AI Power Index
+            </span>
           </div>
           <span
-            className="text-[12px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2.5 py-0.5 opacity-85"
+            className="text-[10px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2.5 py-0.5 opacity-85"
           >
             Classification: Restricted
           </span>
@@ -572,28 +547,28 @@ export default function SAPIRoadmap() {
           <div>
             <button
               onClick={() => navigate("/results")}
-              className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-sapi-muted text-[13px] tracking-[0.1em] uppercase p-0 mb-4 hover:text-sapi-gold transition-colors"
+              className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-sapi-muted text-xs tracking-[0.1em] uppercase p-0 mb-4 hover:text-sapi-gold transition-colors"
             >
-              <span className="text-[15px]">←</span> Back to Results
+              <span className="text-sm">←</span> Back to Results
             </button>
-            <h1 className="font-serif text-[30px] font-medium tracking-[0.08em] text-sapi-parchment m-0 uppercase">
+            <h1 className="font-serif text-[28px] font-medium tracking-[0.08em] text-sapi-parchment m-0 uppercase">
               Sovereign AI Roadmap
             </h1>
           </div>
 
           {/* Nation + Score badge */}
           <div className="flex items-center gap-4 flex-wrap">
-            <span className="text-[15px] text-sapi-muted tracking-[0.06em]">
+            <span className="text-sm text-sapi-muted tracking-[0.06em]">
               {country}
             </span>
             <div
               className="flex items-center gap-2.5 py-2 px-5"
               style={{ backgroundColor: C.midnight, border: `1px solid ${C.bronzeStr}` }}
             >
-              <span className="font-sans text-[24px] text-sapi-paleGold font-medium">
+              <span className="font-serif text-[22px] text-sapi-paleGold font-medium">
                 {Math.round(compositeScore)}
               </span>
-              <span className="text-[12px] tracking-[0.12em] text-sapi-muted uppercase">
+              <span className="text-[10px] tracking-[0.12em] text-sapi-muted uppercase">
                 SAPI Score
               </span>
             </div>
@@ -602,24 +577,24 @@ export default function SAPIRoadmap() {
 
         {/* ── Intro line ── */}
         <p
-          className="text-[15px] text-sapi-muted tracking-[0.04em] leading-[1.7] mb-12 max-w-[640px] border-l-2 border-sapi-bronze pl-4"
+          className="text-xs text-sapi-muted tracking-[0.04em] leading-[1.7] mb-12 max-w-[640px] border-l-2 border-sapi-bronze pl-4"
         >
           Your personalised roadmap is generated from the three lowest-scoring dimensions in your
           assessment. Interventions are ranked by impact on composite SAPI score.
         </p>
 
         {/* ── Priority Interventions Panel ── */}
-        <section className="mt-12 mb-14">
+        <section className="mb-14">
           <div
             className="py-7 px-8"
             style={{ backgroundColor: C.midnight, border: `1px solid ${C.gold}`, borderLeft: `3px solid ${C.gold}` }}
           >
             <div className="flex items-center gap-2.5 mb-6">
-              <span className="font-serif text-[13px] tracking-[0.16em] text-sapi-gold uppercase">
+              <span className="font-serif text-[11px] tracking-[0.16em] text-sapi-gold uppercase">
                 Priority Interventions
               </span>
               <div className="h-px flex-1" style={{ backgroundColor: C.bronzeStr }} />
-              <span className="text-[12px] text-sapi-muted tracking-[0.1em]">
+              <span className="text-[10px] text-sapi-muted tracking-[0.1em]">
                 Immediate action required
               </span>
             </div>
@@ -633,8 +608,8 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Three-Column Phase Layout ── */}
-        <section className="mt-16">
-          <div className="font-serif text-[13px] tracking-[0.16em] text-sapi-muted uppercase mb-6">
+        <section>
+          <div className="font-serif text-[11px] tracking-[0.16em] text-sapi-muted uppercase mb-6">
             Full Intervention Programme
           </div>
 
@@ -656,13 +631,13 @@ export default function SAPIRoadmap() {
             className="py-8 px-10 flex items-center justify-between flex-wrap gap-6 bg-sapi-navy border border-sapi-bronze border-t-2 border-t-sapi-gold"
           >
             <div className="max-w-[560px]">
-              <p className="font-serif text-[17px] text-sapi-parchment leading-[1.65] m-0 mb-2">
+              <p className="font-serif text-[15px] text-sapi-parchment leading-[1.65] m-0 mb-2">
                 Your roadmap identifies{" "}
-                <span className="font-sans font-medium" style={{ color: C.paleGold }}>{totalInterventions} critical interventions</span>.
+                <span style={{ color: C.paleGold }}>{totalInterventions} critical interventions</span>.
               </p>
               <p style={{
-                fontSize:     14,
-                color:        "white",
+                fontSize:     12,
+                color:        C.muted,
                 lineHeight:   1.7,
                 margin:       0,
                 letterSpacing:"0.02em",
@@ -676,7 +651,7 @@ export default function SAPIRoadmap() {
 
             <button
               onClick={() => setCurrentPage("upgrade")}
-              className="bg-sapi-gold text-sapi-void border-none px-8 py-3.5 cursor-pointer font-sans text-[13px] tracking-[0.12em] uppercase font-medium flex-shrink-0 hover:opacity-90 transition-opacity"
+              className="bg-sapi-gold text-sapi-void border-none px-8 py-3.5 cursor-pointer font-sans text-xs tracking-[0.12em] uppercase font-medium flex-shrink-0 hover:opacity-90 transition-opacity"
             >
               Upgrade to Tier 2 →
             </button>
@@ -685,7 +660,7 @@ export default function SAPIRoadmap() {
 
         {/* ── Confidentiality notice ── */}
         <div className="mt-10 py-3.5 px-5 border-l-[3px] border-sapi-gold bg-sapi-gold/[0.05]">
-          <p className="text-[13px] text-sapi-muted leading-[1.6] m-0 tracking-[0.03em]">
+          <p className="text-[11px] text-sapi-muted leading-[1.6] m-0 tracking-[0.03em]">
             This roadmap is generated exclusively from self-reported assessment data and is intended
             for internal policy planning purposes only. SAPI Tier 1 recommendations are indicative.
             Tier 2–4 assessments incorporate primary research, in-country verification, and
@@ -707,7 +682,7 @@ function PriorityCard({ card, rank }) {
     >
       {/* Rank */}
       <div
-        className="absolute -top-px right-4 font-serif text-[12px] tracking-[0.1em] px-2 py-0.5"
+        className="absolute -top-px right-4 font-serif text-[10px] tracking-[0.1em] px-2 py-0.5"
         style={{ backgroundColor: C.gold, color: C.void }}
       >
         #{rank}
@@ -720,7 +695,7 @@ function PriorityCard({ card, rank }) {
       </div>
 
       {/* Title */}
-      <p className="font-serif text-[15px] text-sapi-parchment leading-[1.55] m-0 mb-2.5 font-medium">
+      <p className="font-serif text-[13px] text-sapi-parchment leading-[1.55] m-0 mb-2.5 font-medium">
         {card.title}
       </p>
 
@@ -742,13 +717,13 @@ function PhaseColumn({ phase, accent, icon }) {
         style={{ borderBottom: `1px solid ${C.bronze}` }}
       >
         <div className="flex items-center gap-2 mb-1.5">
-          <span style={{ color: accent, fontSize: 16 }}>{icon}</span>
-          <span className="font-serif text-[13px] tracking-[0.12em] text-sapi-parchment uppercase">
+          <span style={{ color: accent, fontSize: 14 }}>{icon}</span>
+          <span className="font-serif text-xs tracking-[0.12em] text-sapi-parchment uppercase">
             {phase.label}
           </span>
         </div>
         <span
-          className="inline-block px-2.5 py-0.5 text-[12px] tracking-[0.1em] uppercase"
+          className="inline-block px-2.5 py-0.5 text-[10px] tracking-[0.1em] uppercase"
           style={{ backgroundColor: "rgba(0,0,0,0.3)", border: `1px solid ${C.bronze}`, color: accent }}
         >
           {phase.timeline}
@@ -779,12 +754,12 @@ function InterventionCard({ card }) {
       </div>
 
       {/* Title */}
-      <p className="font-serif text-[13px] text-sapi-parchment leading-[1.55] m-0 mb-2 font-medium">
+      <p className="font-serif text-xs text-sapi-parchment leading-[1.55] m-0 mb-2 font-medium">
         {card.title}
       </p>
 
       {/* Description */}
-      <p className="text-[13px] text-sapi-muted leading-[1.65] m-0 mb-3 tracking-[0.01em]">
+      <p className="text-[11px] text-sapi-muted leading-[1.65] m-0 mb-3 tracking-[0.01em]">
         {card.desc}
       </p>
 
@@ -798,7 +773,7 @@ function InterventionCard({ card }) {
 function DimBadge({ code, color }) {
   return (
     <span
-      className="inline-flex items-center text-[11px] tracking-[0.12em] uppercase px-1.5 py-0.5 font-sans"
+      className="inline-flex items-center text-[9px] tracking-[0.12em] uppercase px-1.5 py-0.5 font-sans"
       style={{ backgroundColor: `${color}22`, border: `1px solid ${color}55`, color }}
     >
       {code}
@@ -811,7 +786,7 @@ function BandPill({ band }) {
   const bc = bandColor(band);
   return (
     <span
-      className="inline-flex items-center text-[11px] tracking-[0.1em] uppercase px-1.5 py-0.5"
+      className="inline-flex items-center text-[9px] tracking-[0.1em] uppercase px-1.5 py-0.5"
       style={{ backgroundColor: `${bc}18`, border: `1px solid ${bc}44`, color: bc }}
     >
       {bandLabel(band)}
@@ -826,14 +801,14 @@ function ScoreArrow({ score, target }) {
       className="flex items-center gap-1.5 pt-1"
       style={{ borderTop: `1px solid ${C.bronze}` }}
     >
-      <span className="font-sans text-[15px] text-sapi-crimson font-medium">
+      <span className="font-serif text-[13px] text-sapi-crimson">
         {Math.round(score)}
       </span>
-      <span className="text-[13px] text-sapi-muted">→</span>
-      <span className="font-sans text-[15px] text-sapi-emerald font-medium">
+      <span className="text-[11px] text-sapi-muted">→</span>
+      <span className="font-serif text-[13px] text-sapi-emerald">
         {target}
       </span>
-      <span className="text-[11px] text-sapi-muted tracking-[0.08em] uppercase ml-0.5">
+      <span className="text-[9px] text-sapi-muted tracking-[0.08em] uppercase ml-0.5">
         target
       </span>
     </div>

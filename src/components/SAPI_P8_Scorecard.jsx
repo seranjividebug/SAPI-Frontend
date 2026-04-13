@@ -283,7 +283,7 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
         onClick={onToggle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="w-full border-none cursor-pointer px-6 py-5 flex items-center gap-5 transition-colors text-left"
+        className="w-full border-none cursor-pointer px-6 py-4.5 flex items-center gap-5 transition-colors text-left"
         style={{
           background: isOpen ? C.midnight : (hovered ? "rgba(26,21,64,0.6)" : C.navy),
         }}
@@ -321,7 +321,7 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
 
         {/* Band pill */}
         <div
-          className="font-sans text-[10.5px] tracking-[0.18em] uppercase pl-4 pr-2.5 py-1 rounded-[3px] min-w-[62px] text-center flex-shrink-0"
+          className="font-sans text-[10.5px] tracking-[0.18em] uppercase px-2.5 py-1 rounded-[3px] min-w-[62px] text-center flex-shrink-0"
           style={{
             color: band.color,
             background: band.bg,
@@ -350,7 +350,7 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
       {/* ── Expanded Content ── */}
       {isOpen && (
         <div
-          className="py-7 pl-14 pr-7 pb-8"
+          className="py-7 px-7 pb-8"
           style={{ background: C.void, borderTop: `1px solid ${C.bronze}` }}
         >
           {/* Top row: large score + band classification */}
@@ -384,7 +384,7 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
 
             {/* Band classification + description */}
             <div
-              className="flex-1 py-5 pl-5 px-5.5"
+              className="flex-1 py-5 px-5.5"
               style={{
                 background: C.navy,
                 border: `1px solid ${C.bronze}`,
@@ -452,7 +452,7 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
             }}
           >
             {/* Icon */}
-            <svg width="18" height="18" viewBox="0 0 15 15" fill="none" className="flex-shrink-0 pl-2">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" className="flex-shrink-0 mt-0.5">
               <circle cx="7.5" cy="7.5" r="6.5" stroke={C.gold} strokeWidth="1" opacity="0.7" />
               <path d="M7.5 4.5V8" stroke={C.gold} strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
               <circle cx="7.5" cy="10.2" r="0.7" fill={C.gold} opacity="0.7" />
@@ -810,10 +810,10 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
           className="rounded py-4 px-5.5 flex gap-3.5 items-start mb-8"
           style={{ background: C.navy, border: `1px solid ${C.bronze}` }}
         >
-          <svg width="18" height="18" viewBox="0 0 14 14" fill="none" className="flex-shrink-0 mt-0.5 pl-2">
-            <circle cx="7" cy="7" r="6" stroke="white" strokeWidth="0.9" opacity="0.5" />
-            <path d="M7 4V7.5" stroke="white" strokeWidth="1.1" strokeLinecap="round" opacity="0.5" />
-            <circle cx="7" cy="9.5" r="0.6" fill="white" opacity="0.5" />
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0 mt-0.5">
+            <circle cx="7" cy="7" r="6" stroke={C.muted} strokeWidth="0.9" opacity="0.5" />
+            <path d="M7 4V7.5" stroke={C.muted} strokeWidth="1.1" strokeLinecap="round" opacity="0.5" />
+            <circle cx="7" cy="9.5" r="0.6" fill={C.muted} opacity="0.5" />
           </svg>
           <p className="font-sans text-[13px] text-sapi-muted opacity-60 leading-[1.65] m-0 tracking-[0.015em]">
             Sub-indicator scores are derived directly from individual question responses.
