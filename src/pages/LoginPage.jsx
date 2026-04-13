@@ -103,14 +103,14 @@ export default function LoginPage() {
           </button>
 
           {/* Sign up link */}
-          {/* <div className="mt-5 text-center">
+          <div className="mt-5 text-center">
             <span className="font-sans text-[11px] text-sapi-muted">
               Don't have an account?{' '}
               <a href="/register" className="text-sapi-gold hover:text-sapi-paleGold transition-colors">
                 Sign up
               </a>
             </span>
-          </div> */}
+          </div>
 
        
         </div>

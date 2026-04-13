@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PageLayout } from "../pages/common";
+import { getAssessmentResults } from "../services/assessmentService";
 
 const DIMENSIONS = [
   { name: "Compute Capacity",               shortCode: "D1", weight: 0.175, ids: ["Q1","Q2","Q3","Q4","Q5"] },
@@ -63,15 +64,15 @@ function DimBar({ dim, score, active, staggerIndex }) {
       {/* Label row */}
       <div className="flex justify-between items-baseline mb-1.5">
         <div className="flex items-center gap-2">
-          <span className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-gold opacity-90">
+          <span className="font-sans text-[12px] font-medium tracking-extra-wide uppercase text-sapi-gold">
             {dim.shortCode}
           </span>
           <span className="font-sans text-[11px] tracking-wide text-sapi-muted opacity-75">
             {dim.name}
           </span>
         </div>
-        <span className="font-serif text-[13px] text-sapi-paleGold tracking-wide transition-opacity duration-300" style={{ transitionDelay: `${delay + 0.4}s`, opacity: active ? 1 : 0 }}>
-          {score > 0 ? score.toFixed(1) : "—"}
+        <span className="font-sans text-[14px] font-medium text-sapi-paleGold tracking-wide transition-opacity duration-300" style={{ transitionDelay: `${delay + 0.4}s`, opacity: active ? 1 : 0 }}>
+          {score && score > 0 ? Number(score).toFixed(1) : "—"}
         </span>
       </div>
 
@@ -80,7 +81,7 @@ function DimBar({ dim, score, active, staggerIndex }) {
         <div
           className="h-full rounded-sm shadow-[0_0_8px_rgba(201,150,58,0.4)] rounded-[2px]"
           style={{
-            width: active ? `${Math.min(score, 100)}%` : "0%",
+            width: active ? `${Math.min(Number(score) || 0, 100)}%` : "0%",
             background: 'linear-gradient(90deg, #C9963A 0%, #EDD98A 85%, #FFF8E0 100%)',
             transition: `width ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}s`,
           }}
@@ -103,21 +104,38 @@ export default function SAPICalculating() {
   // Get answers from navigation state and memoize
   const answers = useMemo(() => location.state?.answers || {}, [location.state]);
 
-  // Calculate scores (submission already done in QuizWrapper)
+  // Calculate scores and fetch from API
   useEffect(() => {
-    const calculateScores = () => {
+    const calculateScores = async () => {
       try {
+        // Try to fetch from API using assessment ID from localStorage
+        const assessmentId = localStorage.getItem('sapi_assessment_id');
+        
+        if (assessmentId) {
+          const response = await getAssessmentResults(assessmentId);
+          if (response.success || response.data) {
+            setAssessmentResults(response.data || response);
+            return;
+          }
+        }
+        
+        // Fallback: calculate locally if no API response
         if (Object.keys(answers).length === 0) {
           // No answers, use mock data for demo
           return;
         }
         
-        // Just calculate and display - submission already done in QuizWrapper
         const { dimScores, composite } = computeAllScores(answers);
         const tier = getTier(composite);
         
-        // Store results
+        // Store results with numeric values
         setAssessmentResults({
+          compute_capacity: dimScores[0],
+          capital_formation: dimScores[1],
+          regulatory_readiness: dimScores[2],
+          data_sovereignty: dimScores[3],
+          directed_intelligence: dimScores[4],
+          sapi_score: composite,
           dimensionScores: dimScores,
           compositeScore: composite,
           tier: tier
@@ -128,6 +146,22 @@ export default function SAPICalculating() {
       } catch (err) {
         console.error("Score calculation error:", err);
         setError(err.message);
+        // Fallback to local calculation on error
+        if (Object.keys(answers).length > 0) {
+          const { dimScores, composite } = computeAllScores(answers);
+          const tier = getTier(composite);
+          setAssessmentResults({
+            compute_capacity: dimScores[0],
+            capital_formation: dimScores[1],
+            regulatory_readiness: dimScores[2],
+            data_sovereignty: dimScores[3],
+            directed_intelligence: dimScores[4],
+            sapi_score: composite,
+            dimensionScores: dimScores,
+            compositeScore: composite,
+            tier: tier
+          });
+        }
       }
     };
 
@@ -140,21 +174,20 @@ export default function SAPICalculating() {
       // Use API results
       return {
         dimScores: [
-          assessmentResults.compute_capacity,
-          assessmentResults.capital_formation,
-          assessmentResults.regulatory_readiness,
-          assessmentResults.data_sovereignty,
-          assessmentResults.directed_intelligence
+          Number(assessmentResults.compute_capacity) || 0,
+          Number(assessmentResults.capital_formation) || 0,
+          Number(assessmentResults.regulatory_readiness) || 0,
+          Number(assessmentResults.data_sovereignty) || 0,
+          Number(assessmentResults.directed_intelligence) || 0
         ],
-        composite: assessmentResults.sapi_score
+        composite: Number(assessmentResults.sapi_score) || 0
       };
     }
-    // Fallback: compute locally from answers
-    return computeAllScores(
-      Object.fromEntries(
-        Object.entries(answers).map(([k, v]) => [k, v.score || 0])
-      )
+    // Fallback: compute locally from answers (answers are objects with score property)
+    const numericAnswers = Object.fromEntries(
+      Object.entries(answers).map(([k, v]) => [k, typeof v === 'object' ? (v.score || 0) : (v || 0)])
     );
+    return computeAllScores(numericAnswers);
   }, [assessmentResults, answers]);
   // eslint-disable-next-line no-unused-vars
   const tier = useMemo(() => getTier(composite), [composite]);

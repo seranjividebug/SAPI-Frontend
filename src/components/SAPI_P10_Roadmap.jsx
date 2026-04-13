@@ -609,9 +609,9 @@ export default function SAPIRoadmap() {
         </p>
 
         {/* ── Priority Interventions Panel ── */}
-        <section className="mt-12 mb-14">
+        <section className="mt-16 mb-16">
           <div
-            className="py-7 px-8"
+            className="py-10 px-8"
             style={{ backgroundColor: C.midnight, border: `1px solid ${C.gold}`, borderLeft: `3px solid ${C.gold}` }}
           >
             <div className="flex items-center gap-2.5 mb-6">
@@ -624,7 +624,7 @@ export default function SAPIRoadmap() {
               </span>
             </div>
 
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 pt-6">
               {priorityPanel.map((card, i) => (
                 <PriorityCard key={i} card={card} rank={i + 1} />
               ))}
@@ -702,19 +702,19 @@ function PriorityCard({ card, rank }) {
   const band = card.band;
   return (
     <div
-      className="py-4.5 px-5 relative"
+      className="py-5 px-5 relative"
       style={{ backgroundColor: C.navy, border: `1px solid ${C.bronzeStr}` }}
     >
       {/* Rank */}
       <div
-        className="absolute -top-px right-4 font-serif text-[12px] tracking-[0.1em] px-2 py-0.5"
+        className="absolute top-1 right-4 font-serif text-[12px] tracking-[0.1em] px-3 py-1"
         style={{ backgroundColor: C.gold, color: C.void }}
       >
         #{rank}
       </div>
 
       {/* Dim badge + band */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-3 mb-3">
         <DimBadge code={card.dimCode} color={card.dimColor} />
         <BandPill band={band} />
       </div>
@@ -738,7 +738,7 @@ function PhaseColumn({ phase, accent, icon }) {
     >
       {/* Phase header */}
       <div
-        className="py-4.5 px-5 pb-4"
+        className="py-6 px-5 pb-4"
         style={{ borderBottom: `1px solid ${C.bronze}` }}
       >
         <div className="flex items-center gap-2 mb-1.5">

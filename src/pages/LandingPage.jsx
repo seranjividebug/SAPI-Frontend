@@ -99,7 +99,7 @@ export default function LandingPage({ onBegin }) {
         <div className="grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-4">
           {DIMENSIONS.map((d) => (
             <div key={d.num} className="bg-sapi-navy border-l-[3px] border-sapi-gold px-5 py-6">
-              <div className="font-serif text-[32px] text-sapi-gold font-normal leading-none mb-2.5 opacity-70">
+              <div className="font-sans text-[32px] text-sapi-gold font-normal leading-none mb-2.5 opacity-70">
                 {d.num}
               </div>
               <div className="font-serif text-[17px] text-sapi-parchment font-normal mb-2.5 tracking-wide leading-tight">

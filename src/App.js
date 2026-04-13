@@ -163,32 +163,32 @@ function App() {
       <div className="App">
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<LandingPage />} />
-          <Route path="/preview" element={<PreviewPage />} />
+          <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
+          <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/briefing" element={<BriefingWrapper setCurrentDimension={setCurrentDimension} />} />
+          <Route path="/briefing" element={<ProtectedRoute allowedRole={2}><BriefingWrapper setCurrentDimension={setCurrentDimension} /></ProtectedRoute>} />
           <Route 
             path="/dimintro" 
-            element={<DimIntroWrapper 
+            element={<ProtectedRoute allowedRole={2}><DimIntroWrapper 
               currentDimension={currentDimension} 
               setCurrentDimension={setCurrentDimension}
-            />} 
+            /></ProtectedRoute>} 
           />
           <Route 
             path="/quiz" 
-            element={<QuizWrapper 
+            element={<ProtectedRoute allowedRole={2}><QuizWrapper 
               currentDimension={currentDimension}
               setCurrentDimension={setCurrentDimension}
-            />} 
+            /></ProtectedRoute>} 
           />
-          <Route path="/calculating" element={<SAPICalculating />} />
-          <Route path="/results" element={<SAPIResults />} />
-          <Route path="/results-report" element={<ResultsWrapper />} />
-          <Route path="/scorecard" element={<SAPIScorecard />} />
-          <Route path="/peercomparison" element={<SAPIPeerComparison />} />
-          <Route path="/roadmap" element={<SAPIRoadmap />} />
+          <Route path="/calculating" element={<ProtectedRoute allowedRole={2}><SAPICalculating /></ProtectedRoute>} />
+          <Route path="/results" element={<ProtectedRoute allowedRole={2}><SAPIResults /></ProtectedRoute>} />
+          <Route path="/results-report" element={<ProtectedRoute allowedRole={2}><ResultsWrapper /></ProtectedRoute>} />
+          <Route path="/scorecard" element={<ProtectedRoute allowedRole={2}><SAPIScorecard /></ProtectedRoute>} />
+          <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
+          <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
