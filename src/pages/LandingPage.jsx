@@ -189,17 +189,13 @@ export default function LandingPage({ onBegin }) {
                         : 'border-b border-sapi-bronze text-sapi-parchment'
                     }`}
                   >
-                    {t.price ? (
+                    {t.price && (
                       <>
                         <span className="block font-sans text-[14px] tracking-extra-wide text-sapi-muted uppercase mb-0.5">
                           Investment
                         </span>
                         {t.price}
                       </>
-                    ) : (
-                      <button className="w-full font-sans text-[14px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm py-2.5 px-4 border border-sapi-gold text-sapi-gold hover:bg-sapi-gold hover:text-sapi-void transition-colors duration-150">
-                        Enquire
-                      </button>
                     )}
                   </td>
                 ))}
