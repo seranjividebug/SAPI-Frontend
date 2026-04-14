@@ -85,7 +85,7 @@ export default function LandingPage({ onBegin }) {
                 : 'border-transparent text-sapi-muted hover:text-sapi-parchment'
             }`}
           >
-            Power Arc
+            The Power Arc
           </button>
         </div>
       </div>
