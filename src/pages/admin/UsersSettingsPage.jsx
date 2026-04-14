@@ -48,6 +48,7 @@ export default function UsersSettingsPage() {
   const [toast, setToast] = useState({ visible: false, message: '', type: 'error' });
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -55,9 +56,10 @@ export default function UsersSettingsPage() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [itemsPerPage] = useState(5);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [itemsPerPage] = useState(8);
 
-  const fetchUsers = useCallback(async (page = 1) => {
+  const fetchUsers = useCallback(async () => {
     const token =
       localStorage.getItem("sapi_token") ||
       sessionStorage.getItem("sapi_token");
@@ -69,7 +71,8 @@ export default function UsersSettingsPage() {
 
     try {
       setLoading(true);
-      const response = await getUsers(token, { role: 1, page, limit: itemsPerPage });
+      // Fetch all users without pagination for client-side filtering
+      const response = await getUsers(token, { limit: 1000 });
 
       if (response?.success && response?.data?.users) {
         const mappedUsers = response.data.users.map((user) => ({
@@ -82,10 +85,9 @@ export default function UsersSettingsPage() {
         }));
         setUsers(mappedUsers);
         setFilteredUsers(mappedUsers);
-        // Calculate totalPages from API response (handle different response structures)
-        const totalCount = response.data.pagination?.totalCount || response.data.totalCount || response.data.total || 0;
-        const apiTotalPages = response.data.pagination?.totalPages || response.data.totalPages;
-        setTotalPages(apiTotalPages || Math.ceil(totalCount / itemsPerPage) || 1);
+        const totalCount = response.data.pagination?.totalCount || response.data.totalCount || response.data.total || mappedUsers.length;
+        setTotalUsers(totalCount);
+        setTotalPages(Math.ceil(totalCount / itemsPerPage));
       } else if (Array.isArray(response)) {
         // Handle case where API returns array directly
         const mappedUsers = response.map((user) => ({
@@ -98,10 +100,12 @@ export default function UsersSettingsPage() {
         }));
         setUsers(mappedUsers);
         setFilteredUsers(mappedUsers);
-        setTotalPages(1);
+        setTotalUsers(mappedUsers.length);
+        setTotalPages(Math.ceil(mappedUsers.length / itemsPerPage));
       } else {
         setUsers([]);
         setFilteredUsers([]);
+        setTotalUsers(0);
         setTotalPages(1);
       }
       setError(null);
@@ -110,6 +114,7 @@ export default function UsersSettingsPage() {
       setError("Failed to load users");
       setUsers([]);
       setFilteredUsers([]);
+      setTotalUsers(0);
       setTotalPages(1);
     } finally {
       setLoading(false);
@@ -117,10 +122,10 @@ export default function UsersSettingsPage() {
   }, [itemsPerPage]);
 
   useEffect(() => {
-    fetchUsers(currentPage);
-  }, [currentPage, fetchUsers]);
+    fetchUsers();
+  }, [fetchUsers]);
 
-  // Filter users based on search query and status
+  // Filter users based on search query, status, and role
   useEffect(() => {
     let filtered = [...users];
 
@@ -137,13 +142,24 @@ export default function UsersSettingsPage() {
       filtered = filtered.filter((user) => user.status === statusFilter);
     }
 
+    if (roleFilter) {
+      filtered = filtered.filter((user) => user.role === roleFilter);
+    }
+
     setFilteredUsers(filtered);
-  }, [searchQuery, statusFilter, users]);
+    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+  }, [searchQuery, statusFilter, roleFilter, users, itemsPerPage]);
 
   // Reset to page 1 when search or filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, statusFilter]);
+  }, [searchQuery, statusFilter, roleFilter]);
+
+  // Calculate current users to display based on pagination
+  const currentUsers = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   // Auto-hide toast after 3 seconds
   useEffect(() => {
@@ -195,7 +211,7 @@ export default function UsersSettingsPage() {
         const response = await updateUser(token, editingUser.id, updateData);
 
         if (response?.success) {
-          fetchUsers(currentPage);
+          fetchUsers();
           setShowAddModal(false);
           setEditingUser(null);
           setToast({ visible: true, message: 'User updated successfully', type: 'success' });
@@ -220,7 +236,7 @@ export default function UsersSettingsPage() {
 
         if (response?.success) {
           setCurrentPage(1);
-          fetchUsers(1);
+          fetchUsers();
           setShowAddModal(false);
           setFormData({ full_name: "", email: "", role: "" });
           setToast({ visible: true, message: 'User created successfully', type: 'success' });
@@ -247,13 +263,7 @@ export default function UsersSettingsPage() {
       const response = await deleteUser(token, id);
 
       if (response?.success) {
-        const updatedUsers = users.filter((u) => u.id !== id);
-        if (currentPage > 1 && updatedUsers.length === 0) {
-          setCurrentPage(currentPage - 1);
-          fetchUsers(currentPage - 1);
-        } else {
-          fetchUsers(currentPage);
-        }
+        fetchUsers();
         setToast({ visible: true, message: 'User deleted successfully', type: 'success' });
       } else {
         setToast({ visible: true, message: response?.message || "Failed to delete user", type: 'error' });
@@ -320,7 +330,7 @@ export default function UsersSettingsPage() {
       {/* Tabs */}
       <div className="flex gap-0 border-b border-[#E0D8CC] mb-4">
         {[
-          { key: "users", label: "Users", count: users.length },
+          { key: "users", label: "Users", count: totalUsers },
           { key: "settings", label: "Settings" },
         ].map((tab) => (
           <button
@@ -369,6 +379,15 @@ export default function UsersSettingsPage() {
                 <option value="">All Status</option>
                 <option>Active</option>
                 <option>Inactive</option>
+              </select>
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] outline-none"
+              >
+                <option value="">All Roles</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
               </select>
             </div>
             <button
@@ -422,7 +441,7 @@ export default function UsersSettingsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredUsers.length === 0 ? (
+                    {currentUsers.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="px-3.5 py-10 text-center">
                           <div className="text-sm text-[#6B6577]">
@@ -431,7 +450,7 @@ export default function UsersSettingsPage() {
                         </td>
                       </tr>
                     ) : (
-                      filteredUsers.map((user, i) => (
+                      currentUsers.map((user, i) => (
                         <tr
                           key={user.id}
                           className={`border-b border-[#F0EBE3] ${
