@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageLayout, PageFooter } from "../common";
 import { submitContactForm } from "../../services/contactService";
+import { SAPIGlobe } from "../common/Logo";
 
 // Placeholder components
 const FadeIn = ({ children, className = "", delay = 0 }) => (
@@ -49,15 +50,12 @@ const CustomHeader = () => {
   const navigate = useNavigate();
 
   return (
-    <header className="bg-[#0a0a12] border-b border-sapi-bronze py-4">
+    <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="px-8 py-4 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <img 
-            src="/logo.png" 
-            alt="SAPI Logo" 
-            className="w-12 h-12 rounded-full cursor-pointer"
-            onClick={() => navigate('/main')}
-          />
+          <div onClick={() => navigate('/main')} className="cursor-pointer">
+            <SAPIGlobe size={180} />
+          </div>
           <div 
             className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
@@ -86,7 +84,7 @@ const CustomHeader = () => {
           </button>
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-            onClick={() => navigate('/main')}
+            onClick={() => navigate('/login')}
           >
             Try now
           </button>

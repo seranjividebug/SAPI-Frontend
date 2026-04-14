@@ -186,14 +186,12 @@ const DEMO_PROFILE = {
 function SAPILogo({ size = 34 }) {
   return (
     <img
-      src="/logo.png"
+      src="/SAPI_Logo_B4.svg"
       alt="SAPI Logo"
-      className="object-contain bg-transparent rounded-full p-0.5 box-border"
+      className="object-contain bg-transparent p-0.5 box-border"
       style={{
         width: size,
-        height: size,
-        WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
-        maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
+        height: size
       }}
     />
   );

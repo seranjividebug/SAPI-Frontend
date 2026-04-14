@@ -40,19 +40,14 @@ function getTier(score) {
 function SAPIGlobeAnimated({ size = 96 }) {
   return (
     <img
-      src="/logo.png"
+      src="/SAPI_Logo_B4.svg"
       alt="SAPI Logo"
-      className="animate-[globeBreathe_2.8s_ease-in-out_infinite]"
+      className="animate-[globeBreathe_2.8s_ease-in-out_infinite] object-contain bg-transparent"
       style={{
         width: size,
         height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
         padding: '8px',
-        boxSizing: 'border-box',
-        WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
-        maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
+        boxSizing: 'border-box'
       }}
     />
   );

@@ -61,9 +61,19 @@ function FilterSelect({ value, onChange, options, placeholder }) {
           </option>
         ))}
       </select>
-      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-[#9880B0] pointer-events-none">
-        ▾
-      </span>
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9880B0] pointer-events-none"
+      >
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
     </div>
   );
 }
@@ -525,10 +535,10 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                   <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                    className={`px-3 py-1.5 border border-[#E0D8CC] rounded text-xs cursor-pointer ${
                       currentPage === pageNum
-                        ? "bg-[#1A1A2E] border-none text-white"
-                        : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
+                        ? "bg-[#1A1A2E] text-white"
+                        : "bg-white text-[#1A1A2E] hover:border-[#C9963A]"
                     }`}
                   >
                     {pageNum}

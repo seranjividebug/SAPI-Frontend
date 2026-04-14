@@ -49,6 +49,8 @@ export default function UsersSettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  const [roleDropdownOpen, setRoleDropdownOpen] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -154,6 +156,20 @@ export default function UsersSettingsPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, statusFilter, roleFilter]);
+
+  // Handle click outside for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.status-dropdown')) {
+        setStatusDropdownOpen(false);
+      }
+      if (!e.target.closest('.role-dropdown')) {
+        setRoleDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Calculate current users to display based on pagination
   const currentUsers = filteredUsers.slice(
@@ -371,24 +387,78 @@ export default function UsersSettingsPage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-60 outline-none"
               />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] outline-none"
-              >
-                <option value="">All Status</option>
-                <option>Active</option>
-                <option>Inactive</option>
-              </select>
-              <select
-                value={roleFilter}
-                onChange={(e) => setRoleFilter(e.target.value)}
-                className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] outline-none"
-              >
-                <option value="">All Roles</option>
-                <option value="Admin">Admin</option>
-                <option value="User">User</option>
-              </select>
+              <div className="status-dropdown relative">
+                <button
+                  onClick={() => setStatusDropdownOpen(!statusDropdownOpen)}
+                  className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-32 flex justify-between items-center cursor-pointer outline-none"
+                >
+                  <span>{statusFilter || "All Status"}</span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`text-[#9880B0] transition-transform duration-200 ${statusDropdownOpen ? "rotate-180" : ""}`}
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                {statusDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-[#D0C8BC] rounded-md mt-1 z-[100] shadow-lg">
+                    {["", "Active", "Inactive"].map((option) => (
+                      <div
+                        key={option}
+                        onClick={() => { setStatusFilter(option); setStatusDropdownOpen(false); }}
+                        className={`px-3 py-2 text-xs cursor-pointer text-[#1A1A2E] ${
+                          statusFilter === option ? "bg-[#F5F3EE]" : "hover:bg-[#F5F5F5]"
+                        }`}
+                      >
+                        {option || "All Status"}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="role-dropdown relative">
+                <button
+                  onClick={() => setRoleDropdownOpen(!roleDropdownOpen)}
+                  className="px-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-32 flex justify-between items-center cursor-pointer outline-none"
+                >
+                  <span>{roleFilter || "All Roles"}</span>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`text-[#9880B0] transition-transform duration-200 ${roleDropdownOpen ? "rotate-180" : ""}`}
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
+                {roleDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 bg-white border border-[#D0C8BC] rounded-md mt-1 z-[100] shadow-lg">
+                    {["", "Admin", "User"].map((option) => (
+                      <div
+                        key={option}
+                        onClick={() => { setRoleFilter(option); setRoleDropdownOpen(false); }}
+                        className={`px-3 py-2 text-xs cursor-pointer text-[#1A1A2E] ${
+                          roleFilter === option ? "bg-[#F5F3EE]" : "hover:bg-[#F5F5F5]"
+                        }`}
+                      >
+                        {option || "All Roles"}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
@@ -524,9 +594,13 @@ export default function UsersSettingsPage() {
                     <button
                       onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
-                      className="px-3 py-1.5 text-xs border border-[#D0C8BC] rounded bg-white text-[#1A1A2E] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F5F5]"
+                      className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                        currentPage === 1
+                          ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
+                          : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
+                      }`}
                     >
-                      Previous
+                      ←
                     </button>
                     {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                       let pageNum;
@@ -543,10 +617,10 @@ export default function UsersSettingsPage() {
                         <button
                           key={pageNum}
                           onClick={() => setCurrentPage(pageNum)}
-                          className={`px-3 py-1.5 text-xs border rounded ${
+                          className={`px-3 py-1.5 border border-[#E0D8CC] rounded text-xs cursor-pointer ${
                             currentPage === pageNum
-                              ? "bg-[#C9963A] text-white border-[#C9963A]"
-                              : "bg-white text-[#1A1A2E] border-[#D0C8BC] hover:bg-[#F5F5F5]"
+                              ? "bg-[#1A1A2E] text-white"
+                              : "bg-white text-[#1A1A2E] hover:border-[#C9963A]"
                           }`}
                         >
                           {pageNum}
@@ -556,9 +630,13 @@ export default function UsersSettingsPage() {
                     <button
                       onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-1.5 text-xs border border-[#D0C8BC] rounded bg-white text-[#1A1A2E] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F5F5]"
+                      className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                        currentPage === totalPages
+                          ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
+                          : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
+                      }`}
                     >
-                      Next
+                      →
                     </button>
                   </div>
                 </div>

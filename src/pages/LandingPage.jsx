@@ -73,7 +73,7 @@ export default function LandingPage({ onBegin }) {
         <div className="font-sans text-[16px] text-sapi-muted leading-[1.8] max-w-[620px] mt-5 mb-7">
           Governments that understand their AI position today will set the terms of global competition for the next two decades. Those that don't will find those terms set for them. SAPI gives your ministry the diagnostic clarity to make consequential decisions — on infrastructure, investment, governance, and strategic deployment — before the window closes.
         </div>
-        <div className="flex flex-wrap gap-6 mb-1 px-19">
+        <div className="flex flex-wrap gap-6 mb-6 px-19">
           {[
             ["Benchmark", "See exactly where your nation stands across five dimensions of AI power"],
             ["Prioritise", "Identify the highest-leverage gaps your government should close first"],
@@ -88,6 +88,18 @@ export default function LandingPage({ onBegin }) {
               </div>
             </div>
           ))}
+        </div>
+        <div className="flex justify-center">
+          <button
+            className={`font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 border-none transition-colors duration-150 mt-4 ${
+              hovering ? 'bg-[#B8862A] text-sapi-void' : 'bg-sapi-gold text-sapi-void'
+            }`}
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            onClick={handleBegin}
+          >
+            Begin Tier 1 Assessment
+          </button>
         </div>
       </div>
 
