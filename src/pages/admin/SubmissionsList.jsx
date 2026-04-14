@@ -7,6 +7,8 @@ import {
   getAuthToken,
   transformAssessment,
   countryFlagComponents,
+  getCountryFlag,
+  getCountryCode,
   truncMin,
 } from "./components/AdminHelpers";
 
@@ -413,8 +415,15 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                       <td className="px-3.5 h-[52px] align-middle">
                         <div className="flex items-center gap-2">
                           {(() => {
-                            const FlagComponent = countryFlagComponents[row.country];
-                            return FlagComponent ? <FlagComponent /> : <span className="text-base">🏳️</span>;
+                            const countryCode = getCountryCode(row.country);
+                            return countryCode ? (
+                              <span 
+                                className={`fi fi-${countryCode} rounded-sm`}
+                                style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                              ></span>
+                            ) : (
+                              <span className="text-2xl">🏳️</span>
+                            );
                           })()}
                           <span className="text-sm text-[#1A1A2E] font-medium">{row.country}</span>
                         </div>
@@ -499,7 +508,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
                 }`}
               >
-                ‹
+                ←
               </button>
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                 let pageNum;
@@ -535,7 +544,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
                 }`}
               >
-                ›
+                →
               </button>
             </div>
           </div>

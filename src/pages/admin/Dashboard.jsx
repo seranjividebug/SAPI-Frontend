@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   getDashboardAssessments,
   getDashboardFilters,
@@ -13,6 +13,8 @@ import {
   getAuthToken,
   transformAssessment,
   countryFlagComponents,
+  getCountryFlag,
+  getCountryCode,
 } from "./components/AdminHelpers";
 
 // KPI Card Component
@@ -80,8 +82,8 @@ function TierDistributionChart({ submissions }) {
               </span>
               <div className="flex-1 h-2 bg-[#F0EBE3] rounded overflow-hidden">
                 <div
-                  className={`h-full rounded bg-[${tierColors[tier]}]`}
-                  style={{ width: `${pct}%` }}
+                  className="h-full rounded"
+                  style={{ width: `${pct}%`, backgroundColor: tierColors[tier] }}
                 />
               </div>
               <span className="text-xs text-[#1A1A2E] font-medium w-8 text-right">
@@ -103,7 +105,6 @@ const tierColors = {
 };
 
 export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
-  const [submissions, setSubmissions] = useState([]);
   const [allSubmissions, setAllSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -116,7 +117,6 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 10;
 
   const [filterLoading, setFilterLoading] = useState(false);
@@ -158,10 +158,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
         setLoading(true);
 
         const [assessmentsRes, filtersRes, statsRes] = await Promise.all([
-          getDashboardAssessments(token, {
-            page: currentPage,
-            limit: itemsPerPage,
-          }).catch(() => null),
+          getDashboardAssessments(token, { page: 1, limit: 100 }).catch(() => null),
           getDashboardFilters(token).catch(() => null),
           getDashboardStats(token).catch(() => null),
         ]);
@@ -170,13 +167,9 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           const transformedSubmissions = assessmentsRes.data.data.map(
             transformAssessment
           );
-          setSubmissions(transformedSubmissions);
           setAllSubmissions(transformedSubmissions);
-          setTotalPages(assessmentsRes.data.totalPages || 1);
         } else {
-          setSubmissions([]);
           setAllSubmissions([]);
-          setTotalPages(1);
         }
 
         if (statsRes?.success) {
@@ -187,65 +180,16 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
       } catch (err) {
         console.error("Dashboard fetch error:", err);
         setError("Failed to load dashboard data");
-        setSubmissions([]);
         setAllSubmissions([]);
-        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, [currentPage]);
+  }, []);
 
-  useEffect(() => {
-    const fetchFilteredAssessments = async () => {
-      const token = getAuthToken();
-
-      try {
-        setFilterLoading(true);
-        const filterParams = {
-          page: currentPage,
-          limit: itemsPerPage,
-          search: searchQuery,
-          country: selectedCountry,
-        };
-
-        if (selectedScoreRange) {
-          const ranges = {
-            "90-100": { min: 90, max: 100 },
-            "70-89": { min: 70, max: 89 },
-            "50-69": { min: 50, max: 69 },
-            "Below 50": { min: 0, max: 49 },
-          };
-          const range = ranges[selectedScoreRange];
-          if (range) {
-            filterParams.scoreMin = range.min;
-            filterParams.scoreMax = range.max;
-          }
-        }
-
-        const response = await getDashboardAssessments(token, filterParams);
-
-        if (response?.success) {
-          const transformedSubmissions = response.data.data.map(
-            transformAssessment
-          );
-          setSubmissions(transformedSubmissions);
-          setTotalPages(response.data.totalPages || 1);
-        }
-      } catch (err) {
-        console.error("Filter fetch error:", err);
-      } finally {
-        setFilterLoading(false);
-      }
-    };
-
-    const timeoutId = setTimeout(fetchFilteredAssessments, 300);
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery, selectedCountry, selectedScoreRange, currentPage]);
-
-  useEffect(() => {
+  const filteredSubmissions = useMemo(() => {
     let filtered = [...allSubmissions];
 
     // Filter by search query
@@ -255,7 +199,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
         return searchTerms.every((term) => {
           return (
             s.country.toLowerCase().includes(term) ||
-            s.name.toLowerCase().includes(term) ||
+            s.respondentName.toLowerCase().includes(term) ||
             s.ministry.toLowerCase().includes(term)
           );
         });
@@ -269,14 +213,17 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
 
     // Filter by score range
     if (selectedScoreRange) {
-      if (selectedScoreRange === "Below 50") {
-        filtered = filtered.filter((s) => (s.compositeScore || 0) < 50);
-      } else {
-        const [min, max] = selectedScoreRange.split("-").map((s) => parseInt(s.trim()));
-        filtered = filtered.filter((s) => {
-          const score = s.compositeScore || 0;
-          return score >= min && score <= max;
-        });
+      const ranges = {
+        "90-100": { min: 90, max: 100 },
+        "70-89": { min: 70, max: 89 },
+        "50-69": { min: 50, max: 69 },
+        "Below 50": { min: 0, max: 49 },
+      };
+      const range = ranges[selectedScoreRange];
+      if (range) {
+        filtered = filtered.filter(
+          (s) => s.compositeScore >= range.min && s.compositeScore <= range.max
+        );
       }
     }
 
@@ -286,14 +233,27 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - days);
       filtered = filtered.filter((s) => {
-        const submissionDate = s.createdAt ? new Date(s.createdAt) : null;
+        const submissionDate = s.completedAt ? new Date(s.completedAt) : null;
         return submissionDate && submissionDate >= cutoffDate;
       });
     }
 
-    setSubmissions(filtered);
-    setTotalPages(Math.ceil(filtered.length / itemsPerPage));
+    return filtered;
   }, [searchQuery, selectedCountry, selectedScoreRange, selectedDateRange, allSubmissions]);
+
+  const filteredCount = filteredSubmissions.length;
+  const totalPages = Math.ceil(filteredCount / itemsPerPage);
+
+  // Paginated submissions
+  const paginatedSubmissions = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredSubmissions.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredSubmissions, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCountry, selectedScoreRange, selectedDateRange]);
 
   const total = allSubmissions.length;
   const uniqueCountries = [...new Set(allSubmissions.map((s) => s.country))].sort();
@@ -648,15 +608,15 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                 </tr>
               </thead>
               <tbody>
-                {submissions.length === 0 && !filterLoading ? (
+                {paginatedSubmissions.length === 0 && !filterLoading ? (
                   <tr>
                     <td colSpan={7} className="px-3.5 py-10 text-center">
                       <div className="text-sm text-[#6B6577]">No records found</div>
                     </td>
                   </tr>
                 ) : (
-                  submissions.map((sub, i) => {
-                    const FlagComponent = countryFlagComponents[sub.country];
+                  paginatedSubmissions.map((sub, i) => {
+                    const countryCode = getCountryCode(sub.country);
                     return (
                       <tr
                         key={sub.id}
@@ -667,7 +627,14 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                       >
                         <td className="px-3.5 py-3">
                           <div className="flex items-center gap-2">
-                            {FlagComponent ? <FlagComponent /> : <span>🏳️</span>}
+                            {countryCode ? (
+                              <span 
+                                className={`fi fi-${countryCode} rounded-sm`}
+                                style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                              ></span>
+                            ) : (
+                              <span className="text-2xl">🏳️</span>
+                            )}
                             <span className="text-[#1A1A2E] font-medium">
                               {shortCountry(sub.country)}
                             </span>
@@ -728,14 +695,18 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           <div className="flex justify-between items-center px-4 py-3 border-t border-[#E0D8CC] bg-[#FAFBFC]">
             <div className="text-xs text-[#6B6577]">
               Showing{" "}
-              {total > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{" "}
-              {Math.min(currentPage * itemsPerPage, total)} of {total} results
+              {filteredCount > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{" "}
+              {Math.min(currentPage * itemsPerPage, filteredCount)} of {filteredCount} results
             </div>
             <div className="flex gap-1">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1.5 bg-white border border-[#E0D8CC] rounded text-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                  currentPage === 1
+                    ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
+                    : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
+                }`}
               >
                 ←
               </button>
@@ -759,7 +730,11 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   setCurrentPage((p) => Math.min(totalPages, p + 1))
                 }
                 disabled={currentPage === totalPages}
-                className="px-3 py-1.5 bg-white border border-[#E0D8CC] rounded text-xs disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                  currentPage === totalPages
+                    ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
+                    : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
+                }`}
               >
                 →
               </button>
@@ -776,10 +751,17 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
             </h3>
             <div className="flex flex-col gap-3">
               {topCountries.map((country, idx) => {
-                const FlagComponent = countryFlagComponents[country.country];
+                const countryCode = getCountryCode(country.country);
                 return (
                   <div key={country.id} className="flex items-center gap-2.5">
-                    {FlagComponent ? <FlagComponent /> : <span>🏳️</span>}
+                    {countryCode ? (
+                      <span 
+                        className={`fi fi-${countryCode} rounded-sm`}
+                        style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      ></span>
+                    ) : (
+                      <span className="text-2xl">🏳️</span>
+                    )}
                     <div className="flex-1">
                       <div className="text-xs text-[#1A1A2E] font-medium">
                         {shortCountry(country.country)}

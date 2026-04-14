@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { LoginPage, RegisterPage, LandingPage, PreviewPage } from './pages';
+import { LoginPage, RegisterPage, LandingPage, PreviewPage, MainPage } from './pages';
+import MethodologyPage from './pages/methodology/MethodologyPage';
+import AboutPage from './pages/about/AboutPage';
+import ContactPage from './pages/contact/ContactPage';
 import SAPIBriefing from './components/SAPI_P3_Briefing';
 import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
@@ -16,6 +19,7 @@ import SubmissionsList from './pages/admin/SubmissionsList';
 import SubmissionDetail from './pages/admin/SubmissionDetail';
 import QuestionEditor from './components/SAPI_E1_QuestionEditor';
 import ProtectedRoute from './components/ProtectedRoute';
+import 'flag-icons/css/flag-icons.min.css';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -191,6 +195,10 @@ function App() {
           <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
           <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
           <Route path="/powerarc" element={<SAPIArcDashboard />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/methodology" element={<MethodologyPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />

@@ -13,3 +13,4 @@ export {
   getDashboardFilters, 
   exportDashboardCSV 
 } from './dashboardService';
+export { submitContactForm } from './contactService';

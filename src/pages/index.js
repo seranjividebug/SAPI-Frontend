@@ -7,3 +7,4 @@ export { default as BriefingPage } from "./BriefingPage";
 export { default as DimIntroPage } from "./DimIntroPage";
 export { default as QuizPage } from "./QuizPage";
 export { default as CalculatingPage } from "./CalculatingPage";
+export { default as MainPage } from "./main/mainpage";

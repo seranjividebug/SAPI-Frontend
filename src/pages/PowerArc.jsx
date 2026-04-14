@@ -319,9 +319,9 @@ function ArcCanvas({ highlight, scoreView, onTooltip, showTrails, showVectors })
       }
 
       // ── Accel ring ────────────────────────────────────────
-      if (!dimmed) {
+      if (!dimmed && n.accel !== "steady") {
         c.beginPath(); c.arc(pt.x, pt.y, 22, 0, Math.PI*2);
-        const accelCol = n.accel === "accelerating" ? T.gold : n.accel === "stalling" ? T.red : T.gray;
+        const accelCol = n.accel === "accelerating" ? T.gold : T.red;
         c.strokeStyle = accelCol; c.lineWidth = n.accel === "stalling" ? 1 : 1.8;
         c.globalAlpha = n.accel === "stalling" ? 0.25 : 0.55; c.stroke(); c.globalAlpha = 1;
       }

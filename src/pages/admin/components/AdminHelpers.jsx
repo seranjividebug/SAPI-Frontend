@@ -108,6 +108,7 @@ export const getAuthToken = () => localStorage.getItem('sapi_token') || sessionS
 export const transformAssessment = (assessment) => ({
   id: assessment.id,
   country: assessment.country,
+  countryFlag: assessment.countryFlag,
   respondentName: assessment.respondentName,
   title: assessment.title,
   ministry: assessment.ministry,
@@ -241,6 +242,187 @@ export const SaudiArabiaFlag = () => (
   </svg>
 );
 
+export const COUNTRIES = [
+  { value:"UK",  label:"United Kingdom",          Flag:UnitedKingdomFlag },
+  { value:"UAE", label:"United Arab Emirates",    Flag:UAEFlag },
+  { value:"KSA", label:"Kingdom of Saudi Arabia", Flag:SaudiArabiaFlag },
+  { value:"AZ",  label:"Republic of Azerbaijan",  Flag:AzerbaijanFlag },
+  { value:"KZ",  label:"Republic of Kazakhstan",  Flag:KazakhstanFlag },
+  { value:"QA",  label:"State of Qatar",          Flag:QatarFlag },
+  { value:"SG",  label:"Republic of Singapore",   Flag:SingaporeFlag },
+  { value:"IN",  label:"Republic of India",       Flag:IndiaFlag },
+  { value:"GH",  label:"Republic of Ghana",        Flag:GhanaFlag },
+  { value:"NG",  label:"Federal Republic of Nigeria", Flag:NigeriaFlag },
+  { value:"KE",  label:"Republic of Kenya",       Flag:KenyaFlag },
+  { value:"RW",  label:"Republic of Rwanda",      Flag:RwandaFlag },
+  { value:"BJ",  label:"Benin",                   Flag: null },
+];
+
+// Helper function to get flag component dynamically
+export const getCountryFlag = (countryName) => {
+  if (!countryName) return null;
+  
+  const countryLower = countryName.toLowerCase();
+  
+  // Find matching country in COUNTRIES array
+  const country = COUNTRIES.find(c => 
+    c.label.toLowerCase() === countryLower ||
+    c.value.toLowerCase() === countryLower ||
+    c.label.toLowerCase().includes(countryLower) ||
+    countryLower.includes(c.label.toLowerCase().split(' ').pop())
+  );
+  
+  return country ? country.Flag : null;
+};
+
+// Helper function to get country code for flag-icons
+export const getCountryCode = (countryName) => {
+  if (!countryName) return null;
+  
+  const countryLower = countryName.toLowerCase();
+  
+  // ISO 3166-1 alpha-2 code mapping (what flag-icons uses)
+  const isoCodeMap = {
+    'afghanistan': 'af',
+    'albania': 'al',
+    'algeria': 'dz',
+    'andorra': 'ad',
+    'angola': 'ao',
+    'antigua and barbuda': 'ag',
+    'argentina': 'ar',
+    'armenia': 'am',
+    'australia': 'au',
+    'austria': 'at',
+    'azerbaijan': 'az',
+    'republic of azerbaijan': 'az',
+    'bahamas': 'bs',
+    'bahrain': 'bh',
+    'bangladesh': 'bd',
+    'barbados': 'bb',
+    'belarus': 'by',
+    'belgium': 'be',
+    'belize': 'bz',
+    'benin': 'bj',
+    'republic of benin': 'bj',
+    'bhutan': 'bt',
+    'bolivia': 'bo',
+    'bosnia and herzegovina': 'ba',
+    'botswana': 'bw',
+    'brazil': 'br',
+    'brunei': 'bn',
+    'bulgaria': 'bg',
+    'burkina faso': 'bf',
+    'burundi': 'bi',
+    'cambodia': 'kh',
+    'cameroon': 'cm',
+    'canada': 'ca',
+    'central african republic': 'cf',
+    'chad': 'td',
+    'chile': 'cl',
+    'china': 'cn',
+    'colombia': 'co',
+    'comoros': 'km',
+    'congo': 'cg',
+    'costa rica': 'cr',
+    'croatia': 'hr',
+    'cuba': 'cu',
+    'cyprus': 'cy',
+    'czechia': 'cz',
+    'denmark': 'dk',
+    'djibouti': 'dj',
+    'dominica': 'dm',
+    'dominican republic': 'do',
+    'ecuador': 'ec',
+    'egypt': 'eg',
+    'el salvador': 'sv',
+    'estonia': 'ee',
+    'ethiopia': 'et',
+    'finland': 'fi',
+    'france': 'fr',
+    'germany': 'de',
+    'ghana': 'gh',
+    'republic of ghana': 'gh',
+    'greece': 'gr',
+    'india': 'in',
+    'republic of india': 'in',
+    'indonesia': 'id',
+    'iran': 'ir',
+    'iraq': 'iq',
+    'ireland': 'ie',
+    'israel': 'il',
+    'italy': 'it',
+    'japan': 'jp',
+    'jordan': 'jo',
+    'kazakhstan': 'kz',
+    'republic of kazakhstan': 'kz',
+    'kenya': 'ke',
+    'republic of kenya': 'ke',
+    'kuwait': 'kw',
+    'kyrgyzstan': 'kg',
+    'malaysia': 'my',
+    'maldives': 'mv',
+    'mexico': 'mx',
+    'morocco': 'ma',
+    'nepal': 'np',
+    'netherlands': 'nl',
+    'new zealand': 'nz',
+    'nigeria': 'ng',
+    'federal republic of nigeria': 'ng',
+    'norway': 'no',
+    'oman': 'om',
+    'pakistan': 'pk',
+    'philippines': 'ph',
+    'poland': 'pl',
+    'portugal': 'pt',
+    'qatar': 'qa',
+    'state of qatar': 'qa',
+    'romania': 'ro',
+    'russia': 'ru',
+    'rwanda': 'rw',
+    'republic of rwanda': 'rw',
+    'saudi arabia': 'sa',
+    'kingdom of saudi arabia': 'sa',
+    'singapore': 'sg',
+    'republic of singapore': 'sg',
+    'south africa': 'za',
+    'south korea': 'kr',
+    'spain': 'es',
+    'sri lanka': 'lk',
+    'sweden': 'se',
+    'switzerland': 'ch',
+    'tajikistan': 'tj',
+    'thailand': 'th',
+    'turkey': 'tr',
+    'turkmenistan': 'tm',
+    'ukraine': 'ua',
+    'united arab emirates': 'ae',
+    'uae': 'ae',
+    'united kingdom': 'gb',
+    'uk': 'gb',
+    'united states': 'us',
+    'usa': 'us',
+    'uzbekistan': 'uz',
+    'vietnam': 'vn',
+    'zambia': 'zm',
+    'zimbabwe': 'zw',
+  };
+  
+  // Try exact match first
+  if (isoCodeMap[countryLower]) {
+    return isoCodeMap[countryLower];
+  }
+  
+  // Try partial match
+  for (const [key, code] of Object.entries(isoCodeMap)) {
+    if (countryLower.includes(key) || key.includes(countryLower)) {
+      return code;
+    }
+  }
+  
+  return null;
+};
+
+// Keep the old object for backward compatibility
 export const countryFlagComponents = {
   'Kingdom of Saudi Arabia': SaudiArabiaFlag,
   'Republic of Singapore': SingaporeFlag,

@@ -1,6 +1,21 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 /**
+ * Get all countries
+ * GET /api/countries
+ */
+export async function getCountries() {
+  const response = await fetch(`${API_BASE_URL}/countries`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch countries: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data;
+}
+
+/**
  * Submit assessment answers and get scores
  * POST /assessment/submit
  * @param {string} profileId - Profile UUID

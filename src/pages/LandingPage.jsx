@@ -25,7 +25,7 @@ const TIERS = [
     name: "Enhanced Assessment",
     depth: "60–90 questions",
     description: "Deeper follow-up questions triggered by Tier 1 responses. AI agent conducts structured dialogue to clarify ambiguous answers. Sub-indicator level scoring.",
-    price: "£5,000–£15,000",
+    // price: "£5,000–£15,000",
     highlight: false,
   },
   {
@@ -33,7 +33,7 @@ const TIERS = [
     name: "Practitioner Assessment",
     depth: "Full assessment",
     description: "SAPI practitioner-led assessment with structured interviews, document review, and institutional analysis. Cross-referenced against public data sources.",
-    price: "£50,000–£150,000",
+    // price: "£50,000–£150,000",
     highlight: false,
   },
   {
@@ -41,7 +41,7 @@ const TIERS = [
     name: "Sovereign Deep Dive",
     depth: "Full assessment + longitudinal",
     description: "Comprehensive institutional evaluation including classified briefings (where applicable), multi-year trend analysis, peer benchmarking, and council membership pathway.",
-    price: "£250,000+",
+    // price: "£250,000+",
     highlight: false,
   },
 ]
@@ -181,18 +181,26 @@ export default function LandingPage({ onBegin }) {
               {/* Price row */}
               <tr>
                 {TIERS.map((t) => (
-                  <td 
-                    key={t.tier} 
+                  <td
+                    key={t.tier}
                     className={`p-3 font-sans text-[17px] align-top leading-normal ${
-                      t.highlight 
-                        ? 'border-b-2 border-l-2 border-r-2 border-sapi-gold bg-[rgba(201,150,58,0.04)] text-sapi-paleGold font-medium' 
+                      t.highlight
+                        ? 'border-b-2 border-l-2 border-r-2 border-sapi-gold bg-[rgba(201,150,58,0.04)] text-sapi-paleGold font-medium'
                         : 'border-b border-sapi-bronze text-sapi-parchment'
                     }`}
                   >
-                    <span className="block font-sans text-[14px] tracking-extra-wide text-sapi-muted uppercase mb-0.5">
-                      Investment
-                    </span>
-                    {t.price}
+                    {t.price ? (
+                      <>
+                        <span className="block font-sans text-[14px] tracking-extra-wide text-sapi-muted uppercase mb-0.5">
+                          Investment
+                        </span>
+                        {t.price}
+                      </>
+                    ) : (
+                      <button className="w-full font-sans text-[14px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm py-2.5 px-4 border border-sapi-gold text-sapi-gold hover:bg-sapi-gold hover:text-sapi-void transition-colors duration-150">
+                        Enquire
+                      </button>
+                    )}
                   </td>
                 ))}
               </tr>

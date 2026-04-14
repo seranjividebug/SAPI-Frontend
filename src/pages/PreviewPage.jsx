@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { saveProfile } from "../services/profileService";
+import { getCountries } from "../services/assessmentService";
 import { PageLayout, PageHeader, PageFooter, SAPIGlobe } from "./common";
+import 'flag-icons/css/flag-icons.min.css';
 
 // ── Override Chrome Autofill White Background ───────────────────────────────
 const autofillStyles = `
@@ -139,6 +141,7 @@ export default function PreviewPage() {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState("");
+  const [countries, setCountries] = useState([]);
 
   const countryRef = useRef(null);
   const stageRef = useRef(null);
@@ -153,7 +156,7 @@ export default function PreviewPage() {
         try {
           const profile = JSON.parse(savedProfile);
           // Find country value from label (profile stores full name, dropdown needs value code)
-          const countryObj = COUNTRIES.find(c => c.label === profile.country);
+          const countryObj = countries.find(c => c.label === profile.country);
           setForm({
             country: countryObj?.value || "",
             name: profile.respondent_name || "",
@@ -174,7 +177,30 @@ export default function PreviewPage() {
     }
     document.addEventListener("mousedown", h);
     return () => document.removeEventListener("mousedown", h);
-  }, [location]);
+  }, [location, countries]);
+
+  // Fetch countries from API
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const response = await getCountries();
+        if (response.success) {
+          // Transform API data to match component structure
+          const transformedCountries = response.data.map(c => ({
+            value: c.code,
+            label: c.name,
+            sub: c.description
+          }));
+          setCountries(transformedCountries);
+        }
+      } catch (error) {
+        console.error('Failed to fetch countries:', error);
+        // Fallback to static countries if API fails
+        setCountries(COUNTRIES);
+      }
+    }
+    fetchCountries();
+  }, []);
 
   function validate(id, val) {
     if (!val || !val.trim()) return "Required.";
@@ -226,10 +252,10 @@ export default function PreviewPage() {
     }
   }
 
-  const selectedCountry = COUNTRIES.find(c => c.value === form.country);
+  const selectedCountry = countries.find(c => c.value === form.country);
   const selectedStage = STAGES.find(s => s.value === form.developmentStage);
   
-  const filteredCountries = COUNTRIES.filter(c => 
+  const filteredCountries = countries.filter(c => 
     c.label.toLowerCase().includes(countrySearch.toLowerCase()) ||
     c.value.toLowerCase().includes(countrySearch.toLowerCase())
   );
@@ -281,7 +307,7 @@ export default function PreviewPage() {
     return (
       <PageLayout className="flex items-center justify-center flex-col gap-4 p-8 text-center">
         <SAPIGlobe size={48} />
-        {selectedCountry && <div className="text-4xl leading-none"><selectedCountry.Flag /></div>}
+        {selectedCountry && <span className={`fi fi-${selectedCountry.value.toLowerCase()} rounded-sm text-4xl leading-none`}></span>}
         <div className="w-12 h-px bg-sapi-bronze" />
         <div className="font-serif text-[24px] text-sapi-parchment tracking-wide">
           Profile received, {form.name.split(" ")[0]}.
@@ -362,7 +388,7 @@ export default function PreviewPage() {
               onClick={() => { setCountryOpen(o => !o); setStageOpen(false); setTouched(p => ({ ...p, country:true })); if (!countryOpen) setCountrySearch(""); }}>
               <span className="flex items-center gap-2.5">
                 {selectedCountry
-                  ? <><span className="leading-none"><selectedCountry.Flag /></span><span>{selectedCountry.label}</span></>
+                  ? <><span className={`fi fi-${selectedCountry.value.toLowerCase()} rounded-sm leading-none text-xl`}></span><span>{selectedCountry.label}</span></>
                   : <span>Select your country</span>}
               </span>
               <Chevron open={countryOpen} />
@@ -394,7 +420,7 @@ export default function PreviewPage() {
                     } ${i > 0 ? 'border-t border-sapi-bronze' : ''}`}
                     onClick={() => { handleChange("country", c.value); setErrors(p => ({ ...p, country:null })); setCountryOpen(false); setCountrySearch(""); }}>
                     <div className="w-11 flex-shrink-0 flex items-center justify-center border-r border-sapi-bronze py-3">
-                      <c.Flag />
+                      <span className={`fi fi-${c.value.toLowerCase()} rounded-sm text-xl`}></span>
                     </div>
                     <div className="py-3 px-4 flex-1">
                       <div className={`font-sans text-[15px] tracking-wide mb-0.5 ${

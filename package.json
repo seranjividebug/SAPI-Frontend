@@ -4,6 +4,7 @@
   "description": "SAPI Sovereign AI Assessment Platform",
   "private": true,
   "dependencies": {
+    "flag-icons": "^7.5.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "react": "^18.2.0",

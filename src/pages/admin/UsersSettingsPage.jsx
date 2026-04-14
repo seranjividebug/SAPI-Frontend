@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   getUsers,
   getUserById,
@@ -8,16 +8,31 @@ import {
 } from "../../services/authService";
 import { formatCreatedAt } from "./components/AdminHelpers";
 
+// Toast Component
+const Toast = ({ visible, message, type = 'error' }) => {
+  return (
+    <div
+      className={`fixed top-7 right-7 z-[9999] bg-[#1A1540] border border-[#2A204A] text-[#FBF5E6] px-4 py-3 rounded-lg text-sm flex items-center gap-2.5 shadow-lg transition-all duration-300 pointer-events-none ${
+        visible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
+      }`}
+    >
+      <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${type === 'success' ? 'bg-[#28A868]' : 'bg-[#C03058]'}`} />
+      {message}
+    </div>
+  );
+};
+
 // ── Constants (defined outside component to prevent re-renders) ───────────────
 const roleMapping = {
   Admin: 1,
+  User: 2,
   Editor: 2,
   Viewer: 3,
 };
 
 const reverseRoleMapping = {
   1: "Admin",
-  2: "Editor",
+  2: "User",
   3: "Viewer",
 };
 
@@ -29,69 +44,81 @@ export default function UsersSettingsPage() {
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'error' });
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
-    role: "1",
+    role: "", // Default to empty
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage] = useState(5);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const token =
-        localStorage.getItem("sapi_token") ||
-        sessionStorage.getItem("sapi_token");
-      if (!token) {
-        setError("Authentication required");
-        setLoading(false);
-        return;
-      }
+  const fetchUsers = useCallback(async (page = 1) => {
+    const token =
+      localStorage.getItem("sapi_token") ||
+      sessionStorage.getItem("sapi_token");
+    if (!token) {
+      setError("Authentication required");
+      setLoading(false);
+      return;
+    }
 
-      try {
-        setLoading(true);
-        const response = await getUsers(token, { role: 1, page: 1, limit: 10 });
+    try {
+      setLoading(true);
+      const response = await getUsers(token, { role: 1, page, limit: itemsPerPage });
 
-        if (response?.success && response?.data?.users) {
-          const mappedUsers = response.data.users.map((user) => ({
-            id: user.id,
-            name: user.full_name || user.name || "",
-            email: user.email,
-            role: "Admin", // Always Admin
-            status: "Active",
-            lastLogin: user.created_at || "-",
-          }));
-          setUsers(mappedUsers);
-          setFilteredUsers(mappedUsers);
-        } else if (Array.isArray(response)) {
-          // Handle case where API returns array directly
-          const mappedUsers = response.map((user) => ({
-            id: user.id,
-            name: user.full_name || user.name || "",
-            email: user.email,
-            role: "Admin", // Always Admin
-            status: "Active",
-            lastLogin: user.created_at || "-",
-          }));
-          setUsers(mappedUsers);
-          setFilteredUsers(mappedUsers);
-        } else {
-          setUsers([]);
-          setFilteredUsers([]);
-        }
-        setError(null);
-      } catch (err) {
-        console.error("Failed to fetch users:", err);
-        setError("Failed to load users");
+      if (response?.success && response?.data?.users) {
+        const mappedUsers = response.data.users.map((user) => ({
+          id: user.id,
+          name: user.full_name || user.name || "",
+          email: user.email,
+          role: reverseRoleMapping[user.role] || "Admin",
+          status: "Active",
+          lastLogin: user.created_at || "-",
+        }));
+        setUsers(mappedUsers);
+        setFilteredUsers(mappedUsers);
+        // Calculate totalPages from API response (handle different response structures)
+        const totalCount = response.data.pagination?.totalCount || response.data.totalCount || response.data.total || 0;
+        const apiTotalPages = response.data.pagination?.totalPages || response.data.totalPages;
+        setTotalPages(apiTotalPages || Math.ceil(totalCount / itemsPerPage) || 1);
+      } else if (Array.isArray(response)) {
+        // Handle case where API returns array directly
+        const mappedUsers = response.map((user) => ({
+          id: user.id,
+          name: user.full_name || user.name || "",
+          email: user.email,
+          role: reverseRoleMapping[user.role] || "Admin",
+          status: "Active",
+          lastLogin: user.created_at || "-",
+        }));
+        setUsers(mappedUsers);
+        setFilteredUsers(mappedUsers);
+        setTotalPages(1);
+      } else {
         setUsers([]);
         setFilteredUsers([]);
-      } finally {
-        setLoading(false);
+        setTotalPages(1);
       }
-    };
+      setError(null);
+    } catch (err) {
+      console.error("Failed to fetch users:", err);
+      setError("Failed to load users");
+      setUsers([]);
+      setFilteredUsers([]);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  }, [itemsPerPage]);
 
-    fetchUsers();
-  }, []);
+  useEffect(() => {
+    fetchUsers(currentPage);
+  }, [currentPage, fetchUsers]);
 
   // Filter users based on search query and status
   useEffect(() => {
@@ -113,75 +140,98 @@ export default function UsersSettingsPage() {
     setFilteredUsers(filtered);
   }, [searchQuery, statusFilter, users]);
 
-  const handleSaveUser = async () => {
+  // Reset to page 1 when search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter]);
+
+  // Auto-hide toast after 3 seconds
+  useEffect(() => {
+    if (toast.visible) {
+      const timer = setTimeout(() => {
+        setToast({ visible: false, message: '', type: 'error' });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast.visible]);
+
+  const handleSaveUser = async (e) => {
+    e.preventDefault();
+
     const token =
       localStorage.getItem("sapi_token") ||
       sessionStorage.getItem("sapi_token");
+
+    // Validate form data
+    const name = editingUser ? editingUser.name : formData.full_name;
+    const email = editingUser ? editingUser.email : formData.email;
+    const role = editingUser ? editingUser.role : formData.role;
+
+    if (!name || !name.trim()) {
+      setToast({ visible: true, message: 'Full Name is required', type: 'error' });
+      return;
+    }
+
+    if (!email || !email.trim()) {
+      setToast({ visible: true, message: 'Email is required', type: 'error' });
+      return;
+    }
+
+    if (!role || !role.trim()) {
+      setToast({ visible: true, message: 'Role is required', type: 'error' });
+      return;
+    }
+
+    setSaving(true);
 
     if (editingUser) {
       try {
         const updateData = {
           full_name: editingUser.name,
           email: editingUser.email,
-          role: 1, // Always Admin
+          role: roleMapping[editingUser.role] || 1,
         };
 
         const response = await updateUser(token, editingUser.id, updateData);
 
         if (response?.success) {
-          const apiUser = response.data?.user || {};
-          const updatedUsers = users.map((u) =>
-            u.id === editingUser.id
-              ? {
-                  ...u,
-                  name: apiUser.full_name || editingUser.name,
-                  email: apiUser.email || editingUser.email,
-                  role: reverseRoleMapping[apiUser.role] || "Admin",
-                }
-              : u
-          );
-          setUsers(updatedUsers);
-          setFilteredUsers(updatedUsers);
+          fetchUsers(currentPage);
           setShowAddModal(false);
           setEditingUser(null);
+          setToast({ visible: true, message: 'User updated successfully', type: 'success' });
         } else {
-          alert(response?.message || "Failed to update user");
+          setToast({ visible: true, message: response?.message || "Failed to update user", type: 'error' });
         }
       } catch (err) {
         console.error("Failed to update user:", err);
-        alert(err.message || "Failed to update user");
+        setToast({ visible: true, message: err.message || "Failed to update user", type: 'error' });
+      } finally {
+        setSaving(false);
       }
     } else {
       try {
         const userData = {
           full_name: formData.full_name,
           email: formData.email,
-          role: 1, // Always Admin
+          role: parseInt(formData.role) || 1, // Default to Admin if empty
         };
 
         const response = await createUser(token, userData);
 
         if (response?.success) {
-          const apiUser = response.data?.user || {};
-          const newUser = {
-            id: apiUser.id || Date.now().toString(),
-            name: apiUser.full_name || formData.full_name,
-            email: apiUser.email || formData.email,
-            role: reverseRoleMapping[apiUser.role] || "Admin",
-            status: "Active",
-            lastLogin: apiUser.created_at || "-",
-          };
-          const updatedUsers = [...users, newUser];
-          setUsers(updatedUsers);
-          setFilteredUsers(updatedUsers);
+          setCurrentPage(1);
+          fetchUsers(1);
           setShowAddModal(false);
-          setFormData({ full_name: "", email: "", role: "1" });
+          setFormData({ full_name: "", email: "", role: "" });
+          setToast({ visible: true, message: 'User created successfully', type: 'success' });
         } else {
-          alert(response?.message || "Failed to create user");
+          setToast({ visible: true, message: response?.message || "Failed to create user", type: 'error' });
         }
       } catch (err) {
         console.error("Failed to create user:", err);
-        alert(err.message || "Failed to create user");
+        setToast({ visible: true, message: err.message || "Failed to create user", type: 'error' });
+      } finally {
+        setSaving(false);
       }
     }
   };
@@ -198,14 +248,19 @@ export default function UsersSettingsPage() {
 
       if (response?.success) {
         const updatedUsers = users.filter((u) => u.id !== id);
-        setUsers(updatedUsers);
-        setFilteredUsers(updatedUsers);
+        if (currentPage > 1 && updatedUsers.length === 0) {
+          setCurrentPage(currentPage - 1);
+          fetchUsers(currentPage - 1);
+        } else {
+          fetchUsers(currentPage);
+        }
+        setToast({ visible: true, message: 'User deleted successfully', type: 'success' });
       } else {
-        alert(response?.message || "Failed to delete user");
+        setToast({ visible: true, message: response?.message || "Failed to delete user", type: 'error' });
       }
     } catch (err) {
       console.error("Failed to delete user:", err);
-      alert(err.message || "Failed to delete user");
+      setToast({ visible: true, message: err.message || "Failed to delete user", type: 'error' });
     }
   };
 
@@ -223,12 +278,12 @@ export default function UsersSettingsPage() {
           id: apiUser.id,
           name: apiUser.full_name,
           email: apiUser.email,
-          role: "Admin", // Always Admin
+          role: reverseRoleMapping[apiUser.role] || "1",
         });
       } else {
         setEditingUser({
           ...user,
-          role: "Admin", // Always Admin
+          role: reverseRoleMapping[user.role] || "1",
         });
       }
       setShowAddModal(true);
@@ -236,7 +291,7 @@ export default function UsersSettingsPage() {
       console.error("Failed to fetch user details:", err);
       setEditingUser({
         ...user,
-        role: "Admin", // Always Admin
+        role: reverseRoleMapping[user.role] || "1",
       });
       setShowAddModal(true);
     }
@@ -245,6 +300,7 @@ export default function UsersSettingsPage() {
   const roleColors = {
     "Super Admin": "#C9963A",
     Admin: "#4A7AE0",
+    User: "#28A868",
     Editor: "#28A868",
     Viewer: "#6B6577",
   };
@@ -343,100 +399,152 @@ export default function UsersSettingsPage() {
           )}
 
           {!loading && !error && (
-            <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden">
-              <table className="w-full border-collapse text-xs">
-                <thead>
-                  <tr className="bg-[#F0EBE3]">
-                    <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
-                      Created At
-                    </th>
-                    <th className="px-3.5 py-2.5 text-right text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredUsers.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="px-3.5 py-10 text-center">
-                        <div className="text-sm text-[#6B6577]">
-                          No users found
-                        </div>
-                      </td>
+            <>
+              <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden">
+                <table className="w-full border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-[#F0EBE3]">
+                      <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
+                        User
+                      </th>
+                      <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
+                        Role
+                      </th>
+                      <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-3.5 py-2.5 text-left text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
+                        Created At
+                      </th>
+                      <th className="px-3.5 py-2.5 text-right text-[11px] font-medium text-[#1A1A2E] uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ) : (
-                    filteredUsers.map((user, i) => (
-                      <tr
-                        key={user.id}
-                        className={`border-b border-[#F0EBE3] ${
-                          i % 2 === 0 ? "bg-white" : "bg-[#FDFAF6]"
-                        }`}
-                      >
-                        <td className="px-3.5 py-3">
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium bg-[#C9963A20] text-[#C9963A]">
-                              {user.name.charAt(0)}
-                            </div>
-                            <div>
-                              <div className="text-[#1A1A2E] font-medium">
-                                {user.name}
-                              </div>
-                              <div className="text-[#9880B0] text-[11px]">
-                                {user.email}
-                              </div>
-                            </div>
+                  </thead>
+                  <tbody>
+                    {filteredUsers.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-3.5 py-10 text-center">
+                          <div className="text-sm text-[#6B6577]">
+                            No users found
                           </div>
                         </td>
-                        <td className="px-3.5 py-3">
-                          <span
-                            className="px-2.5 py-0.5 rounded text-[11px] font-medium border-[0.5px]"
-                            style={{
-                              backgroundColor: `${roleColors[user.role]}20`,
-                              color: roleColors[user.role],
-                              borderColor: `${roleColors[user.role]}50`,
-                            }}
-                          >
-                            {user.role}
-                          </span>
-                        </td>
-                        <td className="px-3.5 py-3">
-                          <span className={`flex items-center gap-1 text-xs ${user.status === "Active" ? "text-[#28A868]" : "text-[#6B6577]"}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${user.status === "Active" ? "bg-[#28A868]" : "bg-[#6B6577]"}`} />
-                            {user.status}
-                          </span>
-                        </td>
-                        <td className="px-3.5 py-3 text-[#6B6577] text-xs">
-                          {formatCreatedAt(user.lastLogin)}
-                        </td>
-                        <td className="px-3.5 py-3 text-right">
-                          <button
-                            onClick={() => handleEditClick(user)}
-                            className="bg-transparent border-none text-[#4A7AE0] text-xs cursor-pointer mr-3"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDeleteUser(user.id)}
-                            className="bg-transparent border-none text-[#C94646] text-xs cursor-pointer"
-                          >
-                            Delete
-                          </button>
-                        </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
+                    ) : (
+                      filteredUsers.map((user, i) => (
+                        <tr
+                          key={user.id}
+                          className={`border-b border-[#F0EBE3] ${
+                            i % 2 === 0 ? "bg-white" : "bg-[#FDFAF6]"
+                          }`}
+                        >
+                          <td className="px-3.5 py-3">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium bg-[#C9963A20] text-[#C9963A]">
+                                {user.name.charAt(0)}
+                              </div>
+                              <div>
+                                <div className="text-[#1A1A2E] font-medium">
+                                  {user.name}
+                                </div>
+                                <div className="text-[#9880B0] text-[11px]">
+                                  {user.email}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-3.5 py-3">
+                            <span
+                              className="px-2.5 py-0.5 rounded text-[11px] font-medium border-[0.5px]"
+                              style={{
+                                backgroundColor: `${roleColors[user.role]}20`,
+                                color: roleColors[user.role],
+                                borderColor: `${roleColors[user.role]}50`,
+                              }}
+                            >
+                              {user.role}
+                            </span>
+                          </td>
+                          <td className="px-3.5 py-3">
+                            <span className={`flex items-center gap-1 text-xs ${user.status === "Active" ? "text-[#28A868]" : "text-[#6B6577]"}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${user.status === "Active" ? "bg-[#28A868]" : "bg-[#6B6577]"}`} />
+                              {user.status}
+                            </span>
+                          </td>
+                          <td className="px-3.5 py-3 text-[#6B6577] text-xs">
+                            {formatCreatedAt(user.lastLogin)}
+                          </td>
+                          <td className="px-3.5 py-3 text-right">
+                            <button
+                              onClick={() => handleEditClick(user)}
+                              className="bg-transparent border-none text-[#4A7AE0] text-xs cursor-pointer mr-3"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(user.id)}
+                              className="bg-transparent border-none text-[#C94646] text-xs cursor-pointer"
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex justify-between items-center mt-4 px-2">
+                  <div className="text-xs text-[#6B6577]">
+                    Page {currentPage} of {totalPages}
+                  </div>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-1.5 text-xs border border-[#D0C8BC] rounded bg-white text-[#1A1A2E] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F5F5]"
+                    >
+                      Previous
+                    </button>
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setCurrentPage(pageNum)}
+                          className={`px-3 py-1.5 text-xs border rounded ${
+                            currentPage === pageNum
+                              ? "bg-[#C9963A] text-white border-[#C9963A]"
+                              : "bg-white text-[#1A1A2E] border-[#D0C8BC] hover:bg-[#F5F5F5]"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-1.5 text-xs border border-[#D0C8BC] rounded bg-white text-[#1A1A2E] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#F5F5F5]"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
@@ -477,9 +585,10 @@ export default function UsersSettingsPage() {
             <h3 className="mb-5 font-serif text-[#1A1A2E]">
               {editingUser ? "Edit User" : "Add User"}
             </h3>
-            <div className="mb-4">
+            <form onSubmit={handleSaveUser}>
+              <div className="mb-4">
               <label className="block text-xs text-[#6B6577] mb-1.5">
-                Full Name
+                Full Name <span className="text-[#C03058]">*</span>
               </label>
               <input
                 type="text"
@@ -496,7 +605,7 @@ export default function UsersSettingsPage() {
             </div>
             <div className="mb-4">
               <label className="block text-xs text-[#6B6577] mb-1.5">
-                Email
+                Email <span className="text-[#C03058]">*</span>
               </label>
               <input
                 type="email"
@@ -513,34 +622,57 @@ export default function UsersSettingsPage() {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-xs text-[#6B6577] mb-1.5">Role</label>
-              <div
-                className="px-3 py-2.5 text-xs border border-[#D0C8BC] rounded-md bg-[#F5F5F5] text-[#6B6577]"
+              <label className="block text-xs text-[#6B6577] mb-1.5">Role <span className="text-[#C03058]">*</span></label>
+              <select
+                required
+                value={editingUser ? (roleMapping[editingUser.role] || editingUser.role) : formData.role}
+                onChange={(e) => {
+                  const roleValue = e.target.value;
+                  if (editingUser) {
+                    setEditingUser({ ...editingUser, role: roleValue });
+                  } else {
+                    setFormData({ ...formData, role: roleValue });
+                  }
+                }}
+                className="w-full px-3 py-2.5 text-xs border border-[#D0C8CC] rounded-md text-[#1A1A2E] bg-white outline-none"
               >
-                Admin
-              </div>
+                <option value="">Select role</option>
+                <option value="1">Admin</option>
+                <option value="2">User</option>
+              </select>
             </div>
             <div className="flex justify-end gap-2">
               <button
+                type="button"
                 onClick={() => {
                   setShowAddModal(false);
                   setEditingUser(null);
-                  setFormData({ full_name: "", email: "", role: "1" });
+                  setFormData({ full_name: "", email: "", role: "" });
                 }}
                 className="bg-transparent text-[#6B6577] border border-[#D0C8BC] rounded-md px-4 py-2 text-xs cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSaveUser}
-                className="bg-[#C9963A] text-white border-none rounded-md px-4 py-2 text-xs cursor-pointer"
+                type="submit"
+                disabled={saving}
+                className="bg-[#C9963A] text-white border-none rounded-md px-4 py-2 text-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {editingUser ? "Save" : "Add"}
+                {saving ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    {editingUser ? "Saving..." : "Adding..."}
+                  </>
+                ) : (
+                  editingUser ? "Save" : "Add"
+                )}
               </button>
             </div>
+            </form>
           </div>
         </div>
       )}
+      <Toast visible={toast.visible} message={toast.message} type={toast.type} />
     </div>
   );
 }
