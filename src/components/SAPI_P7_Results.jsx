@@ -472,10 +472,10 @@ export default function SAPIResults() {
     <div className="min-h-screen bg-sapi-void font-sans">
 
       {/* ── Top bar ──────────────────────────────────────────────────── */}
-      <div className="bg-sapi-navy border-b border-sapi-bronze px-10">
-        <div className="max-w-[1080px] mx-auto h-16 flex items-center justify-between">
+      <div className="bg-sapi-navy border-b border-sapi-bronze">
+        <div className="max-w-[1080px] mx-auto px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <SAPILogo size={34} />
+            <SAPILogo size={90} />
             <div>
               <div className="font-serif text-[9.5px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
                 The Sovereign AI Power Index

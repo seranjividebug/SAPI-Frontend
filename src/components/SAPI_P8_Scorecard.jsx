@@ -591,7 +591,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   if (loading) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
-        <SAPILogo size={64} />
+        <SAPILogo size={90} />
         <div className="font-sans text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
           Loading scorecard data…
         </div>
@@ -621,12 +621,11 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
 
       {/* ── Top bar ──────────────────────────────────────────────────────── */}
       <div
-        className="px-10"
         style={{ background: C.navy, borderBottom: `1px solid ${C.bronze}` }}
       >
-        <div className="max-w-[1100px] mx-auto h-[62px] flex items-center justify-between">
+        <div className="max-w-[1100px] mx-auto px-10 h-[62px] flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <SAPILogo size={34} />
+            <SAPILogo size={80} />
             <div>
               <div
                 className="font-serif text-[11.5px] tracking-[0.3em] uppercase opacity-88"
@@ -656,12 +655,12 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
                 {date} · Tier 1
               </div>
             </div>
-            <div
+            {/* <div
               className="font-serif text-[11.5px] tracking-[0.15em] text-sapi-muted px-2.5 py-1 uppercase opacity-70"
               style={{ border: `1px solid ${C.bronze}` }}
             >
               Classification: Restricted
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -846,7 +845,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
             Classification: Restricted · Tier 1 Automated Assessment · Sub-Indicator Analysis
           </div>
           <div className="font-sans text-[10.5px] text-sapi-muted opacity-40 tracking-[0.1em]">
-            SAPI © {new Date().getFullYear()} · CoreIntel
+            SAPI © {new Date().getFullYear()}
           </div>
         </div>
       </div>

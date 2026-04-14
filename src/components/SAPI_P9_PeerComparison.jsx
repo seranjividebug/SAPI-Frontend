@@ -156,10 +156,10 @@ function DimensionRow({ dim, yourScore, median, topQ }) {
       {/* ── Row header ── */}
       <div className="flex items-center justify-between mb-4 gap-3 flex-wrap">
         <div className="flex items-baseline gap-2.5">
-          <span className="font-serif text-[13px] text-sapi-gold opacity-55">
+          <span className="font-sans text-[15px] text-sapi-gold opacity-55">
             {dim.num}
           </span>
-          <span className="font-serif text-[15px] text-sapi-parchment tracking-[0.01em]">
+          <span className="font-serif text-[17px] text-sapi-parchment tracking-[0.01em]">
             {dim.name}
           </span>
         </div>
@@ -170,7 +170,7 @@ function DimensionRow({ dim, yourScore, median, topQ }) {
         >
           <span className="text-[9px] opacity-90">{status.glyph}</span>
           <span>{status.text}</span>
-          <span className="font-serif text-[11px] tracking-[0.04em] opacity-70">
+          <span className="font-sans text-[13px] tracking-[0.04em] opacity-70">
             ({status.delta} pts)
           </span>
         </div>
@@ -185,7 +185,7 @@ function DimensionRow({ dim, yourScore, median, topQ }) {
             </div>
             <HBar value={value} color={color} />
             <div
-              className="w-[30px] flex-shrink-0 font-serif text-[13px] text-right tracking-[-0.01em]"
+              className="w-[30px] flex-shrink-0 font-sans text-[15px] text-right tracking-[-0.01em]"
               style={{ color }}
             >
               {Math.round(value)}
@@ -308,7 +308,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
       {/* ── Header ── */}
       <header className="border-b border-sapi-bronze py-5">
         <div className="max-w-[1100px] mx-auto px-8 flex items-center gap-4">
-          <SAPIGlobe size={32} />
+          <SAPIGlobe size={90} />
           <div className="font-serif text-[11px] tracking-[0.2em] text-sapi-parchment uppercase leading-[1.5]">
             The Sovereign AI<br />Power Index
           </div>
@@ -345,7 +345,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
         </div>
 
         {/* ── Stage context line ── */}
-        <p className="font-sans text-[13px] text-sapi-muted leading-[1.7] m-0 tracking-[0.02em]">
+        <p className="font-sans text-[15px] text-sapi-muted leading-[1.7] m-0 tracking-[0.02em]">
           Your nation is assessed at the{" "}
           <span className="text-sapi-parchment italic">{stage}</span>{" "}
           stage. Peer data shown below is aggregated from nations at this development stage.
@@ -404,7 +404,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
               <h3 className="font-serif text-lg font-normal text-sapi-parchment m-0 mb-2.5 tracking-[0.01em] leading-[1.35]">
                 Benchmark against named peer nations
               </h3>
-              <p className="font-sans text-[13px] text-sapi-muted leading-[1.72] m-0 tracking-[0.02em]">
+              <p className="font-sans text-[15px] text-sapi-muted leading-[1.72] m-0 tracking-[0.02em]">
                 Tier 1 peer data is aggregated by development stage. Upgrade to Tier 2 to see
                 your nation benchmarked against specific peer nations by region, income level,
                 and dimension profile.
@@ -413,7 +413,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
           </div>
 
           <button
-            className="inline-flex items-center gap-2 border-none px-7 py-3.5 font-sans text-[11px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded transition-colors duration-150 hover:bg-[#B8862A]"
+            className="inline-flex items-center gap-2 border-none px-7 py-3.5 font-sans text-[11px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded transition-colors duration-150 hover:bg-[#B8862A] mt-2"
             style={{
               background: upgradeHover ? "#B8862A" : C.gold,
               color: C.void,

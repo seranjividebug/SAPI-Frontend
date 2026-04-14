@@ -546,7 +546,7 @@ export default function SAPIRoadmap() {
       {/* ── App Header ── */}
       <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
         <div className="max-w-container mx-auto px-8 py-7 pb-6 flex items-center gap-5">
-          <SAPIGlobe size={56} />
+          <SAPIGlobe size={90} />
           <div className="font-serif text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
             The Sovereign AI<br />Power Index
           </div>
