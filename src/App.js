@@ -168,7 +168,7 @@ function App() {
       <div className="App">
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/main" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
           <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
