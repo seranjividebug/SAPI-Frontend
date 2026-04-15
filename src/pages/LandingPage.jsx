@@ -62,7 +62,7 @@ export default function LandingPage({ onBegin }) {
   return (
     <PageLayout>
       {/* ── Header ── */}
-      <PageHeader showAdmin={true} />
+      <PageHeader />
 
       {/* ── Tabs ── */}
       <div className="px-8 max-w-container mx-auto border-b border-sapi-bronze">

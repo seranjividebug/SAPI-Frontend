@@ -489,7 +489,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
   if (checkingAccess) {
     return (
       <PageLayout>
-        <PageHeader showAdmin={false} />
+        <PageHeader />
         <div className="max-w-[800px] mx-auto px-8 py-16 text-center">
           <div className="font-serif text-sapi-parchment text-[19px]">Loading...</div>
         </div>
@@ -631,7 +631,7 @@ export default function QuizPage({ appState, setAppState, setCurrentPage }) {
   if (!currentQuestion) {
     return (
       <PageLayout>
-        <PageHeader showAdmin={false} />
+        <PageHeader />
         <div className="max-w-[800px] mx-auto px-8 py-16 text-center">
           <div className="font-serif text-sapi-parchment text-[19px]">Loading assessment...</div>
         </div>

@@ -331,7 +331,7 @@ export default function PreviewPage() {
   return (
     <PageLayout>
       <style>{autofillStyles}</style>
-      <PageHeader showAdmin={false} />
+      <PageHeader />
 
       {/* Progress nav */}
       <div className="max-w-container mx-auto px-8 pt-5 flex items-center justify-between flex-wrap gap-4">

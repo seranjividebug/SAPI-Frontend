@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { SAPIGlobe } from "./Logo";
 
 /**
  * Common Header Component - Used across landing and other pages
  * @param {Object} props
- * @param {boolean} props.showAdmin - Whether to show the admin button
+ * @param {boolean} props.showProfile - Whether to show the profile icon
  * @param {React.ReactNode} props.rightContent - Custom content to show on the right side
  */
-export function PageHeader({ showAdmin = true, showProfile = true, rightContent }) {
+export function PageHeader({ showProfile = true, rightContent }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -36,7 +35,6 @@ export function PageHeader({ showAdmin = true, showProfile = true, rightContent 
   return (
     <header className="border-b border-sapi-bronze py-1">
   <div className="max-w-container mx-auto px-8 flex items-center gap-4">
-       <SAPIGlobe size={170} />
         <div className="font-sans text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
           The Sovereign AI<br />Power Index
         </div>

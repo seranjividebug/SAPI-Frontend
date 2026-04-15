@@ -380,7 +380,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
       <style>{autofillStyles}</style>
       <div className="bg-sapi-void min-h-auto font-sans text-sapi-parchment pb-10">
 
-      <PageHeader showAdmin={false} />
+      <PageHeader />
 
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
       <div className="max-w-[900px] mx-auto px-10">

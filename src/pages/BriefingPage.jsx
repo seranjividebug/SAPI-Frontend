@@ -108,7 +108,7 @@ export default function BriefingPage({ onBegin }) {
 
   return (
     <PageLayout>
-      <PageHeader showAdmin={false} />
+      <PageHeader />
 
       {/* ── Step indicator ── */}
       <div className="max-w-container mx-auto px-8 pt-5 flex items-center justify-between flex-wrap gap-4">
