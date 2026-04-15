@@ -196,7 +196,7 @@ const IntroductionForm = () => {
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Organization</label>
+          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Organisation</label>
           <input
             type="text"
             required

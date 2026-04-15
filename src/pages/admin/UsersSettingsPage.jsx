@@ -650,7 +650,7 @@ export default function UsersSettingsPage() {
       {activeTab === "settings" && (
         <div className="max-w-xl">
           {[
-            { label: "Organization Name", value: "SAPI Organization", type: "text" },
+            { label: "Organisation Name", value: "SAPI Organization", type: "text" },
             { label: "Support Email", value: "support@sapi.ai", type: "email" },
           ].map((field, idx) => (
             <div key={idx} className="mb-5">

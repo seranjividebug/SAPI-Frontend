@@ -110,43 +110,45 @@ const dimensions = [
   {
     key: "compute",
     label: "Compute Capacity",
+    shortDescription: "Sovereign access to high-performance compute and energy.",
+    description:
+      "Assesses access to hyperscale compute, power resilience, grid capacity, and the physical infrastructure required to host strategic AI workloads.",
     sampleScore: 58,
-    shortDescription: "Sovereign access to high-performance compute and energy infrastructure.",
-    description: "The foundational layer of sovereign AI capability. Nations with domestic compute infrastructure maintain strategic independence and control over AI model training and deployment.",
-    proprietary: false,
   },
   {
     key: "capital",
     label: "Capital Formation",
+    shortDescription: "The depth and strategic orientation of capital for AI development: sovereign wealth deployment, venture ecosystems, and mechanisms directing capital toward sovereign priorities.",
+    description:
+      "The depth and strategic orientation of capital for AI development: sovereign wealth deployment, venture ecosystems, and mechanisms directing capital toward sovereign priorities.",
     sampleScore: 72,
-    shortDescription: "Institutional capital available for long-horizon AI infrastructure investment.",
-    description: "The financial mechanisms and institutional structures that enable sustained investment in AI infrastructure over multi-year time horizons.",
-    proprietary: false,
   },
   {
     key: "regulatory",
     label: "Regulatory Readiness",
+    shortDescription: "The policy conditions that allow AI infrastructure to move with velocity.",
+    description:
+      "Scores legal clarity, procurement maturity, licensing pathways, and the coherence of national AI policy to support deployment.",
     sampleScore: 65,
-    shortDescription: "Governance frameworks that enable public trust in AI systems.",
-    description: "The legal and regulatory frameworks that establish accountability, safety standards, and public trust mechanisms for AI deployment at national scale.",
-    proprietary: false,
   },
   {
-    key: "data",
+    key: "dataSov",
     label: "Data Sovereignty",
+    shortDescription: "Control over strategic data, hosting and trusted operating environments.",
+    description:
+      "Evaluates national control over data localisation, trusted cloud environments, security frameworks, and jurisdictional certainty.",
     sampleScore: 62,
-    shortDescription: "National control over the data AI learns from and acts upon.",
-    description: "The ability to control, govern, and leverage national data assets for AI training and inference while maintaining security and privacy standards.",
-    proprietary: false,
   },
   {
     key: "di",
     label: "Directed Intelligence Maturity",
+    shortDescription: "How effectively a nation or corporation turns AI capability into AI revenue.",
+    description:
+      "Captures the operating maturity required to convert AI capability into state and corporate level execution, from mission design to durable institutional adoption.",
     sampleScore: 63,
-    shortDescription: "How effectively your nation turns AI capability into coordinated state action.",
-    description: "The institutional capacity to translate AI capabilities into coordinated, effective state action across government functions and strategic priorities.",
     proprietary: true,
   },
+
 ];
 
 const standardStats = [
