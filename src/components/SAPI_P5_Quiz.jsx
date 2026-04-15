@@ -608,7 +608,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   if (checkingAccess) {
     return (
       <PageLayout>
-        <PageHeader showAdmin={false} />
+        <PageHeader showAdmin={false} showProfile={false} />
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="font-sans text-[15px] text-sapi-muted tracking-wide mt-6">
             Loading...
@@ -694,7 +694,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   if (loading && allQuestions.length === 0) {
     return (
       <PageLayout>
-        <PageHeader showAdmin={false} />
+        <PageHeader showAdmin={false} showProfile={false} />
         <div className="flex-1 flex flex-col items-center justify-center">
           <div className="font-sans text-[15px] text-sapi-muted tracking-wide mt-6">
             Loading assessment questions…
@@ -709,7 +709,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
   if (error && allQuestions.length === 0) {
     return (
       <PageLayout>
-        <PageHeader showAdmin={false} />
+        <PageHeader showAdmin={false} showProfile={false} />
         <div className="flex-1 flex flex-col items-center justify-center px-8">
           <div className="font-serif text-[19px] text-sapi-crimson mt-6 mb-4">
             Unable to load questions
@@ -731,7 +731,7 @@ export default function SAPIQuiz({ appState, setCurrentPage, setAppState }) {
 
   return (
     <PageLayout>
-      <PageHeader showAdmin={false} />
+      <PageHeader showAdmin={false} showProfile={false} />
 
       {/* Submitting loader overlay */}
       {submitting && (

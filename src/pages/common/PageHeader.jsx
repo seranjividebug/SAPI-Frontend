@@ -8,7 +8,7 @@ import { SAPIGlobe } from "./Logo";
  * @param {boolean} props.showAdmin - Whether to show the admin button
  * @param {React.ReactNode} props.rightContent - Custom content to show on the right side
  */
-export function PageHeader({ showAdmin = true, rightContent }) {
+export function PageHeader({ showAdmin = true, showProfile = true, rightContent }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -44,26 +44,28 @@ export function PageHeader({ showAdmin = true, rightContent }) {
           For Government & Sovereign Institutions
         </div>
         {rightContent}
-        <div className="relative" ref={dropdownRef}>
-          <button
-            className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
-            onClick={() => setShowDropdown(!showDropdown)}
-          >
-            <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
-              {firstLetter}
-            </div>
-          </button>
-          {showDropdown && (
-            <div className="absolute right-0 mt-2 w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
-              <button
-                onClick={handleSignOut}
-                className="w-full text-left px-4 py-2 text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
-              >
-                Sign out
-              </button>
-            </div>
-          )}
-        </div>
+        {showProfile && (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
+                {firstLetter}
+              </div>
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-4 py-2 text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );
