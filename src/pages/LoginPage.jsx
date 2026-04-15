@@ -87,7 +87,7 @@ export default function LoginPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              autoComplete="off"
+              // autoComplete="off"
               readOnly={passwordReadOnly}
               onFocus={() => setPasswordReadOnly(false)}
               className="w-full py-3.5 pl-5 pr-4.5 text-sm font-sans text-sapi-void bg-[#F0F0F5] border border-transparent rounded-md outline-none transition-all duration-150 focus:border-sapi-gold"
