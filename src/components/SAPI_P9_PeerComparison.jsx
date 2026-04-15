@@ -2,21 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAssessmentResults } from "../services/assessmentService";
 
-// ── Logo Component ──────────────────────────────────────────────────────────
-function SAPIGlobe({ size = 32 }) {
-  return (
-    <img
-      src="/SAPI_Logo_B4.svg"
-      alt="SAPI Logo"
-      className="object-contain bg-transparent p-0.5 box-border"
-      style={{
-        width: size,
-        height: size
-      }}
-    />
-  );
-}
-
 // ── Colour palette ───────────────────────────────────────────────────────────
 const C = {
   void:      "#06030E",
@@ -292,7 +277,6 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
   if (loading) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
-        <SAPIGlobe size={64} />
         <div className="font-sans text-sm text-sapi-muted tracking-[0.1em] mt-6">
           Loading peer comparison data…
         </div>
@@ -303,7 +287,6 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
   if (error || !appState) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
-        <SAPIGlobe size={64} />
         <div className="font-serif text-lg text-sapi-crimson mt-6 mb-4">
           {error || "Unable to load peer comparison"}
         </div>
@@ -332,7 +315,6 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
       {/* ── Header ── */}
       <header className="border-b border-sapi-bronze py-5">
         <div className="max-w-[1100px] mx-auto px-8 flex items-center gap-4">
-          <SAPIGlobe size={90} />
           <div className="font-serif text-[11px] tracking-[0.2em] text-sapi-parchment uppercase leading-[1.5]">
             The Sovereign AI<br />Power Index
           </div>

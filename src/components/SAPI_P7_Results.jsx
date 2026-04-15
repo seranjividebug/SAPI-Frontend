@@ -43,21 +43,6 @@ function getBand(score) {
   return               { label: "Low",    color: C.crimson, bg: "rgba(192,48,88,0.15)"  };
 }
 
-// ── Logo Component ──────────────────────────────────────────────────────────
-function SAPILogo({ size = 120 }) {
-  return (
-    <img
-      src="/SAPI_Logo_B4.svg"
-      alt="SAPI Logo"
-      className="object-contain bg-transparent p-1 box-border"
-      style={{
-        width: size,
-        height: size
-      }}
-    />
-  );
-}
-
 // ── Pentagon Radar Chart ──────────────────────────────────────────────────────
 function RadarChart({ scores }) {
   const cx = 160, cy = 155, r = 112;
@@ -499,7 +484,6 @@ export default function SAPIResults() {
       <div className="bg-sapi-navy border-b border-sapi-bronze">
         <div className="max-w-[1080px] mx-auto px-10 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <SAPILogo size={90} />
             <div>
               <div className="font-serif text-[9.5px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
                 The Sovereign AI Power Index

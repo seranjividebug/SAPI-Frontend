@@ -182,21 +182,6 @@ const DEMO_PROFILE = {
   }),
 };
 
-// ── Logo Component ───────────────────────────────────────────────────────────
-function SAPILogo({ size = 34 }) {
-  return (
-    <img
-      src="/SAPI_Logo_B4.svg"
-      alt="SAPI Logo"
-      className="object-contain bg-transparent p-0.5 box-border"
-      style={{
-        width: size,
-        height: size
-      }}
-    />
-  );
-}
-
 // ── Score Bar ─────────────────────────────────────────────────────────────────
 function ScoreBar({ score, color }) {
   return (
@@ -615,7 +600,6 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   if (loading) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
-        <SAPILogo size={90} />
         <div className="font-sans text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
           Loading scorecard data…
         </div>
@@ -626,7 +610,6 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   if (error || !appState) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
-        <SAPILogo size={64} />
         <div className="font-serif text-[19px] text-sapi-crimson mt-6 mb-4">
           {error || "Unable to load scorecard"}
         </div>
@@ -649,7 +632,6 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
       >
         <div className="max-w-[1100px] mx-auto px-10 h-[62px] flex items-center justify-between">
           <div className="flex items-center gap-3.5">
-            <SAPILogo size={80} />
             <div>
               <div
                 className="font-serif text-[11.5px] tracking-[0.3em] uppercase opacity-88"

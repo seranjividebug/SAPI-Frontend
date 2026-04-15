@@ -3,21 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { generateRoadmap } from "../services/roadmapService";
 import { getAssessmentResults } from "../services/assessmentService";
 
-// ── Logo Component ──────────────────────────────────────────────────────────
-function SAPIGlobe({ size = 32 }) {
-  return (
-    <img
-      src="/SAPI_Logo_B4.svg"
-      alt="SAPI Logo"
-      className="object-contain bg-transparent p-0.5 box-border"
-      style={{
-        width: size,
-        height: size
-      }}
-    />
-  );
-}
-
 // ── Colour palette ────────────────────────────────────────────────────────────
 const C = {
   void:      "#06030E",
@@ -535,7 +520,6 @@ export default function SAPIRoadmap() {
   if (loading) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center">
-        <SAPIGlobe size={64} />
         <div className="font-sans text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
           Generating your roadmap…
         </div>
@@ -546,7 +530,6 @@ export default function SAPIRoadmap() {
   if (error) {
     return (
       <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
-        <SAPIGlobe size={64} />
         <div className="font-serif text-[19px] text-sapi-crimson mt-6 mb-4">
           {error}
         </div>
@@ -570,7 +553,6 @@ export default function SAPIRoadmap() {
       {/* ── App Header ── */}
       <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
         <div className="max-w-container mx-auto px-8 py-7 pb-6 flex items-center gap-5">
-          <SAPIGlobe size={90} />
           <div className="font-serif text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
             The Sovereign AI<br />Power Index
           </div>
