@@ -86,7 +86,7 @@ const CustomHeader = () => {
             className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
             onClick={() => navigate('/login')}
           >
-            Try now
+            Index
           </button>
         </div>
       </div>

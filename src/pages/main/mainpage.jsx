@@ -76,7 +76,7 @@ const CustomHeader = () => {
             className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
             onClick={() => navigate('/login')}
           >
-            Try now
+            Index
           </button>
         </div>
       </div>
@@ -110,7 +110,7 @@ const dimensions = [
   {
     key: "compute",
     label: "Compute Capacity",
-    sampleScore: 72,
+    sampleScore: 58,
     shortDescription: "Sovereign access to high-performance compute and energy infrastructure.",
     description: "The foundational layer of sovereign AI capability. Nations with domestic compute infrastructure maintain strategic independence and control over AI model training and deployment.",
     proprietary: false,
@@ -118,7 +118,7 @@ const dimensions = [
   {
     key: "capital",
     label: "Capital Formation",
-    sampleScore: 68,
+    sampleScore: 72,
     shortDescription: "Institutional capital available for long-horizon AI infrastructure investment.",
     description: "The financial mechanisms and institutional structures that enable sustained investment in AI infrastructure over multi-year time horizons.",
     proprietary: false,
@@ -126,7 +126,7 @@ const dimensions = [
   {
     key: "regulatory",
     label: "Regulatory Readiness",
-    sampleScore: 61,
+    sampleScore: 65,
     shortDescription: "Governance frameworks that enable public trust in AI systems.",
     description: "The legal and regulatory frameworks that establish accountability, safety standards, and public trust mechanisms for AI deployment at national scale.",
     proprietary: false,
@@ -134,7 +134,7 @@ const dimensions = [
   {
     key: "data",
     label: "Data Sovereignty",
-    sampleScore: 58,
+    sampleScore: 62,
     shortDescription: "National control over the data AI learns from and acts upon.",
     description: "The ability to control, govern, and leverage national data assets for AI training and inference while maintaining security and privacy standards.",
     proprietary: false,
@@ -142,7 +142,7 @@ const dimensions = [
   {
     key: "di",
     label: "Directed Intelligence Maturity",
-    sampleScore: 64,
+    sampleScore: 63,
     shortDescription: "How effectively your nation turns AI capability into coordinated state action.",
     description: "The institutional capacity to translate AI capabilities into coordinated, effective state action across government functions and strategic priorities.",
     proprietary: true,
