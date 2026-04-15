@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAssessmentResults } from "../services/assessmentService";
 
@@ -345,12 +345,36 @@ function SectionLabel({ children }) {
 export default function SAPIResults() {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [apiResults, setApiResults] = useState(location.state?.results || null);
   // eslint-disable-next-line no-unused-vars
   const [assessmentId, setAssessmentId] = useState(location.state?.assessmentId || null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const currentUser = JSON.parse(localStorage.getItem("sapi_current_user") || "{}");
+  const email = currentUser.email || "";
+  const firstLetter = email.charAt(0).toUpperCase() || "U";
+
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   
   // Fetch results from API if not available in state
   useEffect(() => {
@@ -494,6 +518,26 @@ export default function SAPIResults() {
               <div className="font-sans text-[8.5px] text-sapi-muted opacity-60 tracking-[0.1em] uppercase mt-0.5">
                 {date} · Tier 1 Assessment
               </div>
+            </div>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
+                  {firstLetter}
+                </div>
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-4 py-2 text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

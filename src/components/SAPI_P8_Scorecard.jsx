@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAssessmentResults } from "../services/assessmentService";
 
@@ -478,11 +478,35 @@ function Rule() {
 // ── P8 Main ───────────────────────────────────────────────────────────────────
 export default function SAPIScorecard({ appState: passedState, setAppState, setCurrentPage }) {
   const navigate = useNavigate();
-  
+
   // API data states
   const [apiData, setApiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const currentUser = JSON.parse(localStorage.getItem("sapi_current_user") || "{}");
+  const email = currentUser.email || "";
+  const firstLetter = email.charAt(0).toUpperCase() || "U";
+
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   
   // Fetch results from API on mount
   useEffect(() => {
@@ -661,6 +685,26 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
             >
               Classification: Restricted
             </div> */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
+                  {firstLetter}
+                </div>
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-4 py-2 text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

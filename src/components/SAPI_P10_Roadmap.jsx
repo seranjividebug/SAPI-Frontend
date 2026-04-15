@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateRoadmap } from "../services/roadmapService";
 import { getAssessmentResults } from "../services/assessmentService";
