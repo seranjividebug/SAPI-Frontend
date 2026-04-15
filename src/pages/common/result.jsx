@@ -349,11 +349,11 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   }, [composite]);
 
   // Email gate state
-  const [emailCaptured, setEmailCaptured] = useState(appState.emailCaptured || false);
-  const [zoneRevealed, setZoneRevealed] = useState(appState.emailCaptured || false);
-  const [emailInput, setEmailInput] = useState(appState.email || "");
-  const [emailSubmitted, setEmailSubmitted] = useState(appState.emailCaptured || false);
-  const [confirmedEmail, setConfirmedEmail] = useState(appState.email || "");
+  const [emailCaptured, setEmailCaptured] = useState(false);
+  const [zoneRevealed, setZoneRevealed] = useState(true);
+  const [emailInput, setEmailInput] = useState("");
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [confirmedEmail, setConfirmedEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [downloadTooltip, setDownloadTooltip] = useState(false);
 
@@ -518,7 +518,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
         </div>
 
         {/* ─── EMAIL CAPTURE PANEL ─────────────────────────────────────────── */}
-        <div className="bg-sapi-navy border border-sapi-bronze/20 border-l-[3px] border-l-sapi-gold rounded-r-lg py-8 px-9 mb-10">
+        {/* <div className="bg-sapi-navy border border-sapi-bronze/20 border-l-[3px] border-l-sapi-gold rounded-r-lg py-8 px-9 mb-10">
           {!emailSubmitted ? (
             <>
               <div className="flex items-start gap-4">
@@ -534,7 +534,6 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                     and receive your secure access link.
                   </div>
 
-                  {/* Input + button row */}
                   <div className="flex gap-2.5 flex-wrap">
                     <input
                       type="email"
@@ -568,27 +567,15 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                     </button>
                   </div>
 
-                  {/* Validation error */}
                   {emailError && (
                     <div className="mt-2 text-[13px] text-sapi-crimson">
                       {emailError}
                     </div>
                   )}
-
-                  {/* Trust signals */}
-                  {/* <div className="mt-4 flex gap-6 flex-wrap">
-                    {["No account creation required", "Secured access link dispatched instantly"].map((t) => (
-                      <div key={t} className="flex items-center gap-1.5 text-[13px] text-sapi-muted/70">
-                        <div className="w-1 h-1 rounded-full bg-sapi-gold/50" />
-                        {t}
-                      </div>
-                    ))}
-                  </div> */}
                 </div>
               </div>
             </>
           ) : (
-            /* Confirmed state */
             <div className="flex items-center gap-3.5">
               <TickIcon />
               <div>
@@ -602,7 +589,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
               </div>
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* ─── ZONE B: GATED RESULTS ────────────────────────────────────────── */}
         <div
@@ -732,7 +719,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           </div>
 
           {/* Frosted gate overlay */}
-          {!emailCaptured && (
+          {/* {!emailCaptured && (
             <div
               className="absolute inset-0 backdrop-blur-[8px] rounded-lg flex flex-col items-center justify-center gap-3 z-[5] transition-opacity duration-[0.6s]"
               style={{
@@ -747,7 +734,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                 Save your report to unlock your full dimension analysis.
               </div>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     

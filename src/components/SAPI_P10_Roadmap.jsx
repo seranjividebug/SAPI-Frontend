@@ -649,7 +649,7 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Upgrade Hook ── */}
-        <section className="mt-16">
+        {/* <section className="mt-16">
           <div
             className="py-8 px-10 flex items-center justify-between flex-wrap gap-6 bg-sapi-navy border border-sapi-bronze border-t-2 border-t-sapi-gold"
           >
@@ -679,7 +679,7 @@ export default function SAPIRoadmap() {
               Upgrade to Tier 2 →
             </button>
           </div>
-        </section>
+        </section> */}
 
         {/* ── Confidentiality notice ── */}
         <div className="mt-10 py-3.5 px-5 border-l-[3px] border-sapi-gold bg-sapi-gold/[0.05]">

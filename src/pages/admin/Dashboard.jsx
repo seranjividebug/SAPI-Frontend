@@ -459,7 +459,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                     value={countrySearch}
                     onChange={(e) => setCountrySearch(e.target.value)}
                     placeholder="Search Country..."
-                    className="px-2 py-1.5 text-xs border border-[#D0C8BC] rounded w-full box-border outline-none"
+                    className="px-2 py-1.5 text-xs border border-[#D0C8BC] rounded w-full box-border outline-none text-[#1A1A2E]"
                     autoComplete="off"
                   />
                 </div>

@@ -388,15 +388,13 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
         </div>
 
         {/* ── Upgrade hook card ── */}
-        <div className="bg-sapi-navy border border-sapi-gold p-7 pb-7 relative">
-          {/* Gold top accent line */}
+        {/* <div className="bg-sapi-navy border border-sapi-gold p-7 pb-7 relative">
           <div
             className="absolute -top-px -left-px -right-px h-0.5 pointer-events-none"
             style={{ background: `linear-gradient(90deg, ${C.gold} 0%, rgba(201,150,58,0.3) 100%)` }}
           />
 
           <div className="flex items-start gap-4 mb-4.5 flex-wrap">
-            {/* Tier badge */}
             <div className="border border-sapi-gold text-sapi-gold font-sans text-[9px] tracking-[0.22em] uppercase px-2.5 py-1 flex-shrink-0 self-start">
               Tier 2
             </div>
@@ -428,7 +426,7 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
                 strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
-        </div>
+        </div> */}
 
       </div>
 

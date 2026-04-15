@@ -310,7 +310,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
             <input
               type="text"
               value={search}
-              placeholder="Search country, respondent, ministry..."
+              placeholder="Search Country, Respondent, Ministry..."
               onChange={(e) => setSearch(e.target.value)}
               className={`bg-white border rounded-md py-2 pr-3 pl-9 text-xs text-[#1A1A2E] w-65 outline-none transition-colors ${
                 search ? "border-[#C9963A]" : "border-[#E0D8CC]"
@@ -321,9 +321,9 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
           <FilterSelect
             value={filterStage}
             onChange={setFilterStage}
-            placeholder="All dev stages"
+            placeholder="All Dev Stages"
             options={[
-              { value: "All", label: "All dev stages" },
+              { value: "All", label: "All Dev Stages" },
               { value: "Early", label: "Early" },
               { value: "Emerging", label: "Emerging" },
               { value: "Developing", label: "Developing" },

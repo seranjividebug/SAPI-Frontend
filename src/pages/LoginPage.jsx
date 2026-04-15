@@ -7,6 +7,8 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [emailReadOnly, setEmailReadOnly] = useState(true);
+  const [passwordReadOnly, setPasswordReadOnly] = useState(true);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -67,6 +69,9 @@ export default function LoginPage() {
               value={form.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              // autoComplete="off"
+              readOnly={emailReadOnly}
+              onFocus={() => setEmailReadOnly(false)}
               className="w-full py-3.5 pl-5 pr-4.5 text-sm font-sans text-sapi-void bg-[#F0F0F5] border border-transparent rounded-md outline-none transition-all duration-150 focus:border-sapi-gold"
             />
           </div>
@@ -82,6 +87,9 @@ export default function LoginPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              autoComplete="off"
+              readOnly={passwordReadOnly}
+              onFocus={() => setPasswordReadOnly(false)}
               className="w-full py-3.5 pl-5 pr-4.5 text-sm font-sans text-sapi-void bg-[#F0F0F5] border border-transparent rounded-md outline-none transition-all duration-150 focus:border-sapi-gold"
             />
           </div>
