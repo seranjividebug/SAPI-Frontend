@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageLayout, EnhancedFooter } from "../common";
 import { submitContactForm } from "../../services/contactService";
-import { SAPIGlobe } from "../common/Logo";
 
 // Placeholder components
 const FadeIn = ({ children, className = "", delay = 0 }) => (
@@ -53,10 +52,7 @@ const CustomHeader = () => {
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="px-8 py-4 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div onClick={() => navigate('/main')} className="cursor-pointer">
-            <SAPIGlobe size={180} />
-          </div>
-          <div 
+          <div
             className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
           >

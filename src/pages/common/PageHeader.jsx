@@ -33,7 +33,7 @@ export function PageHeader({ showProfile = true, rightContent }) {
     };
   }, []);
   return (
-    <header className="border-b border-sapi-bronze py-1">
+    <header className="border-b border-sapi-bronze py-1 mt-6">
   <div className="max-w-container mx-auto px-8 flex items-center gap-4">
         <div className="font-sans text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
           The Sovereign AI<br />Power Index
