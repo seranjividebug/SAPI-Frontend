@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PageLayout, PageFooter } from "../common";
+import { PageLayout, EnhancedFooter } from "../common";
 import { submitContactForm } from "../../services/contactService";
 import { SAPIGlobe } from "../common/Logo";
 
@@ -301,7 +301,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-      <PageFooter />
+      <EnhancedFooter />
     </PageLayout>
   );
 }

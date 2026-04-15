@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PageLayout, PageFooter } from "../common";
+import { PageLayout } from "../common";
+import { EnhancedFooter } from "../common/EnhancedFooter";
 import { SAPIGlobe } from "../common/Logo";
 
 // Placeholder components
@@ -182,7 +183,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <PageFooter />
+      <EnhancedFooter />
     </PageLayout>
   );
 }

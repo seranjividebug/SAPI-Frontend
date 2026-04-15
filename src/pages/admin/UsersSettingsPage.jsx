@@ -54,7 +54,7 @@ export default function UsersSettingsPage() {
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
-    role: "", // Default to empty
+    role: "2", // Default to User
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
