@@ -315,6 +315,11 @@ export default function SAPIPeerComparison({ appState: passedState, setAppState,
       {/* ── Header ── */}
       <header className="border-b border-sapi-bronze py-5">
         <div className="max-w-[1100px] mx-auto px-8 flex items-center gap-4">
+          <img
+            src="/SAPI_Logo_B4.svg"
+            alt="SAPI Logo"
+            className="h-40 w-40 object-contain"
+          />
           <div className="font-serif text-[11px] tracking-[0.2em] text-sapi-parchment uppercase leading-[1.5]">
             The Sovereign AI<br />Power Index
           </div>

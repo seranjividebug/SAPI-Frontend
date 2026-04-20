@@ -62,8 +62,13 @@ const CustomHeader = () => {
 
   return (
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
-      <div className="px-8 py-4 max-w-container mx-auto flex items-center justify-between">
+      <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
+          <img
+            src="/SAPI_Logo_B4.svg"
+            alt="SAPI Logo"
+            className="h-40 w-40 object-contain"
+          />
           <div
             className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
@@ -72,6 +77,12 @@ const CustomHeader = () => {
           </div>
         </div>
         <div className="flex items-center gap-6">
+          <button
+            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
+            onClick={() => navigate('/login')}
+          >
+            The Index
+          </button>
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/methodology')}
@@ -85,16 +96,10 @@ const CustomHeader = () => {
             About
           </button>
           <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
+            className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
             onClick={() => navigate('/contact')}
           >
             Request Introduction
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-            onClick={() => navigate('/login')}
-          >
-            Index
           </button>
         </div>
       </div>

@@ -34,16 +34,23 @@ export function PageHeader({ showProfile = true, rightContent }) {
   }, []);
   return (
     <header className="border-b border-sapi-bronze py-1 mt-6">
-  <div className="max-w-container mx-auto px-8 flex items-center gap-4">
-        <div className="font-sans text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
+  <div className="max-w-container mx-auto pl-[1px] pr-8 flex items-start gap-1">
+        <div>
+          <img
+            src="/SAPI_Logo_B4.svg"
+            alt="SAPI Logo"
+            className="h-56 w-56 object-contain"
+          />
+        </div>
+        <div className="self-center font-sans text-[16px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
           The Sovereign AI<br />Power Index
         </div>
-        <div className="ml-auto font-serif text-[10px] tracking-extra-wide text-sapi-muted uppercase border border-sapi-bronze px-2.5 py-1">
+        <div className="self-center ml-auto font-serif text-[13px] tracking-extra-wide text-sapi-muted uppercase border border-sapi-bronze px-2.5 py-1">
           For Government & Sovereign Institutions
         </div>
         {rightContent}
         {showProfile && (
-          <div className="relative" ref={dropdownRef}>
+          <div className="self-center relative" ref={dropdownRef}>
             <button
               className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
               onClick={() => setShowDropdown(!showDropdown)}

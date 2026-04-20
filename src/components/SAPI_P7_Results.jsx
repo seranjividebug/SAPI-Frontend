@@ -482,13 +482,18 @@ export default function SAPIResults() {
 
       {/* ── Top bar ──────────────────────────────────────────────────── */}
       <div className="bg-sapi-navy border-b border-sapi-bronze">
-        <div className="max-w-[1080px] mx-auto px-10 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
+        <div className="max-w-[1080px] mx-auto pl-4 pr-10 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-5">
+            <img
+              src="/SAPI_Logo_B4.svg"
+              alt="SAPI Logo"
+              className="h-40 w-40 object-contain"
+            />
             <div>
-              <div className="font-serif text-[9.5px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
+              <div className="font-serif text-[12px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
                 The Sovereign AI Power Index
               </div>
-              <div className="font-sans text-[8.5px] tracking-[0.22em] uppercase text-sapi-gold opacity-60 mt-0.5">
+              <div className="font-sans text-[12px] tracking-[0.22em] uppercase text-sapi-gold opacity-60 mt-0.5">
                 Assessment Results
               </div>
             </div>

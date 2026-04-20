@@ -552,24 +552,27 @@ export default function SAPIRoadmap() {
 
       {/* ── App Header ── */}
       <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
-        <div className="max-w-container mx-auto px-8 py-7 pb-6 flex items-center gap-5">
-          <div className="font-serif text-[15px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
+        <div className="max-w-container mx-auto px-8 py-1 pb-1 flex items-center gap-1">
+          <img
+            src="/SAPI_Logo_B4.svg"
+            alt="SAPI Logo"
+            className="h-28 w-28 object-contain"
+          />
+          <div className="font-serif text-[12px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
             The Sovereign AI<br />Power Index
           </div>
-          <div className="ml-auto font-serif text-[12px] tracking-extra-wide text-sapi-muted uppercase border border-sapi-bronze px-2.5 py-1">
-            For Government & Sovereign Institutions
-          </div>
-          <span
-            className="text-[12px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2.5 py-0.5 opacity-85"
-          >
-            Classification: Restricted
-          </span>
-          <div className="relative" ref={dropdownRef}>
+          <div className="ml-auto flex items-center gap-5">
+            <span
+              className="text-[10px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2.5 py-0.5 opacity-85"
+            >
+              Classification: Restricted
+            </span>
+            <div className="relative" ref={dropdownRef}>
             <button
               className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
+              <div className="w-6 h-6 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-xs font-medium">
                 {firstLetter}
               </div>
             </button>
@@ -583,6 +586,7 @@ export default function SAPIRoadmap() {
                 </button>
               </div>
             )}
+          </div>
           </div>
         </div>
       </header>

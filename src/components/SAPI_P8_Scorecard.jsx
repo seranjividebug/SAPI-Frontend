@@ -630,8 +630,13 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
       <div
         style={{ background: C.navy, borderBottom: `1px solid ${C.bronze}` }}
       >
-        <div className="max-w-[1100px] mx-auto px-10 h-[62px] flex items-center justify-between">
+        <div className="max-w-[1100px] mx-auto pl-3 pr-10 h-[67px] flex items-center justify-between mt-1 mb-3">
           <div className="flex items-center gap-3.5">
+            <img
+              src="/SAPI_Logo_B4.svg"
+              alt="SAPI Logo"
+              className="h-40 w-40 object-contain"
+            />
             <div>
               <div
                 className="font-serif text-[11.5px] tracking-[0.3em] uppercase opacity-88"
