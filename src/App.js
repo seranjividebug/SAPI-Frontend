@@ -14,6 +14,7 @@ import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
 import SAPIArcDashboard from './pages/PowerArc';
+import SapiIndexPage from './pages/sapi-index-page';
 import AdminDashboard from './components/AdminDashboard';
 import SubmissionsList from './pages/admin/SubmissionsList';
 import SubmissionDetail from './pages/admin/SubmissionDetail';
@@ -195,6 +196,7 @@ function App() {
           <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
           <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
           <Route path="/powerarc" element={<SAPIArcDashboard />} />
+          <Route path="/sapi-index" element={<SapiIndexPage />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/methodology" element={<MethodologyPage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -214,5 +216,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;
