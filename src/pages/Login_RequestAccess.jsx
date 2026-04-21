@@ -63,7 +63,7 @@
                 onClick={() => navigate('/login')}
                 className="absolute top-4 mt-2 left-4 font-sans text-[11px] hover:text-sapi-gold transition-colors duration-150 bg-transparent border-none cursor-pointer tracking-wide uppercase text-[#E0E0E0]"
               >
-                ← Back to Login
+                ← Back to SignIn
               </button>
 
               <RequestAccessForm />
