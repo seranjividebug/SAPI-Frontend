@@ -71,7 +71,7 @@ const CustomHeader = () => {
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
           >
-            Sample
+            Preview
           </button>
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"

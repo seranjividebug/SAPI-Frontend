@@ -44,9 +44,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center px-5 py-10">
       {/* Card */}
-      <div className="w-full max-w-[400px] bg-gradient-to-br from-sapi-navy to-[#120822] border border-sapi-bronze/15 rounded-lg p-10 shadow-2xl">
+      <div className="w-full max-w-[400px] bg-gradient-to-br from-sapi-navy to-[#120822] border border-sapi-bronze/15 rounded-lg p-10 shadow-2xl relative">
+        {/* Back to Main Page - Top Left */}
+        <button
+          onClick={() => navigate('/main')}
+          className="absolute top-4 left-4 font-sans text-[11px] text-sapi-muted hover:text-sapi-gold transition-colors duration-150 bg-transparent border-none cursor-pointer tracking-wide uppercase"
+        >
+          ← Back to Main Page
+        </button>
+
         {/* Title */}
-        <h1 className="font-serif text-[22px] font-normal text-sapi-parchment text-center tracking-wide uppercase mb-2.5">
+        <h1 className="font-serif text-[22px] font-normal text-sapi-parchment text-center tracking-wide uppercase mb-2.5 mt-4">
           Sign In
         </h1>
         <p className="font-sans text-[11px] text-sapi-muted text-center tracking-wide uppercase mb-6">
@@ -101,26 +109,23 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full py-3.5 px-6 mt-2 font-sans text-xs font-medium tracking-wide uppercase text-sapi-void bg-sapi-gold border-none rounded-md cursor-pointer transition-all duration-150 hover:bg-[#B8862A] disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Verifying...' : 'Sign In'}
-          </button>
+          {/* Buttons */}
+          <div className="flex flex-col gap-3 mt-2">
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-void bg-sapi-gold border-none rounded-md cursor-pointer transition-all duration-150 hover:bg-[#B8862A] disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Verifying...' : 'Sign In'}
+            </button>
+            <button
+              onClick={() => navigate('/sapi-login')}
+              className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-parchment bg-sapi-navy border border-sapi-bronze/30 rounded-md cursor-pointer transition-all duration-150 hover:border-sapi-gold/50"
+            >
+              Request for Registrion
+            </button>
+          </div>
 
-          {/* Sign up link */}
-          {/* <div className="mt-5 text-center">
-            <span className="font-sans text-[11px] text-sapi-muted">
-              Don't have an account?{' '}
-              <a href="/register" className="text-sapi-gold hover:text-sapi-paleGold transition-colors">
-                Sign up
-              </a>
-            </span>
-          </div> */}
-
-       
         </div>
       </div>
 

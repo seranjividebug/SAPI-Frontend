@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { OrientationStrip, BriefedVersionPanel } from './SAPI_IndexPage_Enhancements';
 
 // ── Anonymized nation data (A–Z, AA–FF) ──────────────────────────────────
 const nations = [
@@ -680,7 +681,8 @@ export default function SAPIIndexPage() {
   });
 
   return (
-    <div style={{ width:"100%", fontFamily:"sans-serif", background:T.bg, color:T.textPri }}>
+    <>
+    <div className="w-full font-sans bg-sapi-void text-sapi-parchment">
       {/* Header */}
         <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
@@ -714,7 +716,7 @@ export default function SAPIIndexPage() {
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
           >
-            Sample
+            Preview
           </button>
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
@@ -732,14 +734,17 @@ export default function SAPIIndexPage() {
       </div>
     </header>
 
+    {/* Orientation Strip */}
+    <OrientationStrip />
+
     {/* Tab bar */}
-    <div className="px-8 max-w-container mx-auto" style={{ display:"flex", gap:2, borderBottom:`0.5px solid ${T.border}`, background:T.bgCard }}>
+    <div className="px-8 w-[1050px] mx-auto flex gap-0.5 border-b border-sapi-bronze/20 bg-sapi-navy">
       {TABS.map(tab => (
         <button key={tab} onClick={() => setActiveTab(tab)} style={tabStyle(tab)}>
           {TAB_LABELS[tab]}
         </button>
       ))}
-      <div style={{ marginLeft:"auto", padding:"8px 16px", fontSize:11, color:T.textDim, alignSelf:"center" }}>
+      <div className="ml-auto px-4 py-2 text-[11px] text-sapi-muted self-center">
         {nations.length} nations · SAPI v1.0 (Anonymized)
       </div>
     </div>
@@ -747,16 +752,16 @@ export default function SAPIIndexPage() {
       {/* Arc tab controls */}
       {activeTab === "arc" && (
         <>
-          <div className="px-8 max-w-container mx-auto">
-            <div style={{ display:"flex", gap:20, alignItems:"center", padding:"10px 0", flexWrap:"wrap", borderBottom:`0.5px solid ${T.border}`, background:T.bgCard }}>
+          <div className="px-8 w-[1115px] mx-auto">
+            <div className="flex gap-5 items-center py-2.5 pl-5 flex-wrap border-b border-sapi-bronze/20 bg-sapi-navy">
               {[
                 { label:"HIGHLIGHT", value:highlight, onChange:e=>setHighlight(e.target.value), options:allNationOptions },
                 { label:"SCORE VIEW", value:scoreView, onChange:e=>setScoreView(e.target.value), options:[
                   {value:"combined",label:"Combined"},{value:"sovereignty",label:"Sovereignty axis"},{value:"velocity",label:"Velocity axis"}
                 ]},
               ].map(ctrl => (
-                <div key={ctrl.label} style={{ display:"flex", alignItems:"center", gap:8 }}>
-                  <span style={{ fontSize:11, color:T.textSec, letterSpacing:0.5 }}>{ctrl.label}</span>
+                <div key={ctrl.label} className="flex items-center gap-2">
+                  <span className="text-[11px] text-sapi-muted tracking-[0.5px]">{ctrl.label}</span>
                   <select value={ctrl.value} onChange={ctrl.onChange} style={selectStyle}>
                     {ctrl.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
@@ -773,7 +778,7 @@ export default function SAPIIndexPage() {
             </div>
 
             {/* Legend */}
-            <div style={{ display:"flex", gap:20, flexWrap:"wrap", padding:"8px 0", borderBottom:`0.5px solid ${T.border}`, fontSize:11, color:T.textSec, background:T.bgCard }}>
+            <div className="flex gap-5 flex-wrap py-2 pl-4 border-b border-sapi-bronze/20 text-[11px] text-sapi-muted bg-sapi-navy">
               {[
                 { color:T.green, label:"Above arc (outperforming)" },
                 { color:T.gray,  label:"On arc (±5)" },
@@ -782,8 +787,8 @@ export default function SAPIIndexPage() {
                 { color:T.gray,  label:"Steady trajectory" },
                 { color:T.red,   label:"Declining trajectory" },
               ].map(item => (
-                <div key={item.label} style={{ display:"flex", alignItems:"center", gap:6 }}>
-                  <div style={{ width:10, height:10, borderRadius:"50%", background:item.color }} />{item.label}
+                <div key={item.label} className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background:item.color }} />{item.label}
                 </div>
               ))}
             </div>
@@ -800,29 +805,29 @@ export default function SAPIIndexPage() {
             </div>
 
             {/* Explanation Section */}
-            <div style={{ padding:"24px 0", background:T.bgCard, borderTop:`0.5px solid ${T.border}` }}>
-              <div style={{ maxWidth:"900px", margin:"0 auto" }}>
-                <div style={{ fontSize:12, fontWeight:600, color:T.textPri, marginBottom:8, letterSpacing:0.5, textTransform:"uppercase", textAlign:"center" }}>Understanding the Index</div>
-                <p style={{ fontSize:13, color:T.textSec, lineHeight:1.7, margin:"0 0 16px" }}>
+            <div className="py-6 bg-sapi-navy border-t border-sapi-bronze/20">
+              <div className="max-w-[900px] mx-auto">
+                <div className="text-[12px] font-semibold text-sapi-parchment mb-2 tracking-[0.5px] uppercase text-center">Understanding the Index</div>
+                <p className="text-[13px] text-sapi-muted leading-[1.7] mb-4">
                   The Sovereign AI Power Index maps 32 nations across two dimensions: structural independence (X-axis) and execution velocity (Y-axis). Each node represents a nation's strategic position in the global AI race. Nation identities are anonymized (A, B, C, etc.) in this preview.
                 </p>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(250px, 1fr))", gap:16 }}>
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
                   <div>
-                    <div style={{ fontSize:11, fontWeight:600, color:T.gold, marginBottom:6 }}>Sovereignty Axis (X)</div>
-                    <p style={{ fontSize:12, color:T.textSec, lineHeight:1.6, margin:0 }}>
+                    <div className="text-[11px] font-semibold text-sapi-gold mb-1.5">Sovereignty Axis (X)</div>
+                    <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
                       Measures structural independence through compute infrastructure, semiconductor access, data jurisdiction, model independence, and AI talent retention.
                     </p>
                   </div>
                   <div>
-                    <div style={{ fontSize:11, fontWeight:600, color:T.gold, marginBottom:6 }}>Velocity Axis (Y)</div>
-                    <p style={{ fontSize:12, color:T.textSec, lineHeight:1.6, margin:0 }}>
+                    <div className="text-[11px] font-semibold text-sapi-gold mb-1.5">Velocity Axis (Y)</div>
+                    <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
                       Measures execution and deployment speed through policy velocity, public/private sector adoption, investment coherence, and institutional readiness.
                     </p>
                   </div>
                 </div>
-                <div style={{ marginTop:16, padding:"12px 16px", background:T.bgPanel, borderLeft:`2px solid ${T.gold}`, borderRadius:"0 6px 6px 0" }}>
-                  <div style={{ fontSize:11, fontWeight:600, color:T.textPri, marginBottom:4 }}>The Execution Delta</div>
-                  <p style={{ fontSize:12, color:T.textSec, lineHeight:1.6, margin:0 }}>
+                <div className="mt-4 p-4 bg-sapi-midnight border-l-2 border-sapi-gold rounded-r-md">
+                  <div className="text-[11px] font-semibold text-sapi-parchment mb-1">The Execution Delta</div>
+                  <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
                     The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta — the most important metric in the index. Positive delta = outperforming, Negative delta = unrealized potential.
                   </p>
                 </div>
@@ -848,5 +853,9 @@ export default function SAPIIndexPage() {
         </div>
       )}
     </div>
+    
+    {/* BriefedVersionPanel - shows for all tabs */}
+    <BriefedVersionPanel />
+  </>
   );
 }

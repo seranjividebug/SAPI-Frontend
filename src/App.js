@@ -4,6 +4,7 @@ import { LoginPage, RegisterPage, LandingPage, PreviewPage, MainPage } from './p
 import MethodologyPage from './pages/methodology/MethodologyPage';
 import AboutPage from './pages/about/AboutPage';
 import ContactPage from './pages/contact/ContactPage';
+import SAPILogin from './pages/Login_RequestAccess';
 import SAPIBriefing from './components/SAPI_P3_Briefing';
 import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
@@ -15,6 +16,7 @@ import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
 import SAPIArcDashboard from './pages/PowerArc';
 import SapiIndexPage from './pages/sapi-index-page';
+import SAPIIndexPageDemo from './pages/SAPI_IndexPage_Enhancements';
 import AdminDashboard from './components/AdminDashboard';
 import SubmissionsList from './pages/admin/SubmissionsList';
 import SubmissionDetail from './pages/admin/SubmissionDetail';
@@ -171,6 +173,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/main" replace />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/sapi-login" element={<SAPILogin />} />
           <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
           <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
           <Route path="/register" element={<RegisterPage />} />
@@ -197,6 +200,7 @@ function App() {
           <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
           <Route path="/powerarc" element={<SAPIArcDashboard />} />
           <Route path="/sapi-index" element={<SapiIndexPage />} />
+          <Route path="/sapi-index-demo" element={<SAPIIndexPageDemo />} />
           <Route path="/main" element={<MainPage />} />
           <Route path="/methodology" element={<MethodologyPage />} />
           <Route path="/about" element={<AboutPage />} />

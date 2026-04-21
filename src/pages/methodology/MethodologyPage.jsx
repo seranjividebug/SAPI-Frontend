@@ -93,7 +93,7 @@ const CustomHeader = () => {
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
           >
-            Sample
+            Preview
           </button>
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
@@ -195,7 +195,7 @@ export default function MethodologyPage() {
       <section className="bg-[#0a0a12] pt-2 min-h-screen font-sans">
         <div className="px-8 py-8 max-w-container mx-auto">
           <div className="space-y-8">
-            <button
+            {/* <button
               className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
               onClick={() => window.location.href = '/main'}
             >
@@ -204,7 +204,7 @@ export default function MethodologyPage() {
                   strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Back to Main Page
-            </button>
+            </button> */}
             <PageHero
               cta={{ href: "/contact", label: "Request an Introduction" }}
               description="The methodology explains the five dimensions, the scoring architecture and the institutional lens applied to sovereign AI readiness - with proprietary mechanics underpinning every scoring layer."
