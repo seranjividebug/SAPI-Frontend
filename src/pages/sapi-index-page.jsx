@@ -702,7 +702,7 @@ export default function SAPIIndexPage() {
         <div className="flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/sapi-index')}
           >
             Index
           </button>
@@ -712,12 +712,12 @@ export default function SAPIIndexPage() {
           >
             Methodology
           </button>
-          <button
+          {/* <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
           >
             Preview
-          </button>
+          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}
@@ -733,6 +733,28 @@ export default function SAPIIndexPage() {
         </div>
       </div>
     </header>
+
+    {/* Credential Request Card */}
+    <div className="px-8 py-6 max-w-[1110px] mx-auto">
+      <div className="bg-sapi-navy border border-sapi-bronze/30 rounded-sm p-6">
+        <div className="text-center mb-4">
+          {/* <h2 className="font-sans text-[11px] tracking-[0.22em] text-white font-medium uppercase">
+            NOT YET CREDENTIALED
+          </h2> */}
+        </div>
+        <p className="font-sans text-[13px] leading-[1.6] text-sapi-parchment text-center mb-4">
+          Sign in to view nation identities, detailed scores, and comprehensive analysis.
+        </p>
+        <div className="text-center">
+          <button
+            onClick={() => navigate('/login')}
+            className="font-sans text-[12px] tracking-[0.24em] uppercase font-medium cursor-pointer rounded-sm px-8 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+          >
+            SIGN IN
+          </button>
+        </div>
+      </div>
+    </div>
 
     {/* Orientation Strip */}
     <OrientationStrip />

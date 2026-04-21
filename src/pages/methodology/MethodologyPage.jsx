@@ -79,7 +79,7 @@ const CustomHeader = () => {
         <div className="flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/sapi-index')}
           >
             Index
           </button>
@@ -89,12 +89,12 @@ const CustomHeader = () => {
           >
             Methodology
           </button>
-          <button
+          {/* <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
           >
             Preview
-          </button>
+          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}

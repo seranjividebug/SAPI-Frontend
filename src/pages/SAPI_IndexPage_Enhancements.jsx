@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { submitBriefedIndexRequest } from "../services/contactService";
 
 /**
  * SAPI — Power Arc page enhancements
@@ -151,14 +152,18 @@ export function BriefedVersionPanel() {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      // TODO: replace with real endpoint
-      // await fetch("/api/leads/request-access", {
-      //   method: "POST",
-      //   body: JSON.stringify({ ...form, requestType: "briefed_version" }),
-      // });
-      console.log("[stub] briefed version request", { ...form, requestType: "briefed_version" });
-      await new Promise((r) => setTimeout(r, 900));
+      const briefedData = {
+        name: form.fullName,
+        email: form.email,
+        institution: form.institution,
+        behalfOf: form.requestorType,
+        additionalContext: form.context,
+      };
+      await submitBriefedIndexRequest(briefedData);
       setSubmitted(true);
+    } catch (error) {
+      console.error("Failed to submit briefed index request:", error);
+      alert("Failed to submit request. Please try again.");
     } finally {
       setSubmitting(false);
     }

@@ -118,13 +118,44 @@ export default function LoginPage() {
             >
               {loading ? 'Verifying...' : 'Sign In'}
             </button>
-            <button
-              onClick={() => navigate('/sapi-login')}
-              className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-parchment bg-sapi-navy border border-sapi-bronze/30 rounded-md cursor-pointer transition-all duration-150 hover:border-sapi-gold/50"
-            >
-              Request for Registrion
-            </button>
           </div>
+
+          {/* Divider */}
+          <div
+            className="mt-1 mb-1"
+            style={{ height: '1px', background: `linear-gradient(90deg, transparent, #6B450855, transparent)` }}
+          />
+
+          <div className="text-center mb-6">
+            <h2
+              style={{
+                fontSize: '11px',
+                letterSpacing: '0.22em',
+                color: '#FFFFFF',
+                fontWeight: 500,
+              }}
+            >
+              NOT YET CREDENTIALED
+            </h2>
+          </div>
+
+          <p
+            className="text-center mb-2"
+            style={{
+              fontSize: '14px',
+              lineHeight: '1.6',
+              color: '#FBF5E6',
+            }}
+          >
+            Access to the SAPI portal is issued to verified officials. Request credentials and our team will validate your institution and respond within two working days.
+          </p>
+
+          <button
+            onClick={() => navigate('/sapi-login')}
+            className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-gold border border-sapi-gold rounded-md cursor-pointer transition-all duration-150 hover:bg-sapi-gold hover:text-sapi-void"
+          >
+            REQUEST CREDENTIALS
+          </button>
 
         </div>
       </div>
