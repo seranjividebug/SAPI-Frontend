@@ -152,11 +152,13 @@ export function BriefedVersionPanel() {
     if (!validate()) return;
     setSubmitting(true);
     try {
+      // Get the label for the selected requestor type value
+      const selectedRequestorType = REQUESTOR_TYPES.find(t => t.value === form.requestorType);
       const briefedData = {
         name: form.fullName,
         email: form.email,
         institution: form.institution,
-        behalfOf: form.requestorType,
+        behalfOf: selectedRequestorType?.label || form.requestorType,
         additionalContext: form.context,
       };
       await submitBriefedIndexRequest(briefedData);

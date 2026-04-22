@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrientationStrip, BriefedVersionPanel } from './SAPI_IndexPage_Enhancements';
+import { EnhancedFooter } from './common/EnhancedFooter';
 
 // ── Anonymized nation data (A–Z, AA–FF) ──────────────────────────────────
 const nations = [
@@ -932,9 +933,12 @@ export default function SAPIIndexPage() {
         </div>
       )}
     </div>
-    
+
     {/* BriefedVersionPanel - shows for all tabs */}
     <BriefedVersionPanel />
+
+    {/* Footer */}
+    <EnhancedFooter />
   </>
   );
 }
