@@ -24,7 +24,7 @@ const Button = ({ href, variant = "default", children }) => {
   return (
     <button
       onClick={() => navigate(href)}
-      className={`font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 transition-colors duration-150 ${
+      className={`font-sans text-[13px] sm:text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-8 sm:px-11 py-3.5 transition-colors duration-150 ${
         variant === "text" 
           ? "text-sapi-gold hover:text-[#B8862A]" 
           : "bg-sapi-gold text-sapi-void hover:bg-[#B8862A]"
@@ -39,17 +39,17 @@ const PageHero = ({ cta, description, label, title }) => {
   const navigate = useNavigate();
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <SectionLabel tone="accent">{label}</SectionLabel>
-      <h1 className="font-sans text-5xl leading-tight text-sapi-parchment max-w-4xl">
+      <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl leading-tight text-sapi-parchment max-w-4xl">
         {title}
       </h1>
-      <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
+      <p className="font-sans text-base sm:text-lg leading-8 text-sapi-muted max-w-2xl">
         {description}
       </p>
       <button 
         onClick={() => navigate(cta.href)}
-        className="font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+        className="font-sans text-[13px] sm:text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-8 sm:px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
       >
         {cta.label}
       </button>
@@ -59,24 +59,27 @@ const PageHero = ({ cta, description, label, title }) => {
 
 const CustomHeader = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <img
             src="/SAPI_Logo_B4.svg"
             alt="SAPI Logo"
-            className="h-40 w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
           />
           <div
-            className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
+            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
           >
             THE SOVEREIGN<br />AI POWER INDEX
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
@@ -89,12 +92,6 @@ const CustomHeader = () => {
           >
             Methodology
           </button>
-          {/* <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Preview
-          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}
@@ -108,7 +105,65 @@ const CustomHeader = () => {
             Request Introduction
           </button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-sapi-parchment p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
+          <div className="flex flex-col gap-4">
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/sapi-index');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Index
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/methodology');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Methodology
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/about');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              About Us
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+              onClick={() => {
+                navigate('/contact');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Request Introduction
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
@@ -193,8 +248,8 @@ export default function MethodologyPage() {
     <PageLayout>
       <CustomHeader />
       <section className="bg-[#0a0a12] pt-2 min-h-screen font-sans">
-        <div className="px-8 py-8 max-w-container mx-auto">
-          <div className="space-y-8">
+        <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-container mx-auto">
+          <div className="space-y-6 sm:space-y-8">
             {/* <button
               className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
               onClick={() => window.location.href = '/main'}
@@ -213,34 +268,34 @@ export default function MethodologyPage() {
             />
           </div>
 
-        <div className="grid gap-12 border-t border-sapi-bronze pt-12 lg:grid-cols-[0.82fr_1.18fr]">
-          <FadeIn className="space-y-5">
+        <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
+          <FadeIn className="space-y-4 sm:space-y-5">
             <SectionLabel>Institutional Lens</SectionLabel>
-            <h2 className="font-sans max-w-xl text-3xl leading-tight text-sapi-parchment sm:text-4xl">
+            <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
               What the framework is designed to test
             </h2>
           </FadeIn>
 
-          <FadeIn className="space-y-8">
-            <p className="text-lg leading-8 text-sapi-muted">
+          <FadeIn className="space-y-6 sm:space-y-8">
+            <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
               SAPI is designed to answer a simple question: who can translate AI ambition into durable
               strategic capacity. The framework rewards more than technical capability. It tests whether capital,
               infrastructure, policy, and execution are aligned.
             </p>
-            <p className="text-lg leading-8 text-sapi-muted">
+            <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
               That alignment matters because sovereign AI readiness is not won by compute alone. It emerges when a
               nation can deploy, govern, finance, and protect intelligence infrastructure as a coherent system.
             </p>
           </FadeIn>
         </div>
 
-        <div className="space-y-10 pt-12">
-          <FadeIn className="space-y-6">
+        <div className="space-y-8 sm:space-y-10 pt-8 sm:pt-12">
+          <FadeIn className="space-y-4 sm:space-y-6">
             <SectionLabel>Five Dimensions</SectionLabel>
-            <h2 className="font-sans max-w-4xl text-4xl leading-tight text-sapi-parchment sm:text-5xl lg:text-6xl">
+            <h2 className="font-sans max-w-4xl text-3xl sm:text-4xl leading-tight text-sapi-parchment sm:text-5xl lg:text-6xl">
               The scoring architecture
             </h2>
-            <p className="max-w-2xl text-lg leading-8 text-sapi-muted">
+            <p className="max-w-2xl text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
               Each dimension isolates a separate source of sovereign strength so the final score can be read like an
               institutional ratings sheet rather than an infographic.
             </p>
@@ -253,10 +308,10 @@ export default function MethodologyPage() {
           </div>
         </div>
 
-        <div className="grid gap-10 pt-16 lg:grid-cols-2 lg:gap-x-14">
+        <div className="grid gap-8 sm:gap-10 pt-12 sm:pt-16 lg:grid-cols-2 lg:gap-x-14">
           {dimensions.map((dimension, index) => (
             <FadeIn key={dimension.key} delay={index * 0.04}>
-              <div className="space-y-4 border-b border-sapi-bronze pb-10">
+              <div className="space-y-4 border-b border-sapi-bronze pb-8 sm:pb-10">
                 <div className="flex flex-wrap items-center gap-3">
                   <SectionLabel className="text-sapi-parchment" tone="white">
                     {dimension.label}
@@ -273,7 +328,7 @@ export default function MethodologyPage() {
           ))}
 
           <FadeIn className="border-l border-sapi-gold pl-6 lg:col-span-2">
-            <p className="max-w-3xl text-base leading-8 text-sapi-muted">
+            <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
               <span className="text-sapi-gold">Directed Intelligence Maturity</span> is proprietary to The Sovereign AI Power Index.
             </p>
             <div className="mt-6">
@@ -282,16 +337,16 @@ export default function MethodologyPage() {
           </FadeIn>
         </div>
 
-        <div className="grid gap-12 border-t border-sapi-bronze pt-16 lg:grid-cols-[0.82fr_1.18fr]">
-          <FadeIn className="space-y-5">
+        <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-12 sm:pt-16 lg:grid-cols-[0.82fr_1.18fr]">
+          <FadeIn className="space-y-4 sm:space-y-5">
             <SectionLabel>Scoring Architecture</SectionLabel>
-            <h2 className="font-sans max-w-xl text-3xl leading-tight text-sapi-parchment sm:text-4xl">
+            <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
               How dimensions are weighted and scored.
             </h2>
           </FadeIn>
 
-          <FadeIn className="space-y-8">
-            <p className="max-w-3xl text-base leading-8 text-sapi-muted">
+          <FadeIn className="space-y-6 sm:space-y-8">
+            <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
               Each dimension is scored on a 0 - 100 scale using a composite of quantitative indicators and qualitative
               practitioner assessment. The five dimension scores are weighted to produce a single composite SAPI score.
               Weightings are not equal, they reflect the relative contribution of each dimension to durable sovereign
@@ -299,31 +354,31 @@ export default function MethodologyPage() {
             </p>
 
             <div className="border-t border-sapi-bronze">
-              <div className="grid gap-3 border-b border-sapi-bronze py-5 md:grid-cols-[1.2fr_0.8fr] md:items-start">
-                <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Dimension</p>
-                <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Weight Range</p>
+              <div className="grid gap-2 sm:gap-3 border-b border-sapi-bronze py-4 sm:py-5 md:grid-cols-[1.2fr_0.8fr] md:items-start">
+                <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Dimension</p>
+                <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Weight Range</p>
               </div>
               {dimensionWeights.map((row, index) => (
                 <FadeIn key={row.dimension} delay={index * 0.04}>
-                  <div className="grid gap-3 border-b border-sapi-bronze py-5 md:grid-cols-[1.2fr_0.8fr] md:items-start">
-                    <p className={`text-lg leading-8 ${row.dimension === "Directed Intelligence Maturity" ? "text-sapi-gold" : "text-sapi-parchment"}`}>{row.dimension}</p>
-                    <p className="text-base leading-8 text-sapi-muted">{row.weightRange}</p>
+                  <div className="grid gap-2 sm:gap-3 border-b border-sapi-bronze py-4 sm:py-5 md:grid-cols-[1.2fr_0.8fr] md:items-start">
+                    <p className={`text-base sm:text-lg leading-7 sm:leading-8 ${row.dimension === "Directed Intelligence Maturity" ? "text-sapi-gold" : "text-sapi-parchment"}`}>{row.dimension}</p>
+                    <p className="text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">{row.weightRange}</p>
                   </div>
                 </FadeIn>
               ))}
               <p className="font-sans pt-3 text-[0.72rem] uppercase tracking-[0.22em] text-sapi-muted/70">[National scoring architecture]</p>
             </div>
 
-            <p className="max-w-3xl text-base leading-8 text-sapi-muted">
+            <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
               Weights are expressed as ranges rather than fixed values because SAPI applies contextual adjustment based
               on a nation's development stage. A nation at Level 2 on the DI Maturity scale may have its Regulatory
               Readiness weight increased to reflect the outsized role that policy frameworks play at that stage. The
               full weighting methodology is available under NDA to institutional counterparts.
             </p>
 
-            <div className="space-y-5 border-t border-sapi-bronze pt-8">
-              <h3 className="font-sans text-3xl leading-tight text-sapi-parchment sm:text-4xl">Data sources</h3>
-              <p className="max-w-3xl text-base leading-8 text-sapi-muted">
+            <div className="space-y-4 sm:space-y-5 border-t border-sapi-bronze pt-6 sm:pt-8">
+              <h3 className="font-sans text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">Data sources</h3>
+              <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
                 SAPI scores are derived from a combination of public data (government AI strategies, budget filings,
                 energy grid capacity reports, regulatory frameworks), proprietary practitioner assessment, and
                 structured interviews with in-country AI and corporate leads. No single data source determines a score. The Directed Intelligence Maturity dimension is exclusive to The Sovereign AI Power Index.
@@ -332,20 +387,20 @@ export default function MethodologyPage() {
           </FadeIn>
         </div>
 
-        <div className="grid gap-12 border-t border-sapi-bronze pt-12 lg:grid-cols-[0.82fr_1.18fr]">
-          <FadeIn className="space-y-5">
+        <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
+          <FadeIn className="space-y-4 sm:space-y-5">
             <SectionLabel tone="accent">Directed Intelligence Maturity</SectionLabel>
-            <h2 className="font-sans max-w-xl text-3xl leading-tight text-sapi-parchment sm:text-4xl">
+            <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
               Five stages of institutional adoption
             </h2>
           </FadeIn>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {methodologyLevels.map((level, index) => (
               <FadeIn key={level.level} delay={index * 0.04}>
-                <div className="border-b border-sapi-bronze pb-6">
-                  <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-parchment">{level.level}</p>
-                  <p className="mt-3 text-base leading-8 text-sapi-muted">{level.description}</p>
+                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
+                  <p className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-parchment">{level.level}</p>
+                  <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">{level.description}</p>
                 </div>
               </FadeIn>
             ))}

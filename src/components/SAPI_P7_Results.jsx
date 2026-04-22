@@ -269,7 +269,7 @@ function DimCard({ dim, score, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="p-4.5 px-4 pt-3.5 cursor-pointer transition-colors duration-150 flex-[1_1_160px] min-w-[148px]"
+      className="p-3.5 sm:p-4.5 px-3 sm:px-4 pt-3 sm:pt-3.5 cursor-pointer transition-colors duration-150 flex-[1_1_140px_sm:1_1_160px] min-w-[130px_sm:148px]"
       style={{
         background: hover ? C.midnight : C.navy,
         border: `1px solid ${hover ? "rgba(201,150,58,0.4)" : C.bronze}`,
@@ -277,23 +277,23 @@ function DimCard({ dim, score, onClick }) {
         borderRadius: 6,
       }}
     >
-      <div className="flex justify-between items-center mb-3">
-        <span className="font-serif text-[11px] text-sapi-gold tracking-[0.15em] opacity-75">
+      <div className="flex justify-between items-center mb-2.5 sm:mb-3">
+        <span className="font-serif text-[10px] sm:text-[11px] text-sapi-gold tracking-[0.15em] opacity-75">
           {dim.shortCode}
         </span>
         <span
-          className="font-sans text-[8px] tracking-[0.18em] uppercase px-1.5 py-0.5 rounded-[2px]"
+          className="font-sans text-[7.5px] sm:text-[8px] tracking-[0.18em] uppercase px-1 sm:px-1.5 py-0.5 rounded-[2px]"
           style={{ color: band.color, background: band.bg }}
         >
           {band.label}
         </span>
       </div>
 
-      <div className="font-sans text-[10.5px] text-sapi-muted leading-[1.4] mb-3 tracking-[0.01em]">
+      <div className="font-sans text-[9.5px] sm:text-[10.5px] text-sapi-muted leading-[1.4] mb-2.5 sm:mb-3 tracking-[0.01em]">
         {dim.name}
       </div>
 
-      <div className="font-mono text-[30px] text-sapi-paleGold leading-none mb-3 font-medium tracking-[0.02em]">
+      <div className="font-mono text-[26px] sm:text-[30px] text-sapi-paleGold leading-none mb-2.5 sm:mb-3 font-medium tracking-[0.02em]">
         {score.toFixed(1)}
       </div>
 
@@ -305,7 +305,7 @@ function DimCard({ dim, score, onClick }) {
       </div>
 
       <div
-        className="font-sans text-[8.5px] text-sapi-muted tracking-[0.1em] transition-opacity duration-150"
+        className="font-sans text-[8px] sm:text-[8.5px] text-sapi-muted tracking-[0.1em] transition-opacity duration-150"
         style={{ opacity: hover ? 0.65 : 0.25 }}
       >
         View scorecard →
@@ -315,12 +315,12 @@ function DimCard({ dim, score, onClick }) {
 }
 
 function Rule() {
-  return <div className="h-px bg-sapi-bronze my-9" />;
+  return <div className="h-px bg-sapi-bronze my-7 sm:my-9" />;
 }
 
 function SectionLabel({ children }) {
   return (
-    <div className="font-sans text-[9.5px] tracking-[0.24em] uppercase text-sapi-gold opacity-70 mb-4.5">
+    <div className="font-sans text-[8.5px] sm:text-[9.5px] tracking-[0.24em] uppercase text-sapi-gold opacity-70 mb-4 sm:mb-4.5">
       {children}
     </div>
   );
@@ -439,8 +439,8 @@ export default function SAPIResults() {
   // Return loading or error state if no data
   if (loading) {
     return (
-      <div className="min-h-screen bg-sapi-void flex items-center justify-center">
-        <div className="text-sapi-paleGold font-sans text-sm">
+      <div className="min-h-screen bg-sapi-void flex items-center justify-center p-4">
+        <div className="text-sapi-paleGold font-sans text-[13px] sm:text-sm">
           Loading results...
         </div>
       </div>
@@ -449,13 +449,13 @@ export default function SAPIResults() {
 
   if (error || !appState) {
     return (
-      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-10">
-        <div className="font-serif text-lg text-sapi-crimson mb-4">
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-6 sm:p-10">
+        <div className="font-serif text-[16px] sm:text-lg text-sapi-crimson mb-4 text-center">
           {error || "Unable to load assessment results"}
         </div>
         <button 
           onClick={() => navigate('/')}
-          className="bg-sapi-gold text-sapi-void border-none px-6 py-3 font-sans text-xs cursor-pointer rounded hover:opacity-90"
+          className="bg-sapi-gold text-sapi-void border-none px-5 py-2.5 sm:px-6 sm:py-3 font-sans text-[11px] sm:text-xs cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -482,29 +482,29 @@ export default function SAPIResults() {
 
       {/* ── Top bar ──────────────────────────────────────────────────── */}
       <div className="bg-sapi-navy border-b border-sapi-bronze">
-        <div className="max-w-[1080px] mx-auto pl-4 pr-10 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-5">
+        <div className="max-w-[1080px] mx-auto pl-3 sm:pl-4 pr-4 sm:pr-10 h-16 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 sm:gap-5">
             <img
               src="/SAPI_Logo_B4.svg"
               alt="SAPI Logo"
-              className="h-40 w-40 object-contain"
+              className="h-32 w-32 sm:h-40 sm:w-40 object-contain"
             />
-            <div>
-              <div className="font-serif text-[12px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
+            <div className="hidden sm:block">
+              <div className="font-serif text-[11px] sm:text-[12px] tracking-[0.3em] uppercase text-sapi-parchment opacity-[0.88]">
                 The Sovereign AI Power Index
               </div>
-              <div className="font-sans text-[12px] tracking-[0.22em] uppercase text-sapi-gold opacity-60 mt-0.5">
+              <div className="font-sans text-[11px] sm:text-[12px] tracking-[0.22em] uppercase text-sapi-gold opacity-60 mt-0.5">
                 Assessment Results
               </div>
             </div>
           </div>
 
-          <div className="flex items-center gap-5">
-            <div className="text-right">
-              <div className="font-serif text-[13px] text-sapi-parchment opacity-90 tracking-[0.04em]">
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="text-right hidden sm:block">
+              <div className="font-serif text-[12px] sm:text-[13px] text-sapi-parchment opacity-90 tracking-[0.04em]">
                 {nationName}
               </div>
-              <div className="font-sans text-[8.5px] text-sapi-muted opacity-60 tracking-[0.1em] uppercase mt-0.5">
+              <div className="font-sans text-[8px] sm:text-[8.5px] text-sapi-muted opacity-60 tracking-[0.1em] uppercase mt-0.5">
                 {date} · Tier 1 Assessment
               </div>
             </div>
@@ -513,15 +513,15 @@ export default function SAPIResults() {
                 className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
                 onClick={() => setShowDropdown(!showDropdown)}
               >
-                <div className="w-8 h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-sm font-medium">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-[13px] sm:text-sm font-medium">
                   {firstLetter}
                 </div>
               </button>
               {showDropdown && (
-                <div className="absolute right-0 mt-2 w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                <div className="absolute right-0 mt-2 w-36 sm:w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
                   <button
                     onClick={handleSignOut}
-                    className="w-full text-left px-4 py-2 text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                    className="w-full text-left px-3.5 sm:px-4 py-2 text-[13px] sm:text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
                   >
                     Sign out
                   </button>
@@ -533,10 +533,10 @@ export default function SAPIResults() {
       </div>
 
       {/* ── Content ──────────────────────────────────────────────────── */}
-      <div className="max-w-[1080px] mx-auto px-10 py-11 pb-20">
+      <div className="max-w-[1080px] mx-auto px-4 sm:px-10 py-8 sm:py-11 pb-16 sm:pb-20">
 
         {/* ── HERO SECTION ─────────────────────────────────────────── */}
-        <div className="flex bg-sapi-navy border border-sapi-bronzeHi rounded-[10px] overflow-hidden relative">
+        <div className="flex flex-col sm:flex-row bg-sapi-navy border border-sapi-bronzeHi rounded-[10px] overflow-hidden relative">
           {/* Ambient radial */}
           <div
             className="absolute inset-0 pointer-events-none"
@@ -544,24 +544,24 @@ export default function SAPIResults() {
           />
 
           {/* LEFT PANEL */}
-          <div className="flex-shrink-0 p-11 pr-11 pl-12 border-r border-sapi-bronze flex flex-col min-w-[280px]">
+          <div className="flex-shrink-0 p-6 sm:p-11 pr-6 sm:pr-11 pl-6 sm:pl-12 border-b sm:border-b-0 sm:border-r border-sapi-bronze flex flex-col min-w-[280px]">
             {/* Label */}
-            <div className="font-sans text-[8.5px] tracking-[0.26em] uppercase text-sapi-muted opacity-65 mb-3">
+            <div className="font-sans text-[8px] sm:text-[8.5px] tracking-[0.26em] uppercase text-sapi-muted opacity-65 mb-2.5 sm:mb-3">
               Composite SAPI Score
             </div>
 
             {/* Giant number */}
-            <div className="font-mono text-[90px] text-sapi-paleGold leading-[0.9] tracking-[-0.02em] mb-5.5 font-medium">
+            <div className="font-mono text-[60px] sm:text-[90px] text-sapi-paleGold leading-[0.9] tracking-[-0.02em] mb-4 sm:mb-5.5 font-medium">
               {compositeScore != null ? compositeScore.toFixed(1) : "—"}
             </div>
 
             {/* Tier pill */}
             <div
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-[40px] mb-8 self-start"
+              className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-1.5 rounded-[40px] mb-6 sm:mb-8 self-start"
               style={{ border: `1.5px solid ${tier.color}`, background: tier.bg }}
             >
               <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: tier.color }} />
-              <span className="font-sans text-[9.5px] tracking-[0.22em] uppercase font-medium" style={{ color: tier.color }}>
+              <span className="font-sans text-[8.5px] sm:text-[9.5px] tracking-[0.22em] uppercase font-medium" style={{ color: tier.color }}>
                 {tier.label}
               </span>
             </div>
@@ -579,7 +579,7 @@ export default function SAPIResults() {
                 return (
                   <div key={t.label} className="flex items-center gap-2" style={{ opacity: isActive ? 1 : 0.3 }}>
                     <div className="w-4 h-0.5 rounded-[1px] flex-shrink-0" style={{ background: t.color }} />
-                    <span className="font-sans text-[8.5px] tracking-[0.05em]" style={{ color: isActive ? t.color : C.muted }}>
+                    <span className="font-sans text-[7.5px] sm:text-[8.5px] tracking-[0.05em]" style={{ color: isActive ? t.color : C.muted }}>
                       {t.range} — {t.label}
                     </span>
                   </div>
@@ -589,16 +589,16 @@ export default function SAPIResults() {
           </div>
 
           {/* RIGHT PANEL — Radar */}
-          <div className="flex-1 flex flex-col items-center justify-center p-9 relative">
+          <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-9 relative">
             {/* Report Button - Top Right of Radar Panel */}
             <button
               onClick={() => navigate('/results-report')}
-              className="absolute top-5 right-5 px-4 py-2 bg-sapi-gold border-none rounded font-sans text-[11px] font-medium text-sapi-void cursor-pointer transition-opacity duration-200 z-10 hover:opacity-85"
+              className="absolute top-4 sm:top-5 right-4 sm:right-5 px-3.5 sm:px-4 py-2 bg-sapi-gold border-none rounded font-sans text-[10px] sm:text-[11px] font-medium text-sapi-void cursor-pointer transition-opacity duration-200 z-10 hover:opacity-85"
             >
               Report
             </button>
 
-            <div className="font-sans text-[9px] tracking-[0.22em] uppercase text-sapi-muted opacity-55 mb-2 self-start">
+            <div className="font-sans text-[8px] sm:text-[9px] tracking-[0.22em] uppercase text-sapi-muted opacity-55 mb-2 self-start">
               Dimension Profile · 0–100 Scale
             </div>
             <RadarChart scores={dimScores} />
@@ -609,7 +609,7 @@ export default function SAPIResults() {
 
         {/* ── DIMENSION SUMMARY ────────────────────────────────────── */}
         <SectionLabel>Dimension Scores</SectionLabel>
-        <div className="flex gap-3 flex-wrap">
+        <div className="flex gap-2.5 sm:gap-3 flex-wrap">
           {DIMENSIONS.map((dim, i) => (
             <DimCard
               key={dim.shortCode}
@@ -624,8 +624,8 @@ export default function SAPIResults() {
 
         {/* ── EXECUTIVE SUMMARY ────────────────────────────────────── */}
         <SectionLabel>Executive Summary</SectionLabel>
-        <div className="bg-sapi-navy border border-sapi-bronze border-l-[3px] border-l-sapi-gold rounded-md py-6 px-7">
-          <p className="font-serif text-sm text-sapi-parchment leading-[1.9] m-0 tracking-[0.015em]">
+        <div className="bg-sapi-navy border border-sapi-bronze border-l-[3px] border-l-sapi-gold rounded-md py-5 sm:py-6 px-5 sm:px-7">
+          <p className="font-serif text-[13px] sm:text-sm text-sapi-parchment leading-[1.8] sm:leading-[1.9] m-0 tracking-[0.015em]">
             {nationName} has achieved a composite SAPI score of{" "}
             <strong className="text-sapi-paleGold font-medium font-mono">
               {compositeScore?.toFixed(1)}
@@ -650,18 +650,18 @@ export default function SAPIResults() {
 
         {/* ── PEER COMPARISON ──────────────────────────────────────── */}
         <SectionLabel>Global Positioning</SectionLabel>
-        <div className="bg-sapi-navy border border-sapi-bronze rounded-md py-7 px-9">
-          <div className="font-sans text-[11px] text-sapi-muted leading-[1.65] mb-6 tracking-[0.02em] opacity-80">
+        <div className="bg-sapi-navy border border-sapi-bronze rounded-md py-5 sm:py-7 px-5 sm:px-9">
+          <div className="font-sans text-[10px] sm:text-[11px] text-sapi-muted leading-[1.6] sm:leading-[1.65] mb-5 sm:mb-6 tracking-[0.02em] opacity-80">
             Composite score benchmarked against Tier 1 respondent distribution.
             Reference markers based on aggregate cross-government assessment data.
             Individual national scores are not disclosed.
           </div>
           <PeerComparisonStrip compositeScore={compositeScore || 0} />
           
-          <div className="mt-6 flex justify-end">
+          <div className="mt-5 sm:mt-6 flex justify-end">
             <button
               onClick={() => nav("peercomparison")}
-              className="bg-transparent text-sapi-gold border border-sapi-gold px-5 py-2.5 font-sans text-[10px] tracking-[0.14em] uppercase font-medium cursor-pointer rounded hover:bg-sapi-gold hover:text-sapi-void transition-all duration-150"
+              className="bg-transparent text-sapi-gold border border-sapi-gold px-4 py-2.5 sm:px-5 sm:py-2.5 font-sans text-[9.5px] sm:text-[10px] tracking-[0.14em] uppercase font-medium cursor-pointer rounded hover:bg-sapi-gold hover:text-sapi-void transition-all duration-150"
             >
               View Detailed Comparison →
             </button>
@@ -671,28 +671,28 @@ export default function SAPIResults() {
         <Rule />
 
         {/* ── CTAs ─────────────────────────────────────────────────── */}
-        <div className="flex gap-3.5 justify-end items-center">
+        <div className="flex gap-3 sm:gap-3.5 justify-end items-center flex-col sm:flex-row">
           <button
             onClick={() => nav("scorecard")}
-            className="bg-transparent text-sapi-muted border border-sapi-muted/35 px-8 py-3.5 font-sans text-[10px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded hover:text-sapi-parchment hover:border-sapi-muted/65 transition-colors duration-150"
+            className="w-full sm:w-auto bg-transparent text-sapi-muted border border-sapi-muted/35 px-6 sm:px-8 py-3 sm:py-3.5 font-sans text-[9.5px] sm:text-[10px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded hover:text-sapi-parchment hover:border-sapi-muted/65 transition-colors duration-150"
           >
             View Full Scorecard
           </button>
 
           <button
             onClick={() => nav("roadmap")}
-            className="bg-sapi-gold text-sapi-void border-none px-9 py-3.5 font-sans text-[10px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded hover:bg-[#B8862A] transition-colors duration-150"
+            className="w-full sm:w-auto bg-sapi-gold text-sapi-void border-none px-6 sm:px-9 py-3 sm:py-3.5 font-sans text-[9.5px] sm:text-[10px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded hover:bg-[#B8862A] transition-colors duration-150"
           >
             View Roadmap →
           </button>
         </div>
 
         {/* ── Footer ───────────────────────────────────────────────── */}
-        <div className="mt-13 pt-5 border-t border-sapi-bronze flex justify-between items-center">
-          <div className="font-sans text-[8.5px] text-sapi-muted opacity-45 tracking-[0.12em] uppercase">
+        <div className="mt-10 sm:mt-13 pt-4 sm:pt-5 border-t border-sapi-bronze flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+          <div className="font-sans text-[8px] sm:text-[8.5px] text-sapi-muted opacity-45 tracking-[0.12em] uppercase text-center sm:text-left">
             Classification: Restricted · Tier 1 Automated Assessment
           </div>
-          <div className="font-sans text-[8.5px] text-sapi-muted opacity-45 tracking-[0.1em]">
+          <div className="font-sans text-[8px] sm:text-[8.5px] text-sapi-muted opacity-45 tracking-[0.1em] text-center sm:text-right">
             SAPI © {new Date().getFullYear()} · CoreIntel
           </div>
         </div>

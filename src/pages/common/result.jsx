@@ -165,7 +165,7 @@ function RadarChart({ scores }) {
   };
 
   return (
-    <svg width="300" height="300" viewBox="0 0 300 300" className="overflow-visible">
+    <svg width="300" height="300" viewBox="0 0 300 300" className="overflow-visible w-[250px] sm:w-[300px] h-[250px] sm:h-[300px]">
       {/* Grid rings */}
       {gridLevels.map((level) => (
         <polygon
@@ -205,7 +205,7 @@ function RadarChart({ scores }) {
         const { lx, ly, anchor } = labelOffset(i);
         return (
           <text key={d.key} x={lx} y={ly} textAnchor={anchor}
-            fontSize="12.5" fill="white"
+            fontSize="11" className="sm:text-[12.5px]" fill="white"
             fontFamily="system-ui, sans-serif" letterSpacing="0.06em">
             {d.short.toUpperCase()}
           </text>
@@ -378,24 +378,24 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
   return (
     <>
       <style>{autofillStyles}</style>
-      <div className="bg-sapi-void min-h-auto font-sans text-sapi-parchment pb-10">
+      <div className="bg-sapi-void min-h-auto font-sans text-sapi-parchment pb-8 sm:pb-10">
 
       <PageHeader />
 
       {/* ─── ZONE A: SCORE REVEAL ─────────────────────────────────────────── */}
-      <div className="max-w-[900px] mx-auto px-10">
+      <div className="max-w-[900px] mx-auto px-4 sm:px-10">
 
         {/* Back to Results */}
         <button
           onClick={() => navigate('/results')}
-          className="bg-transparent border-none pb-4 mt-2 text-sapi-muted text-[13px] font-medium tracking-[0.1em] cursor-pointer flex items-center gap-2 hover:text-sapi-gold transition-colors"
+          className="bg-transparent border-none pb-3 sm:pb-4 mt-2 text-sapi-muted text-[12px] sm:text-[13px] font-medium tracking-[0.1em] cursor-pointer flex items-center gap-2 hover:text-sapi-gold transition-colors"
         >
-          <span className="text-[15px]">←</span> BACK TO RESULTS
+          <span className="text-[14px] sm:text-[15px]">←</span> BACK TO RESULTS
         </button>
 
         {/* Hero Score Card */}
         <div
-          className="rounded-2xl p-12 px-10 mb-8"
+          className="rounded-2xl p-6 sm:p-8 lg:p-12 px-4 sm:px-6 lg:px-10 mb-6 sm:mb-8"
           style={{
             background: "linear-gradient(145deg, #0A0514 0%, #14102C 100%)",
             border: "1px solid rgba(107,69,8,0.25)",
@@ -403,14 +403,14 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           }}
         >
           {/* Header Row */}
-          <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <div className="text-[12px] tracking-[0.25em] text-sapi-muted font-medium">
+          <div className="flex justify-between items-center mb-6 sm:mb-8 flex-wrap gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="text-[10px] sm:text-[11px] lg:text-[12px] tracking-[0.2em] sm:tracking-[0.25em] text-sapi-muted font-medium">
                 COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
               </div>
             </div>
             {/* Generate PDF Button */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={async () => {
                   const id = localStorage.getItem('sapi_assessment_id') || location.state?.assessmentId;
@@ -433,7 +433,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                     alert('No assessment ID found');
                   }
                 }}
-                className="bg-sapi-gold border-none rounded-md px-5 py-2.5 text-sapi-void text-[13px] font-semibold tracking-[0.08em] cursor-pointer hover:opacity-85 transition-opacity"
+                className="bg-sapi-gold border-none rounded-md px-4 py-2 sm:px-5 sm:py-2.5 text-sapi-void text-[11px] sm:text-[13px] font-semibold tracking-[0.08em] cursor-pointer hover:opacity-85 transition-opacity"
               >
                 GENERATE PDF
               </button>
@@ -441,11 +441,11 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           </div>
 
           {/* Score Display */}
-          <div className="flex items-baseline justify-center gap-3 mb-7">
+          <div className="flex items-baseline justify-center gap-2 sm:gap-3 mb-5 sm:mb-7">
             <span
               className="font-sans font-bold text-sapi-paleGold leading-none tracking-[-0.04em]"
               style={{
-                fontSize: "clamp(80px, 12vw, 120px)",
+                fontSize: "clamp(60px, 15vw, 120px)",
                 textShadow: "0 2px 20px rgba(237,217,138,0.15)",
               }}
             >
@@ -454,7 +454,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
             <span
               className="font-sans font-normal leading-none"
               style={{
-                fontSize: "clamp(28px, 4vw, 36px)",
+                fontSize: "clamp(20px, 5vw, 36px)",
                 color: "rgba(237,217,138,0.35)",
               }}
             >
@@ -463,9 +463,9 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           </div>
 
           {/* Tier Badge */}
-          <div className="flex justify-center mb-5">
+          <div className="flex justify-center mb-4 sm:mb-5">
             <span
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-[20px] text-[13px] tracking-[0.15em] font-semibold"
+              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-[20px] text-[11px] sm:text-[13px] tracking-[0.15em] font-semibold"
               style={{
                 // background: `rgba(${tierMeta.colour === '#28A868' ? '40,168,104' : tierMeta.colour === '#F0C050' ? '240,192,80' : '192,48,88'}, 0.12)`,
                 // border: `1.5px solid ${tierMeta.colour}`,
@@ -484,37 +484,39 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           </div>
 
           {/* Editorial Line */}
-          <div className="text-center font-sans text-[17px] font-normal text-sapi-parchment opacity-75 max-w-[520px] mx-auto leading-[1.7]">
+          <div className="text-center font-sans text-[14px] sm:text-[17px] font-normal text-sapi-parchment opacity-75 max-w-[520px] mx-auto leading-[1.6] sm:leading-[1.7]">
             {/* {tierMeta.editorial} */}
           </div>
         </div>
 
         {/* ── Dimension Score Strip ── */}
-        <div className="grid grid-cols-5 gap-2.5 mb-10">
-          {DIMENSIONS.map((d) => {
-            const s = rawScores[d.key];
-            const bc = getBandColour(s);
-            return (
-              <div key={d.key} className="bg-sapi-navy border border-sapi-bronze/20 rounded-md py-4 px-3 text-center">
-                <div className="text-[11px] tracking-[0.14em] text-sapi-muted mb-2.5 font-medium">
-                  {d.short.toUpperCase()}
+        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 mb-8 sm:mb-10">
+          <div className="grid grid-cols-5 gap-2 sm:gap-2.5 min-w-max">
+            {DIMENSIONS.map((d) => {
+              const s = rawScores[d.key];
+              const bc = getBandColour(s);
+              return (
+                <div key={d.key} className="bg-sapi-navy border border-sapi-bronze/20 rounded-md py-3 sm:py-4 px-2 sm:px-3 text-center min-w-[80px] sm:min-w-[100px]">
+                  <div className="text-[10px] sm:text-[11px] tracking-[0.14em] text-sapi-muted mb-2 sm:mb-2.5 font-medium">
+                    {d.short.toUpperCase()}
+                  </div>
+                  <div className="font-sans text-[26px] sm:text-[34px] font-semibold text-sapi-paleGold leading-none mb-2 sm:mb-2.5 tracking-[-0.02em]">
+                    {s}
+                  </div>
+                  <div className="w-full h-[2.5px] sm:h-[3px] bg-white/[0.06] rounded-[2px] overflow-hidden">
+                    <div
+                      className="h-full rounded-[2px] transition-[width] duration-[1.2s]"
+                      style={{
+                        width: `${s}%`,
+                        background: bc,
+                        transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="font-sans text-[34px] font-semibold text-sapi-paleGold leading-none mb-2.5 tracking-[-0.02em]">
-                  {s}
-                </div>
-                <div className="w-full h-[3px] bg-white/[0.06] rounded-[2px] overflow-hidden">
-                  <div
-                    className="h-full rounded-[2px] transition-[width] duration-[1.2s]"
-                    style={{
-                      width: `${s}%`,
-                      background: bc,
-                      transitionTimingFunction: "cubic-bezier(0.4,0,0.2,1)",
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         {/* ─── EMAIL CAPTURE PANEL ─────────────────────────────────────────── */}
@@ -595,7 +597,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
         <div
           className="relative overflow-hidden"
           style={{
-            marginBottom: zoneRevealed ? "48px" : "16px",
+            marginBottom: zoneRevealed ? "40px" : "16px",
             minHeight: zoneRevealed ? "auto" : "120px",
             maxHeight: zoneRevealed ? "none" : "120px",
           }}
@@ -613,17 +615,17 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           >
 
             {/* Section header */}
-            <div className="text-[12px] tracking-[0.18em] text-sapi-muted mb-8 font-medium border-b border-sapi-bronze/18 pb-3.5">
+            <div className="text-[11px] sm:text-[12px] tracking-[0.18em] text-sapi-muted mb-6 sm:mb-8 font-medium border-b border-sapi-bronze/18 pb-3 sm:pb-3.5">
               DIMENSION ANALYSIS
             </div>
 
             {/* Radar chart + legend row */}
-            <div className="flex gap-12 items-center mb-12 flex-wrap">
+            <div className="flex gap-6 sm:gap-12 items-center mb-8 sm:mb-12 flex-wrap">
               <div className="flex-shrink-0">
                 <RadarChart scores={rawScores} />
               </div>
               <div className="flex-1 min-w-[200px]">
-                <div className="font-serif text-[15px] text-sapi-muted italic mb-5 leading-[1.7]">
+                <div className="font-serif text-[13px] sm:text-[15px] text-sapi-muted italic mb-4 sm:mb-5 leading-[1.6] sm:leading-[1.7]">
                   Each axis represents a dimension of sovereign AI readiness.
                   The gold polygon reflects your nation's current capability profile.
                 </div>
@@ -632,15 +634,15 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                   const s = rawScores[d.key];
                   const bc = getBandColour(s);
                   return (
-                    <div key={d.key} className="flex items-center gap-2.5 mb-2.5">
+                    <div key={d.key} className="flex items-center gap-2 sm:gap-2.5 mb-2 sm:mb-2.5">
                       <div
                         className="w-2 h-2 rounded-full flex-shrink-0"
                         style={{ background: bc }}
                       />
-                      <div className="text-[13px] text-sapi-muted flex-1">
+                      <div className="text-[12px] sm:text-[13px] text-sapi-muted flex-1">
                         {d.full}
                       </div>
-                      <div className="font-sans text-[15px] text-sapi-paleGold font-medium">
+                      <div className="font-sans text-[13px] sm:text-[15px] text-sapi-paleGold font-medium">
                         {s}
                       </div>
                     </div>
@@ -650,7 +652,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
             </div>
 
             {/* Dimension scorecard rows */}
-            <div className="mb-10">
+            <div className="mb-8 sm:mb-10">
               {DIMENSIONS.map((d, idx) => {
                 const s = rawScores[d.key];
                 const bc = getBandColour(s);
@@ -658,7 +660,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                   <div
                     key={d.key}
                     onClick={() => zoneRevealed && setCurrentPage && setCurrentPage("scorecard")}
-                    className={`py-5 transition-all ${zoneRevealed ? 'cursor-pointer' : 'cursor-default'}`}
+                    className={`py-4 sm:py-5 transition-all ${zoneRevealed ? 'cursor-pointer' : 'cursor-default'}`}
                     style={{
                       borderBottom: idx < 4 ? "1px solid rgba(107,69,8,0.15)" : "none",
                     }}
@@ -681,22 +683,22 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                       e.currentTarget.style.borderRadius = "0";
                     }}
                   >
-                    <div className="flex items-baseline justify-between mb-2.5 gap-4 flex-wrap">
-                      <div className="flex items-baseline gap-3">
-                        <span className="font-sans text-[13px] text-sapi-muted/50 tracking-[0.1em]">
+                    <div className="flex items-baseline justify-between mb-2 sm:mb-2.5 gap-3 sm:gap-4 flex-wrap">
+                      <div className="flex items-baseline gap-2 sm:gap-3">
+                        <span className="font-sans text-[12px] sm:text-[13px] text-sapi-muted/50 tracking-[0.1em]">
                           {d.num}
                         </span>
-                        <span className="text-[15px] tracking-[0.06em] text-sapi-parchment font-medium">
+                        <span className="text-[13px] sm:text-[15px] tracking-[0.06em] text-sapi-parchment font-medium">
                           {d.full.toUpperCase()}
                         </span>
                       </div>
-                      <span className="font-sans text-[24px] text-sapi-paleGold leading-none font-medium">
+                      <span className="font-sans text-[20px] sm:text-[24px] text-sapi-paleGold leading-none font-medium">
                         {s}
                       </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div className="w-full h-1 bg-white/[0.06] rounded-[2px] overflow-hidden mb-3">
+                    <div className="w-full h-1 bg-white/[0.06] rounded-[2px] overflow-hidden mb-2.5 sm:mb-3">
                       <div
                         className="h-full rounded-[2px] transition-[width] duration-1000"
                         style={{
@@ -709,7 +711,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
                     </div>
 
                     {/* Editorial insight */}
-                    <div className="font-serif italic text-[15px] text-sapi-muted/80 leading-[1.65]">
+                    <div className="font-serif italic text-[13px] sm:text-[15px] text-sapi-muted/80 leading-[1.6] sm:leading-[1.65]">
                       {d.insight}
                     </div>
                   </div>

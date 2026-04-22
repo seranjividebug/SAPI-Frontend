@@ -119,11 +119,11 @@ export default function SAPILogin() {
       />
 
       {/* ── Main content ─────────────────────────────────────────────────── */}
-      <main className="relative flex-1 flex items-center justify-center px-6 py-12">
+      <main className="relative flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div className="w-full max-w-md">
           {/* Logo + wordmark */}
-          <div className="flex flex-col items-center mb-10">
-            <SAPIGlobe size={52} />
+          <div className="flex flex-col items-center mb-6 sm:mb-10">
+            <SAPIGlobe size={40} />
             <div
               className="mt-4 text-center"
               style={{
@@ -140,7 +140,7 @@ export default function SAPILogin() {
 
           {/* Login card */}
           <div
-            className="rounded-sm p-10"
+            className="rounded-sm p-6 sm:p-8 md:p-10"
             style={{
               backgroundColor: C.card,
               border: `1px solid ${C.border}33`,
@@ -151,7 +151,7 @@ export default function SAPILogin() {
               <h1
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
-                  fontSize: "34px",
+                  fontSize: "28px",
                   letterSpacing: "0.18em",
                   color: C.parchment,
                   fontWeight: 500,
@@ -380,7 +380,7 @@ function RequestCredentialsModal({ onClose }) {
         {submitted ? (
           <SubmittedState onClose={onClose} />
         ) : (
-          <div className="p-8 md:p-10">
+          <div className="p-6 sm:p-8 md:p-10">
             {/* Header */}
             <div className="flex items-start justify-between mb-6">
               <div>
@@ -447,7 +447,7 @@ function RequestCredentialsModal({ onClose }) {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <FormField
                   label="FULL NAME"
                   error={errors.fullName}
@@ -473,7 +473,7 @@ function RequestCredentialsModal({ onClose }) {
                 placeholder="e.g. Federal Ministry of Communications & Digital Economy"
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
                 <FormField
                   label="COUNTRY"
                   error={errors.country}

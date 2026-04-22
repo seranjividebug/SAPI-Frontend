@@ -16,13 +16,13 @@ import {
 function Toast({ visible }) {
   return (
     <div
-      className={`fixed bottom-7 right-7 z-[9999] bg-[#1A1540] border border-[#2A204A] text-[#FBF5E6] px-4 py-3 rounded-lg text-sm flex items-center gap-2.5 shadow-lg transition-all duration-300 pointer-events-none ${
+      className={`fixed bottom-4 sm:bottom-7 right-4 sm:right-7 z-[9999] bg-[#1A1540] border border-[#2A204A] text-[#FBF5E6] px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-[11px] sm:text-sm flex items-center gap-2 sm:gap-2.5 shadow-lg transition-all duration-300 pointer-events-none ${
         visible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
       }`}
     >
       <div className="w-1.5 h-1.5 bg-[#28A868] rounded-full flex-shrink-0" />
       Export ready{" "}
-      <span className="text-[#9880B0] text-[11px] ml-1">(prototype mode)</span>
+      <span className="text-[#9880B0] text-[10px] sm:text-[11px] ml-1">(prototype mode)</span>
     </div>
   );
 }
@@ -31,7 +31,7 @@ function Toast({ visible }) {
 function Pill({ label, color }) {
   return (
     <span
-      className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium tracking-wide whitespace-nowrap border-[0.5px]"
+      className="inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-[11px] font-medium tracking-wide whitespace-nowrap border-[0.5px]"
       style={{
         backgroundColor: `${color}18`,
         color,
@@ -51,7 +51,7 @@ function FilterSelect({ value, onChange, options, placeholder }) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`appearance-none bg-white border rounded-md py-1.5 pr-7 pl-2.5 text-xs text-[#1A1A2E] cursor-pointer outline-none transition-colors min-w-[130px] ${
+        className={`appearance-none bg-white border rounded-md py-1.5 pr-7 pl-2.5 text-[10px] sm:text-xs text-[#1A1A2E] cursor-pointer outline-none transition-colors min-w-[100px] sm:min-w-[130px] ${
           isActive ? "border-[#C9963A]" : "border-[#E0D8CC]"
         }`}
       >
@@ -62,15 +62,13 @@ function FilterSelect({ value, onChange, options, placeholder }) {
         ))}
       </select>
       <svg
-        width="12"
-        height="12"
+        width="10" height="10" className="sm:w-[12px] sm:h-[12px] absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9880B0] pointer-events-none"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#9880B0] pointer-events-none"
       >
         <polyline points="6 9 12 15 18 9"></polyline>
       </svg>
@@ -84,14 +82,14 @@ function ColHeader({ col, sortKey, sortDir, onSort }) {
   return (
     <th
       onClick={col.sortable ? () => onSort(col.key) : undefined}
-      className={`px-3.5 h-9 bg-[#F0EBE3] text-[11px] font-medium uppercase tracking-wider whitespace-nowrap text-left border-b border-[#E0D8CC] transition-colors ${
+      className={`px-2 sm:px-3.5 h-8 sm:h-9 bg-[#F0EBE3] text-[9px] sm:text-[11px] font-medium uppercase tracking-wider whitespace-nowrap text-left border-b border-[#E0D8CC] transition-colors ${
         col.sortable ? "cursor-pointer hover:text-[#1A1A2E]" : "cursor-default"
       } ${active ? "text-[#C9963A]" : "text-[#6B6577]"}`}
       style={{ width: col.width }}
     >
       {col.label}
       {col.sortable && (
-        <span className={`text-[9px] ml-1 ${active ? "text-[#C9963A]" : "text-[#C8C0B8]"}`}>
+        <span className={`text-[8px] sm:text-[9px] ml-1 ${active ? "text-[#C9963A]" : "text-[#C8C0B8]"}`}>
           {active ? (sortDir === "asc" ? "↑" : "↓") : "↕"}
         </span>
       )}
@@ -254,9 +252,9 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
 
   if (loading) {
     return (
-      <div className="px-7 py-7 pb-10 font-sans flex items-center justify-center min-h-[60vh]">
+      <div className="px-4 sm:px-7 py-4 sm:py-7 pb-6 sm:pb-10 font-sans flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="text-sm text-[#6B6577]">Loading assessments...</div>
+          <div className="text-xs sm:text-sm text-[#6B6577]">Loading assessments...</div>
         </div>
       </div>
     );
@@ -264,12 +262,12 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
 
   if (error) {
     return (
-      <div className="px-7 py-7 pb-10 font-sans flex items-center justify-center min-h-[60vh]">
+      <div className="px-4 sm:px-7 py-4 sm:py-7 pb-6 sm:pb-10 font-sans flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <div className="text-sm text-[#C03058] mb-2">{error}</div>
+          <div className="text-xs sm:text-sm text-[#C03058] mb-2">{error}</div>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-[#1A1A2E] text-white rounded-md cursor-pointer"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-[#1A1A2E] text-white rounded-md cursor-pointer text-[10px] sm:text-xs"
           >
             Retry
           </button>
@@ -279,30 +277,28 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
   }
 
   return (
-    <div className="px-7 py-7 pb-10 font-sans">
+    <div className="px-4 sm:px-7 py-4 sm:py-7 pb-6 sm:pb-10 font-sans">
       {/* Page Header */}
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-4 sm:mb-5">
         <div>
-          <h1 className="text-[26px] font-semibold text-[#1A1A2E] mb-1.5 font-serif">
+          <h1 className="text-[20px] sm:text-[26px] font-semibold text-[#1A1A2E] mb-1 sm:mb-1.5 font-serif">
             Assessments
           </h1>
-          <div className="text-sm text-[#6B6577]">
+          <div className="text-[12px] sm:text-sm text-[#6B6577]">
             {totalCount} assessments completed
           </div>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border border-[#E0D8CC] rounded-lg px-4 py-3 mb-5">
-        <div className="flex items-center gap-3 flex-wrap">
+      <div className="bg-white border border-[#E0D8CC] rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 mb-4 sm:mb-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
           {/* Search */}
-          <div className="relative flex-shrink-0">
+          <div className="relative w-full sm:flex-shrink-0">
             <svg
-              width="14"
-              height="14"
+              width="12" height="12" className="sm:w-[14px] sm:h-[14px] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
               viewBox="0 0 16 16"
               fill="none"
-              className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
             >
               <circle cx="7" cy="7" r="4.5" stroke="#B0A8A0" strokeWidth="1.4" />
               <path d="M10.5 10.5L14 14" stroke="#B0A8A0" strokeWidth="1.4" strokeLinecap="round" />
@@ -312,7 +308,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
               value={search}
               placeholder="Search Country, Respondent, Ministry..."
               onChange={(e) => setSearch(e.target.value)}
-              className={`bg-white border rounded-md py-2 pr-3 pl-9 text-xs text-[#1A1A2E] w-65 outline-none transition-colors ${
+              className={`bg-white border rounded-md py-2 pr-3 pl-9 text-[10px] sm:text-xs text-[#1A1A2E] w-full sm:w-65 outline-none transition-colors ${
                 search ? "border-[#C9963A]" : "border-[#E0D8CC]"
               }`}
             />
@@ -332,13 +328,13 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
             ]}
           />
 
-          <div className="flex-1" />
+          <div className="flex-1 hidden sm:block" />
 
           <button
             onClick={handleExport}
-            className="px-4 py-2 text-xs rounded-md bg-[#C9963A] border-none text-white cursor-pointer whitespace-nowrap tracking-wide font-medium flex items-center gap-1.5"
+            className="px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs rounded-md bg-[#C9963A] border-none text-white cursor-pointer whitespace-nowrap tracking-wide font-medium flex items-center gap-1.5 w-full sm:w-auto justify-center"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="12" height="12" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
@@ -349,30 +345,30 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
 
         {/* Active filter pills */}
         {hasActiveFilters && (
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#F0EBE3]">
+          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-[#F0EBE3]">
             {filterStage !== "All" && (
-              <span className="bg-[#F8F9FA] border border-[#E0D8CC] rounded px-2.5 py-1 text-xs text-[#1A1A2E] flex items-center gap-1.5">
+              <span className="bg-[#F8F9FA] border border-[#E0D8CC] rounded px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs text-[#1A1A2E] flex items-center gap-1.5">
                 Dev Stage: {filterStage}
                 <button
                   onClick={() => setFilterStage("All")}
-                  className="bg-none border-none p-0 cursor-pointer text-[#6B6577] text-sm"
+                  className="bg-none border-none p-0 cursor-pointer text-[#6B6577] text-xs sm:text-sm"
                 >
                   ×
                 </button>
               </span>
             )}
             {filterLead !== "All" && (
-              <span className="bg-[#F8F9FA] border border-[#E0D8CC] rounded px-2.5 py-1 text-xs text-[#1A1A2E] flex items-center gap-1.5">
+              <span className="bg-[#F8F9FA] border border-[#E0D8CC] rounded px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs text-[#1A1A2E] flex items-center gap-1.5">
                 Lead: {filterLead}
                 <button
                   onClick={() => setFilterLead("All")}
-                  className="bg-none border-none p-0 cursor-pointer text-[#6B6577] text-sm"
+                  className="bg-none border-none p-0 cursor-pointer text-[#6B6577] text-xs sm:text-sm"
                 >
                   ×
                 </button>
               </span>
             )}
-            <span className="text-xs text-[#6B6577] ml-auto">
+            <span className="text-[10px] sm:text-xs text-[#6B6577] ml-auto">
               Showing {rows.length} of {filteredCount}
             </span>
           </div>
@@ -422,62 +418,62 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                       }`}
                     >
                       {/* Country */}
-                      <td className="px-3.5 h-[52px] align-middle">
-                        <div className="flex items-center gap-2">
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           {(() => {
                             const countryCode = getCountryCode(row.country);
                             return countryCode ? (
                               <span 
-                                className={`fi fi-${countryCode} rounded-sm`}
-                                style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                                className={`fi fi-${countryCode} rounded-sm text-[20px] sm:text-[24px]`}
+                                style={{ lineHeight: 1, width: '28px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                               ></span>
                             ) : (
-                              <span className="text-2xl">🏳️</span>
+                              <span className="text-xl sm:text-2xl">🏳️</span>
                             );
                           })()}
-                          <span className="text-sm text-[#1A1A2E] font-medium">{row.country}</span>
+                          <span className="text-[12px] sm:text-sm text-[#1A1A2E] font-medium">{row.country}</span>
                         </div>
                       </td>
 
                       {/* Respondent */}
-                      <td className="px-3.5 h-[52px] align-middle">
-                        <div className="text-sm text-[#1A1A2E]">{row.respondentName}</div>
-                        <div className="text-[11px] text-[#6B6577] mt-0.5">{truncMin(row.title, 36)}</div>
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
+                        <div className="text-[12px] sm:text-sm text-[#1A1A2E]">{row.respondentName}</div>
+                        <div className="text-[10px] sm:text-[11px] text-[#6B6577] mt-0.5">{truncMin(row.title, 36)}</div>
                       </td>
 
                       {/* Ministry */}
-                      <td className="px-3.5 h-[52px] align-middle">
-                        <span className="text-xs text-[#6B6577]">{truncMin(row.ministry, 30)}</span>
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
+                        <span className="text-[10px] sm:text-xs text-[#6B6577]">{truncMin(row.ministry, 30)}</span>
                       </td>
 
                       {/* Dev Stage */}
-                      <td className="px-3.5 h-[52px] align-middle">
-                        <span className="text-xs text-[#6B6577] bg-[#F0EBE3] px-2 py-0.5 rounded">
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
+                        <span className="text-[10px] sm:text-xs text-[#6B6577] bg-[#F0EBE3] px-1.5 sm:px-2 py-0.5 rounded">
                           {row.developmentStage}
                         </span>
                       </td>
 
                       {/* Date */}
-                      <td className="px-3.5 h-[52px] align-middle whitespace-nowrap">
-                        <span className="text-xs text-[#6B6577]">{fmtDate(row.completedAt)}</span>
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle whitespace-nowrap">
+                        <span className="text-[10px] sm:text-xs text-[#6B6577]">{fmtDate(row.completedAt)}</span>
                       </td>
 
                       {/* Score */}
-                      <td className="px-3.5 h-[52px] align-middle">
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
                         <div className="flex gap-1.5 items-center">
-                          <span className="font-sans text-sm font-normal text-[#1A1A2E]">
+                          <span className="font-sans text-[12px] sm:text-sm font-normal text-[#1A1A2E]">
                             {row.compositeScore}
                           </span>
                         </div>
                       </td>
 
                       {/* Tier */}
-                      <td className="px-3.5 h-[52px] align-middle">
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
                         <Pill label={row.tier} color={tc} />
                       </td>
 
                       {/* Actions */}
-                      <td className="px-3.5 h-[52px] align-middle">
+                      <td className="px-2 sm:px-3.5 h-[44px] sm:h-[52px] align-middle">
                         <div className="flex gap-1.5 items-center">
                           <button
                             onClick={(e) => {
@@ -487,7 +483,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                               setAdminPage("submissionDetail");
                               setSelectedRow(row.id);
                             }}
-                            className="px-2.5 py-1 text-xs rounded bg-transparent border border-[#C9963A] text-[#C9963A] cursor-pointer whitespace-nowrap transition-colors hover:bg-[#C9963A] hover:text-[#06030E]"
+                            className="px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-xs rounded bg-transparent border border-[#C9963A] text-[#C9963A] cursor-pointer whitespace-nowrap transition-colors hover:bg-[#C9963A] hover:text-[#06030E]"
                           >
                             View
                           </button>
@@ -503,8 +499,8 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
 
         {/* Table footer */}
         {rows.length > 0 && (
-          <div className="px-4 py-3 border-t border-[#E8E2DA] bg-[#FAFAF8] flex items-center justify-between">
-            <span className="text-xs text-[#6B6577]">
+          <div className="px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[#E8E2DA] bg-[#FAFAF8] flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span className="text-[10px] sm:text-xs text-[#6B6577]">
               Showing {filteredCount > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{" "}
               {Math.min(currentPage * itemsPerPage, filteredCount)} of {filteredCount} assessments
             </span>
@@ -512,7 +508,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 border rounded text-[10px] sm:text-xs cursor-pointer ${
                   currentPage === 1
                     ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
@@ -535,7 +531,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
                   <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`px-3 py-1.5 border border-[#E0D8CC] rounded text-xs cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1 sm:py-1.5 border border-[#E0D8CC] rounded text-[10px] sm:text-xs cursor-pointer ${
                       currentPage === pageNum
                         ? "bg-[#1A1A2E] text-white"
                         : "bg-white text-[#1A1A2E] hover:border-[#C9963A]"
@@ -548,7 +544,7 @@ export default function SubmissionsList({ setAdminPage, setSelectedSubmission })
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 border rounded text-[10px] sm:text-xs cursor-pointer ${
                   currentPage === totalPages
                     ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"

@@ -582,38 +582,38 @@ function MethodologyPanel() {
       {n:"Private sector adoption depth",w:"20 pts"},{n:"Investment coherence",w:"20 pts"},{n:"Institutional readiness",w:"20 pts"}]},
   ];
   return (
-    <div style={{ padding:16, background:T.bg, minHeight:200 }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:16 }}>
+    <div style={{ padding:12, background:T.bg, minHeight:200 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:10, marginBottom:12 }}>
         {cards.map(card => (
-          <div key={card.title} style={{ background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:8, padding:"14px 16px" }}>
-            <div style={{ fontSize:11, fontWeight:500, letterSpacing:1, textTransform:"uppercase", color:card.color, marginBottom:10 }}>{card.title}</div>
+          <div key={card.title} style={{ background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:6, padding:"10px 12px" }}>
+            <div style={{ fontSize:10, fontWeight:500, letterSpacing:1, textTransform:"uppercase", color:card.color, marginBottom:8 }}>{card.title}</div>
             {card.items.map((item, idx) => (
-              <div key={idx} style={{ display:"flex", justifyContent:"space-between", padding:"6px 0", borderBottom:idx<card.items.length-1?`0.5px solid ${T.border}`:"none", gap:8 }}>
-                <span style={{ fontSize:12, flex:1, color:T.textPri }}>{item.n}</span>
-                <span style={{ fontSize:11, fontWeight:500, background:T.bgCard, border:`0.5px solid ${T.border}`, borderRadius:4, padding:"2px 7px", color:T.textSec, whiteSpace:"nowrap" }}>{item.w}</span>
+              <div key={idx} style={{ display:"flex", justifyContent:"space-between", padding:"4px 0", borderBottom:idx<card.items.length-1?`0.5px solid ${T.border}`:"none", gap:6 }}>
+                <span style={{ fontSize:11, flex:1, color:T.textPri }}>{item.n}</span>
+                <span style={{ fontSize:10, fontWeight:500, background:T.bgCard, border:`0.5px solid ${T.border}`, borderRadius:3, padding:"2px 5px", color:T.textSec, whiteSpace:"nowrap" }}>{item.w}</span>
               </div>
             ))}
           </div>
         ))}
       </div>
-      <div style={{ background:T.bgPanel, borderLeft:`2px solid ${T.gold}`, borderRadius:"0 6px 6px 0", padding:"12px 16px", fontSize:12, color:T.textSec, lineHeight:1.7 }}>
+      <div style={{ background:T.bgPanel, borderLeft:`2px solid ${T.gold}`, borderRadius:"0 4px 4px 0", padding:"10px 12px", fontSize:11, color:T.textSec, lineHeight:1.6 }}>
         <strong style={{ color:T.textPri, fontWeight:500 }}>How the prescriptive arc is set.</strong>{" "}
         At each sovereignty score, the arc plots the theoretical maximum velocity achievable given that structural position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the{" "}
         <strong style={{ color:T.textPri, fontWeight:500 }}>Execution Delta</strong> — the S.A.P.I.'s most proprietary diagnostic metric.
       </div>
       {/* Trajectory Arrow Legend */}
-      <div style={{ marginTop:12, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:8, padding:"12px 16px" }}>
-        <div style={{ fontSize:11, fontWeight:500, color:T.gold, letterSpacing:1, textTransform:"uppercase", marginBottom:8 }}>Movement Trajectory</div>
+      <div style={{ marginTop:10, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:6, padding:"10px 12px" }}>
+        <div style={{ fontSize:10, fontWeight:500, color:T.gold, letterSpacing:1, textTransform:"uppercase", marginBottom:6 }}>Movement Trajectory</div>
         {[
           { color:T.gold,  sym:"Arrow", label:"Golden trajectory arrow connects previous position to current node" },
         ].map(row => (
-          <div key={row.label} style={{ display:"flex", alignItems:"center", gap:10, padding:"5px 0", borderBottom:`0.5px solid ${T.border}` }}>
-            <span style={{ color:row.color, fontWeight:700, fontSize:14, minWidth:24, textAlign:"center" }}>{row.sym}</span>
-            <span style={{ fontSize:12, color:T.textSec }}>{row.label}</span>
+          <div key={row.label} style={{ display:"flex", alignItems:"center", gap:8, padding:"4px 0", borderBottom:`0.5px solid ${T.border}` }}>
+            <span style={{ color:row.color, fontWeight:700, fontSize:12, minWidth:20, textAlign:"center" }}>{row.sym}</span>
+            <span style={{ fontSize:11, color:T.textSec }}>{row.label}</span>
           </div>
         ))}
       </div>
-      <div style={{ marginTop:12, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:8, padding:"12px 16px", fontSize:11, color:T.textSec }}>
+      <div style={{ marginTop:10, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:6, padding:"10px 12px", fontSize:10, color:T.textSec }}>
         <strong style={{ color:T.textPri }}>Dataset:</strong> 32 nations assessed (16 original + 10 batch-2 + 6 batch-3: Jordan, Kazakhstan, Kenya, Kuwait, Kyrgyzstan, Morocco). All scores from SAPI v1.0 (March 2026). Composite score is geometric mean of 5 weighted dimensions.
       </div>
     </div>
@@ -626,15 +626,19 @@ function Tooltip({ nation, x, y }) {
   const dStr = (nation.arcDelta >= 0 ? "+" : "") + nation.arcDelta;
   const accelColor = nation.accel === "accelerating" ? T.gold : nation.accel === "stalling" ? T.red : T.gray;
   const sym = nation.accel === "accelerating" ? "▲ Accelerating" : nation.accel === "stalling" ? "▼ Stalling" : "→ Steady";
+  const sovStr = `${nation.sx}/100`;
+  const velStr = `${nation.vy}/100`;
+  const mainData = [["SAPI",nation.sapi],["Zone",nation.zone],["Sov.",sovStr],["Vel.",velStr],["Delta",dStr]];
+  const scoreData = [["Comp",nation.scores.compute],["Cap",nation.scores.capital],["Reg",nation.scores.regulatory],["Data",nation.scores.data],["DI",nation.scores.di]];
   return (
-    <div style={{ position:"absolute", left:x+14, top:y-10, background:T.bgCard, border:`0.5px solid ${T.borderMid}`, borderRadius:6, padding:"10px 14px", fontSize:12, boxShadow:"0 2px 16px rgba(0,0,0,0.6)", zIndex:10, maxWidth:240, pointerEvents:"none" }}>
-      <div style={{ fontWeight:500, fontSize:13, marginBottom:4, color:T.textPri }}>{nation.name}</div>
-      {[["SAPI Score",nation.sapi],["Zone",nation.zone],["Sovereignty",`${nation.sx}/100`],["Velocity",`${nation.vy}/100`],["Exec Delta",dStr]].map(([k,v]) => (
-        <div key={k} style={{ color:T.textSec, lineHeight:1.8 }}>{k}: <span style={{ color:T.textPri, fontWeight:500 }}>{v}</span></div>
+    <div style={{ position:"absolute", left:x+14, top:y-10, background:T.bgCard, border:`0.5px solid ${T.borderMid}`, borderRadius:6, padding:"8px 12px", fontSize:11, boxShadow:"0 2px 16px rgba(0,0,0,0.6)", zIndex:10, maxWidth:220, pointerEvents:"none" }}>
+      <div style={{ fontWeight:500, fontSize:12, marginBottom:4, color:T.textPri }}>{nation.name}</div>
+      {mainData.map(([k,v]) => (
+        <div key={k} style={{ color:T.textSec, lineHeight:1.6, fontSize:10 }}>{k}: <span style={{ color:T.textPri, fontWeight:500 }}>{v}</span></div>
       ))}
-      <div style={{ color:accelColor, lineHeight:1.8, fontWeight:500 }}>Momentum: {sym}</div>
-      <div style={{ marginTop:6, paddingTop:6, borderTop:`0.5px solid ${T.border}`, display:"grid", gridTemplateColumns:"1fr 1fr", gap:"2px 12px", fontSize:11 }}>
-        {[["Compute",nation.scores.compute],["Capital",nation.scores.capital],["Regulatory",nation.scores.regulatory],["Data Sov.",nation.scores.data],["DI Mat.",nation.scores.di]].map(([k,v]) => (
+      <div style={{ color:accelColor, lineHeight:1.6, fontWeight:500, fontSize:10 }}>Momentum: {sym}</div>
+      <div style={{ marginTop:5, paddingTop:5, borderTop:"0.5px solid "+T.border, display:"grid", gridTemplateColumns:"1fr 1fr", gap:"2px 8px", fontSize:10 }}>
+        {scoreData.map(([k,v]) => (
           <div key={k} style={{ color:T.textSec }}>{k}: <span style={{ color:T.textPri, fontWeight:500 }}>{v}</span></div>
         ))}
       </div>
@@ -657,35 +661,36 @@ export default function SAPIArcDashboard() {
   const handleTooltip = useCallback((nation, x, y) => setTooltip({ nation, x:x||0, y:y||0 }), []);
 
   const tabStyle = (tab) => ({
-    padding:"9px 16px", fontSize:12, cursor:"pointer", border:"none",
+    padding:"7px 12px", fontSize:11, cursor:"pointer", border:"none",
     background:"transparent",
     color: activeTab===tab ? T.goldLight : T.textSec,
     borderBottom: activeTab===tab ? `2px solid ${T.gold}` : "2px solid transparent",
     marginBottom:-1,
     fontWeight: activeTab===tab ? 500 : 400,
+    whiteSpace:"nowrap",
   });
 
   const selectStyle = {
-    fontSize:11, padding:"4px 8px", border:`0.5px solid ${T.border}`,
-    borderRadius:6, background:T.bgPanel, color:T.textPri, cursor:"pointer",
+    fontSize:10, padding:"3px 6px", border:`0.5px solid ${T.border}`,
+    borderRadius:4, background:T.bgPanel, color:T.textPri, cursor:"pointer",
   };
 
   const toggleStyle = (active) => ({
-    padding:"4px 10px", fontSize:11, cursor:"pointer", border:`0.5px solid ${active ? T.gold : T.border}`,
-    borderRadius:6, background: active ? T.goldDim + "44" : T.bgPanel,
+    padding:"3px 8px", fontSize:10, cursor:"pointer", border:`0.5px solid ${active ? T.gold : T.border}`,
+    borderRadius:4, background: active ? T.goldDim + "44" : T.bgPanel,
     color: active ? T.goldLight : T.textSec, transition:"all 0.15s",
   });
 
   return (
     <div style={{ width:"100%", fontFamily:"sans-serif", background:T.bg, color:T.textPri }}>
       {/* Tab bar */}
-      <div style={{ display:"flex", gap:2, borderBottom:`0.5px solid ${T.border}`, background:T.bgCard }}>
+      <div style={{ display:"flex", gap:2, borderBottom:`0.5px solid ${T.border}`, background:T.bgCard, overflowX:"auto" }}>
         {TABS.map(tab => (
           <button key={tab} onClick={() => setActiveTab(tab)} style={tabStyle(tab)}>
             {TAB_LABELS[tab]}
           </button>
         ))}
-        <div style={{ marginLeft:"auto", padding:"8px 16px", fontSize:11, color:T.textDim, alignSelf:"center" }}>
+        <div style={{ marginLeft:"auto", padding:"6px 12px", fontSize:10, color:T.textDim, alignSelf:"center", whiteSpace:"nowrap" }}>
           {nations.length} nations · SAPI v1.0
         </div>
       </div>
@@ -693,15 +698,15 @@ export default function SAPIArcDashboard() {
       {/* Arc tab controls */}
       {activeTab === "arc" && (
         <>
-          <div style={{ display:"flex", gap:20, alignItems:"center", padding:"10px 16px", flexWrap:"wrap", borderBottom:`0.5px solid ${T.border}`, background:T.bgCard }}>
+          <div style={{ display:"flex", gap:12, alignItems:"center", padding:"8px 12px", flexWrap:"wrap", borderBottom:`0.5px solid ${T.border}`, background:T.bgCard }}>
             {[
               { label:"HIGHLIGHT", value:highlight, onChange:e=>setHighlight(e.target.value), options:allNationOptions },
               { label:"SCORE VIEW", value:scoreView, onChange:e=>setScoreView(e.target.value), options:[
-                {value:"combined",label:"Combined"},{value:"sovereignty",label:"Sovereignty axis"},{value:"velocity",label:"Velocity axis"}
+                {value:"combined",label:"Combined"},{value:"sovereignty",label:"Sovereignty"},{value:"velocity",label:"Velocity"}
               ]},
             ].map(ctrl => (
-              <div key={ctrl.label} style={{ display:"flex", alignItems:"center", gap:8 }}>
-                <span style={{ fontSize:11, color:T.textSec, letterSpacing:0.5 }}>{ctrl.label}</span>
+              <div key={ctrl.label} style={{ display:"flex", alignItems:"center", gap:6 }}>
+                <span style={{ fontSize:10, color:T.textSec, letterSpacing:0.5 }}>{ctrl.label}</span>
                 <select value={ctrl.value} onChange={ctrl.onChange} style={selectStyle}>
                   {ctrl.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
@@ -709,26 +714,26 @@ export default function SAPIArcDashboard() {
             ))}
             {/* Toggle: Comet Trails */}
             <button onClick={() => setShowTrails(v => !v)} style={toggleStyle(showTrails)}>
-              ☄ Comet Trails
+              ☄ Trails
             </button>
             {/* Toggle: Velocity Vectors */}
             <button onClick={() => setShowVectors(v => !v)} style={toggleStyle(showVectors)}>
-              ↗ Velocity Vectors
+              ↗ Vectors
             </button>
           </div>
 
           {/* Legend */}
-          <div style={{ display:"flex", gap:20, flexWrap:"wrap", padding:"8px 16px", borderBottom:`0.5px solid ${T.border}`, fontSize:11, color:T.textSec, background:T.bgCard }}>
+          <div style={{ display:"flex", gap:12, flexWrap:"wrap", padding:"6px 12px", borderBottom:`0.5px solid ${T.border}`, fontSize:10, color:T.textSec, background:T.bgCard }}>
             {[
-              { color:T.green, label:"Above arc (outperforming)" },
+              { color:T.green, label:"Above arc" },
               { color:T.gray,  label:"On arc (±5)" },
-              { color:T.red,   label:"Below arc (underperforming)" },
-              { color:T.gold,  label:"Trajectory arrow (movement path)" },
-              { color:T.gray,  label:"Steady trajectory" },
-              { color:T.red,   label:"Declining trajectory" },
+              { color:T.red,   label:"Below arc" },
+              { color:T.gold,  label:"Trajectory" },
+              { color:T.gray,  label:"Steady" },
+              { color:T.red,   label:"Declining" },
             ].map(item => (
-              <div key={item.label} style={{ display:"flex", alignItems:"center", gap:6 }}>
-                <div style={{ width:10, height:10, borderRadius:"50%", background:item.color }} />{item.label}
+              <div key={item.label} style={{ display:"flex", alignItems:"center", gap:4 }}>
+                <div style={{ width:8, height:8, borderRadius:"50%", background:item.color }} />{item.label}
               </div>
             ))}
           </div>

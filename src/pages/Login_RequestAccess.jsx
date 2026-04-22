@@ -49,7 +49,7 @@
         />
 
         {/* ── Main content ─────────────────────────────────────────────────── */}
-        <main className="relative flex-1 flex items-center justify-center px-6 py-12">
+        <main className="relative flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
           <div className="w-full max-w-xl">
             {/* Wordmark */}
             <div className="flex flex-col items-center mb-10">
@@ -57,13 +57,13 @@
             </div>
 
             {/* Request Access card */}
-            <div className="rounded-sm p-8 md:p-10 relative bg-sapi-navy border border-sapi-bronze/55 shadow-[0_40px_100px_-20px_#06030E,0_0_0_1px_#C9963A15]">
+            <div className="rounded-sm p-6 sm:p-8 md:p-10 relative bg-sapi-navy border border-sapi-bronze/55 shadow-[0_40px_100px_-20px_#06030E,0_0_0_1px_#C9963A15]">
               {/* Back to Login - Inside Card Top Left */}
               <button
                 onClick={() => navigate('/login')}
-                className="absolute top-4 mt-2 left-4 font-sans text-[11px] hover:text-sapi-gold transition-colors duration-150 bg-transparent border-none cursor-pointer tracking-wide uppercase text-[#E0E0E0]"
+                className="absolute top-3 sm:top-4 left-3 sm:left-4 font-sans text-[10px] sm:text-[11px] hover:text-sapi-gold transition-colors duration-150 bg-transparent border-none cursor-pointer tracking-wide uppercase text-[#E0E0E0]"
               >
-                ← Back to SignIn
+                ← Back to Sign In
               </button>
 
               <RequestAccessForm />
@@ -72,7 +72,7 @@
         </main>
 
         {/* Footer */}
-        <footer className="relative px-6 py-8 text-center text-[#E0E0E0] text-[11px] tracking-[0.18em] font-medium">
+        <footer className="relative px-4 sm:px-6 py-6 sm:py-8 text-center text-[#E0E0E0] text-[10px] sm:text-[11px] tracking-[0.18em] font-medium">
           2026 · THE SOVEREIGN AI POWER INDEX · AUTHORISED ACCESS ONLY
         </footer>
       </div>
@@ -151,22 +151,22 @@
     return (
       <>
         {/* Header */}
-        <div className="mb-6 mt-3">
-          <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-2.5">
+        <div className="mb-5 sm:mb-6 mt-2 sm:mt-3">
+          <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-2 sm:mb-2.5">
             CREDENTIAL REQUEST
           </div>
-          <h2 className="font-serif text-[26px] text-sapi-parchment tracking-[0.06em] font-medium leading-[1.25]">
+          <h2 className="font-serif text-[20px] sm:text-[24px] md:text-[26px] text-sapi-parchment tracking-[0.06em] font-medium leading-[1.25]">
             Request access to the SAPI portal
           </h2>
         </div>
 
-        <p className="text-[#E0E0E0] text-[13px] leading-[1.65] mb-7 pb-5.5 border-b border-[#6B450830]">
+        <p className="text-[#E0E0E0] text-[12px] sm:text-[13px] leading-[1.65] mb-6 sm:mb-7 pb-4 sm:pb-5.5 border-b border-[#6B450830]">
           SAPI is issued to verified government officials, ministries, and advisory bodies. Submit the details
           below and our team will validate your institution and respond within two working days.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             <FormField
               label="FULL NAME"
               error={errors.fullName}
@@ -192,7 +192,7 @@
             placeholder="e.g. Federal Ministry of Communications & Digital Economy"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
             <FormField
               label="COUNTRY"
               error={errors.country}
@@ -242,13 +242,13 @@
           </div>
 
           {/* Privacy note */}
-          <p className="text-[#E0E0E0] text-[11px] leading-[1.6] tracking-[0.02em] border-t border-[#6B450830] pt-5 mt-2">
+          <p className="text-[#E0E0E0] text-[10px] sm:text-[11px] leading-[1.6] tracking-[0.02em] border-t border-[#6B450830] pt-4 sm:pt-5 mt-2">
             The information you submit is used solely to verify your credentials and provision portal access.
             It is not shared with third parties.
           </p>
 
           {/* Submit and Cancel buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-3">
             <button
               type="submit"
               disabled={submitting}
@@ -274,11 +274,11 @@
   // ────────────────────────────────────────────────────────────────────────────
   function SubmittedState() {
     return (
-      <div className="p-10 md:p-12 text-center">
+      <div className="p-8 sm:p-10 md:p-12 text-center">
         {/* Gold seal */}
-        <div className="flex justify-center mb-6">
-          <div className="flex items-center justify-center rounded-full w-[72px] h-[72px] border border-sapi-gold bg-[#C9963A12]">
-            <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <div className="flex items-center justify-center rounded-full w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] border border-sapi-gold bg-[#C9963A12]">
+            <svg width="24" height="24" viewBox="0 0 30 30" fill="none" className="sm:w-[30px] sm:h-[30px]">
               <path
                 d="M7 15.5 L13 21 L23 9"
                 stroke="#C9963A"
@@ -290,15 +290,15 @@
           </div>
         </div>
 
-        <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-3.5">
+        <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-3 sm:mb-3.5">
           REQUEST RECEIVED
         </div>
 
-        <h2 className="font-serif text-[28px] text-sapi-parchment tracking-[0.04em] font-medium leading-[1.3] mb-4">
+        <h2 className="font-serif text-[22px] sm:text-[26px] md:text-[28px] text-sapi-parchment tracking-[0.04em] font-medium leading-[1.3] mb-3 sm:mb-4">
           Your request is with our review team
         </h2>
 
-        <p className="text-[#E0E0E0] text-[14px] leading-[1.7] max-w-[44ch] mx-auto">
+        <p className="text-[#E0E0E0] text-[13px] sm:text-[14px] leading-[1.7] max-w-[44ch] mx-auto">
           We will verify your institution and respond within two working days. Credentials, when issued, will be
           sent to the email address you provided.
         </p>
@@ -311,7 +311,7 @@
   // ────────────────────────────────────────────────────────────────────────────
   function FieldLabel({ children, className = "" }) {
     return (
-      <label className={`block mb-2 text-sapi-parchment text-[11px] tracking-[0.22em] font-medium ${className}`}>
+      <label className={`block mb-2 text-sapi-parchment text-[10px] sm:text-[11px] tracking-[0.22em] font-medium ${className}`}>
         {children}
       </label>
     );
@@ -325,7 +325,7 @@
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full rounded-sm transition-all bg-sapi-midnight text-sapi-parchment border border-[#6B450855] p-3.5 text-[14px] outline-none font-normal focus:border-sapi-gold"
+        className="w-full rounded-sm transition-all bg-sapi-midnight text-sapi-parchment border border-[#6B450855] p-3 sm:p-3.5 text-[13px] sm:text-[14px] outline-none font-normal focus:border-sapi-gold"
       />
     );
   }
@@ -338,7 +338,7 @@
           ref={refEl}
           type={inputProps.type || "text"}
           {...inputProps}
-          className="w-full rounded-sm transition-all bg-sapi-midnight text-sapi-parchment border border-[#6B450855] p-3.5 text-[14px] outline-none font-normal focus:border-sapi-gold"
+          className="w-full rounded-sm transition-all bg-sapi-midnight text-sapi-parchment border border-[#6B450855] p-3 sm:p-3.5 text-[13px] sm:text-[14px] outline-none font-normal focus:border-sapi-gold"
           style={error ? { borderColor: "#C03058" } : {}}
           onBlur={(e) => { if (error) e.currentTarget.style.borderColor = "#C03058"; }}
         />
@@ -354,7 +354,7 @@
 
   function ErrorText({ children }) {
     return (
-      <div className="text-sapi-crimson text-[11px] mt-1.5 tracking-[0.04em]">
+      <div className="text-sapi-crimson text-[10px] sm:text-[11px] mt-1.5 tracking-[0.04em]">
         {children}
       </div>
     );

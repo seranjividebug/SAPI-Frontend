@@ -40,11 +40,11 @@ import { submitBriefedIndexRequest } from "../services/contactService";
 // ────────────────────────────────────────────────────────────────────────────
 export function OrientationStrip() {
   return (
-    <section className="w-[1050px] mx-auto bg-sapi-navy border-y border-sapi-bronze/30">
-      <div className="px-8 py-8">
-        <div className="flex flex-col gap-6 items-center">
+    <section className="w-full max-w-[1050px] mx-auto bg-sapi-navy border-y border-sapi-bronze/30">
+      <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8">
+        <div className="flex flex-col gap-4 sm:gap-6 items-center">
           {/* Thesis */}
-          <div className="max-w-[700px] text-left">
+          <div className="max-w-[700px] w-full text-left px-2 sm:px-0">
             <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-3 text-center">
               S.A.P.I. INDEX
             </div>
@@ -60,7 +60,7 @@ export function OrientationStrip() {
           </div>
 
           {/* Stat tiles */}
-          <div className="flex items-stretch border border-sapi-bronze/55 bg-sapi-void max-w-[700px] mx-auto">
+          <div className="flex items-stretch border border-sapi-bronze/55 bg-sapi-void max-w-[700px] w-full mx-auto flex-wrap sm:flex-nowrap">
             <StatTile value="32" label="NATIONS ASSESSED" />
             <StatDivider />
             <StatTile value="5" label="SOVEREIGN DIMENSIONS" />
@@ -75,11 +75,11 @@ export function OrientationStrip() {
 
 function StatTile({ value, label, accent = false }) {
   return (
-    <div className="px-6 py-5 flex flex-col items-center justify-center min-w-[110px] min-h-[96px]">
-      <div className={`font-serif text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
+    <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[100px] sm:min-w-[110px] flex-1">
+      <div className={`font-serif text-[24px] sm:text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
         {value}
       </div>
-      <div className="text-[9px] tracking-[0.24em] text-sapi-muted font-medium whitespace-nowrap">
+      <div className="text-[8px] sm:text-[9px] tracking-[0.24em] text-sapi-muted font-medium whitespace-nowrap">
         {label}
       </div>
     </div>
@@ -88,7 +88,7 @@ function StatTile({ value, label, accent = false }) {
 
 function StatDivider() {
   return (
-    <div className="w-px bg-gradient-to-b from-transparent via-sapi-bronze/60 to-transparent" />
+    <div className="hidden sm:block w-px bg-gradient-to-b from-transparent via-sapi-bronze/60 to-transparent" />
   );
 }
 

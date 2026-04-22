@@ -37,12 +37,12 @@ const Button = ({ href, variant = "default", children }) => {
 
 const PageHero = ({ description, label, title }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <SectionLabel tone="accent">{label}</SectionLabel>
-      <h1 className="font-sans text-5xl leading-tight text-sapi-parchment max-w-4xl">
+      <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl leading-tight text-sapi-parchment max-w-4xl">
         {title}
       </h1>
-      <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
+      <p className="font-sans text-base sm:text-lg leading-8 text-sapi-muted max-w-2xl">
         {description}
       </p>
     </div>
@@ -51,24 +51,27 @@ const PageHero = ({ description, label, title }) => {
 
 const CustomHeader = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <img
             src="/SAPI_Logo_B4.svg"
             alt="SAPI Logo"
-            className="h-40 w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
           />
           <div
-            className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
+            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
           >
             THE SOVEREIGN<br />AI POWER INDEX
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
@@ -81,12 +84,6 @@ const CustomHeader = () => {
           >
             Methodology
           </button>
-          {/* <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Preview
-          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}
@@ -100,7 +97,65 @@ const CustomHeader = () => {
             Request Introduction
           </button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-sapi-parchment p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
+          <div className="flex flex-col gap-4">
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/sapi-index');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Index
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/methodology');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Methodology
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/about');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              About Us
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+              onClick={() => {
+                navigate('/contact');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Request Introduction
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
@@ -110,7 +165,7 @@ export default function AboutPage() {
     <PageLayout>
       <CustomHeader />
       <section className="bg-[#0a0a12] pt-2 min-h-screen font-sans">
-        <div className="px-8 py-8 max-w-container mx-auto">
+        <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-container mx-auto">
           <div className="mx-auto max-w-5xl">
             {/* <button
               className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
@@ -129,34 +184,34 @@ export default function AboutPage() {
             />
           </div>
 
-          <div className="mt-24 grid gap-16">
-            <div className="grid gap-12 border-t border-sapi-bronze pt-12 lg:grid-cols-[0.82fr_1.18fr]">
+          <div className="mt-16 sm:mt-24 grid gap-12 sm:gap-16">
+            <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
               <FadeIn className="space-y-5">
                 <SectionLabel>Platform Model</SectionLabel>
-                <h2 className="font-sans max-w-xl text-3xl leading-tight text-sapi-parchment sm:text-4xl">
+                <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
                   Three functions.<br />One standard.
                 </h2>
               </FadeIn>
 
-              <FadeIn className="grid gap-6">
-                <div className="border-b border-sapi-bronze pb-6">
+              <FadeIn className="grid gap-4 sm:gap-6">
+                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">The Sovereign AI Power Index</p>
-                  <p className="mt-4 text-base leading-8 text-sapi-muted">
+                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
                     The benchmark. Scores national AI readiness across five dimensions: compute capacity, capital
                     formation, regulatory readiness, data sovereignty, and directed intelligence maturity. Published
                     annually. Used by sovereign wealth funds, government AI leads, infrastructure investors and corporate entities to
                     compare, prioritise, and act.
                   </p>
                 </div>
-                <div className="border-b border-sapi-bronze pb-6">
+                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Westminster. Quarterly</p>
-                  <p className="mt-4 text-base leading-8 text-sapi-muted">
+                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
                     Nations present. Corporations present. Sovereign capital evaluates. Strategic partners deliver. Chatham House Rule throughout. The Room.
                   </p>
                 </div>
-                <div className="border-b border-sapi-bronze pb-6">
+                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Assessments</p>
-                  <p className="mt-4 text-base leading-8 text-sapi-muted">
+                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
                     The intelligence. Bespoke country and corporate assessments that identify readiness gaps, score
                     governance maturity, and produce the decision-grade intelligence that capital and delivery partners
                     require before they commit.
@@ -165,15 +220,15 @@ export default function AboutPage() {
               </FadeIn>
             </div>
 
-            <FadeIn className="grid gap-12 border-t border-sapi-bronze pt-12 lg:grid-cols-[0.82fr_1.18fr]">
-              <div className="space-y-5">
+            <FadeIn className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
+              <div className="space-y-4 sm:space-y-5">
                 <SectionLabel>Launch Status</SectionLabel>
-                <h2 className="font-sans max-w-xl text-3xl leading-tight text-sapi-parchment sm:text-4xl">
+                <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
                   SAPI operates as an independent UK organisation.
                 </h2>
               </div>
-              <div className="space-y-6">
-                <p className="max-w-2xl text-base leading-8 text-sapi-muted">
+              <div className="space-y-4 sm:space-y-6">
+                <p className="max-w-2xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
                   Advisory relationships, institutional affiliations, and leadership appointments are disclosed as they
                   are formalised. SAPI does not pre-announce partnerships. Formal updates will be published on this page
                   as they are confirmed.
@@ -181,9 +236,9 @@ export default function AboutPage() {
               </div>
             </FadeIn>
 
-            <FadeIn className="border-t border-sapi-bronze pt-12">
+            <FadeIn className="border-t border-sapi-bronze pt-8 sm:pt-12">
               <SectionLabel tone="accent">Next Step</SectionLabel>
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <Button href="/contact">Request an Introduction</Button>
               </div>
             </FadeIn>

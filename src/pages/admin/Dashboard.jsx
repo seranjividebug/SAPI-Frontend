@@ -22,24 +22,24 @@ function KpiCard({ icon, value, label, trend, trendLabel, color }) {
   const isPositive =
     trend?.includes("+") || trend?.includes("No change") || false;
   return (
-    <div className="bg-white border border-[#E0D8CC] rounded-lg p-4">
-      <div className="flex justify-between mb-3">
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-[${color}15]`}>
+    <div className="bg-white border border-[#E0D8CC] rounded-lg p-3 sm:p-4">
+      <div className="flex justify-between mb-2 sm:mb-3">
+        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center bg-[${color}15]`}>
           {icon}
         </div>
       </div>
-      <div className="text-3xl font-semibold text-[#1A1A2E] leading-none mb-1 font-sans">
+      <div className="text-2xl sm:text-3xl font-semibold text-[#1A1A2E] leading-none mb-1 font-sans">
         {value}
       </div>
-      <div className="text-xs font-medium text-[#6B6577] uppercase tracking-wider mb-2">
+      <div className="text-[10px] sm:text-xs font-medium text-[#6B6577] uppercase tracking-wider mb-2">
         {label}
       </div>
       {trend && trendLabel && (
-        <div className="flex items-center gap-1.5">
-          <span className={`text-xs font-medium ${isPositive ? "text-[#28A868]" : "text-[#C03058]"}`}>
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <span className={`text-[10px] sm:text-xs font-medium ${isPositive ? "text-[#28A868]" : "text-[#C03058]"}`}>
             {trend}
           </span>
-          <span className="text-xs text-[#9880B0]">{trendLabel}</span>
+          <span className="text-[10px] sm:text-xs text-[#9880B0]">{trendLabel}</span>
         </div>
       )}
     </div>
@@ -70,23 +70,23 @@ function TierDistributionChart({ submissions }) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1.5 sm:gap-2">
       {tiers
         .filter((t) => counts[t] > 0)
         .map((tier) => {
           const pct = Math.round((counts[tier] / total) * 100);
           return (
-            <div key={tier} className="flex items-center gap-2.5">
-              <span className="text-xs text-[#6B6577] w-16">
+            <div key={tier} className="flex items-center gap-2 sm:gap-2.5">
+              <span className="text-[10px] sm:text-xs text-[#6B6577] w-12 sm:w-16">
                 {shortNames[tier]}
               </span>
-              <div className="flex-1 h-2 bg-[#F0EBE3] rounded overflow-hidden">
+              <div className="flex-1 h-1.5 sm:h-2 bg-[#F0EBE3] rounded overflow-hidden">
                 <div
                   className="h-full rounded"
                   style={{ width: `${pct}%`, backgroundColor: tierColors[tier] }}
                 />
               </div>
-              <span className="text-xs text-[#1A1A2E] font-medium w-8 text-right">
+              <span className="text-[10px] sm:text-xs text-[#1A1A2E] font-medium w-6 sm:w-8 text-right">
                 {pct}%
               </span>
             </div>
@@ -311,9 +311,9 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
 
   if (loading) {
     return (
-      <div className="px-8 py-6 bg-[#F8F9FA] min-h-screen flex items-center justify-center">
+      <div className="px-4 sm:px-8 py-6 bg-[#F8F9FA] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-base text-[#6B6577]">Loading dashboard...</div>
+          <div className="text-sm sm:text-base text-[#6B6577]">Loading dashboard...</div>
         </div>
       </div>
     );
@@ -321,9 +321,9 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
 
   if (error) {
     return (
-      <div className="px-8 py-6 bg-[#F8F9FA] min-h-screen flex items-center justify-center">
+      <div className="px-4 sm:px-8 py-6 bg-[#F8F9FA] min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-base text-[#C03058] mb-2">{error}</div>
+          <div className="text-sm sm:text-base text-[#C03058] mb-2">{error}</div>
           <button
             onClick={() => window.location.reload()}
             className="px-4 py-2 bg-[#1A1A2E] text-white rounded-md cursor-pointer"
@@ -336,19 +336,19 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
   }
 
   return (
-    <div className="px-8 py-6 bg-[#F8F9FA] min-h-screen font-sans">
+    <div className="px-4 sm:px-8 py-4 sm:py-6 bg-[#F8F9FA] min-h-screen font-sans">
       {/* Header */}
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-4 sm:mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-[#1A1A2E] mb-1 font-serif">
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#1A1A2E] mb-1 font-serif">
             Welcome Back
           </h1>
-          <div className="text-xs text-[#6B6577]">{todayStr}</div>
+          <div className="text-[10px] sm:text-xs text-[#6B6577]">{todayStr}</div>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <KpiCard
           icon={
             <svg
@@ -410,15 +410,15 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
       </div>
 
       {/* Filters */}
-      <div className="flex gap-2.5 mb-4 items-center justify-between relative z-10">
-        <div className="flex gap-2.5 items-center flex-1">
-          <div className="relative">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-2.5 mb-4 items-start sm:items-center justify-between relative z-10">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-2.5 items-stretch sm:items-center w-full">
+          <div className="relative w-full sm:flex-1">
             <input
               type="text"
               placeholder="Search Country, Name or Ministry..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 pr-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-[280px] outline-none"
+              className="pl-8 pr-3 py-2 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-full outline-none"
             />
             <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9880B0]">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -429,12 +429,12 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           </div>
 
           {/* Country Searchable Dropdown */}
-          <div ref={countryDropdownRef} className="relative flex-1 min-w-[140px]">
+          <div ref={countryDropdownRef} className="relative w-full sm:flex-1">
             <button
               onClick={() => setCountryDropdownOpen(!countryDropdownOpen)}
               className="px-2 py-1.5 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-full text-left cursor-pointer flex justify-between items-center"
             >
-              <span>
+              <span className="truncate">
                 {selectedCountry ? shortCountry(selectedCountry) : "All Countries"}
               </span>
               <svg
@@ -503,12 +503,12 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           </div>
 
           {/* Score Range Custom Dropdown */}
-          <div ref={scoreDropdownRef} className="relative flex-1 min-w-[140px]">
+          <div ref={scoreDropdownRef} className="relative w-full sm:flex-1">
             <button
               onClick={() => setScoreDropdownOpen(!scoreDropdownOpen)}
               className="px-2 py-1.5 text-xs border border-[#D0C8BC] rounded-md bg-white text-[#1A1A2E] w-full text-left cursor-pointer flex justify-between items-center"
             >
-              <span>
+              <span className="truncate">
                 {selectedScoreRange || "All Score Ranges"}
               </span>
               <svg
@@ -556,11 +556,10 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
 
         <button
           onClick={handleExportCSV}
-          className="flex items-center gap-1.5 px-4 py-2 bg-[#C9963A] border-none rounded-md text-xs text-white cursor-pointer flex-shrink-0"
+          className="flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 bg-[#C9963A] border-none rounded-md text-xs text-white cursor-pointer flex-shrink-0 w-full sm:w-auto"
         >
           <svg
-            width="14"
-            height="14"
+            width="12" height="12" className="sm:w-[14px] sm:h-[14px]"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -570,23 +569,23 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
             <polyline points="7 10 12 15 17 10" />
             <line x1="12" y1="15" x2="12" y2="3" />
           </svg>
-          Export CSV
+          <span className="hidden sm:inline">Export CSV</span>
         </button>
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-[1fr_320px] gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 sm:gap-5">
         {/* Table */}
         <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden">
           <div className="overflow-x-auto relative">
             {filterLoading && (
               <div className="absolute inset-0 bg-white/80 flex items-center justify-center z-[5]">
                 <div className="text-center">
-                  <div className="w-10 h-10 border-3 border-[#E0D8CC] border-t-[#C9963A] rounded-full animate-spin mx-auto mb-2" />
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 border-3 border-[#E0D8CC] border-t-[#C9963A] rounded-full animate-spin mx-auto mb-2" />
                 </div>
               </div>
             )}
-            <table className="w-full border-collapse text-xs">
+            <table className="w-full border-collapse text-[10px] sm:text-xs">
               <thead>
                 <tr className="bg-[#FAFBFC] border-b border-[#E0D8CC]">
                   {[
@@ -600,7 +599,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   ].map((h) => (
                     <th
                       key={h}
-                      className="px-3.5 py-2.5 text-left text-[11px] font-semibold text-[#6B6577] uppercase tracking-wider whitespace-nowrap"
+                      className="px-2.5 sm:px-3.5 py-2 sm:py-2.5 text-left text-[10px] sm:text-[11px] font-semibold text-[#6B6577] uppercase tracking-wider whitespace-nowrap"
                     >
                       {h}
                     </th>
@@ -610,8 +609,8 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
               <tbody>
                 {paginatedSubmissions.length === 0 && !filterLoading ? (
                   <tr>
-                    <td colSpan={7} className="px-3.5 py-10 text-center">
-                      <div className="text-sm text-[#6B6577]">No records found</div>
+                    <td colSpan={7} className="px-2.5 sm:px-3.5 py-8 sm:py-10 text-center">
+                      <div className="text-xs sm:text-sm text-[#6B6577]">No records found</div>
                     </td>
                   </tr>
                 ) : (
@@ -625,60 +624,60 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                           i % 2 === 0 ? "bg-white" : "bg-[#FAFBFC]"
                         }`}
                       >
-                        <td className="px-3.5 py-3">
-                          <div className="flex items-center gap-2">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3">
+                          <div className="flex items-center gap-1.5 sm:gap-2">
                             {countryCode ? (
                               <span 
-                                className={`fi fi-${countryCode} rounded-sm`}
-                                style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                                className={`fi fi-${countryCode} rounded-sm text-[20px] sm:text-[24px]`}
+                                style={{ lineHeight: 1, width: '28px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                               ></span>
                             ) : (
-                              <span className="text-2xl">🏳️</span>
+                              <span className="text-xl sm:text-2xl">🏳️</span>
                             )}
-                            <span className="text-[#1A1A2E] font-medium">
+                            <span className="text-[#1A1A2E] font-medium text-[10px] sm:text-xs">
                               {shortCountry(sub.country)}
                             </span>
                           </div>
                         </td>
-                        <td className="px-3.5 py-3">
-                          <div className="text-[#1A1A2E] font-medium">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3">
+                          <div className="text-[#1A1A2E] font-medium text-[10px] sm:text-xs">
                             {sub.respondentName}
                           </div>
-                          <div className="text-[#1A1A2E] text-[11px]">
+                          <div className="text-[#1A1A2E] text-[10px] sm:text-[11px]">
                             {sub.title}
                           </div>
                         </td>
-                        <td className="px-3.5 py-3 text-[#6B6577] text-xs">
-                          {sub.ministry.length > 30
-                            ? sub.ministry.slice(0, 30) + "…"
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3 text-[#6B6577] text-[10px] sm:text-xs">
+                          {sub.ministry.length > (window.innerWidth < 640 ? 20 : 30)
+                            ? sub.ministry.slice(0, (window.innerWidth < 640 ? 20 : 30)) + "…"
                             : sub.ministry}
                         </td>
-                        <td className="px-3.5 py-3">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3">
                           <div className="flex items-baseline gap-0.5">
-                            <span className="text-[#1A1A2E] text-base font-semibold font-sans">
+                            <span className="text-[#1A1A2E] text-sm sm:text-base font-semibold font-sans">
                               {sub.compositeScore}
                             </span>
-                            <span className="text-[#1A1A2E] text-[11px]">/100</span>
+                            <span className="text-[#1A1A2E] text-[10px] sm:text-[11px]">/100</span>
                           </div>
                         </td>
-                        <td className="px-3.5 py-3">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3">
                           <span
-                            className="text-[11px] font-medium"
+                            className="text-[10px] sm:text-[11px] font-medium"
                             style={{ color: tierColors[sub.tier] || '#9880B0' }}
                           >
                             {sub.tier}
                           </span>
                         </td>
-                        <td className="px-3.5 py-3 text-[#6B6577] text-xs whitespace-nowrap">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3 text-[#6B6577] text-[10px] sm:text-xs whitespace-nowrap">
                           {fmtDate(sub.completedAt)}
                         </td>
-                        <td className="px-3.5 py-3">
+                        <td className="px-2.5 sm:px-3.5 py-2.5 sm:py-3">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleViewAssessment(sub.id);
                             }}
-                            className="px-4 py-1.5 bg-transparent border border-[#C9963A] rounded text-xs text-[#C9963A] cursor-pointer transition-all hover:bg-[#C9963A] hover:text-white"
+                            className="px-3 sm:px-4 py-1.5 bg-transparent border border-[#C9963A] rounded text-[10px] sm:text-xs text-[#C9963A] cursor-pointer transition-all hover:bg-[#C9963A] hover:text-white"
                           >
                             View
                           </button>
@@ -692,8 +691,8 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-between items-center px-4 py-3 border-t border-[#E0D8CC] bg-[#FAFBFC]">
-            <div className="text-xs text-[#6B6577]">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0 px-3 sm:px-4 py-2.5 sm:py-3 border-t border-[#E0D8CC] bg-[#FAFBFC]">
+            <div className="text-[10px] sm:text-xs text-[#6B6577] text-center sm:text-left">
               Showing{" "}
               {filteredCount > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to{" "}
               {Math.min(currentPage * itemsPerPage, filteredCount)} of {filteredCount} results
@@ -702,7 +701,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 border rounded text-[10px] sm:text-xs cursor-pointer ${
                   currentPage === 1
                     ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
@@ -710,12 +709,12 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
               >
                 ←
               </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map(
                 (page) => (
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`px-3 py-1.5 border border-[#E0D8CC] rounded text-xs cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1.5 border border-[#E0D8CC] rounded text-[10px] sm:text-xs cursor-pointer ${
                       currentPage === page
                         ? "bg-[#1A1A2E] text-white"
                         : "bg-white text-[#1A1A2E]"
@@ -730,7 +729,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                   setCurrentPage((p) => Math.min(totalPages, p + 1))
                 }
                 disabled={currentPage === totalPages}
-                className={`px-3 py-1.5 border rounded text-xs cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 border rounded text-[10px] sm:text-xs cursor-pointer ${
                   currentPage === totalPages
                     ? "bg-white border-[#E0D8CC] text-[#C8C0B8] cursor-not-allowed"
                     : "bg-white border-[#E0D8CC] text-[#6B6577] hover:border-[#C9963A]"
@@ -743,31 +742,31 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
         </div>
 
         {/* Right Sidebar */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3 sm:gap-4">
           {/* Top Scoring Countries */}
-          <div className="bg-white border border-[#E0D8CC] rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-[#1A1A2E] mb-3.5">
+          <div className="bg-white border border-[#E0D8CC] rounded-lg p-3 sm:p-4">
+            <h3 className="text-xs sm:text-sm font-semibold text-[#1A1A2E] mb-3 sm:mb-3.5">
               Top 5 Scoring Countries
             </h3>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5 sm:gap-3">
               {topCountries.map((country, idx) => {
                 const countryCode = getCountryCode(country.country);
                 return (
-                  <div key={country.id} className="flex items-center gap-2.5">
+                  <div key={country.id} className="flex items-center gap-2 sm:gap-2.5">
                     {countryCode ? (
                       <span 
-                        className={`fi fi-${countryCode} rounded-sm`}
-                        style={{ fontSize: '24px', lineHeight: 1, width: '32px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                        className={`fi fi-${countryCode} rounded-sm text-[20px] sm:text-[24px]`}
+                        style={{ lineHeight: 1, width: '28px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                       ></span>
                     ) : (
-                      <span className="text-2xl">🏳️</span>
+                      <span className="text-xl sm:text-2xl">🏳️</span>
                     )}
                     <div className="flex-1">
-                      <div className="text-xs text-[#1A1A2E] font-medium">
+                      <div className="text-[10px] sm:text-xs text-[#1A1A2E] font-medium">
                         {shortCountry(country.country)}
                       </div>
                     </div>
-                    <div className="w-24 h-1.5 bg-[#F0EBE3] rounded overflow-hidden">
+                    <div className="w-16 sm:w-24 h-1.5 bg-[#F0EBE3] rounded overflow-hidden">
                       <div
                         className={`h-full rounded ${
                           idx === 0 ? "bg-[#28A868]" : idx === 1 ? "bg-[#4A7AE0]" : idx === 2 ? "bg-[#C9963A]" : "bg-[#D0C8BC]"
@@ -775,7 +774,7 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
                         style={{ width: `${country.compositeScore}%` }}
                       />
                     </div>
-                    <span className="text-xs text-[#1A1A2E] font-medium w-10 text-right">
+                    <span className="text-[10px] sm:text-xs text-[#1A1A2E] font-medium w-8 sm:w-10 text-right">
                       {country.compositeScore}
                     </span>
                   </div>
@@ -785,40 +784,40 @@ export default function Dashboard({ setAdminPage, setSelectedSubmission }) {
           </div>
 
           {/* Tier Distribution */}
-          <div className="bg-white border border-[#E0D8CC] rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-[#1A1A2E] mb-3.5">
+          <div className="bg-white border border-[#E0D8CC] rounded-lg p-3 sm:p-4">
+            <h3 className="text-xs sm:text-sm font-semibold text-[#1A1A2E] mb-3 sm:mb-3.5">
               Tier Distribution
             </h3>
             <TierDistributionChart submissions={allSubmissions} />
           </div>
 
           {/* Completion Rate Chart */}
-          <div className="bg-white border border-[#E0D8CC] rounded-lg p-4">
-            <h3 className="text-sm font-semibold text-[#1A1A2E] mb-3.5">
+          <div className="bg-white border border-[#E0D8CC] rounded-lg p-3 sm:p-4">
+            <h3 className="text-xs sm:text-sm font-semibold text-[#1A1A2E] mb-3 sm:mb-3.5">
               Completion Rate
             </h3>
-            <div className="flex items-center justify-center h-20">
+            <div className="flex items-center justify-center h-16 sm:h-20">
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center relative"
+                className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center relative"
                 style={{
                   background: `conic-gradient(#28A868 ${stats.completionRate.value * 3.6}deg, #F0EBE3 0deg)`,
                 }}
               >
-                <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center">
-                  <span className="text-base font-semibold text-[#1A1A2E]">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white flex items-center justify-center">
+                  <span className="text-sm sm:text-base font-semibold text-[#1A1A2E]">
                     {stats.completionRate.value}%
                   </span>
                 </div>
               </div>
             </div>
-            <div className="flex justify-center gap-4 mt-3">
+            <div className="flex justify-center gap-3 sm:gap-4 mt-2 sm:mt-3">
               <div className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-[#28A868]" />
-                <span className="text-xs text-[#6B6577]">Completed</span>
+                <span className="text-[10px] sm:text-xs text-[#6B6577]">Completed</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-[#F0EBE3]" />
-                <span className="text-xs text-[#6B6577]">Pending</span>
+                <span className="text-[10px] sm:text-xs text-[#6B6577]">Pending</span>
               </div>
             </div>
           </div>

@@ -658,6 +658,7 @@ export default function SAPIIndexPage() {
   const [showTrails, setShowTrails] = useState(true);
   const [showVectors, setShowVectors] = useState(true);
   const [tooltip, setTooltip] = useState({ nation:null, x:0, y:0 });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const handleTooltip = useCallback((nation, x, y) => setTooltip({ nation, x:x||0, y:y||0 }), []);
 
   const tabStyle = (tab) => ({
@@ -686,20 +687,22 @@ export default function SAPIIndexPage() {
       {/* Header */}
         <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <img
             src="/SAPI_Logo_B4.svg"
             alt="SAPI Logo"
-            className="h-40 w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
           />
           <div
-            className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
+            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
           >
             THE SOVEREIGN<br />AI POWER INDEX
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
@@ -712,12 +715,6 @@ export default function SAPIIndexPage() {
           >
             Methodology
           </button>
-          {/* <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Preview
-          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}
@@ -731,7 +728,65 @@ export default function SAPIIndexPage() {
             Request Introduction
           </button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-sapi-parchment p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
+          <div className="flex flex-col gap-4">
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/sapi-index');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Index
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/methodology');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Methodology
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/about');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              About Us
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+              onClick={() => {
+                navigate('/contact');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Request Introduction
+            </button>
+          </div>
+        </div>
+      )}
     </header>
 
     {/* Credential Request Card */}
@@ -760,13 +815,15 @@ export default function SAPIIndexPage() {
     <OrientationStrip />
 
     {/* Tab bar */}
-    <div className="px-8 w-[1050px] mx-auto flex gap-0.5 border-b border-sapi-bronze/20 bg-sapi-navy">
-      {TABS.map(tab => (
-        <button key={tab} onClick={() => setActiveTab(tab)} style={tabStyle(tab)}>
-          {TAB_LABELS[tab]}
-        </button>
-      ))}
-      <div className="ml-auto px-4 py-2 text-[11px] text-sapi-muted self-center">
+    <div className="px-4 sm:px-6 md:px-8 w-full max-w-[1050px] mx-auto flex gap-0.5 border-b border-sapi-bronze/20 bg-sapi-navy overflow-x-auto">
+      <div className="flex gap-0.5 min-w-max">
+        {TABS.map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)} style={tabStyle(tab)}>
+            {TAB_LABELS[tab]}
+          </button>
+        ))}
+      </div>
+      <div className="ml-auto px-4 py-2 text-[10px] sm:text-[11px] text-sapi-muted self-center whitespace-nowrap">
         {nations.length} nations · SAPI v1.0 (Anonymized)
       </div>
     </div>
@@ -774,8 +831,8 @@ export default function SAPIIndexPage() {
       {/* Arc tab controls */}
       {activeTab === "arc" && (
         <>
-          <div className="px-8 w-[1115px] mx-auto">
-            <div className="flex gap-5 items-center py-2.5 pl-5 flex-wrap border-b border-sapi-bronze/20 bg-sapi-navy">
+          <div className="px-4 sm:px-6 md:px-8 w-full max-w-[1115px] mx-auto">
+            <div className="flex gap-3 sm:gap-5 items-center py-2.5 pl-3 sm:pl-5 flex-wrap border-b border-sapi-bronze/20 bg-sapi-navy">
               {[
                 { label:"HIGHLIGHT", value:highlight, onChange:e=>setHighlight(e.target.value), options:allNationOptions },
                 { label:"SCORE VIEW", value:scoreView, onChange:e=>setScoreView(e.target.value), options:[
@@ -783,7 +840,7 @@ export default function SAPIIndexPage() {
                 ]},
               ].map(ctrl => (
                 <div key={ctrl.label} className="flex items-center gap-2">
-                  <span className="text-[11px] text-sapi-muted tracking-[0.5px]">{ctrl.label}</span>
+                  <span className="text-[10px] sm:text-[11px] text-sapi-muted tracking-[0.5px]">{ctrl.label}</span>
                   <select value={ctrl.value} onChange={ctrl.onChange} style={selectStyle}>
                     {ctrl.options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
@@ -800,7 +857,7 @@ export default function SAPIIndexPage() {
             </div>
 
             {/* Legend */}
-            <div className="flex gap-5 flex-wrap py-2 pl-4 border-b border-sapi-bronze/20 text-[11px] text-sapi-muted bg-sapi-navy">
+            <div className="flex gap-3 sm:gap-5 flex-wrap py-2 pl-3 sm:pl-4 border-b border-sapi-bronze/20 text-[10px] sm:text-[11px] text-sapi-muted bg-sapi-navy">
               {[
                 { color:T.green, label:"Above arc (outperforming)" },
                 { color:T.gray,  label:"On arc (±5)" },
@@ -827,29 +884,29 @@ export default function SAPIIndexPage() {
             </div>
 
             {/* Explanation Section */}
-            <div className="py-6 bg-sapi-navy border-t border-sapi-bronze/20">
-              <div className="max-w-[900px] mx-auto">
-                <div className="text-[12px] font-semibold text-sapi-parchment mb-2 tracking-[0.5px] uppercase text-center">Understanding the Index</div>
-                <p className="text-[13px] text-sapi-muted leading-[1.7] mb-4">
+            <div className="py-4 sm:py-6 bg-sapi-navy border-t border-sapi-bronze/20">
+              <div className="max-w-[900px] mx-auto px-2">
+                <div className="text-[11px] sm:text-[12px] font-semibold text-sapi-parchment mb-2 tracking-[0.5px] uppercase text-center">Understanding the Index</div>
+                <p className="text-[12px] sm:text-[13px] text-sapi-muted leading-[1.7] mb-4">
                   The Sovereign AI Power Index maps 32 nations across two dimensions: structural independence (X-axis) and execution velocity (Y-axis). Each node represents a nation's strategic position in the global AI race. Nation identities are anonymized (A, B, C, etc.) in this preview.
                 </p>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3 sm:gap-4">
                   <div>
-                    <div className="text-[11px] font-semibold text-sapi-gold mb-1.5">Sovereignty Axis (X)</div>
-                    <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
+                    <div className="text-[10px] sm:text-[11px] font-semibold text-sapi-gold mb-1.5">Sovereignty Axis (X)</div>
+                    <p className="text-[11px] sm:text-[12px] text-sapi-muted leading-[1.6] m-0">
                       Measures structural independence through compute infrastructure, semiconductor access, data jurisdiction, model independence, and AI talent retention.
                     </p>
                   </div>
                   <div>
-                    <div className="text-[11px] font-semibold text-sapi-gold mb-1.5">Velocity Axis (Y)</div>
-                    <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
+                    <div className="text-[10px] sm:text-[11px] font-semibold text-sapi-gold mb-1.5">Velocity Axis (Y)</div>
+                    <p className="text-[11px] sm:text-[12px] text-sapi-muted leading-[1.6] m-0">
                       Measures execution and deployment speed through policy velocity, public/private sector adoption, investment coherence, and institutional readiness.
                     </p>
                   </div>
                 </div>
-                <div className="mt-4 p-4 bg-sapi-midnight border-l-2 border-sapi-gold rounded-r-md">
-                  <div className="text-[11px] font-semibold text-sapi-parchment mb-1">The Execution Delta</div>
-                  <p className="text-[12px] text-sapi-muted leading-[1.6] m-0">
+                <div className="mt-4 p-3 sm:p-4 bg-sapi-midnight border-l-2 border-sapi-gold rounded-r-md">
+                  <div className="text-[10px] sm:text-[11px] font-semibold text-sapi-parchment mb-1">The Execution Delta</div>
+                  <p className="text-[11px] sm:text-[12px] text-sapi-muted leading-[1.6] m-0">
                     The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta — the most important metric in the index. Positive delta = outperforming, Negative delta = unrealized potential.
                   </p>
                 </div>
@@ -860,17 +917,17 @@ export default function SAPIIndexPage() {
       )}
 
       {activeTab === "scoreboard" && (
-        <div className="px-8 max-w-container mx-auto">
+        <div className="px-4 sm:px-6 md:px-8 max-w-container mx-auto">
           <ScoreboardCanvas />
         </div>
       )}
       {activeTab === "delta" && (
-        <div className="px-8 max-w-container mx-auto">
+        <div className="px-4 sm:px-6 md:px-8 max-w-container mx-auto">
           <DeltaCanvas />
         </div>
       )}
       {activeTab === "method" && (
-        <div className="px-8 max-w-container mx-auto">
+        <div className="px-4 sm:px-6 md:px-8 max-w-container mx-auto">
           <MethodologyPanel />
         </div>
       )}

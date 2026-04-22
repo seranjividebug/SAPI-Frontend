@@ -22,8 +22,8 @@ const DIMS = [
 // PILL COMPONENT
 // =============================================================
 function Pill({ label, color, size = "sm" }) {
-  const pad = size === "lg" ? "px-2.5 py-1" : "px-2 py-0.5";
-  const fs = size === "lg" ? "text-xs" : "text-[11px]";
+  const pad = size === "lg" ? "px-2 sm:px-2.5 py-1" : "px-1.5 sm:px-2 py-0.5";
+  const fs = size === "lg" ? "text-[10px] sm:text-xs" : "text-[10px] sm:text-[11px]";
   return (
     <span
       className={`inline-flex items-center rounded ${pad} ${fs} font-medium tracking-wide whitespace-nowrap border-[0.5px]`}
@@ -74,7 +74,7 @@ function RadarChart({ scores }) {
   };
 
   return (
-    <svg width="480" height="390" viewBox="0 0 480 390" className="block">
+    <svg width="480" height="390" viewBox="0 0 480 390" className="block w-full max-w-[480px] h-auto">
       {[0.25, 0.5, 0.75, 1].map((pct) => (
         <polygon
           key={pct}
@@ -157,13 +157,13 @@ function RadarChart({ scores }) {
 function CompositeScoreCard({ score, tier }) {
   const tc = tierColor(tier);
   return (
-    <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden mb-3.5 flex-shrink-0">
-      <div className="px-6 py-5 bg-[#F7F4EF] flex items-center justify-between">
+    <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden mb-3 sm:mb-3.5 flex-shrink-0">
+      <div className="px-4 sm:px-6 py-4 sm:py-5 bg-[#F7F4EF] flex items-center justify-between">
         <div>
-          <div className="text-base font-semibold text-[#1A1A2E] mb-1">Composite Score</div>
-          <div className="flex items-center gap-2 mt-2">
-            <span className="text-xs flex items-center gap-1" style={{ color: tc }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={tc} strokeWidth="2">
+          <div className="text-sm sm:text-base font-semibold text-[#1A1A2E] mb-1">Composite Score</div>
+          <div className="flex items-center gap-1.5 sm:gap-2 mt-2">
+            <span className="text-[10px] sm:text-xs flex items-center gap-1" style={{ color: tc }}>
+              <svg width="12" height="12" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 24 24" fill="none" stroke={tc} strokeWidth="2">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
               </svg>
               {tier}
@@ -171,11 +171,11 @@ function CompositeScoreCard({ score, tier }) {
           </div>
         </div>
         <div
-          className="w-20 h-20 rounded-full flex flex-col items-center justify-center bg-white"
+          className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center bg-white"
           style={{ border: `3px solid ${tc}` }}
         >
-          <div className="font-sans text-[28px] font-bold text-[#1A1A2E] leading-none">{score}</div>
-          <div className="text-[9px] mt-0.5 truncate max-w-[60px]" style={{ color: tc }} title={tier}>
+          <div className="font-sans text-[22px] sm:text-[28px] font-bold text-[#1A1A2E] leading-none">{score}</div>
+          <div className="text-[8px] sm:text-[9px] mt-0.5 truncate max-w-[50px] sm:max-w-[60px]" style={{ color: tc }} title={tier}>
             {tier}
           </div>
         </div>
@@ -196,7 +196,7 @@ function OrgProfileCard({ sub }) {
     {
       label: "Email",
       value: (
-        <a href={`mailto:${sub.email}`} className="text-[#4A7AE0] no-underline">
+        <a href={`mailto:${sub.email}`} className="text-[#4A7AE0] no-underline break-all">
           {sub.email}
         </a>
       ),
@@ -206,19 +206,19 @@ function OrgProfileCard({ sub }) {
   ];
   return (
     <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden flex-1 flex flex-col">
-      <div className="px-5 py-3.5 bg-[#F7F4EF] border-b border-[#E0D8CC]">
-        <span className="text-xs font-medium text-[#6B6577] uppercase tracking-wider">
+      <div className="px-4 sm:px-5 py-3 sm:py-3.5 bg-[#F7F4EF] border-b border-[#E0D8CC]">
+        <span className="text-[10px] sm:text-xs font-medium text-[#6B6577] uppercase tracking-wider">
           Organisation Profile
         </span>
       </div>
-      <div className="py-3 flex-1">
+      <div className="py-2 sm:py-3 flex-1">
         {rows.map((row, i) => (
           <div
             key={i}
-            className={`flex items-center px-5 py-3 ${i < rows.length - 1 ? "border-b border-[#F0EBE3]" : ""}`}
+            className={`flex flex-col sm:flex-row items-start sm:items-center px-4 sm:px-5 py-2 sm:py-3 ${i < rows.length - 1 ? "border-b border-[#F0EBE3]" : ""}`}
           >
-            <div className="w-40 flex-shrink-0 text-sm text-[#6B6577]">{row.label}</div>
-            <div className="text-sm text-[#1A1A2E] flex-1">{row.value}</div>
+            <div className="w-full sm:w-40 flex-shrink-0 text-[12px] sm:text-sm text-[#6B6577] mb-1 sm:mb-0">{row.label}</div>
+            <div className="text-[12px] sm:text-sm text-[#1A1A2E] flex-1">{row.value}</div>
           </div>
         ))}
       </div>
@@ -234,7 +234,7 @@ function DimensionScoresPanel({ scores, onDimensionClick, selectedDim }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grid grid-cols-5 gap-2.5 mb-3.5 flex-shrink-0">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-2.5 mb-3 sm:mb-3.5 flex-shrink-0">
         {DIMS.map((dim) => {
           const s = scores[dim.key] || 0;
           const bc = bandColor(s);
@@ -248,7 +248,7 @@ function DimensionScoresPanel({ scores, onDimensionClick, selectedDim }) {
               onClick={() => onDimensionClick && onDimensionClick(dim.key)}
               onMouseEnter={() => setHoveredDim(dim.key)}
               onMouseLeave={() => setHoveredDim(null)}
-              className={`bg-white border rounded-lg py-3.5 px-3.5 text-center cursor-pointer transition-all duration-300 relative overflow-hidden ${
+              className={`bg-white border rounded-lg py-2.5 sm:py-3.5 px-2.5 sm:px-3.5 text-center cursor-pointer transition-all duration-300 relative overflow-hidden ${
                 isActive ? "scale-105 shadow-lg" : "scale-100 shadow-none"
               }`}
               style={{
@@ -257,18 +257,18 @@ function DimensionScoresPanel({ scores, onDimensionClick, selectedDim }) {
               }}
             >
               {isActive && <div className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: bc }} />}
-              <div className="text-[11px] text-[#6B6577] font-medium uppercase tracking-normal mb-2 leading-tight line-clamp-2 text-center">
+              <div className="text-[9px] sm:text-[11px] text-[#6B6577] font-medium uppercase tracking-normal mb-1.5 sm:mb-2 leading-tight line-clamp-2 text-center">
                 {dim.label}
               </div>
-              <div className="font-sans text-[28px] font-bold leading-none" style={{ color: bc }}>
+              <div className="font-sans text-[20px] sm:text-[28px] font-bold leading-none" style={{ color: bc }}>
                 {s}
               </div>
             </div>
           );
         })}
       </div>
-      <div className="bg-white border border-[#E0D8CC] rounded-lg px-5 py-4 flex flex-col items-center flex-1">
-        <div className="text-xs font-medium text-[#6B6577] uppercase tracking-wider self-start mb-2">
+      <div className="bg-white border border-[#E0D8CC] rounded-lg px-4 sm:px-5 py-3 sm:py-4 flex flex-col items-center flex-1">
+        <div className="text-[10px] sm:text-xs font-medium text-[#6B6577] uppercase tracking-wider self-start mb-2">
           Dimension Radar
         </div>
         <div className="flex-1 flex items-center justify-center w-full">
@@ -319,9 +319,9 @@ function QAAccordion({ answers, dimensionBreakdown, openDim, onToggleDim }) {
   };
 
   return (
-    <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden mb-3.5">
-      <div className="px-4 py-2.5 bg-[#F7F4EF] border-b border-[#E0D8CC]">
-        <span className="text-xs font-medium text-[#6B6577] uppercase tracking-wider">
+    <div className="bg-white border border-[#E0D8CC] rounded-lg overflow-hidden mb-3 sm:mb-3.5">
+      <div className="px-4 py-2 sm:py-2.5 bg-[#F7F4EF] border-b border-[#E0D8CC]">
+        <span className="text-[10px] sm:text-xs font-medium text-[#6B6577] uppercase tracking-wider">
           Assessment Responses
         </span>
       </div>
@@ -336,37 +336,37 @@ function QAAccordion({ answers, dimensionBreakdown, openDim, onToggleDim }) {
           <div key={dim.key} className={`${di < DIMS.length - 1 ? "border-b border-[#E8E2DA]" : ""}`}>
             <button
               onClick={() => toggle(dim.key)}
-              className={`w-full flex items-center gap-2.5 px-4 py-3 border-none cursor-pointer text-left transition-colors ${
+              className={`w-full flex items-center gap-2 sm:gap-2.5 px-4 py-2.5 sm:py-3 border-none cursor-pointer text-left transition-colors ${
                 isOpen ? "bg-[#FAFAF8]" : "bg-transparent"
               }`}
             >
               <svg
-                width="16"
-                height="16"
+                width="14" height="14" className="sm:w-[16px] sm:h-[16px] flex-shrink-0 transition-transform duration-200"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className={`flex-shrink-0 transition-transform duration-200 ${
-                  isOpen ? "text-[#C9963A] rotate-90" : "text-[#5A4A7A] rotate-0"
-                }`}
+                style={{
+                  color: isOpen ? "#C9963A" : "#5A4A7A",
+                  transform: isOpen ? "rotate(90deg)" : "rotate(0deg)"
+                }}
               >
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
-              <span className="text-sm font-medium text-[#1A1A2E] flex-1">{dim.label}</span>
-              <span className="text-xs text-[#9880B0] mr-2">{questions.length} questions</span>
+              <span className="text-[12px] sm:text-sm font-medium text-[#1A1A2E] flex-1">{dim.label}</span>
+              <span className="text-[10px] sm:text-xs text-[#9880B0] mr-2">{questions.length} questions</span>
               <Pill label={bandLabel(dimScore)} color={bandColor(dimScore)} />
             </button>
             {isOpen && questions.length > 0 && (
-              <div className="px-4 py-3 bg-[#FAFAF8]">
+              <div className="px-4 py-2.5 sm:py-3 bg-[#FAFAF8]">
                 {questions.map((q) => (
-                  <div key={q.question_id} className="mb-4 last:mb-0 pb-4 last:pb-0 border-b border-[#E8E2DA] last:border-0">
-                    <div className="text-sm text-[#6B6577] font-bold mb-2 leading-relaxed">{q.question_text}</div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-[#1A1A2E] font-normal flex-1 mr-4">{q.selected_text}</div>
-                      <div className="text-sm text-[#C9963A] font-semibold whitespace-nowrap">Score: {q.score}</div>
+                  <div key={q.question_id} className="mb-3 sm:mb-4 last:mb-0 pb-3 sm:pb-4 last:pb-0 border-b border-[#E8E2DA] last:border-0">
+                    <div className="text-[12px] sm:text-sm text-[#6B6577] font-bold mb-1.5 sm:mb-2 leading-relaxed">{q.question_text}</div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                      <div className="text-[12px] sm:text-sm text-[#1A1A2E] font-normal flex-1 mr-0 sm:mr-4">{q.selected_text}</div>
+                      <div className="text-[12px] sm:text-sm text-[#C9963A] font-semibold whitespace-nowrap">Score: {q.score}</div>
                     </div>
                   </div>
                 ))}
@@ -546,7 +546,7 @@ export default function SubmissionDetail({ submission: submissionProp, onBack })
     return (
       <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center font-sans">
         <div className="text-center">
-          <div className="text-base text-[#6B6577]">Loading assessment details...</div>
+          <div className="text-sm sm:text-base text-[#6B6577]">Loading assessment details...</div>
         </div>
       </div>
     );
@@ -555,9 +555,9 @@ export default function SubmissionDetail({ submission: submissionProp, onBack })
   if (error) {
     return (
       <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center font-sans">
-        <div className="text-center px-10 py-5 bg-white rounded-lg border border-[#E0D8CC]">
-          <div className="text-base text-[#C03058] mb-2">Error</div>
-          <div className="text-sm text-[#6B6577]">{error}</div>
+        <div className="text-center px-6 sm:px-10 py-4 sm:py-5 bg-white rounded-lg border border-[#E0D8CC]">
+          <div className="text-sm sm:text-base text-[#C03058] mb-2">Error</div>
+          <div className="text-xs sm:text-sm text-[#6B6577]">{error}</div>
         </div>
       </div>
     );
@@ -567,7 +567,7 @@ export default function SubmissionDetail({ submission: submissionProp, onBack })
     return (
       <div className="min-h-screen bg-[#F7F4EF] flex items-center justify-center font-sans">
         <div className="text-center">
-          <div className="text-base text-[#6B6577]">No assessment data available</div>
+          <div className="text-sm sm:text-base text-[#6B6577]">No assessment data available</div>
         </div>
       </div>
     );
@@ -596,30 +596,30 @@ export default function SubmissionDetail({ submission: submissionProp, onBack })
       `}</style>
 
       {/* Page Header */}
-      <div className="bg-white border-b border-[#E0D8CC] px-6 py-4">
+      <div className="bg-white border-b border-[#E0D8CC] px-4 sm:px-6 py-3 sm:py-4">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 bg-[#F7F4EF] border border-[#E0D8CC] rounded-md cursor-pointer text-[#6B6577] text-xs py-2 px-3.5 transition-all duration-150 mb-4 hover:bg-[#F0EBE3] hover:border-[#D4CBB8]"
+          className="inline-flex items-center gap-2 bg-[#F7F4EF] border border-[#E0D8CC] rounded-md cursor-pointer text-[#6B6577] text-[10px] sm:text-xs py-2 px-3 sm:px-3.5 transition-all duration-150 mb-3 sm:mb-4 hover:bg-[#F0EBE3] hover:border-[#D4CBB8]"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="12" height="12" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           Back to Assessments
         </button>
 
-        <h1 className="font-serif text-[22px] font-semibold text-[#1A1A2E] m-0">Assessment Details</h1>
-        <p className="text-sm text-[#6B6577] mt-2">
+        <h1 className="font-serif text-[18px] sm:text-[22px] font-semibold text-[#1A1A2E] m-0">Assessment Details</h1>
+        <p className="text-[12px] sm:text-sm text-[#6B6577] mt-1.5 sm:mt-2">
           View comprehensive assessment results including dimension scores, organisation profile, and detailed
           question responses.
         </p>
       </div>
 
       {/* Body Content */}
-      <div className="px-6 py-4 pb-8">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 pb-6 sm:pb-8">
         {/* Top row */}
-        <div className="flex gap-4 mb-3.5 items-stretch">
+        <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 mb-3 sm:mb-3.5 items-stretch">
           {/* Left column */}
-          <div className="flex-[0_0_40%] flex flex-col bg-white rounded-lg p-4 animate-card">
+          <div className="flex-1 lg:flex-[0_0_40%] flex flex-col bg-white rounded-lg p-3 sm:p-4 animate-card">
             <div className="hover-lift">
               <CompositeScoreCard score={submission.compositeScore} tier={submission.tier} />
             </div>

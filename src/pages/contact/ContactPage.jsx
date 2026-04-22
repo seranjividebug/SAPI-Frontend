@@ -33,12 +33,12 @@ const SectionLabel = ({ children, tone = "default", className = "" }) => (
 
 const PageHero = ({ description, label, title }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <SectionLabel tone="accent">{label}</SectionLabel>
-      <h1 className="font-sans text-5xl leading-tight text-sapi-parchment max-w-4xl">
+      <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl leading-tight text-sapi-parchment max-w-4xl">
         {title}
       </h1>
-      <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
+      <p className="font-sans text-base sm:text-lg leading-8 text-sapi-muted max-w-2xl">
         {description}
       </p>
     </div>
@@ -47,24 +47,27 @@ const PageHero = ({ description, label, title }) => {
 
 const CustomHeader = () => {
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <img
             src="/SAPI_Logo_B4.svg"
             alt="SAPI Logo"
-            className="h-40 w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
           />
           <div
-            className="font-sans text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
+            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
             onClick={() => navigate('/main')}
           >
             THE SOVEREIGN<br />AI POWER INDEX
           </div>
         </div>
-        <div className="flex items-center gap-6">
+        
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/sapi-index')}
@@ -77,12 +80,6 @@ const CustomHeader = () => {
           >
             Methodology
           </button>
-          {/* <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-          Preview
-          </button> */}
           <button
             className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
             onClick={() => navigate('/about')}
@@ -96,7 +93,65 @@ const CustomHeader = () => {
             Request Introduction
           </button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-sapi-parchment p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
+          <div className="flex flex-col gap-4">
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/sapi-index');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Index
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/methodology');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Methodology
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
+              onClick={() => {
+                navigate('/about');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              About Us
+            </button>
+            <button
+              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
+              onClick={() => {
+                navigate('/contact');
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              Request Introduction
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
@@ -172,52 +227,52 @@ const IntroductionForm = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {error && (
           <div className="bg-red-900/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-sm text-sm">
             {error}
           </div>
         )}
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Name</label>
+          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Name</label>
           <input
             type="text"
             required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
         <div className="space-y-2">
-          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Email</label>
+          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Email</label>
           <input
             type="email"
             required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Organisation</label>
+          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Organisation</label>
           <input
             type="text"
             required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
             value={formData.organization}
             onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
           />
         </div>
         <div className="space-y-2">
-          <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Role</label>
+          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Role</label>
           <input
             type="text"
             required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
             value={formData.role}
             onChange={(e) => setFormData({ ...formData, role: e.target.value })}
           />
@@ -225,10 +280,10 @@ const IntroductionForm = () => {
       </div>
 
       <div className="space-y-2">
-        <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Area of Interest</label>
+        <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Area of Interest</label>
         <select
           required
-          className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+          className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
           value={formData.interest}
           onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
         >
@@ -241,20 +296,20 @@ const IntroductionForm = () => {
       </div>
 
       <div className="space-y-2">
-        <label className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Message</label>
+        <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Message</label>
         <textarea
           required
           rows={5}
-          className="w-full bg-[#0a0a12] border border-sapi-bronze px-4 py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors resize-none [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
+          className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors resize-none [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-        />
+          />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="font-sans text-[13px] sm:text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-8 sm:px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {loading ? 'Submitting...' : 'Submit Request'}
       </button>
@@ -284,8 +339,8 @@ export default function ContactPage() {
             transition: background-color 5000s ease-in-out 0s;
           }
         `}</style>
-        <div className="px-8 py-8 max-w-container mx-auto">
-          <div className="space-y-14">
+        <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-container mx-auto">
+          <div className="space-y-10 sm:space-y-14">
             {/* <button
               className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
               onClick={() => window.location.href = '/main'}
