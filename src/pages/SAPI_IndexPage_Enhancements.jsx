@@ -75,11 +75,11 @@ export function OrientationStrip() {
 
 function StatTile({ value, label, accent = false }) {
   return (
-    <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[100px] sm:min-w-[110px] flex-1">
+    <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[120px] sm:min-w-[140px] flex-1">
       <div className={`font-serif text-[24px] sm:text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
         {value}
       </div>
-      <div className="text-[8px] sm:text-[9px] tracking-[0.24em] text-sapi-muted font-medium whitespace-nowrap">
+      <div className="text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.24em] text-sapi-muted font-medium text-center leading-tight">
         {label}
       </div>
     </div>

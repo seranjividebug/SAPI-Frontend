@@ -125,13 +125,15 @@
       if (!validate()) return;
       setSubmitting(true);
       try {
+        // Get the label for the selected use case value
+        const selectedUseCase = USE_CASES.find(u => u.value === form.useCase);
         const credentialData = {
           fullName: form.fullName,
           officialTitle: form.title,
           entity: form.entity,
           country: form.country,
           email: form.email,
-          intendedUse: form.useCase,
+          intendedUse: selectedUseCase?.label || form.useCase,
           briefContext: form.context,
         };
         await submitCredentialRequest(credentialData);
