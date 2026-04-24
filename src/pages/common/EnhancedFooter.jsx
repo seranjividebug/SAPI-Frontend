@@ -7,7 +7,7 @@ const navigationItems = [
 ];
 
 const socialLinks = [
-  { href: "https://x.com/thesaipi", label: "X" },
+  // { href: "https://x.com/thesaipi", label: "X" },
   { href: "https://www.linkedin.com/company/the-sovereign-ai-power-index/", label: "LinkedIn" },
 ];
 
