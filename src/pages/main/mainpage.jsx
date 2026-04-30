@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DimensionChart } from "./DimensionChart";
 import { PageLayout, EnhancedFooter } from "../common";
@@ -22,16 +22,34 @@ const HorizontalRule = () => (
   <div className="w-full h-px bg-sapi-bronze" />
 );
 
-const AnimatedStat = ({ value }) => {
+const AnimatedStat = ({ value, prefix = "", suffix = "" }) => {
   const [displayValue, setDisplayValue] = useState(0);
   
-  return <span>{value}</span>;
+  useEffect(() => {
+    let startTimestamp = null;
+    const duration = 2000;
+    const startValue = 0;
+    const endValue = parseInt(value);
+    
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      setDisplayValue(Math.floor(progress * (endValue - startValue) + startValue));
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    
+    window.requestAnimationFrame(step);
+  }, [value]);
+  
+  return <span>{prefix}{displayValue}{suffix}</span>;
 };
 
-const StatRow = ({ label, value }) => (
+const StatRow = ({ label, value, prefix = "", suffix = "" }) => (
   <div className="border-l border-sapi-bronze pl-6">
     <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">{label}</p>
-    <p className="font-sans text-5xl leading-none text-sapi-parchment mt-4">{value}</p>
+    <p className="font-sans text-5xl leading-none text-sapi-parchment mt-4"><AnimatedStat value={value} prefix={prefix} suffix={suffix} /></p>
   </div>
 );
 
@@ -203,10 +221,10 @@ const dimensions = [
   },
   {
     key: "di",
-    label: "Directed Intelligence Maturity",
-    shortDescription: "How effectively a nation or corporation turns AI capability into AI revenue.",
+    label: "AI Implementation Maturity",
+    shortDescription: "How effectively a nation or corporation converts AI capability into measurable outcomes.",
     description:
-      "Captures the operating maturity required to convert AI capability into state and corporate level execution, from mission design to durable institutional adoption.",
+      "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
     sampleScore: 63,
     proprietary: true,
   },
@@ -214,9 +232,9 @@ const dimensions = [
 ];
 
 const standardStats = [
-  { label: "SOVEREIGN CAPITAL INVESTED", value: "£584M" },
-  { label: "REVIEW SESSIONS PER YEAR", value: "4" },
-  { label: "AI DIMENSIONS MEASURED", value: "5" },
+  { label: "SOVEREIGN CAPITAL INVESTED", value: 584, prefix: "£", suffix: "M" },
+  { label: "REVIEW SESSIONS PER YEAR", value: 4 },
+  { label: "AI DIMENSIONS MEASURED", value: 5 },
 ];
 
 export default function MainPage() {
@@ -227,9 +245,9 @@ export default function MainPage() {
       <div className="bg-[#0a0a12] min-h-screen">
         {/* Hero Section */}
         <HeroSection
-        description="SAPI scores national and corporate AI readiness across five dimensions, convenes quarterly in Westminster, and architects the governance systems that determine which entities lead and which depend."
+        description="SAPI evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organizations lead and which rely on others."
         primaryCta={{ href: "/contact", label: "Request an Introduction" }}
-        title="Sovereign AI readiness intelligence for nations and capital."
+        title="Sovereign AI Readiness intelligence for nations and capital"
       />
 
       {/* The Standard Section */}
@@ -243,12 +261,10 @@ export default function MainPage() {
                   Every consequential standard began the same way.
                 </h2>
                 <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-                  A credible measure entered the market. Capital reorganised around it. Policy followed. Access
-                  became conditional on it.
+                  A credible measure enters the market. Capital reorganises around it. Policy follows. Access becomes conditional on it.
                 </p>
                 <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-                  Credit ratings did this for sovereign debt. ESG scores did it for institutional allocation. SAPI is
-                  doing it for sovereign AI.
+                  Credit ratings did this for sovereign debt. ESG scores did it for institutional allocation. SAPI does it for sovereign AI.
                 </p>
               </div>
 
@@ -268,7 +284,7 @@ export default function MainPage() {
 
             <div className="grid gap-10 pt-8 md:grid-cols-3">
               {standardStats.map((stat) => (
-                <StatRow key={stat.label} label={stat.label} value={stat.value} />
+                <StatRow key={stat.label} label={stat.label} value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
               ))}
             </div>
           </FadeIn>
@@ -285,7 +301,7 @@ export default function MainPage() {
               Five dimensions. One score.
             </h2>
             <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              SAPI translates sovereign readiness into a decision-grade frame.
+              SAPI translates sovereign readiness into a decision-grade framework.
             </p>
           </FadeIn>
 
@@ -304,9 +320,7 @@ export default function MainPage() {
               Westminster. Quarterly.
             </h2>
             <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              Nations present. Corporations present. Sovereign capital evaluates. The SAPI assessment is the shared
-              language. If your institution deploys capital into national AI infrastructure, or your government is
-              seeking it, this is the room where it begins.
+              Nations attend. Corporations attend. Sovereign capital evaluates. The SAPI assessment provides the shared language. If your institution deploys capital into national AI infrastructure or your government seeks it, this is where it begins.
             </p>
           </FadeIn>
         </div>

@@ -9,7 +9,7 @@ const DIMENSIONS = [
   { num: "02", name: "Capital Formation", def: "Institutional capital available for long-horizon AI infrastructure investment." },
   { num: "03", name: "Regulatory Readiness", def: "Governance frameworks that enable public trust in AI systems." },
   { num: "04", name: "Data Sovereignty", def: "National control over the data AI learns from and acts upon." },
-  { num: "05", name: "Directed Intelligence Maturity", def: "How effectively your nation turns AI capability into coordinated state action." },
+  { num: "05", name: "AI Implementation Maturity", def: "How effectively your nation turns AI capability into coordinated state action." },
 ];
 
 const TIERS = [
@@ -102,7 +102,7 @@ export default function LandingPage({ onBegin }) {
               The nations that lead the AI era will not do so by accident.
             </div>
             <div className="font-sans text-[14px] sm:text-[15px] md:text-[16px] text-sapi-muted leading-[1.7] sm:leading-[1.8] max-w-[620px] mt-4 sm:mt-5 mb-6 sm:mb-7">
-              Governments that understand their AI position today will set the terms of global competition for the next two decades. Those that don't will find those terms set for them. SAPI gives your ministry the diagnostic clarity to make consequential decisions — on infrastructure, investment, governance, and strategic deployment — before the window closes.
+              Governments that understand their AI position today will set the terms of global competition for the next two decades. Those that don't will find those terms set for them. SAPI gives your ministry the diagnostic clarity to make consequential decisions on infrastructure, investment, governance, and strategic deployment before the window closes.
             </div>
             <div className="flex flex-wrap gap-4 sm:gap-6 mb-6">
               {[
@@ -254,7 +254,7 @@ export default function LandingPage({ onBegin }) {
               Begin Your Sovereign AI Assessment
             </div>
             <div className="font-sans text-[13px] sm:text-[15px] text-sapi-muted tracking-extra-wide text-center max-w-[520px] leading-relaxed">
-              The Tier 1 assessment comprises 30 questions across five dimensions. Completion time: approximately 12–18 minutes. Results are generated automatically upon submission.
+              The Tier 1 assessment has 30 questions across five dimensions. Completion takes approximately 12 to 18 minutes. Results are generated automatically upon submission.
             </div>
             <button
               className={`font-sans text-[13px] sm:text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm mt-2 px-8 sm:px-11 py-3.5 border-none transition-colors duration-150 ${

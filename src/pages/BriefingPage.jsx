@@ -11,7 +11,7 @@ const DIMENSIONS = [
   { num: "02",  name: "Capital Formation",              questions: 6 },
   { num: "03",  name: "Regulatory Readiness",           questions: 7 },
   { num: "04",  name: "Data Sovereignty",               questions: 6 },
-  { num: "05",  name: "Directed Intelligence Maturity", questions: 6 },
+  { num: "05",  name: "AI Implementation Maturity", questions: 6 },
 ];
 
 const COUNTRY_LABELS = {
@@ -201,7 +201,7 @@ export default function BriefingPage({ onBegin }) {
         {/* ── Section: What this assessment measures ── */}
         <SectionLabel>What this assessment measures</SectionLabel>
         <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-5 tracking-wide">
-          The SAPI Tier 1 assessment evaluates your nation's sovereign AI readiness across five dimensions, each representing a distinct institutional condition required for durable AI capacity. Your responses generate a composite SAPI score — calculated as a weighted geometric mean — which maps your nation to one of five readiness tiers.
+          The SAPI Tier 1 assessment evaluates your nation's Sovereign AI Readiness across five dimensions. Each dimension represents a distinct institutional condition required for durable AI capacity. Your responses generate a composite SAPI score calculated as a weighted geometric mean. This score maps your nation to one of five readiness tiers.
         </p>
 
         {/* Dimension list */}
@@ -241,7 +241,7 @@ export default function BriefingPage({ onBegin }) {
         {/* ── Section: How your score is used ── */}
         <SectionLabel>How your score is used</SectionLabel>
         <p className="font-sans text-[14px] sm:text-[15px] text-sapi-muted leading-relaxed mb-3.5 sm:mb-4 tracking-wide">
-          Scoring is fully automated. Upon submission, your five dimension scores and composite SAPI score are calculated instantly and mapped to a readiness tier — from <em className="text-sapi-parchment">Pre-conditions Unmet</em> through to <em className="text-sapi-parchment">Sovereign AI Leader</em>.
+          Scoring is fully automated. Upon submission, your five dimension scores and composite SAPI score are calculated instantly and mapped to a readiness tier. Tiers range from <em className="text-sapi-parchment">Pre-conditions Unmet</em> to <em className="text-sapi-parchment">Sovereign AI Leader</em>.
         </p>
         <p className="font-sans text-[14px] sm:text-[15px] text-sapi-muted leading-relaxed m-0 tracking-wide">
           Your results include a prioritised 12–18 month improvement roadmap with targeted interventions for your lowest-scoring dimensions, and a clear pathway to Tier 2 deep-dive assessment where required.

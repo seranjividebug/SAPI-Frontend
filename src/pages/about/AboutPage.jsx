@@ -178,9 +178,9 @@ export default function AboutPage() {
               Back to Main Page
             </button> */}
             <PageHero
-              description="Founded in the UK, The Sovereign AI Power Index is an intelligence and convening platform built for a single purpose: to make sovereign AI readiness measurable, investable, and governable. It serves governments, sovereign wealth funds, infrastructure operators building national AI systems and corporate entities."
+              description="Founded in the UK, The Sovereign AI Power Index is an intelligence and convening platform with one purpose. It makes sovereign AI capability measurable, investable, and governable. The platform serves governments, sovereign wealth funds, infrastructure operators building national AI systems, and corporate entities."
               label="About SAPI"
-              title="The institutional standard for sovereign AI readiness."
+              title="The institutional standard for sovereign AI capability"
             />
           </div>
 
@@ -197,10 +197,7 @@ export default function AboutPage() {
                 <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">The Sovereign AI Power Index</p>
                   <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    The benchmark. Scores national AI readiness across five dimensions: compute capacity, capital
-                    formation, regulatory readiness, data sovereignty, and directed intelligence maturity. Published
-                    annually. Used by sovereign wealth funds, government AI leads, infrastructure investors and corporate entities to
-                    compare, prioritise, and act.
+                    The benchmark. Scores national AI preparedness across five dimensions including compute capacity, capital formation, regulatory readiness, data sovereignty, and AI implementation maturity. Published annually. Sovereign wealth funds, government AI leads, infrastructure investors, and corporate entities use it to compare, prioritise, and act.
                   </p>
                 </div>
                 <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
@@ -212,9 +209,7 @@ export default function AboutPage() {
                 <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Assessments</p>
                   <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    The intelligence. Bespoke country and corporate assessments that identify readiness gaps, score
-                    governance maturity, and produce the decision-grade intelligence that capital and delivery partners
-                    require before they commit.
+                    The intelligence. Bespoke country and corporate assessments that identify capability gaps, score governance maturity, and produce the intelligence that capital and delivery partners need before they commit.
                   </p>
                 </div>
               </FadeIn>

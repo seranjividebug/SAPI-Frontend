@@ -406,7 +406,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
           <div className="flex justify-between items-center mb-6 sm:mb-8 flex-wrap gap-3 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="text-[10px] sm:text-[11px] lg:text-[12px] tracking-[0.2em] sm:tracking-[0.25em] text-sapi-muted font-medium">
-                COMPOSITE SAPI SCORE — TIER 1 ASSESSMENT
+                COMPOSITE SAPI SCORE - TIER 1 ASSESSMENT
               </div>
             </div>
             {/* Generate PDF Button */}
@@ -626,7 +626,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
               </div>
               <div className="flex-1 min-w-[200px]">
                 <div className="font-serif text-[13px] sm:text-[15px] text-sapi-muted italic mb-4 sm:mb-5 leading-[1.6] sm:leading-[1.7]">
-                  Each axis represents a dimension of sovereign AI readiness.
+                  Each axis represents a dimension of Sovereign AI Readiness.
                   The gold polygon reflects your nation's current capability profile.
                 </div>
                 {/* Mini legend */}
