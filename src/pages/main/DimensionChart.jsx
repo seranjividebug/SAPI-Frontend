@@ -151,7 +151,7 @@ export function DimensionChart({ dimensions }) {
 
       <div className="flex flex-col gap-8">
         <div className="order-2 grid gap-3 lg:order-1 lg:gap-4">
-          {dimensions.map((dimension) => {
+          {dimensions.map((dimension, index) => {
             const isActive = activeDimension.key === dimension.key;
 
             return (
@@ -170,8 +170,8 @@ export function DimensionChart({ dimensions }) {
                 type="button"
               >
                 <div className="flex flex-wrap items-center gap-3">
-                  <span className={`font-sans text-[13px] tracking-[0.22em] uppercase ${dimension.proprietary ? "text-sapi-gold" : ""}`}>
-                    {dimension.label}
+                  <span className={`font-sans text-[13px] tracking-[0.22em] uppercase`}>
+                    {index + 1}. {dimension.label}
                   </span>
                   {dimension.proprietary ? (
                     <span className="font-sans text-[0.62rem] uppercase tracking-[0.22em] text-sapi-gold">
@@ -189,8 +189,8 @@ export function DimensionChart({ dimensions }) {
 
         <div className="order-1 border-l border-sapi-gold pl-6 lg:order-2">
           <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Active Dimension</p>
-          <h3 className={`font-serif mt-4 text-3xl sm:text-4xl ${activeDimension.proprietary ? "text-sapi-gold" : "text-sapi-parchment"}`}>
-            {activeDimension.label}
+          <h3 className={`font-serif mt-4 text-3xl sm:text-4xl text-sapi-parchment`}>
+            {dimensions.findIndex(d => d.key === activeDimension.key) + 1}. {activeDimension.label}
           </h3>
           <p className="mt-4 max-w-xl text-base leading-8 text-sapi-muted">
             {activeDimension.description}

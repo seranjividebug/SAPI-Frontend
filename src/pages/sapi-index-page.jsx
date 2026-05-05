@@ -374,7 +374,7 @@ function ArcCanvas({ highlight, scoreView, onTooltip, showTrails, showVectors })
 
     // Title
     c.font = "500 13px sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
-    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER Arc - 32 Nations", W/2, 6);
+    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER - 32 Nations", W/2, 6);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Sovereign AI Power Index · CoreIntel", W/2, 22);
   }, [highlight, scoreView, showTrails, showVectors]);
@@ -690,7 +690,7 @@ export default function SAPIIndexPage() {
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <img
-            src="/SAPI_Logo_B4.svg"
+            src="/SAPI_logo1.svg"
             alt="SAPI Logo"
             className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
           />
@@ -889,7 +889,7 @@ export default function SAPIIndexPage() {
               <div className="max-w-[900px] mx-auto px-2">
                 <div className="text-[11px] sm:text-[12px] font-semibold text-sapi-parchment mb-2 tracking-[0.5px] uppercase text-center">Understanding the Index</div>
                 <p className="text-[12px] sm:text-[13px] text-sapi-muted leading-[1.7] mb-4">
-                  The Sovereign AI Power Index maps 32 nations across two dimensions: structural independence (X-axis) and execution velocity (Y-axis). Each node represents a nation's strategic position in the global AI race. Nation identities are anonymized (A, B, C, etc.) in this preview.
+                  The Sovereign AI Power Index (SAPI) maps 32 nations across two dimensions: structural independence (X-axis) and execution velocity (Y-axis). Each node represents a nation's strategic position in the global AI race. Nation identities are anonymized (A, B, C, etc.) in this preview.
                 </p>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3 sm:gap-4">
                   <div>

@@ -46,7 +46,7 @@ export function OrientationStrip() {
           {/* Thesis */}
           <div className="max-w-[700px] w-full text-left px-2 sm:px-0">
             <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-3 text-center">
-              SOVEREIGN AI POWER INDEX
+              SOVEREIGN AI POWER INDEX (SAPI)
             </div>
             <p className="font-serif text-[20px] leading-[1.45] text-sapi-parchment font-medium tracking-[0.005em]">
               Thirty-two nations, measured against the{" "}
@@ -61,7 +61,7 @@ export function OrientationStrip() {
 
           {/* Stat tiles */}
           <div className="flex items-stretch border border-sapi-bronze/55 bg-sapi-void max-w-[700px] w-full mx-auto flex-wrap sm:flex-nowrap">
-            <StatTile value="32" label="NATIONS ASSESSED" />
+            <StatTile value="32" label="NATIONS-ASSESSED" />
             <StatDivider />
             <StatTile value="5" label="SOVEREIGN DIMENSIONS" />
             <StatDivider />
@@ -75,7 +75,7 @@ export function OrientationStrip() {
 
 function StatTile({ value, label, accent = false }) {
   return (
-    <div className="px-4 sm:px-(Anonymized)6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[120px] sm:min-w-[140px] flex-1">
+    <div className="px-4 sm:px-(Anonymised)6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[120px] sm:min-w-[140px] flex-1">
       <div className={`font-serif text-[24px] sm:text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
         {value}
       </div>
@@ -191,7 +191,7 @@ export function BriefedVersionPanel() {
           aria-label="Request briefed version of the index"
           className="fixed z-40 transition-all duration-200 right-0 top-1/2 -translate-y-1/2 [writing-mode:vertical-rl] bg-sapi-gold text-sapi-void py-5 px-3 border-none rounded-tl-sm rounded-bl-sm text-[11px] tracking-[0.28em] font-medium cursor-pointer shadow-[-4px_0_24px_rgba(6,3,14,0.67),0_0_0_1px_rgba(237,217,138,0.2)] hover:bg-sapi-paleGold hover:pr-4"
         >
-          REQUEST BRIEFED VERSION
+          REQUEST INFORMATION
         </button>
       )}
 

@@ -226,7 +226,6 @@ const dimensions = [
     description:
       "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
     sampleScore: 63,
-    proprietary: true,
   },
 
 ];
@@ -301,7 +300,7 @@ export default function MainPage() {
               Five dimensions. One score.
             </h2>
             <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              SAPI translates sovereign readiness into a decision-grade frameworks.
+              SAPI translates sovereign readiness into a decision-grade framework.
             </p>
           </FadeIn>
 
