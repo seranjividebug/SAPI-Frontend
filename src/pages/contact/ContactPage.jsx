@@ -54,9 +54,9 @@ const CustomHeader = () => {
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <img
-            src="/SAPI_Logo_B4.svg"
+            src="/SAPI_Logo1.svg"
             alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
           />
           <div
             className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"

@@ -325,7 +325,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="border-l border-sapi-gold pl-6 lg:col-span-2">
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-              <span className="text-sapi-gold">The Directed Intelligence Maturity</span> is proprietary to The Sovereign AI Power Index.
+             The Directed Intelligence Maturity is proprietary to The Sovereign AI Power Index.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="text">Learn more</Button>

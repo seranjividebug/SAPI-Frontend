@@ -374,7 +374,7 @@ function ArcCanvas({ highlight, scoreView, onTooltip, showTrails, showVectors })
 
     // Title
     c.font = "500 13px sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
-    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER - 32 Nations", W/2, 6);
+    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER ARC - 32 Nations", W/2, 6);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Sovereign AI Power Index · CoreIntel", W/2, 22);
   }, [highlight, scoreView, showTrails, showVectors]);
@@ -825,7 +825,7 @@ export default function SAPIIndexPage() {
         ))}
       </div>
       <div className="ml-auto px-4 py-2 text-[10px] sm:text-[11px] text-sapi-muted self-center whitespace-nowrap">
-        {nations.length} nations · SAPI (Anonymized)
+        {nations.length} nations · SAPI (Anonymised)
       </div>
     </div>
 

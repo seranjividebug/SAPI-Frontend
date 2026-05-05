@@ -226,6 +226,7 @@ const dimensions = [
     description:
       "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
     sampleScore: 63,
+    proprietary: true,
   },
 
 ];
@@ -244,7 +245,7 @@ export default function MainPage() {
       <div className="bg-[#0a0a12] min-h-screen">
         {/* Hero Section */}
         <HeroSection
-        description="The Sovereign AI Power Index evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organisations lead and which rely on others."
+        description="The Sovereign AI Power (SAPI) Index evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organisations lead and which rely on others."
         primaryCta={{ href: "/contact", label: "Request an Introduction" }}
         title="Sovereign AI readiness intelligence for nations and capital"
       />
