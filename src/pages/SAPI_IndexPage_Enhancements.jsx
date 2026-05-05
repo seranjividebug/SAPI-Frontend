@@ -49,8 +49,8 @@ export function OrientationStrip() {
               SOVEREIGN AI POWER INDEX (SAPI)
             </div>
             <p className="font-serif text-[20px] leading-[1.45] text-sapi-parchment font-medium tracking-[0.005em]">
-              Thirty-two nations, measured against the{" "}
-              <span className="text-sapi-paleGold">Sovereign AI Power Arc</span> - the trajectory any state must follow to
+              Thirty-two nations, measured against {" "}
+              <span className="text-sapi-paleGold">The Sovereign AI Power Arc</span> - the trajectory any state must follow to
               convert AI capability into coordinated action.
             </p>
             <p className="mt-[14px] text-sapi-muted text-[13px] leading-[1.6]">
@@ -61,7 +61,7 @@ export function OrientationStrip() {
 
           {/* Stat tiles */}
           <div className="flex items-stretch border border-sapi-bronze/55 bg-sapi-void max-w-[700px] w-full mx-auto flex-wrap sm:flex-nowrap">
-            <StatTile value="32" label="NATIONS-ASSESSED" />
+            <StatTile value="32" label="NATIONS ASSESSED" />
             <StatDivider />
             <StatTile value="5" label="SOVEREIGN DIMENSIONS" />
             <StatDivider />

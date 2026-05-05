@@ -203,7 +203,7 @@ const dimensions = [
   },
   {
     key: "di",
-    label: "Directed Intelligence Maturity",
+    label: "Directed Intelligence",
     shortDescription: "How effectively a nation or corporation converts AI capability into measurable outcomes.",
     description:
       "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
@@ -217,7 +217,7 @@ const dimensionWeights = [
   { dimension: "Capital Formation", weightRange: "20 - 25%" },
   { dimension: "Regulatory Readiness", weightRange: "15 - 20%" },
   { dimension: "Data Sovereignty", weightRange: "10 - 15%" },
-  { dimension: "Directed Intelligence Maturity", weightRange: "25 - 30%" },
+  { dimension: "Directed Intelligence", weightRange: "25 - 30%" },
 ];
 
 export const methodologyLevels = [
@@ -325,7 +325,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="border-l border-sapi-gold pl-6 lg:col-span-2">
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-             The Directed Intelligence Maturity is proprietary to The Sovereign AI Power Index.
+             The Directed Intelligence is proprietary to The Sovereign AI Power Index.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="text">Learn more</Button>
@@ -369,7 +369,7 @@ export default function MethodologyPage() {
             <div className="space-y-4 sm:space-y-5 border-t border-sapi-bronze pt-6 sm:pt-8">
               <h3 className="font-sans text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">Data sources</h3>
               <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                SAPI scores come from public data, proprietary practitioner assessment, and structured interviews with in-country AI and corporate leads. Public data includes government AI strategies, budget filings, energy grid capacity reports, and regulatory frameworks. No single data source determines a score. The  Directed Intelligence Maturity Dimension is exclusive to The Sovereign AI Power Index.
+                SAPI scores come from public data, proprietary practitioner assessment, and structured interviews with in-country AI and corporate leads. Public data includes government AI strategies, budget filings, energy grid capacity reports, and regulatory frameworks. No single data source determines a score. The  Directed Intelligence Dimension is exclusive to The Sovereign AI Power Index.
               </p>
             </div>
           </FadeIn>
@@ -377,7 +377,7 @@ export default function MethodologyPage() {
 
         <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
           <FadeIn className="space-y-4 sm:space-y-5">
-            <SectionLabel>Directed Intelligence Maturity</SectionLabel>
+            <SectionLabel>Directed Intelligence</SectionLabel>
             <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
               Five stages of institutional adoption
             </h2>
