@@ -690,7 +690,7 @@ export default function SAPIIndexPage() {
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <img
-            src="/SAPI_logo1.svg"
+            src="/SAPI_Logo1.svg"
             alt="SAPI Logo"
             className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
           />
