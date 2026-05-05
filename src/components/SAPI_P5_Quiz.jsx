@@ -4,7 +4,7 @@ import { fetchQuestions } from "../services/questionService";
 import { PageLayout, PageHeader, PageFooter } from "../pages/common";
 
 const ALL_QUESTIONS = [
-  // DIMENSION 1 — COMPUTE CAPACITY
+  // DIMENSION 1 - COMPUTE CAPACITY
   {
     id: "Q1", dimIndex: 0, dimName: "Compute Capacity",
     text: "What is your organisation's primary AI compute infrastructure?",
@@ -59,7 +59,7 @@ const ALL_QUESTIONS = [
     ],
   },
 
-  // DIMENSION 2 — CAPITAL FORMATION
+  // DIMENSION 2 - CAPITAL FORMATION
   {
     id: "Q6", dimIndex: 1, dimName: "Capital Formation",
     text: "What proportion of your government's total R&D budget is allocated to AI infrastructure and development?",
@@ -122,7 +122,7 @@ const ALL_QUESTIONS = [
     ],
   },
 
-  // DIMENSION 3 — REGULATORY READINESS
+  // DIMENSION 3 - REGULATORY READINESS
   {
     id: "Q12", dimIndex: 2, dimName: "Regulatory Readiness",
     text: "Does your nation have a formal, published national AI strategy?",
@@ -194,7 +194,7 @@ const ALL_QUESTIONS = [
     ],
   },
 
-  // DIMENSION 4 — DATA SOVEREIGNTY
+  // DIMENSION 4 - DATA SOVEREIGNTY
   {
     id: "Q19", dimIndex: 3, dimName: "Data Sovereignty",
     text: "Does your nation have enforceable data residency requirements for strategic and citizen data?",
@@ -256,7 +256,7 @@ const ALL_QUESTIONS = [
     ],
   },
 
-  // DIMENSION 5 — DIRECTED INTELLIGENCE MATURITY
+  // DIMENSION 5 - DIRECTED INTELLIGENCE MATURITY
   {
     id: "Q25", dimIndex: 4, dimName: "Directed Intelligence Maturity",
     text: "To what extent are national AI deployments tied to explicit sovereign priorities?",

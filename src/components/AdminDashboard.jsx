@@ -23,7 +23,7 @@ export default function SAPIAdmin() {
   };
 
   const pageTitle = {
-    submissionDetail: selectedSubmission ? `${selectedSubmission.country} — Assessment Detail` : 'Assessment Detail',
+    submissionDetail: selectedSubmission ? `${selectedSubmission.country} - Assessment Detail` : 'Assessment Detail',
     leads: 'Leads Pipeline',
     leadDetail: 'Lead Detail',
     questionEditor: 'Question Editor',

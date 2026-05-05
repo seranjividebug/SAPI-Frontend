@@ -58,7 +58,7 @@ function getComparisonStatus(yourScore, median) {
   const delta = yourScore - median;
   if (delta >  1.5) return { text: "Above peer median", color: C.emerald, glyph: "▲", delta: `+${Math.round(delta)}` };
   if (delta < -1.5) return { text: "Below peer median", color: C.crimson, glyph: "▼", delta: `${Math.round(delta)}`  };
-  return               { text: "At peer median",    color: C.muted,   glyph: "—", delta: "0"                      };
+  return               { text: "At peer median",    color: C.muted,   glyph: "-", delta: "0"                      };
 }
 
 // Extract a dimension score from the appState.scores object.
@@ -484,11 +484,11 @@ export function SAPIPeerComparisonDemo() {
     orgProfile: { developmentStage: "Developing" },
     scores: {
       // Dimension scores on 0–100 scale
-      D1: 45,   // Compute — above median (38), below top (58)
-      D2: 31,   // Capital — below median (35)
-      D3: 58,   // Regulatory — below top (62), at/above median (42)
-      D4: 26,   // Data — below median (32)
-      D5: 42,   // DI — above median (28), below top (45)
+      D1: 45,   // Compute - above median (38), below top (58)
+      D2: 31,   // Capital - below median (35)
+      D3: 58,   // Regulatory - below top (62), at/above median (42)
+      D4: 26,   // Data - below median (32)
+      D5: 42,   // DI - above median (28), below top (45)
     },
   };
 

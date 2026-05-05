@@ -56,7 +56,7 @@ const LIBRARY = {
       },
       {
         title: "Secure dedicated energy supply agreements for AI data centres.",
-        desc:  "AI workloads require predictable, low-cost energy at scale — speculative procurement creates both cost and resilience risk. Long-term power purchase agreements lock in favourable rates and guarantee uptime.",
+        desc:  "AI workloads require predictable, low-cost energy at scale - speculative procurement creates both cost and resilience risk. Long-term power purchase agreements lock in favourable rates and guarantee uptime.",
       },
       {
         title: "Launch sovereign cloud migration programme for government workloads.",
@@ -101,7 +101,7 @@ const LIBRARY = {
       },
       {
         title: "Establish AI-specific DFI financing vehicles.",
-        desc:  "Generic DFI instruments are poorly suited to AI projects, which combine early-stage risk with sovereign strategic value. Purpose-built vehicles — grants, concessional loans, equity — create appropriate risk-return profiles.",
+        desc:  "Generic DFI instruments are poorly suited to AI projects, which combine early-stage risk with sovereign strategic value. Purpose-built vehicles - grants, concessional loans, equity - create appropriate risk-return profiles.",
       },
       {
         title: "Launch a domestic AI VC catalytic fund to stimulate private capital.",
@@ -177,7 +177,7 @@ const LIBRARY = {
       },
       {
         title: "Establish enforceable data localisation requirements for strategic data.",
-        desc:  "Enforceable localisation requirements — backed by sanctions for non-compliance — close the gap between policy intent and operational reality. Strategic data classification is the prerequisite step.",
+        desc:  "Enforceable localisation requirements - backed by sanctions for non-compliance - close the gap between policy intent and operational reality. Strategic data classification is the prerequisite step.",
       },
       {
         title: "Begin government data cataloguing programme.",
@@ -218,7 +218,7 @@ const LIBRARY = {
     LOW: [
       {
         title: "Map all AI pilots to national strategy priorities.",
-        desc:  "Unmapped pilots represent strategic drift — resource consumption without sovereign value creation. A formal mapping exercise identifies misaligned pilots for reorientation or termination.",
+        desc:  "Unmapped pilots represent strategic drift - resource consumption without sovereign value creation. A formal mapping exercise identifies misaligned pilots for reorientation or termination.",
       },
       {
         title: "Establish a cross-departmental AI coordination working group.",
@@ -240,13 +240,13 @@ const LIBRARY = {
       },
       {
         title: "Scale pilots to production (target: >25% conversion rate).",
-        desc:  "A 25% pilot-to-production conversion rate is the minimum threshold for a functioning AI deployment pipeline. Conversion blockages — procurement, legal, technical — should be identified and systematically removed.",
+        desc:  "A 25% pilot-to-production conversion rate is the minimum threshold for a functioning AI deployment pipeline. Conversion blockages - procurement, legal, technical - should be identified and systematically removed.",
       },
     ],
     HIGH: [
       {
         title: "Achieve Intelligence Fabric: real-time AI coordination across government.",
-        desc:  "An Intelligence Fabric represents the highest maturity state — AI systems that coordinate autonomously within a sovereign governance framework. Achieving this requires shared data standards, interoperable APIs, and cross-agency trust protocols.",
+        desc:  "An Intelligence Fabric represents the highest maturity state - AI systems that coordinate autonomously within a sovereign governance framework. Achieving this requires shared data standards, interoperable APIs, and cross-agency trust protocols.",
       },
       {
         title: "Institute systematic outcome attribution for all AI deployments.",
@@ -543,8 +543,8 @@ export default function SAPIRoadmap() {
     );
   }
 
-  const lowestDim       = bottom3[0]?.key  || "—";
-  const secondLowestDim = bottom3[1]?.key  || "—";
+  const lowestDim       = bottom3[0]?.key  || "-";
+  const secondLowestDim = bottom3[1]?.key  || "-";
   const totalInterventions = phases.reduce((n, p) => n + p.cards.length, 0);
 
   return (

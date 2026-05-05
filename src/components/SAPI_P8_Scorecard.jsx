@@ -570,7 +570,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   const date = orgProfile?.assessmentDate ||
     new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-  // Open state per dimension — all collapsed by default
+  // Open state per dimension - all collapsed by default
   const [openDims, setOpenDims] = useState({});
 
   function toggleDim(code) {
@@ -773,7 +773,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
                     key={dim.code}
                     onClick={() => {
                       setOpenDims(prev => ({ ...prev, [dim.code]: true }));
-                      // Scroll to accordion — handled visually
+                      // Scroll to accordion - handled visually
                     }}
                     className="py-1 px-4 sm:px-5 cursor-pointer text-center"
                     style={{ borderRight: isLast ? "none" : `1px solid ${C.bronze}`, minWidth: "100px" }}
@@ -851,7 +851,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
             Sub-indicator scores are derived directly from individual question responses.
             Dimension scores represent arithmetic means across their respective question sets.
             Composite SAPI score is computed as a geometric mean weighted by dimension coefficients.
-            Tier 1 assessment is automated and indicative — Tier 2 and above apply practitioner validation.
+            Tier 1 assessment is automated and indicative - Tier 2 and above apply practitioner validation.
           </p>
         </div>
 

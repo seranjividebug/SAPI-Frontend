@@ -110,11 +110,11 @@ const COUNTRIES = [
 ];
 
 const STAGES = [
-  { value:"Early",      label:"Early",      description:"Minimal sovereign AI capability — no formal strategy, negligible dedicated infrastructure or investment." },
-  { value:"Emerging",   label:"Emerging",   description:"Pilots underway, foundations forming — discrete programmes exist but coordination and funding remain fragmented." },
-  { value:"Developing", label:"Developing", description:"Structured programmes with institutional backing — building blocks in place, significant gaps remain." },
-  { value:"Advanced",   label:"Advanced",   description:"Strong foundations across most dimensions — identifiable constraints, not yet a coherent sovereign system." },
-  { value:"Leading",    label:"Leading",    description:"Durable, self-sustaining sovereign AI capacity — AI is a coordinated national system across all five dimensions." },
+  { value:"Early",      label:"Early",      description:"Minimal sovereign AI capability - no formal strategy, negligible dedicated infrastructure or investment." },
+  { value:"Emerging",   label:"Emerging",   description:"Pilots underway, foundations forming - discrete programmes exist but coordination and funding remain fragmented." },
+  { value:"Developing", label:"Developing", description:"Structured programmes with institutional backing - building blocks in place, significant gaps remain." },
+  { value:"Advanced",   label:"Advanced",   description:"Strong foundations across most dimensions - identifiable constraints, not yet a coherent sovereign system." },
+  { value:"Leading",    label:"Leading",    description:"Durable, self-sustaining sovereign AI capacity - AI is a coordinated national system across all five dimensions." },
 ];
 
 const TEXT_FIELDS = [

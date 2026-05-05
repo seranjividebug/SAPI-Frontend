@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
 /**
- * SAPI — Login Page with Request Credentials flow
+ * SAPI - Login Page with Request Credentials flow
  * ------------------------------------------------
  * Single-file React component. No external CSS imports.
  * Palette and typography follow the established SAPI design system.

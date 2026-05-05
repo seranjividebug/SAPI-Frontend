@@ -53,7 +53,7 @@ const DEMO_SCORES = { D1: 58, D2: 44, D3: 67, D4: 51, D5: 39 };
 //   advanced: {
 //     label: "ADVANCED",
 //     colour: "#F0C050",
-//     editorial: "Significant capacity exists — strategic gaps remain in high-leverage dimensions.",
+//     editorial: "Significant capacity exists - strategic gaps remain in high-leverage dimensions.",
 //   },
 //   developing: {
 //     label: "DEVELOPING",
@@ -626,7 +626,7 @@ export default function P7Results({ appState: appStateProp, setAppState, setCurr
               </div>
               <div className="flex-1 min-w-[200px]">
                 <div className="font-serif text-[13px] sm:text-[15px] text-sapi-muted italic mb-4 sm:mb-5 leading-[1.6] sm:leading-[1.7]">
-                  Each axis represents a dimension of Sovereign AI Readiness.
+                  Each axis represents a dimension of Sovereign AI readiness.
                   The gold polygon reflects your nation's current capability profile.
                 </div>
                 {/* Mini legend */}

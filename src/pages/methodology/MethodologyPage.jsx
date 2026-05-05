@@ -66,9 +66,9 @@ const CustomHeader = () => {
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-4">
           <img
-            src="/SAPI_Logo_B4.svg"
+            src="/SAPI_Logo1.svg"
             alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
           />
           <div
             className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
@@ -203,7 +203,7 @@ const dimensions = [
   },
   {
     key: "di",
-    label: "AI Implementation Maturity",
+    label: "Directed Intelligence Maturity",
     shortDescription: "How effectively a nation or corporation converts AI capability into measurable outcomes.",
     description:
       "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
@@ -217,7 +217,7 @@ const dimensionWeights = [
   { dimension: "Capital Formation", weightRange: "20 - 25%" },
   { dimension: "Regulatory Readiness", weightRange: "15 - 20%" },
   { dimension: "Data Sovereignty", weightRange: "10 - 15%" },
-  { dimension: "AI Implementation Maturity", weightRange: "25 - 30%" },
+  { dimension: "Directed Intelligence Maturity", weightRange: "25 - 30%" },
 ];
 
 export const methodologyLevels = [
@@ -262,7 +262,7 @@ export default function MethodologyPage() {
             </button> */}
             <PageHero
               cta={{ href: "/contact", label: "Request an Introduction" }}
-              description="This document explains the five dimensions, scoring architecture, and institutional lens applied to sovereign AI capability. Proprietary mechanics underpin every scoring layer."
+              description="This document explains the five dimensions, scoring architecture, and institutional lens applied to Sovereign AI capability. Proprietary mechanics underpin every scoring layer."
               label="Methodology"
               title="The Sovereign AI Power Index Methodology"
             />
@@ -278,10 +278,10 @@ export default function MethodologyPage() {
 
           <FadeIn className="space-y-6 sm:space-y-8">
             <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
-              SAPI answers one question: who can turn AI ambition into durable strategic capacity. The framework looks beyond technical capability. It tests whether capital, infrastructure, policy, and execution work together.
+              SOVEREIGN AI POWER INDEX answers one question: who can turn AI ambition into durable strategic capacity. The framework looks beyond technical capability. It tests whether capital, infrastructure, policy, and execution work together.
             </p>
             <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
-              This alignment matters because sovereign AI development requires more than compute. Success comes when a nation can deploy, govern, finance, and protect intelligence infrastructure as a coherent system.
+              This alignment matters because Sovereign AI development requires more than compute. Success comes when a nation can deploy, govern, finance, and protect intelligence infrastructure as a coherent system.
             </p>
           </FadeIn>
         </div>
@@ -325,7 +325,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="border-l border-sapi-gold pl-6 lg:col-span-2">
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-              <span className="text-sapi-gold">AI Implementation Maturity</span> is proprietary to The Sovereign AI Power Index.
+              <span className="text-sapi-gold">Directed Intelligence Maturity</span> is proprietary to The SOVEREIGN AI POWER INDEX.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="text">Learn more</Button>
@@ -343,7 +343,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="space-y-6 sm:space-y-8">
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-              Each dimension is scored on a 0 to 100 scale using quantitative indicators and qualitative practitioner assessment. The five dimension scores are weighted to produce a single composite SAPI score. Weightings are not equal. They reflect the relative contribution of each dimension to durable sovereign AI development, not just current capacity.
+              Each dimension is scored on a 0 to 100 scale using quantitative indicators and qualitative practitioner assessment. The five dimension scores are weighted to produce a single composite SAPI score. Weightings are not equal. They reflect the relative contribution of each dimension to durable Sovereign AI development, not just current capacity.
             </p>
 
             <div className="border-t border-sapi-bronze">
@@ -354,7 +354,7 @@ export default function MethodologyPage() {
               {dimensionWeights.map((row, index) => (
                 <FadeIn key={row.dimension} delay={index * 0.04}>
                   <div className="grid gap-2 sm:gap-3 border-b border-sapi-bronze py-4 sm:py-5 md:grid-cols-[1.2fr_0.8fr] md:items-start">
-                    <p className={`text-base sm:text-lg leading-7 sm:leading-8 ${row.dimension === "AI Implementation Maturity" ? "text-sapi-gold" : "text-sapi-parchment"}`}>{row.dimension}</p>
+                    <p className={`text-base sm:text-lg leading-7 sm:leading-8 ${row.dimension === "Directed Intelligence Maturity" ? "text-sapi-gold" : "text-sapi-parchment"}`}>{row.dimension}</p>
                     <p className="text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">{row.weightRange}</p>
                   </div>
                 </FadeIn>
@@ -363,13 +363,13 @@ export default function MethodologyPage() {
             </div>
 
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-              Weights are expressed as ranges rather than fixed values because SAPI applies contextual adjustments based on a nation's development stage. A nation at Level 2 on the AI Implementation Maturity scale may have its Regulatory Readiness weight increased to reflect the importance of policy frameworks at that stage. The full weighting methodology is available under NDA to institutional counterparts.
+              Weights are expressed as ranges rather than fixed values because SAPI applies contextual adjustments based on a nation's development stage. A nation at Level 2 on the Directed Intelligence Maturity scale may have its Regulatory Readiness weight increased to reflect the importance of policy frameworks at that stage. The full weighting methodology is available under NDA to institutional counterparts.
             </p>
 
             <div className="space-y-4 sm:space-y-5 border-t border-sapi-bronze pt-6 sm:pt-8">
               <h3 className="font-sans text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">Data sources</h3>
               <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                SAPI scores come from public data, proprietary practitioner assessment, and structured interviews with in-country AI and corporate leads. Public data includes government AI strategies, budget filings, energy grid capacity reports, and regulatory frameworks. No single data source determines a score. The AI Implementation Maturity dimension is exclusive to The Sovereign AI Power Index.
+                SAPI scores come from public data, proprietary practitioner assessment, and structured interviews with in-country AI and corporate leads. Public data includes government AI strategies, budget filings, energy grid capacity reports, and regulatory frameworks. No single data source determines a score. The  Directed Intelligence Maturity imension is exclusive to The Sovereign AI Power Index.
               </p>
             </div>
           </FadeIn>
@@ -377,7 +377,7 @@ export default function MethodologyPage() {
 
         <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
           <FadeIn className="space-y-4 sm:space-y-5">
-            <SectionLabel tone="accent">AI Implementation Maturity</SectionLabel>
+            <SectionLabel tone="accent">Directed Intelligence Maturity</SectionLabel>
             <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
               Five stages of institutional adoption
             </h2>

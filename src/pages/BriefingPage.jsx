@@ -201,7 +201,7 @@ export default function BriefingPage({ onBegin }) {
         {/* ── Section: What this assessment measures ── */}
         <SectionLabel>What this assessment measures</SectionLabel>
         <p className="font-sans text-[15px] text-sapi-muted leading-relaxed mb-5 tracking-wide">
-          The SAPI Tier 1 assessment evaluates your nation's Sovereign AI Readiness across five dimensions. Each dimension represents a distinct institutional condition required for durable AI capacity. Your responses generate a composite SAPI score calculated as a weighted geometric mean. This score maps your nation to one of five readiness tiers.
+          The SAPI Tier 1 assessment evaluates your nation's Sovereign AI readiness across five dimensions. Each dimension represents a distinct institutional condition required for durable AI capacity. Your responses generate a composite SAPI score calculated as a weighted geometric mean. This score maps your nation to one of five readiness tiers.
         </p>
 
         {/* Dimension list */}

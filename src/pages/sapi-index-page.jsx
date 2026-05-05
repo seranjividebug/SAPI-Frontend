@@ -374,7 +374,7 @@ function ArcCanvas({ highlight, scoreView, onTooltip, showTrails, showVectors })
 
     // Title
     c.font = "500 13px sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
-    c.fillStyle = T.textPri; c.fillText("S.A.P.I. Power Arc — 32 Nations", W/2, 6);
+    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER Arc - 32 Nations", W/2, 6);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Sovereign AI Power Index · CoreIntel", W/2, 22);
   }, [highlight, scoreView, showTrails, showVectors]);
@@ -437,7 +437,7 @@ function DeltaCanvas() {
     const barH = 18, barGap = 8, maxAbs = 25, midX = W/2, startY = 52;
 
     c.font = "500 12px sans-serif"; c.textAlign = "center"; c.fillStyle = T.textPri;
-    c.fillText("Execution Delta — performance vs prescriptive arc (32 nations)", W/2, 16);
+    c.fillText("Execution Delta - performance vs prescriptive arc (32 nations)", W/2, 16);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Positive = outperforming sovereign position · Negative = unrealised AI power", W/2, 32);
 
@@ -515,9 +515,9 @@ function ScoreboardCanvas() {
     c.fillStyle = T.bg; c.fillRect(0, 0, W, H);
 
     c.font = "500 12px sans-serif"; c.textAlign = "center"; c.fillStyle = T.textPri; c.textBaseline = "top";
-    c.fillText("SAPI Composite Scoreboard — 32 Nations Ranked", W/2, 10);
+    c.fillText("SAPI Composite Scoreboard - 32 Nations Ranked", W/2, 10);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
-    c.fillText("Geometric mean composite · Sovereign AI Power Index v1.0", W/2, 26);
+    c.fillText("Geometric mean composite · Sovereign AI Power Index", W/2, 26);
 
     const cols = [
       {label:"#",x:20,align:"center"},{label:"Code",x:50,align:"center"},{label:"Nation",x:90,align:"left"},
@@ -603,7 +603,7 @@ function MethodologyPanel() {
       <div style={{ background:T.bgPanel, borderLeft:`2px solid ${T.gold}`, borderRadius:"0 6px 6px 0", padding:"12px 16px", fontSize:12, color:T.textSec, lineHeight:1.7 }}>
         <strong style={{ color:T.textPri, fontWeight:500 }}>How the prescriptive arc is set.</strong>{" "}
         At each sovereignty score, the arc plots the theoretical maximum velocity achievable given that structural position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the{" "}
-        <strong style={{ color:T.textPri, fontWeight:500 }}>Execution Delta</strong> — the S.A.P.I.'s most proprietary diagnostic metric.
+        <strong style={{ color:T.textPri, fontWeight:500 }}>Execution Delta</strong> - the Sovereign AI Power Index's most proprietary diagnostic metric.
       </div>
       {/* Trajectory Arrow Legend */}
       <div style={{ marginTop:12, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:8, padding:"12px 16px" }}>
@@ -618,7 +618,7 @@ function MethodologyPanel() {
         ))}
       </div>
       <div style={{ marginTop:12, background:T.bgPanel, border:`0.5px solid ${T.border}`, borderRadius:8, padding:"12px 16px", fontSize:11, color:T.textSec }}>
-        <strong style={{ color:T.textPri }}>Dataset:</strong> 32 nations assessed. All scores from SAPI v1.0 (March 2026). Composite score is geometric mean of 5 weighted dimensions.
+        <strong style={{ color:T.textPri }}>Dataset:</strong> 32 nations assessed. All scores from SAPI (March 2026). Composite score is geometric mean of 5 weighted dimensions.
       </div>
     </div>
   );
@@ -825,7 +825,7 @@ export default function SAPIIndexPage() {
         ))}
       </div>
       <div className="ml-auto px-4 py-2 text-[10px] sm:text-[11px] text-sapi-muted self-center whitespace-nowrap">
-        {nations.length} nations · SAPI v1.0 (Anonymized)
+        {nations.length} nations · SAPI (Anonymized)
       </div>
     </div>
 
@@ -908,7 +908,7 @@ export default function SAPIIndexPage() {
                 <div className="mt-4 p-3 sm:p-4 bg-sapi-midnight border-l-2 border-sapi-gold rounded-r-md">
                   <div className="text-[10px] sm:text-[11px] font-semibold text-sapi-parchment mb-1">The Execution Delta</div>
                   <p className="text-[11px] sm:text-[12px] text-sapi-muted leading-[1.6] m-0">
-                    The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta — the most important metric in the index. Positive delta = outperforming, Negative delta = unrealized potential.
+                    The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta - the most important metric in the index. Positive delta = outperforming, Negative delta = unrealized potential.
                   </p>
                 </div>
               </div>

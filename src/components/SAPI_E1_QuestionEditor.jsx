@@ -222,7 +222,7 @@ const INITIAL_QUESTIONS = [
   },
   {
     id:"Q20", dimIndex:3, number:20,
-    text:"What is the state of your national data infrastructure for AI — including data lakes, APIs, and interoperability?",
+    text:"What is the state of your national data infrastructure for AI - including data lakes, APIs, and interoperability?",
     options:[
       {letter:"A", text:"No national data infrastructure; data siloed across agencies with no sharing", score:10},
       {letter:"B", text:"Early-stage; limited datasets accessible; no interoperability standards", score:25},
@@ -301,7 +301,7 @@ const INITIAL_QUESTIONS = [
   },
   {
     id:"Q27", dimIndex:4, number:27,
-    text:"What is the state of AI adoption in critical national services — health, education, taxation, and social protection?",
+    text:"What is the state of AI adoption in critical national services - health, education, taxation, and social protection?",
     options:[
       {letter:"A", text:"No AI in critical national services", score:10},
       {letter:"B", text:"Isolated pilots in one sector; not scaled or embedded in service delivery", score:25},
@@ -472,7 +472,7 @@ function PreviewModal({question, onClose}) {
       <div style={{background:"#0F0830",border:"0.5px solid #2A204A",borderRadius:14,padding:"32px 36px",maxWidth:640,width:"100%",boxShadow:"0 24px 80px rgba(0,0,0,0.7)"}} onClick={e=>e.stopPropagation()}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:20}}>
           <div>
-            <div style={{color:"#C9963A",fontSize:10,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:6,fontWeight:500}}>Respondent Preview — Q{question.number}</div>
+            <div style={{color:"#C9963A",fontSize:10,letterSpacing:"0.14em",textTransform:"uppercase",marginBottom:6,fontWeight:500}}>Respondent Preview - Q{question.number}</div>
             <div style={{color:"#9880B0",fontSize:11}}>This is exactly how the question appears to assessment respondents</div>
           </div>
           <button onClick={onClose} style={{background:"rgba(255,255,255,0.06)",border:"0.5px solid #2A204A",borderRadius:6,color:"#9880B0",cursor:"pointer",width:28,height:28,fontSize:15,display:"flex",alignItems:"center",justifyContent:"center"}}>×</button>
@@ -491,7 +491,7 @@ function PreviewModal({question, onClose}) {
           })}
         </div>
         <div style={{marginTop:20,padding:"9px 13px",background:"rgba(201,150,58,0.08)",borderRadius:6,border:"0.5px solid rgba(201,150,58,0.2)"}}>
-          <span style={{color:"#C9963A",fontSize:11}}>ADMIN — Score mapping: </span>
+          <span style={{color:"#C9963A",fontSize:11}}>ADMIN - Score mapping: </span>
           <span style={{color:"#9880B0",fontSize:11}}>{question.options.map(o=>`${o.letter}→${o.score}`).join(", ")}</span>
         </div>
       </div>
@@ -603,14 +603,14 @@ function DimQuestionsPanel({dimIndex, questions, onUpdate, showToast, onPreview}
       <div style={{flex:1,overflowY:"auto",padding:"16px 24px 100px"}}>
         {dimQs.length===0
           ? <div style={{textAlign:"center",color:"#B0A8C0",fontSize:14,marginTop:60}}>No questions in this dimension yet.</div>
-          : dimQs.map(q=><QuestionCard key={q.id} q={q} onUpdate={handleUpdate} onDelete={()=>handleDelete(q.id)} onPreview={()=>onPreview(q)} onDragHint={()=>showToast("Drag to reorder (prototype mode — drag is disabled).","warn")}/>)
+          : dimQs.map(q=><QuestionCard key={q.id} q={q} onUpdate={handleUpdate} onDelete={()=>handleDelete(q.id)} onPreview={()=>onPreview(q)} onDragHint={()=>showToast("Drag to reorder (prototype mode - drag is disabled).","warn")}/>)
         }
         <button onClick={addQuestion} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 18px",background:"transparent",border:"1px dashed #C9963A",borderRadius:8,color:"#C9963A",cursor:"pointer",fontSize:13,marginBottom:24}}>
           <span style={{fontSize:16}}>+</span>Add question to this dimension
         </button>
       </div>
       <div style={{position:"sticky",bottom:0,background:"#F7F4EF",borderTop:"0.5px solid #E0D8CC",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:12,color:"#9880B0"}}>{dimQs.length} question{dimQs.length!==1?"s":""} · Prototype mode — local state only</span>
+        <span style={{fontSize:12,color:"#9880B0"}}>{dimQs.length} question{dimQs.length!==1?"s":""} · Prototype mode - local state only</span>
         <button onClick={handleSave} style={{padding:"9px 22px",background:"#C9963A",border:"none",borderRadius:6,color:"#06030E",fontSize:13,fontWeight:500,cursor:"pointer"}}>Save changes</button>
       </div>
     </>
@@ -678,7 +678,7 @@ function InterventionPanel({interventions, onUpdate, showToast}) {
         })}
       </div>
       <div style={{position:"sticky",bottom:0,background:"#F7F4EF",borderTop:"0.5px solid #E0D8CC",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:12,color:"#9880B0"}}>5 dimensions · 3 bands each · Prototype — local state only</span>
+        <span style={{fontSize:12,color:"#9880B0"}}>5 dimensions · 3 bands each · Prototype - local state only</span>
         <button onClick={handleSave} style={{padding:"9px 22px",background:"#C9963A",border:"none",borderRadius:6,color:"#06030E",fontSize:13,fontWeight:500,cursor:"pointer"}}>Save changes</button>
       </div>
     </>

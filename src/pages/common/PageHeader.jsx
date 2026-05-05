@@ -37,9 +37,9 @@ export function PageHeader({ showProfile = true, rightContent }) {
   <div className="max-w-container mx-auto pl-[1px] pr-8 flex items-start gap-1">
         <div>
           <img
-            src="/SAPI_Logo_B4.svg"
+            src="/SAPI_Logo1.svg"
             alt="SAPI Logo"
-            className="h-56 w-56 object-contain"
+            className="h-14 w-14 object-contain"
           />
         </div>
         <div className="self-center font-sans text-[16px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">

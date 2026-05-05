@@ -3,7 +3,7 @@
   import { submitCredentialRequest } from "../services/contactService";
 
   /**
-   * SAPI — Request Access Page
+   * SAPI - Request Access Page
    * ------------------------------------------------
    * Single-file React component. No external CSS imports.
    * Palette and typography follow the established SAPI design system.

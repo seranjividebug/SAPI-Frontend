@@ -6,8 +6,8 @@ const DIMENSION_DATA = [
   {
     number: "01",
     name: "Compute Capacity",
-    insight: "The infrastructure floor — sovereign compute determines whether your AI capability is owned or merely rented.",
-    definition: "Sovereign access to high-performance compute and energy infrastructure — the foundational hardware layer that determines a nation's ability to train, run, and scale AI systems independently.",
+    insight: "The infrastructure floor - sovereign compute determines whether your AI capability is owned or merely rented.",
+    definition: "Sovereign access to high-performance compute and energy infrastructure - the foundational hardware layer that determines a nation's ability to train, run, and scale AI systems independently.",
     questionCount: 5,
     subIndicators: [
       "GPU / TPU Density",
@@ -20,8 +20,8 @@ const DIMENSION_DATA = [
   {
     number: "02",
     name: "Capital Formation",
-    insight: "Capital is the binding constraint for most nations — this dimension separates strategic intent from execution.",
-    definition: "Institutional capital available for long-horizon AI infrastructure investment — encompassing sovereign wealth deployment, public-private co-investment mechanisms, and AI-dedicated budget structures.",
+    insight: "Capital is the binding constraint for most nations - this dimension separates strategic intent from execution.",
+    definition: "Institutional capital available for long-horizon AI infrastructure investment - encompassing sovereign wealth deployment, public-private co-investment mechanisms, and AI-dedicated budget structures.",
     questionCount: 6,
     subIndicators: [
       "Sovereign AI Budget Allocation",
@@ -36,7 +36,7 @@ const DIMENSION_DATA = [
     number: "03",
     name: "Regulatory Readiness",
     insight: "Legal clarity is what converts AI capability into public trust and deployment at scale.",
-    definition: "The maturity of governance frameworks that enable public trust, legal clarity, and responsible deployment of AI systems — covering legislation, institutional capacity, and international alignment.",
+    definition: "The maturity of governance frameworks that enable public trust, legal clarity, and responsible deployment of AI systems - covering legislation, institutional capacity, and international alignment.",
     questionCount: 7,
     subIndicators: [
       "AI Legislation Status",
@@ -52,7 +52,7 @@ const DIMENSION_DATA = [
     number: "04",
     name: "Data Sovereignty",
     insight: "Your AI systems are only as sovereign as the data they learn from.",
-    definition: "National control over the data AI systems learn from and act upon — encompassing data localisation, cross-border transfer governance, and the strategic integrity of national data assets.",
+    definition: "National control over the data AI systems learn from and act upon - encompassing data localisation, cross-border transfer governance, and the strategic integrity of national data assets.",
     questionCount: 6,
     subIndicators: [
       "Data Localisation Policy",
@@ -67,7 +67,7 @@ const DIMENSION_DATA = [
     number: "05",
     name: "Directed Intelligence Maturity",
     insight: "Most nations possess latent AI capability that never becomes coordinated state action. This dimension measures the gap.",
-    definition: "How effectively your nation converts AI capability into coordinated state action — measuring deployment in public services, civil service AI literacy, and the institutional capacity to direct AI as a strategic instrument.",
+    definition: "How effectively your nation converts AI capability into coordinated state action - measuring deployment in public services, civil service AI literacy, and the institutional capacity to direct AI as a strategic instrument.",
     questionCount: 6,
     subIndicators: [
       "Government AI Deployment",

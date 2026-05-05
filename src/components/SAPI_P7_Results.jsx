@@ -552,7 +552,7 @@ export default function SAPIResults() {
 
             {/* Giant number */}
             <div className="font-mono text-[60px] sm:text-[90px] text-sapi-paleGold leading-[0.9] tracking-[-0.02em] mb-4 sm:mb-5.5 font-medium">
-              {compositeScore != null ? compositeScore.toFixed(1) : "—"}
+              {compositeScore != null ? compositeScore.toFixed(1) : "-"}
             </div>
 
             {/* Tier pill */}
@@ -580,7 +580,7 @@ export default function SAPIResults() {
                   <div key={t.label} className="flex items-center gap-2" style={{ opacity: isActive ? 1 : 0.3 }}>
                     <div className="w-4 h-0.5 rounded-[1px] flex-shrink-0" style={{ background: t.color }} />
                     <span className="font-sans text-[7.5px] sm:text-[8.5px] tracking-[0.05em]" style={{ color: isActive ? t.color : C.muted }}>
-                      {t.range} — {t.label}
+                      {t.range} - {t.label}
                     </span>
                   </div>
                 );
@@ -588,7 +588,7 @@ export default function SAPIResults() {
             </div>
           </div>
 
-          {/* RIGHT PANEL — Radar */}
+          {/* RIGHT PANEL - Radar */}
           <div className="flex-1 flex flex-col items-center justify-center p-6 sm:p-9 relative">
             {/* Report Button - Top Right of Radar Panel */}
             <button

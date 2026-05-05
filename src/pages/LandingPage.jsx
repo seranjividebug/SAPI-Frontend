@@ -96,7 +96,7 @@ export default function LandingPage({ onBegin }) {
           {/* ── Hero ── */}
           <div className="px-4 sm:px-6 md:px-8 pt-8 sm:pt-10 pb-12 sm:pb-16 max-w-container mx-auto border-b border-sapi-bronze">
             <div className="font-sans text-[13px] sm:text-[15px] md:text-[17px] text-sapi-muted tracking-extra-wide uppercase mb-2">
-              Sovereign AI Readiness Assessment · Free · 12 Minutes
+              Sovereign AI readiness Assessment · Free · 12 Minutes
             </div>
             <div className="font-serif text-[24px] sm:text-[28px] md:text-[32px] lg:text-[36px] font-normal text-sapi-parchment tracking-wide leading-[1.35] max-w-[680px] mb-4 sm:mb-5">
               The nations that lead the AI era will not do so by accident.
@@ -137,7 +137,7 @@ export default function LandingPage({ onBegin }) {
           {/* ── Five Dimensions ── */}
           <div className="px-4 sm:px-6 md:px-8 py-10 sm:py-14 max-w-container mx-auto border-b border-sapi-bronze">
             <div className="font-sans text-[12px] sm:text-[14px] tracking-super-wide text-sapi-gold uppercase mb-5 sm:mb-7">
-              The Five Dimensions of Sovereign AI Readiness
+              The Five Dimensions of Sovereign AI readiness
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] sm:grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-3 sm:gap-4">
               {DIMENSIONS.map((d) => (

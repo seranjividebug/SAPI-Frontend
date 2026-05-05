@@ -2,14 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import { submitBriefedIndexRequest } from "../services/contactService";
 
 /**
- * SAPI — Power Arc page enhancements
+ * SAPI - Power Arc page enhancements
  * ------------------------------------------------
  * Two integrated components intended to sit on the SAPI Index page
  * above and alongside the existing Power Arc chart:
  *
- *   1. <OrientationStrip />    — horizontal thesis + stat tiles, sits
+ *   1. <OrientationStrip />    - horizontal thesis + stat tiles, sits
  *                                between the page header and chart controls.
- *   2. <BriefedVersionPanel /> — persistent right-edge drawer that captures
+ *   2. <BriefedVersionPanel /> - persistent right-edge drawer that captures
  *                                lead requests for the de-anonymised index.
  *
  * A demo layout (<SAPIIndexPageDemo />) is exported as the default so the
@@ -46,11 +46,11 @@ export function OrientationStrip() {
           {/* Thesis */}
           <div className="max-w-[700px] w-full text-left px-2 sm:px-0">
             <div className="text-[10px] tracking-[0.32em] text-sapi-gold font-medium mb-3 text-center">
-              S.A.P.I. INDEX
+              SOVEREIGN AI POWER INDEX
             </div>
             <p className="font-serif text-[20px] leading-[1.45] text-sapi-parchment font-medium tracking-[0.005em]">
               Thirty-two nations, measured against the{" "}
-              <span className="text-sapi-paleGold">Sovereign Power Arc</span> — the trajectory any state must follow to
+              <span className="text-sapi-paleGold">Sovereign AI Power Arc</span> - the trajectory any state must follow to
               convert AI capability into coordinated action.
             </p>
             <p className="mt-[14px] text-sapi-muted text-[13px] leading-[1.6]">
@@ -75,7 +75,7 @@ export function OrientationStrip() {
 
 function StatTile({ value, label, accent = false }) {
   return (
-    <div className="px-4 sm:px-6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[120px] sm:min-w-[140px] flex-1">
+    <div className="px-4 sm:px-(Anonymized)6 py-4 sm:py-5 flex flex-col items-center justify-center min-w-[120px] sm:min-w-[140px] flex-1">
       <div className={`font-serif text-[24px] sm:text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
         {value}
       </div>
@@ -239,12 +239,12 @@ export function BriefedVersionPanel() {
             </div>
 
             <p className="text-sapi-muted text-[13px] leading-[1.65] mb-5 pb-5 border-b border-sapi-bronze/30">
-              The public preview anonymises all thirty-two nations. The briefed version — with attribution,
-              dimension-level commentary, and trajectory analysis for the top and bottom quartiles — is made
+              The public preview anonymises all thirty-two nations. The briefed version - with attribution,
+              dimension-level commentary, and trajectory analysis for the top and bottom quartiles - is made
               available to verified institutional partners.
             </p>
 
-            {/* Intel summary — 3 things they get */}
+            {/* Intel summary - 3 things they get */}
             <div className="mb-7 space-y-3">
               <IntelRow icon="identities" text="All 32 nations named and attributed" />
               <IntelRow icon="commentary" text="Editorial commentary on each dimension" />
@@ -426,7 +426,7 @@ function PanelError({ children }) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// DEMO PAGE (for preview only — not part of production import)
+// DEMO PAGE (for preview only - not part of production import)
 // ────────────────────────────────────────────────────────────────────────────
 export default function SAPIIndexPageDemo() {
   return (
@@ -451,7 +451,7 @@ export default function SAPIIndexPageDemo() {
         </div>
       </div>
 
-      {/* The actual new piece #2 — floats, always present */}
+      {/* The actual new piece #2 - floats, always present */}
       <BriefedVersionPanel />
     </div>
   );

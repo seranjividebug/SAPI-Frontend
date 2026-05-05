@@ -70,7 +70,7 @@ function DimBar({ dim, score, active, staggerIndex }) {
           </span>
         </div>
         <span className="font-sans text-[14px] font-medium text-sapi-paleGold tracking-wide transition-opacity duration-300" style={{ transitionDelay: `${delay + 0.4}s`, opacity: active ? 1 : 0 }}>
-          {score && score > 0 ? Number(score).toFixed(1) : "—"}
+          {score && score > 0 ? Number(score).toFixed(1) : "-"}
         </span>
       </div>
 
@@ -268,7 +268,7 @@ export default function SAPICalculating() {
         {/* Status text sequence */}
         <div className="flex flex-col items-center gap-3 mb-12 text-center">
           <span className="sapi-line-1 font-sans text-[13px] tracking-[0.15em] uppercase text-sapi-muted">
-            Analysing Sovereign AI Readiness...
+            Analysing Sovereign AI readiness...
           </span>
           <span className="sapi-line-2 font-sans text-[13px] tracking-[0.15em] uppercase text-sapi-muted">
             Computing dimension scores...

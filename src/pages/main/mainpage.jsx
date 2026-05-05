@@ -60,11 +60,11 @@ const CustomHeader = () => {
   return (
     <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
       <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-1 sm:gap-2">
           <img
-            src="/SAPI_Logo_B4.svg"
+            src="/SAPI_Logo1.svg"
             alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
           />
           <div
             className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
@@ -221,7 +221,7 @@ const dimensions = [
   },
   {
     key: "di",
-    label: "AI Implementation Maturity",
+    label: "Directed Intelligence Maturity",
     shortDescription: "How effectively a nation or corporation converts AI capability into measurable outcomes.",
     description:
       "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
@@ -245,9 +245,9 @@ export default function MainPage() {
       <div className="bg-[#0a0a12] min-h-screen">
         {/* Hero Section */}
         <HeroSection
-        description="SAPI evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organizations lead and which rely on others."
+        description="The Sovereign AI Power Index evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organisations lead and which rely on others."
         primaryCta={{ href: "/contact", label: "Request an Introduction" }}
-        title="Sovereign AI Readiness intelligence for nations and capital"
+        title="Sovereign AI readiness intelligence for nations and capital"
       />
 
       {/* The Standard Section */}
@@ -264,7 +264,7 @@ export default function MainPage() {
                   A credible measure enters the market. Capital reorganises around it. Policy follows. Access becomes conditional on it.
                 </p>
                 <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-                  Credit ratings did this for sovereign debt. ESG scores did it for institutional allocation. SAPI does it for sovereign AI.
+                  Credit ratings did this for sovereign debt. ESG scores did it for institutional allocation. SAPI does it for Sovereign AI.
                 </p>
               </div>
 
@@ -301,7 +301,7 @@ export default function MainPage() {
               Five dimensions. One score.
             </h2>
             <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              SAPI translates sovereign readiness into a decision-grade framework.
+              SAPI translates sovereign readiness into a decision-grade frameworks.
             </p>
           </FadeIn>
 
