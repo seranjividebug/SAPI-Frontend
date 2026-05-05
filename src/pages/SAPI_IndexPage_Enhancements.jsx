@@ -79,7 +79,7 @@ function StatTile({ value, label, accent = false }) {
       <div className={`font-serif text-[24px] sm:text-[30px] ${accent ? 'text-sapi-paleGold' : 'text-sapi-parchment'} font-medium tracking-[0.02em] leading-none mb-2`}>
         {value}
       </div>
-      <div className="text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.24em] text-sapi-muted font-medium text-center leading-tight">
+      <div className="text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.24em] text-sapi-muted font-medium text-center leading-tight whitespace-nowrap">
         {label}
       </div>
     </div>

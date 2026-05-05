@@ -278,7 +278,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="space-y-6 sm:space-y-8">
             <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
-              The Sovereign AI Power Index answers one question: who can turn AI ambition into durable strategic capacity. The framework looks beyond technical capability. It tests whether capital, infrastructure, policy, and execution work together.
+              The Sovereign AI Power Index (SAPI) answers one question: who can turn AI ambition into durable strategic capacity. The framework looks beyond technical capability. It tests whether capital, infrastructure, policy, and execution work together.
             </p>
             <p className="text-base sm:text-lg leading-7 sm:leading-8 text-sapi-muted">
               This alignment matters because Sovereign AI development requires more than compute. Success comes when a nation can deploy, govern, finance, and protect intelligence infrastructure as a coherent system.
@@ -325,7 +325,7 @@ export default function MethodologyPage() {
 
           <FadeIn className="border-l border-sapi-gold pl-6 lg:col-span-2">
             <p className="max-w-3xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-              <span className="text-sapi-gold">The Directed Intelligence Maturity</span> is proprietary to The SOVEREIGN AI POWER INDEX.
+              <span className="text-sapi-gold">The Directed Intelligence Maturity</span> is proprietary to The Sovereign AI Power Index.
             </p>
             <div className="mt-6">
               <Button href="/contact" variant="text">Learn more</Button>

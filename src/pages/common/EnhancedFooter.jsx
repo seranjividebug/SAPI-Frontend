@@ -63,10 +63,10 @@ export function EnhancedFooter() {
           <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Legal</p>
           <div className="grid gap-4">
             <p className="font-sans text-[0.72rem] uppercase tracking-[0.22em] text-sapi-muted">
-              Sovereign AI Power Index is an independent UK Sovereign AI intelligence company.
+              Sovereign AI Power Index (SAPI) is an independent UK Sovereign AI intelligence company.
             </p>
             <p className="font-sans text-[0.72rem] uppercase tracking-[0.22em] text-sapi-muted">
-              © 2026 THE SOVEREIGN AI POWER INDEX
+              © 2026 THE SOVEREIGN AI POWER INDEX (SAPI)
             </p>
           </div>
         </div>

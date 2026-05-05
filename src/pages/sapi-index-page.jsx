@@ -692,7 +692,7 @@ export default function SAPIIndexPage() {
           <img
             src="/SAPI_logo1.svg"
             alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-40 lg:w-40 object-contain"
+            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
           />
           <div
             className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
@@ -908,7 +908,7 @@ export default function SAPIIndexPage() {
                 <div className="mt-4 p-3 sm:p-4 bg-sapi-midnight border-l-2 border-sapi-gold rounded-r-md">
                   <div className="text-[10px] sm:text-[11px] font-semibold text-sapi-parchment mb-1">The Execution Delta</div>
                   <p className="text-[11px] sm:text-[12px] text-sapi-muted leading-[1.6] m-0">
-                    The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta - the most important metric in the index. Positive delta = outperforming, Negative delta = unrealized potential.
+                    The prescriptive arc (dashed gold curve) represents the theoretical maximum velocity for a given sovereignty position. The gap between a nation's actual velocity and its arc-prescribed ceiling is the Execution Delta - the most important metric in the index. Positive delta = outperforming, Negative delta = unrealised potential.
                   </p>
                 </div>
               </div>

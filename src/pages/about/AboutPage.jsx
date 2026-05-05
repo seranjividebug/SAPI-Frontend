@@ -197,7 +197,7 @@ export default function AboutPage() {
                 <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
                   <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">The Sovereign AI Power Index</p>
                   <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    The benchmark. Scores national AI preparedness across five dimensions including compute capacity, capital formation, regulatory readiness, data sovereignty, and Directed Intelligence Maturity. Published annually. Sovereign wealth funds, government AI leads, infrastructure investors, and corporate entities use it to compare, prioritise, and act.
+                    The benchmark. Scores national AI preparedness across five dimensions including compute capacity, capital formation, regulatory readiness, data sovereignty, and Directed Intelligence Maturity. Published quarterly. Sovereign wealth funds, government AI leads, infrastructure investors, and corporate entities use it to compare, prioritise, and act.
                   </p>
                 </div>
                 <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
