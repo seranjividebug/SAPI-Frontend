@@ -157,6 +157,27 @@ export default function LoginPage() {
             REQUEST CREDENTIALS
           </button>
 
+          {/* Faster access via QR link */}
+          <div className="flex items-start gap-3 mt-6 py-3.5 px-4 bg-sapi-gold/5 border border-sapi-gold/20 rounded">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-0.5">
+              <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v4M8 10.5v.5" stroke="#C9963A" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+            <div className="flex-1">
+              <div className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-gold mb-1.5">
+                Faster access via QR link
+              </div>
+              <div className="font-sans text-[12px] text-sapi-muted leading-relaxed">
+                If you received a QR code or direct link, verify your identity with a one-time code — no password required.{' '}
+                <span
+                  onClick={() => navigate('/qr-login')}
+                  className="text-sapi-gold underline cursor-pointer"
+                >
+                  Access via email verification →
+                </span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PageLayout, PageHeader, PageFooter } from "./common";
 import SAPIArcDashboard from "./PowerArc";
 
@@ -50,8 +50,9 @@ const TIERS = [
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function LandingPage({ onBegin }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [hovering, setHovering] = useState(false);
-  const [activeTab, setActiveTab] = useState('landing');
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'landing');
 
   const handleBegin = () => {
     window.scrollTo(0, 0);

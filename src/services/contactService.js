@@ -1,4 +1,5 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL;
+console.log("REACT_APP_API_URL", process.env.REACT_APP_API_URL)
 
 /**
  * Submit contact form

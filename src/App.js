@@ -6,6 +6,9 @@ import AboutPage from './pages/about/AboutPage';
 import ContactPage from './pages/contact/ContactPage';
 import SAPILogin from './pages/Login_RequestAccess';
 import SAPILoginRequestAccess from './pages/SAPI_Login_RequestAccess';
+import QRLoginEmailPage from './pages/QRLoginEmailPage';
+import QRLoginOtpPage from './pages/QRLoginOtpPage';
+import QRVerifiedPage from './pages/QRVerifiedPage';
 import SAPIBriefing from './components/SAPI_P3_Briefing';
 import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
@@ -175,6 +178,9 @@ function App() {
           <Route path="/" element={<Navigate to="/main" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/sapi-login" element={<SAPILogin />} />
+          <Route path="/qr-login" element={<QRLoginEmailPage />} />
+          <Route path="/qr-login/verify" element={<QRLoginOtpPage />} />
+          <Route path="/qr-login/success" element={<QRVerifiedPage />} />
           <Route path="/sapi-login-request" element={<SAPILoginRequestAccess />} />
           <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
           <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
