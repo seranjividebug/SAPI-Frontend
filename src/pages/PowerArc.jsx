@@ -103,6 +103,11 @@ const nations = [
     scores:{compute:21.0,capital:6.9, regulatory:23.5,data:31.7,di:30.9}, sapi:19.5 },
 ];
 
+// Nations that have real Power-Arc positioning (zone/sx/vy/accel/arcDelta).
+// Nations without it appear in the Scoreboard only — plotting them would stack
+// them at the origin and draw misleading rings/badges.
+const arcNations = nations.filter(n => n.zone);
+
 // ── Theme ──────────────────────────────────────────────────────────────────
 const T = {
   bg:        "#0A0D14",
@@ -406,7 +411,7 @@ function ArcCanvas({ highlight, scoreView, onTooltip, showTrails, showVectors })
 
     // Title
     c.font = "500 13px sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
-    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER Arc - 32 Nations", W/2, 6);
+    c.fillStyle = T.textPri; c.fillText("SOVEREIGN AI POWER Arc - 50 Nations", W/2, 6);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Sovereign AI Power Index · CoreIntel", W/2, 22);
   }, [highlight, scoreView, showTrails, showVectors]);
@@ -547,7 +552,7 @@ function ScoreboardCanvas() {
     c.fillStyle = T.bg; c.fillRect(0, 0, W, H);
 
     c.font = "500 12px sans-serif"; c.textAlign = "center"; c.fillStyle = T.textPri; c.textBaseline = "top";
-    c.fillText("SAPI Composite Scoreboard - 32 Nations Ranked", W/2, 10);
+    c.fillText("SAPI Composite Scoreboard - 50 Nations Ranked", W/2, 10);
     c.font = "400 10px sans-serif"; c.fillStyle = T.textSec;
     c.fillText("Geometric mean composite · Sovereign AI Power Index", W/2, 26);
 
@@ -565,14 +570,18 @@ function ScoreboardCanvas() {
       if (i%2===0) { c.fillStyle = "rgba(180,150,60,0.04)"; c.fillRect(0, y, W, rowH); }
       c.strokeStyle = T.border; c.lineWidth = 0.5;
       c.beginPath(); c.moveTo(0,y+rowH); c.lineTo(W,y+rowH); c.stroke();
-      const nodeColor = getNodeColor(n.arcDelta);
+      // Code, SAPI value, and SAPI bar use a green that fades from top (rank 1)
+      // to bottom of the ranked list — strongest at the top, lightest at the bottom.
+      const fade = sorted.length > 1 ? i/(sorted.length-1) : 0; // 0 at top → 1 at bottom
+      const greenAlpha = 1 - fade*0.7;                          // 1.0 → 0.30
+      const greenText = `rgba(29,158,117,${greenAlpha})`;
       c.textBaseline = "middle"; const mid = y+rowH/2;
       c.font = "400 10px sans-serif"; c.fillStyle = T.textSec; c.textAlign="center"; c.fillText(i+1, cols[0].x, mid);
-      c.fillStyle = nodeColor; c.font = "500 10px sans-serif"; c.textAlign="center"; c.fillText(n.code, cols[1].x, mid);
+      c.fillStyle = T.green; c.font = "500 10px sans-serif"; c.textAlign="center"; c.fillText(n.code, cols[1].x, mid);
       c.fillStyle = T.textPri; c.font = "400 10px sans-serif"; c.textAlign="left"; c.fillText(n.name, cols[2].x, mid);
       const barMaxW = W*0.08, barW = (n.sapi/100)*barMaxW, barX = W*0.42-barMaxW;
-      c.fillStyle = nodeColor; c.globalAlpha = 0.18; c.fillRect(barX, y+rowH/2-5, barW, 10); c.globalAlpha=1;
-      c.fillStyle = nodeColor; c.font = "500 10px sans-serif"; c.textAlign="right"; c.fillText(n.sapi.toFixed(1), W*0.42, mid);
+      c.fillStyle = T.green; c.globalAlpha = greenAlpha*0.3; c.fillRect(barX, y+rowH/2-5, barW, 10); c.globalAlpha=1;
+      c.fillStyle = greenText; c.font = "500 10px sans-serif"; c.textAlign="right"; c.fillText(n.sapi.toFixed(1), W*0.42, mid);
       const dims = [n.scores.compute, n.scores.capital, n.scores.regulatory, n.scores.data, n.scores.di];
       const dimCols = [W*0.52,W*0.62,W*0.73,W*0.83,W*0.93];
       dims.forEach((s, di) => {

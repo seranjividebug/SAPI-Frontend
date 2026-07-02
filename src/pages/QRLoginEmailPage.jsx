@@ -22,10 +22,30 @@ export default function QRLoginEmailPage() {
       // Code sent — carry the email forward to the OTP screen
       navigate("/qr-login/verify", { state: { email } });
     } catch (err) {
-      setError(err.message || "Failed to send verification code");
+      setError(friendlyError(err.message));
     } finally {
       setLoading(false);
     }
+  }
+
+  // Translate raw backend/SES errors into a friendly, non-technical message.
+  function friendlyError(raw) {
+    const msg = (raw || "").toLowerCase();
+
+    if (msg.includes("not verified") || msg.includes("message rejected") || msg.includes("554")) {
+      return "We couldn't send a code to this email address. Please check that it's correct, or try a different institutional email.";
+    }
+    if (msg.includes("invalid") && msg.includes("email")) {
+      return "Please enter a valid email address.";
+    }
+    if (msg.includes("rate") || msg.includes("too many") || msg.includes("429")) {
+      return "Too many attempts. Please wait a moment before requesting another code.";
+    }
+    if (msg.includes("network") || msg.includes("failed to fetch")) {
+      return "We're having trouble connecting. Please check your internet connection and try again.";
+    }
+
+    return "We couldn't send your verification code right now. Please try again in a moment.";
   }
 
   return (
