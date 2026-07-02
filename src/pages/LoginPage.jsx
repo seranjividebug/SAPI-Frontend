@@ -7,6 +7,8 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [emailReadOnly, setEmailReadOnly] = useState(true);
+  const [passwordReadOnly, setPasswordReadOnly] = useState(true);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,9 +44,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center px-5 py-10">
       {/* Card */}
-      <div className="w-full max-w-[400px] bg-gradient-to-br from-sapi-navy to-[#120822] border border-sapi-bronze/15 rounded-lg p-10 shadow-2xl">
+      <div className="w-full max-w-[400px] bg-gradient-to-br from-sapi-navy to-[#120822] border border-sapi-bronze/15 rounded-lg p-10 shadow-2xl relative">
+        {/* Back to Main Page - Top Left */}
+        <button
+          onClick={() => navigate('/main')}
+          className="absolute top-4 left-4 font-sans text-[11px] text-sapi-muted hover:text-sapi-gold transition-colors duration-150 bg-transparent border-none cursor-pointer tracking-wide uppercase"
+        >
+          ← Back to Main Page
+        </button>
+
         {/* Title */}
-        <h1 className="font-serif text-[22px] font-normal text-sapi-parchment text-center tracking-wide uppercase mb-2.5">
+        <h1 className="font-serif text-[22px] font-normal text-sapi-parchment text-center tracking-wide uppercase mb-2.5 mt-4">
           Sign In
         </h1>
         <p className="font-sans text-[11px] text-sapi-muted text-center tracking-wide uppercase mb-6">
@@ -67,6 +77,9 @@ export default function LoginPage() {
               value={form.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              // autoComplete="off"
+              readOnly={emailReadOnly}
+              onFocus={() => setEmailReadOnly(false)}
               className="w-full py-3.5 pl-5 pr-4.5 text-sm font-sans text-sapi-void bg-[#F0F0F5] border border-transparent rounded-md outline-none transition-all duration-150 focus:border-sapi-gold"
             />
           </div>
@@ -82,6 +95,9 @@ export default function LoginPage() {
               value={form.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              // autoComplete="off"
+              readOnly={passwordReadOnly}
+              onFocus={() => setPasswordReadOnly(false)}
               className="w-full py-3.5 pl-5 pr-4.5 text-sm font-sans text-sapi-void bg-[#F0F0F5] border border-transparent rounded-md outline-none transition-all duration-150 focus:border-sapi-gold"
             />
           </div>
@@ -93,26 +109,75 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full py-3.5 px-6 mt-2 font-sans text-xs font-medium tracking-wide uppercase text-sapi-void bg-sapi-gold border-none rounded-md cursor-pointer transition-all duration-150 hover:bg-[#B8862A] disabled:opacity-70 disabled:cursor-not-allowed"
+          {/* Buttons */}
+          <div className="flex flex-col gap-3 mt-2">
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-void bg-sapi-gold border-none rounded-md cursor-pointer transition-all duration-150 hover:bg-[#B8862A] disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Verifying...' : 'Sign In'}
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div
+            className="mt-1 mb-1"
+            style={{ height: '1px', background: `linear-gradient(90deg, transparent, #6B450855, transparent)` }}
+          />
+
+          <div className="text-center mb-6">
+            <h2
+              style={{
+                fontSize: '11px',
+                letterSpacing: '0.22em',
+                color: '#FFFFFF',
+                fontWeight: 500,
+              }}
+            >
+              NOT YET CREDENTIALED
+            </h2>
+          </div>
+
+          <p
+            className="text-center mb-2"
+            style={{
+              fontSize: '14px',
+              lineHeight: '1.6',
+              color: '#FBF5E6',
+            }}
           >
-            {loading ? 'Verifying...' : 'Sign In'}
+            Access to the SAPI portal is issued to verified officials. Request credentials and our team will validate your institution and respond within two working days.
+          </p>
+
+          <button
+            onClick={() => navigate('/sapi-login')}
+            className="w-full py-3.5 px-6 font-sans text-xs font-medium tracking-wide uppercase text-sapi-gold border border-sapi-gold rounded-md cursor-pointer transition-all duration-150 hover:bg-sapi-gold hover:text-sapi-void"
+          >
+            REQUEST CREDENTIALS
           </button>
 
-          {/* Sign up link */}
-          {/* <div className="mt-5 text-center">
-            <span className="font-sans text-[11px] text-sapi-muted">
-              Don't have an account?{' '}
-              <a href="/register" className="text-sapi-gold hover:text-sapi-paleGold transition-colors">
-                Sign up
-              </a>
-            </span>
-          </div> */}
+          {/* Faster access via QR link */}
+          <div className="flex items-start gap-3 mt-6 py-3.5 px-4 bg-sapi-gold/5 border border-sapi-gold/20 rounded">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-0.5">
+              <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM8 5v4M8 10.5v.5" stroke="#C9963A" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+            <div className="flex-1">
+              <div className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-gold mb-1.5">
+                Faster access via QR link
+              </div>
+              <div className="font-sans text-[12px] text-sapi-muted leading-relaxed">
+                If you received a QR code or direct link, verify your identity with a one-time code — no password required.{' '}
+                <span
+                  onClick={() => navigate('/qr-login')}
+                  className="text-sapi-gold underline cursor-pointer"
+                >
+                  Access via email verification →
+                </span>
+              </div>
+            </div>
+          </div>
 
-       
         </div>
       </div>
 

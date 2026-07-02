@@ -1,28 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateRoadmap } from "../services/roadmapService";
 import { getAssessmentResults } from "../services/assessmentService";
-
-// ── Logo Component ──────────────────────────────────────────────────────────
-function SAPIGlobe({ size = 32 }) {
-  return (
-    <img
-      src="/logo.png"
-      alt="SAPI Logo"
-      style={{
-        width: size,
-        height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
-        padding: '2px',
-        boxSizing: 'border-box',
-        WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
-        maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
-      }}
-    />
-  );
-}
 
 // ── Colour palette ────────────────────────────────────────────────────────────
 const C = {
@@ -77,7 +56,7 @@ const LIBRARY = {
       },
       {
         title: "Secure dedicated energy supply agreements for AI data centres.",
-        desc:  "AI workloads require predictable, low-cost energy at scale — speculative procurement creates both cost and resilience risk. Long-term power purchase agreements lock in favourable rates and guarantee uptime.",
+        desc:  "AI workloads require predictable, low-cost energy at scale - speculative procurement creates both cost and resilience risk. Long-term power purchase agreements lock in favourable rates and guarantee uptime.",
       },
       {
         title: "Launch sovereign cloud migration programme for government workloads.",
@@ -122,7 +101,7 @@ const LIBRARY = {
       },
       {
         title: "Establish AI-specific DFI financing vehicles.",
-        desc:  "Generic DFI instruments are poorly suited to AI projects, which combine early-stage risk with sovereign strategic value. Purpose-built vehicles — grants, concessional loans, equity — create appropriate risk-return profiles.",
+        desc:  "Generic DFI instruments are poorly suited to AI projects, which combine early-stage risk with sovereign strategic value. Purpose-built vehicles - grants, concessional loans, equity - create appropriate risk-return profiles.",
       },
       {
         title: "Launch a domestic AI VC catalytic fund to stimulate private capital.",
@@ -198,7 +177,7 @@ const LIBRARY = {
       },
       {
         title: "Establish enforceable data localisation requirements for strategic data.",
-        desc:  "Enforceable localisation requirements — backed by sanctions for non-compliance — close the gap between policy intent and operational reality. Strategic data classification is the prerequisite step.",
+        desc:  "Enforceable localisation requirements - backed by sanctions for non-compliance - close the gap between policy intent and operational reality. Strategic data classification is the prerequisite step.",
       },
       {
         title: "Begin government data cataloguing programme.",
@@ -239,7 +218,7 @@ const LIBRARY = {
     LOW: [
       {
         title: "Map all AI pilots to national strategy priorities.",
-        desc:  "Unmapped pilots represent strategic drift — resource consumption without sovereign value creation. A formal mapping exercise identifies misaligned pilots for reorientation or termination.",
+        desc:  "Unmapped pilots represent strategic drift - resource consumption without sovereign value creation. A formal mapping exercise identifies misaligned pilots for reorientation or termination.",
       },
       {
         title: "Establish a cross-departmental AI coordination working group.",
@@ -261,13 +240,13 @@ const LIBRARY = {
       },
       {
         title: "Scale pilots to production (target: >25% conversion rate).",
-        desc:  "A 25% pilot-to-production conversion rate is the minimum threshold for a functioning AI deployment pipeline. Conversion blockages — procurement, legal, technical — should be identified and systematically removed.",
+        desc:  "A 25% pilot-to-production conversion rate is the minimum threshold for a functioning AI deployment pipeline. Conversion blockages - procurement, legal, technical - should be identified and systematically removed.",
       },
     ],
     HIGH: [
       {
         title: "Achieve Intelligence Fabric: real-time AI coordination across government.",
-        desc:  "An Intelligence Fabric represents the highest maturity state — AI systems that coordinate autonomously within a sovereign governance framework. Achieving this requires shared data standards, interoperable APIs, and cross-agency trust protocols.",
+        desc:  "An Intelligence Fabric represents the highest maturity state - AI systems that coordinate autonomously within a sovereign governance framework. Achieving this requires shared data standards, interoperable APIs, and cross-agency trust protocols.",
       },
       {
         title: "Institute systematic outcome attribution for all AI deployments.",
@@ -327,12 +306,36 @@ export default function SAPIRoadmap() {
   const navigate = useNavigate();
   // eslint-disable-next-line no-unused-vars
   const [currentPage, setCurrentPage] = useState("overview");
-  
+
   // API data states
   const [roadmapData, setRoadmapData] = useState(null);
   const [assessmentData, setAssessmentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const currentUser = JSON.parse(localStorage.getItem("sapi_current_user") || "{}");
+  const email = currentUser.email || "";
+  const firstLetter = email.charAt(0).toUpperCase() || "U";
+
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   
   // Fetch assessment results and generate roadmap
   useEffect(() => {
@@ -392,9 +395,19 @@ export default function SAPIRoadmap() {
     fetchData();
   }, []);
   
-  const compositeScore = roadmapData?.dimension_scorecard 
-    ? Math.round(roadmapData.dimension_scorecard.reduce((sum, d) => sum + (Number(d.score) || 0), 0) / roadmapData.dimension_scorecard.length)
-    : 0;
+  // Use sapi_score from API response if available, otherwise calculate from dimension scores
+  const compositeScore = assessmentData?.sapi_score 
+    ? Number(assessmentData.sapi_score)
+    : (assessmentData ? (() => {
+        const scores = [
+          Number(assessmentData.compute_capacity) || 0,
+          Number(assessmentData.capital_formation) || 0,
+          Number(assessmentData.regulatory_readiness) || 0,
+          Number(assessmentData.data_sovereignty) || 0,
+          Number(assessmentData.directed_intelligence) || 0,
+        ];
+        return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length * 10) / 10;
+      })() : 0);
   const country = assessmentData?.country || assessmentData?.country_name || "-";
 
   // Transform API roadmap data to component format
@@ -461,8 +474,22 @@ export default function SAPIRoadmap() {
       return null;
     };
     
-    // Get scores for dimensions
+    // Get scores for all dimensions from dimension_scorecard
     const scoreMap = {};
+    const dimNameMap = {
+      1: "Compute Capacity",
+      2: "Capital Formation",
+      3: "Regulatory Readiness",
+      4: "Data Sovereignty",
+      5: "Directed Intelligence Maturity"
+    };
+    if (roadmapData.dimension_scorecard) {
+      roadmapData.dimension_scorecard.forEach(d => {
+        const dimName = dimNameMap[d.dimension_id] || d.dimension_name;
+        scoreMap[dimName] = Number(d.score) || 0;
+      });
+    }
+    // Also add bottom3 scores as fallback
     bottom3List.forEach(d => { scoreMap[d.key] = d.score; });
     
     // Fill phases
@@ -492,9 +519,8 @@ export default function SAPIRoadmap() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 14, color: C.muted, letterSpacing: "0.1em", marginTop: 24 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-4">
+        <div className="font-sans text-[13px] sm:text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
           Generating your roadmap…
         </div>
       </div>
@@ -503,14 +529,13 @@ export default function SAPIRoadmap() {
 
   if (error) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40 }}>
-        <SAPIGlobe size={64} />
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, color: C.crimson, marginTop: 24, marginBottom: 16 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-6 sm:p-10">
+        <div className="font-serif text-[17px] sm:text-[19px] text-sapi-crimson mt-6 mb-4 text-center">
           {error}
         </div>
         <button 
           onClick={() => navigate('/')}
-          style={{ background: C.gold, color: C.void, border: "none", padding: "12px 24px", fontFamily: "system-ui, sans-serif", fontSize: 12, cursor: "pointer", borderRadius: 3 }}
+          className="bg-sapi-gold text-sapi-void border-none px-5 py-2.5 sm:px-6 sm:py-3 font-sans text-[12px] sm:text-[13px] cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -518,143 +543,85 @@ export default function SAPIRoadmap() {
     );
   }
 
-  const lowestDim       = bottom3[0]?.key  || "—";
-  const secondLowestDim = bottom3[1]?.key  || "—";
+  const lowestDim       = bottom3[0]?.key  || "-";
+  const secondLowestDim = bottom3[1]?.key  || "-";
   const totalInterventions = phases.reduce((n, p) => n + p.cards.length, 0);
 
   return (
-    <div style={{
-      minHeight:       "100vh",
-      backgroundColor: C.void,
-      color:           C.parchment,
-      fontFamily:      "system-ui, -apple-system, sans-serif",
-    }}>
+    <div className="min-h-screen bg-sapi-void text-sapi-parchment font-sans">
 
       {/* ── App Header ── */}
-      <header style={{
-        borderBottom:    `1px solid ${C.bronze}`,
-        backgroundColor: C.navy,
-        position:        "sticky",
-        top:             0,
-        zIndex:          100,
-      }}>
-        <div style={{
-          maxWidth:       1100,
-          margin:         "0 auto",
-          padding:        "18px 32px",
-          display:        "flex",
-          alignItems:     "center",
-          justifyContent: "space-between",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <SAPIGlobe size={32} />
-            <span style={{
-              fontFamily:    "Georgia, serif",
-              fontSize:      11,
-              letterSpacing: "0.14em",
-              color:         C.parchment,
-              opacity:       0.9,
-              textTransform: "uppercase",
-            }}>
-              The Sovereign AI Power Index
-            </span>
+      <header className="border-b border-sapi-bronze bg-sapi-navy sticky top-0 z-[100]">
+        <div className="max-w-container mx-auto px-4 sm:px-8 py-1 pb-1 flex items-center gap-1">
+          <img
+            src="/SAPI_Logo_B4.svg"
+            alt="SAPI Logo"
+            className="h-24 w-24 sm:h-28 sm:w-28 object-contain"
+          />
+          <div className="font-serif text-[10px] sm:text-[12px] font-normal tracking-extra-wide text-sapi-parchment uppercase leading-normal">
+            The Sovereign AI<br />Power Index
           </div>
-          <span style={{
-            fontSize:      10,
-            letterSpacing: "0.15em",
-            color:         C.crimson,
-            textTransform: "uppercase",
-            border:        `1px solid ${C.crimson}`,
-            padding:       "3px 10px",
-            opacity:       0.85,
-          }}>
-            Classification: Restricted
-          </span>
+          <div className="ml-auto flex items-center gap-3 sm:gap-5">
+            <span
+              className="text-[9px] sm:text-[10px] tracking-[0.15em] text-sapi-crimson uppercase border border-sapi-crimson px-2 sm:px-2.5 py-0.5 opacity-85 hidden sm:inline-block"
+            >
+              Classification: Restricted
+            </span>
+            <div className="relative" ref={dropdownRef}>
+            <button
+              className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-[11px] sm:text-xs font-medium">
+                {firstLetter}
+              </div>
+            </button>
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 w-36 sm:w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-3.5 sm:px-4 py-2 text-[13px] sm:text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
+          </div>
         </div>
       </header>
 
       {/* ── Page body ── */}
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 32px 80px" }}>
+      <main className="max-w-[1100px] mx-auto px-4 sm:px-8 py-8 sm:py-12 pb-16 sm:pb-20">
 
         {/* ── Page header row ── */}
-        <div style={{
-          display:        "flex",
-          alignItems:     "flex-start",
-          justifyContent: "space-between",
-          marginBottom:   40,
-          flexWrap:       "wrap",
-          gap:            16,
-        }}>
+        <div className="flex items-start justify-between mb-8 sm:mb-10 flex-wrap gap-4">
           {/* Back + Title */}
           <div>
             <button
               onClick={() => navigate("/results")}
-              style={{
-                display:        "flex",
-                alignItems:     "center",
-                gap:            6,
-                background:     "none",
-                border:         "none",
-                cursor:         "pointer",
-                color:          C.muted,
-                fontSize:       12,
-                letterSpacing:  "0.10em",
-                textTransform:  "uppercase",
-                padding:        0,
-                marginBottom:   16,
-              }}
+              className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-sapi-muted text-[12px] sm:text-[13px] tracking-[0.1em] uppercase p-0 mb-3 sm:mb-4 hover:text-sapi-gold transition-colors"
             >
-              <span style={{ fontSize: 14 }}>←</span> Back to Results
+              <span className="text-[14px] sm:text-[15px]">←</span> Back to Results
             </button>
-            <h1 style={{
-              fontFamily:    "Georgia, serif",
-              fontSize:      28,
-              fontWeight:    500,
-              letterSpacing: "0.08em",
-              color:         C.parchment,
-              margin:        0,
-              textTransform: "uppercase",
-            }}>
+            <h1 className="font-serif text-[24px] sm:text-[30px] font-medium tracking-[0.08em] text-sapi-parchment m-0 uppercase">
               Sovereign AI Roadmap
             </h1>
           </div>
 
           {/* Nation + Score badge */}
-          <div style={{
-            display:       "flex",
-            alignItems:    "center",
-            gap:           16,
-            flexWrap:      "wrap",
-          }}>
-            <span style={{
-              fontSize:      14,
-              color:         C.muted,
-              letterSpacing: "0.06em",
-            }}>
+          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
+            <span className="text-[13px] sm:text-[15px] text-sapi-muted tracking-[0.06em]">
               {country}
             </span>
-            <div style={{
-              backgroundColor: C.midnight,
-              border:          `1px solid ${C.bronzeStr}`,
-              padding:         "8px 20px",
-              display:         "flex",
-              alignItems:      "center",
-              gap:             10,
-            }}>
-              <span style={{
-                fontFamily: "Georgia, serif",
-                fontSize:   22,
-                color:      C.paleGold,
-                fontWeight: 500,
-              }}>
+            <div
+              className="flex items-center gap-2 sm:gap-2.5 py-1.5 sm:py-2 px-4 sm:px-5"
+              style={{ backgroundColor: C.midnight, border: `1px solid ${C.bronzeStr}` }}
+            >
+              <span className="font-sans text-[20px] sm:text-[24px] text-sapi-paleGold font-medium">
                 {Math.round(compositeScore)}
               </span>
-              <span style={{
-                fontSize:      10,
-                letterSpacing: "0.12em",
-                color:         C.muted,
-                textTransform: "uppercase",
-              }}>
+              <span className="text-[11px] sm:text-[12px] tracking-[0.12em] text-sapi-muted uppercase">
                 SAPI Score
               </span>
             </div>
@@ -662,62 +629,30 @@ export default function SAPIRoadmap() {
         </div>
 
         {/* ── Intro line ── */}
-        <p style={{
-          fontSize:     12,
-          color:        C.muted,
-          letterSpacing:"0.04em",
-          lineHeight:   1.7,
-          marginBottom: 48,
-          maxWidth:     640,
-          borderLeft:   `2px solid ${C.bronze}`,
-          paddingLeft:  16,
-        }}>
+        <p
+          className="text-[13px] sm:text-[15px] text-sapi-muted tracking-[0.04em] leading-[1.6] sm:leading-[1.7] mb-8 sm:mb-12 max-w-[640px] border-l-2 border-sapi-bronze pl-4"
+        >
           Your personalised roadmap is generated from the three lowest-scoring dimensions in your
           assessment. Interventions are ranked by impact on composite SAPI score.
         </p>
 
         {/* ── Priority Interventions Panel ── */}
-        <section style={{ marginBottom: 56 }}>
-          <div style={{
-            backgroundColor: C.midnight,
-            border:          `1px solid ${C.gold}`,
-            borderLeft:      `3px solid ${C.gold}`,
-            padding:         "28px 32px",
-          }}>
-            <div style={{
-              display:       "flex",
-              alignItems:    "center",
-              gap:           10,
-              marginBottom:  24,
-            }}>
-              <span style={{
-                fontFamily:    "Georgia, serif",
-                fontSize:      11,
-                letterSpacing: "0.16em",
-                color:         C.gold,
-                textTransform: "uppercase",
-              }}>
+        <section className="mt-12 sm:mt-16 mb-12 sm:mb-16">
+          <div
+            className="py-6 sm:py-10 px-5 sm:px-8"
+            style={{ backgroundColor: C.midnight, border: `1px solid ${C.gold}`, borderLeft: `3px solid ${C.gold}` }}
+          >
+            <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 flex-wrap">
+              <span className="font-serif text-[11px] sm:text-[13px] tracking-[0.16em] text-sapi-gold uppercase">
                 Priority Interventions
               </span>
-              <div style={{
-                height:          1,
-                flex:            1,
-                backgroundColor: C.bronzeStr,
-              }} />
-              <span style={{
-                fontSize:      10,
-                color:         C.muted,
-                letterSpacing: "0.10em",
-              }}>
+              <div className="h-px flex-1" style={{ backgroundColor: C.bronzeStr }} />
+              <span className="text-[11px] sm:text-[12px] text-sapi-muted tracking-[0.1em]">
                 Immediate action required
               </span>
             </div>
 
-            <div style={{
-              display:             "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap:                 20,
-            }}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(240px_sm:280px,1fr))] gap-4 sm:gap-5 pt-4 sm:pt-6">
               {priorityPanel.map((card, i) => (
                 <PriorityCard key={i} card={card} rank={i + 1} />
               ))}
@@ -726,24 +661,12 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Three-Column Phase Layout ── */}
-        <section>
-          <div style={{
-            fontFamily:    "Georgia, serif",
-            fontSize:      11,
-            letterSpacing: "0.16em",
-            color:         C.muted,
-            textTransform: "uppercase",
-            marginBottom:  24,
-          }}>
+        <section className="mt-12 sm:mt-16">
+          <div className="font-serif text-[11px] sm:text-[13px] tracking-[0.16em] text-sapi-muted uppercase mb-5 sm:mb-6">
             Full Intervention Programme
           </div>
 
-          <div style={{
-            display:             "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap:                 20,
-            alignItems:          "start",
-          }}>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 items-start">
             {phases.map((phase, pi) => (
               <PhaseColumn
                 key={pi}
@@ -756,34 +679,18 @@ export default function SAPIRoadmap() {
         </section>
 
         {/* ── Upgrade Hook ── */}
-        <section style={{ marginTop: 64 }}>
-          <div style={{
-            backgroundColor: C.navy,
-            border:          `1px solid ${C.bronzeStr}`,
-            borderTop:       `2px solid ${C.gold}`,
-            padding:         "32px 40px",
-            display:         "flex",
-            alignItems:      "center",
-            justifyContent:  "space-between",
-            flexWrap:        "wrap",
-            gap:             24,
-          }}>
-            <div style={{ maxWidth: 560 }}>
-              <p style={{
-                fontFamily:    "Georgia, serif",
-                fontSize:      15,
-                color:         C.parchment,
-                lineHeight:    1.65,
-                margin:        0,
-                marginBottom:  8,
-                letterSpacing: "0.02em",
-              }}>
+        {/* <section className="mt-16">
+          <div
+            className="py-8 px-10 flex items-center justify-between flex-wrap gap-6 bg-sapi-navy border border-sapi-bronze border-t-2 border-t-sapi-gold"
+          >
+            <div className="max-w-[560px]">
+              <p className="font-serif text-[17px] text-sapi-parchment leading-[1.65] m-0 mb-2">
                 Your roadmap identifies{" "}
-                <span style={{ color: C.paleGold }}>{totalInterventions} critical interventions</span>.
+                <span className="font-sans font-medium" style={{ color: C.paleGold }}>{totalInterventions} critical interventions</span>.
               </p>
               <p style={{
-                fontSize:     12,
-                color:        C.muted,
+                fontSize:     14,
+                color:        "white",
                 lineHeight:   1.7,
                 margin:       0,
                 letterSpacing:"0.02em",
@@ -797,39 +704,16 @@ export default function SAPIRoadmap() {
 
             <button
               onClick={() => setCurrentPage("upgrade")}
-              style={{
-                backgroundColor: C.gold,
-                color:           C.void,
-                border:          "none",
-                padding:         "14px 32px",
-                cursor:          "pointer",
-                fontFamily:      "system-ui, sans-serif",
-                fontSize:        12,
-                letterSpacing:   "0.12em",
-                textTransform:   "uppercase",
-                fontWeight:      500,
-                flexShrink:      0,
-              }}
+              className="bg-sapi-gold text-sapi-void border-none px-8 py-3.5 cursor-pointer font-sans text-[13px] tracking-[0.12em] uppercase font-medium flex-shrink-0 hover:opacity-90 transition-opacity"
             >
               Upgrade to Tier 2 →
             </button>
           </div>
-        </section>
+        </section> */}
 
         {/* ── Confidentiality notice ── */}
-        <div style={{
-          marginTop:    40,
-          padding:      "14px 20px",
-          borderLeft:   `3px solid ${C.gold}`,
-          backgroundColor: "rgba(201,150,58,0.05)",
-        }}>
-          <p style={{
-            fontSize:     11,
-            color:        C.muted,
-            lineHeight:   1.6,
-            margin:       0,
-            letterSpacing:"0.03em",
-          }}>
+        <div className="mt-8 sm:mt-10 py-3 sm:py-3.5 px-4 sm:px-5 border-l-[3px] border-sapi-gold bg-sapi-gold/[0.05]">
+          <p className="text-[12px] sm:text-[13px] text-sapi-muted leading-[1.55] sm:leading-[1.6] m-0 tracking-[0.03em]">
             This roadmap is generated exclusively from self-reported assessment data and is intended
             for internal policy planning purposes only. SAPI Tier 1 recommendations are indicative.
             Tier 2–4 assessments incorporate primary research, in-country verification, and
@@ -845,43 +729,26 @@ export default function SAPIRoadmap() {
 function PriorityCard({ card, rank }) {
   const band = card.band;
   return (
-    <div style={{
-      backgroundColor: C.navy,
-      border:          `1px solid ${C.bronzeStr}`,
-      padding:         "18px 20px",
-      position:        "relative",
-    }}>
+    <div
+      className="py-4 sm:py-5 px-4 sm:px-5 relative"
+      style={{ backgroundColor: C.navy, border: `1px solid ${C.bronzeStr}` }}
+    >
       {/* Rank */}
-      <div style={{
-        position:        "absolute",
-        top:             -1,
-        right:           16,
-        backgroundColor: C.gold,
-        color:           C.void,
-        fontSize:        10,
-        fontFamily:      "Georgia, serif",
-        letterSpacing:   "0.10em",
-        padding:         "2px 8px",
-      }}>
+      <div
+        className="absolute top-1 right-3 sm:right-4 font-serif text-[11px] sm:text-[12px] tracking-[0.1em] px-2.5 sm:px-3 py-1"
+        style={{ backgroundColor: C.gold, color: C.void }}
+      >
         #{rank}
       </div>
 
       {/* Dim badge + band */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+      <div className="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3">
         <DimBadge code={card.dimCode} color={card.dimColor} />
         <BandPill band={band} />
       </div>
 
       {/* Title */}
-      <p style={{
-        fontFamily:    "Georgia, serif",
-        fontSize:      13,
-        color:         C.parchment,
-        lineHeight:    1.55,
-        margin:        0,
-        marginBottom:  10,
-        fontWeight:    500,
-      }}>
+      <p className="font-serif text-[13px] sm:text-[15px] text-sapi-parchment leading-[1.5] sm:leading-[1.55] m-0 mb-2 sm:mb-2.5 font-medium">
         {card.title}
       </p>
 
@@ -894,44 +761,30 @@ function PriorityCard({ card, rank }) {
 // ── Phase Column ──────────────────────────────────────────────────────────────
 function PhaseColumn({ phase, accent, icon }) {
   return (
-    <div style={{
-      backgroundColor: C.navy,
-      border:          `1px solid ${C.bronzeStr}`,
-      borderTop:       `2px solid ${accent}`,
-    }}>
+    <div
+      style={{ backgroundColor: C.navy, border: `1px solid ${C.bronzeStr}`, borderTop: `2px solid ${accent}` }}
+    >
       {/* Phase header */}
-      <div style={{
-        padding:      "18px 20px 16px",
-        borderBottom: `1px solid ${C.bronze}`,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-          <span style={{ color: accent, fontSize: 14 }}>{icon}</span>
-          <span style={{
-            fontFamily:    "Georgia, serif",
-            fontSize:      12,
-            letterSpacing: "0.12em",
-            color:         C.parchment,
-            textTransform: "uppercase",
-          }}>
+      <div
+        className="py-4 sm:py-6 px-4 sm:px-5 pb-3 sm:pb-4"
+        style={{ borderBottom: `1px solid ${C.bronze}` }}
+      >
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="text-[14px] sm:text-[16px]" style={{ color: accent }}>{icon}</span>
+          <span className="font-serif text-[11px] sm:text-[13px] tracking-[0.12em] text-sapi-parchment uppercase">
             {phase.label}
           </span>
         </div>
-        <span style={{
-          display:         "inline-block",
-          backgroundColor: "rgba(0,0,0,0.3)",
-          border:          `1px solid ${C.bronze}`,
-          padding:         "2px 10px",
-          fontSize:        10,
-          letterSpacing:   "0.10em",
-          color:           accent,
-          textTransform:   "uppercase",
-        }}>
+        <span
+          className="inline-block px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-[12px] tracking-[0.1em] uppercase"
+          style={{ backgroundColor: "rgba(0,0,0,0.3)", border: `1px solid ${C.bronze}`, color: accent }}
+        >
           {phase.timeline}
         </span>
       </div>
 
       {/* Cards */}
-      <div style={{ padding: "12px 12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+      <div className="py-2.5 sm:py-3 px-2.5 sm:px-3 pb-3 sm:pb-4 flex flex-col gap-2 sm:gap-2.5">
         {phase.cards.map((card, i) => (
           <InterventionCard key={i} card={card} />
         ))}
@@ -943,39 +796,23 @@ function PhaseColumn({ phase, accent, icon }) {
 // ── Intervention Card ─────────────────────────────────────────────────────────
 function InterventionCard({ card }) {
   return (
-    <div style={{
-      backgroundColor: C.midnight,
-      border:          `1px solid ${C.bronze}`,
-      padding:         "14px 16px",
-    }}>
+    <div
+      className="py-3 sm:py-3.5 px-3 sm:px-4"
+      style={{ backgroundColor: C.midnight, border: `1px solid ${C.bronze}` }}
+    >
       {/* Dim badge + band */}
-      <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
+      <div className="flex items-center gap-1.5 mb-2 sm:mb-2.5">
         <DimBadge code={card.dimCode} color={card.dimColor} />
         <BandPill band={card.band} />
       </div>
 
       {/* Title */}
-      <p style={{
-        fontFamily:    "Georgia, serif",
-        fontSize:      12,
-        color:         C.parchment,
-        lineHeight:    1.55,
-        margin:        0,
-        marginBottom:  8,
-        fontWeight:    500,
-      }}>
+      <p className="font-serif text-[12px] sm:text-[13px] text-sapi-parchment leading-[1.5] sm:leading-[1.55] m-0 mb-2 font-medium">
         {card.title}
       </p>
 
       {/* Description */}
-      <p style={{
-        fontSize:     11,
-        color:        C.muted,
-        lineHeight:   1.65,
-        margin:       0,
-        marginBottom: 12,
-        letterSpacing:"0.01em",
-      }}>
+      <p className="text-[12px] sm:text-[13px] text-sapi-muted leading-[1.6] sm:leading-[1.65] m-0 mb-2.5 sm:mb-3 tracking-[0.01em]">
         {card.desc}
       </p>
 
@@ -988,18 +825,10 @@ function InterventionCard({ card }) {
 // ── Dimension Badge ───────────────────────────────────────────────────────────
 function DimBadge({ code, color }) {
   return (
-    <span style={{
-      display:         "inline-flex",
-      alignItems:      "center",
-      backgroundColor: `${color}22`,
-      border:          `1px solid ${color}55`,
-      color:           color,
-      fontSize:        9,
-      letterSpacing:   "0.12em",
-      padding:         "2px 7px",
-      textTransform:   "uppercase",
-      fontFamily:      "system-ui, sans-serif",
-    }}>
+    <span
+      className="inline-flex items-center text-[10px] sm:text-[11px] tracking-[0.12em] uppercase px-1.5 py-0.5 font-sans"
+      style={{ backgroundColor: `${color}22`, border: `1px solid ${color}55`, color }}
+    >
       {code}
     </span>
   );
@@ -1009,17 +838,10 @@ function DimBadge({ code, color }) {
 function BandPill({ band }) {
   const bc = bandColor(band);
   return (
-    <span style={{
-      display:         "inline-flex",
-      alignItems:      "center",
-      backgroundColor: `${bc}18`,
-      border:          `1px solid ${bc}44`,
-      color:           bc,
-      fontSize:        9,
-      letterSpacing:   "0.10em",
-      padding:         "2px 7px",
-      textTransform:   "uppercase",
-    }}>
+    <span
+      className="inline-flex items-center text-[10px] sm:text-[11px] tracking-[0.1em] uppercase px-1.5 py-0.5"
+      style={{ backgroundColor: `${bc}18`, border: `1px solid ${bc}44`, color: bc }}
+    >
       {bandLabel(band)}
     </span>
   );
@@ -1028,35 +850,18 @@ function BandPill({ band }) {
 // ── Score Arrow ───────────────────────────────────────────────────────────────
 function ScoreArrow({ score, target }) {
   return (
-    <div style={{
-      display:     "flex",
-      alignItems:  "center",
-      gap:         6,
-      paddingTop:  4,
-      borderTop:   `1px solid ${C.bronze}`,
-    }}>
-      <span style={{
-        fontFamily: "Georgia, serif",
-        fontSize:   13,
-        color:      C.crimson,
-      }}>
+    <div
+      className="flex items-center gap-1 sm:gap-1.5 pt-1"
+      style={{ borderTop: `1px solid ${C.bronze}` }}
+    >
+      <span className="font-sans text-[13px] sm:text-[15px] text-sapi-crimson font-medium">
         {Math.round(score)}
       </span>
-      <span style={{ color: C.muted, fontSize: 11 }}>→</span>
-      <span style={{
-        fontFamily: "Georgia, serif",
-        fontSize:   13,
-        color:      C.emerald,
-      }}>
+      <span className="text-[12px] sm:text-[13px] text-sapi-muted">→</span>
+      <span className="font-sans text-[13px] sm:text-[15px] text-sapi-emerald font-medium">
         {target}
       </span>
-      <span style={{
-        fontSize:      9,
-        color:         C.muted,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-        marginLeft:    2,
-      }}>
+      <span className="text-[10px] sm:text-[11px] text-sapi-muted tracking-[0.08em] uppercase ml-0.5">
         target
       </span>
     </div>

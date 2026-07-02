@@ -9,7 +9,85 @@
       name="description"
       content="SAPI Sovereign AI Assessment Platform"
     />
+    <!-- Cache Control Meta Tags -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>SAPI - Sovereign AI Assessment</title>
+    <script>
+      (function () {
+        function isOpaqueScriptError(event) {
+          return event
+            && (event.message === 'Script error.' || event.message === 'Script error')
+            && !event.error
+            && (!event.filename || /^https?:\/\//.test(event.filename));
+        }
+
+        function isExpectedSafariCancellation(reason) {
+          var name = reason && reason.name;
+          var message = String((reason && reason.message) || reason || '');
+          return name === 'AbortError'
+            || name === 'NotAllowedError'
+            || /AbortError|cancelled|canceled|Share canceled/i.test(message);
+        }
+
+        window.__sapiShouldIgnoreBrowserError = function (event) {
+          return isOpaqueScriptError(event);
+        };
+
+        window.addEventListener('error', function (event) {
+          if (!window.__sapiShouldIgnoreBrowserError(event)) {
+            return;
+          }
+
+          event.preventDefault();
+          if (event.stopImmediatePropagation) {
+            event.stopImmediatePropagation();
+          }
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (event) {
+          if (!isExpectedSafariCancellation(event.reason)) {
+            return;
+          }
+
+          event.preventDefault();
+          if (event.stopImmediatePropagation) {
+            event.stopImmediatePropagation();
+          }
+        }, true);
+      })();
+    </script>
+    <!-- Google Analytics -->
+    <script>
+      (function () {
+        var measurementId = 'G-0KEWHLLS2H';
+        var isLocalHost = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(window.location.hostname);
+
+        if (isLocalHost) {
+          window.gtag = function () {};
+          return;
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+          window.dataLayer.push(arguments);
+        };
+
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+        script.crossOrigin = 'anonymous';
+        script.referrerPolicy = 'strict-origin-when-cross-origin';
+        script.onerror = function () {
+          window.__sapiGaLoadFailed = true;
+        };
+        document.head.appendChild(script);
+
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId);
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

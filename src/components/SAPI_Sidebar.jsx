@@ -18,28 +18,18 @@ export default function Sidebar({ adminPage, setAdminPage, onSignOut }) {
     }
   })();
   return (
-    <div style={{
-      width: 220, flexShrink: 0,
-      background: '#0F0830',
-      display: 'flex', flexDirection: 'column',
-      height: '100%',
-      borderRight: '0.5px solid #1E1650',
-    }}>
-      <div style={{ padding: '18px 16px 16px', borderBottom: '0.5px solid #1E1650' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-          <div style={{
-            width: 28, height: 28, background: '#C9963A', borderRadius: 5,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#06030E', fontFamily: 'Georgia, serif', fontSize: 16, flexShrink: 0,
-          }}>S</div>
-          <div>
-            <div style={{ color: '#FBF5E6', fontSize: 13, fontWeight: 500, lineHeight: 1.25 }}>SAPI</div>
-            <div style={{ color: '#9880B0', fontSize: 9.5, letterSpacing: '0.09em', textTransform: 'uppercase', lineHeight: 1 }}>Admin Panel</div>
+    <div className="w-[220px] flex-shrink-0 bg-sapi-navy flex flex-col h-full border-r border-[#1E1650]/50">
+      <div className="py-4.5 px-4 pb-4 border-b border-[#1E1650]/50">
+        <div className="flex items-center gap-2 ml-4 mt-5">
+          <div className="w-7 h-7 bg-sapi-gold rounded flex items-center justify-center text-sapi-void font-serif text-base flex-shrink-0">S</div>
+          <div className="pl-1">
+            <div className="text-sapi-parchment text-[13px] font-medium leading-[1.25]">SAPI</div>
+            <div className="text-sapi-muted text-[9.5px] tracking-[0.09em] uppercase leading-none pl-0.1">Admin Panel</div>
           </div>
         </div>
       </div>
 
-      <nav style={{ flex: 1, paddingTop: 8 }}>
+      <nav className="flex-1 pt-2">
         {NAV_ITEMS.map(item => {
           const active = adminPage === item.key
             || (adminPage === 'submissionDetail' && item.key === 'submissions')
@@ -50,34 +40,29 @@ export default function Sidebar({ adminPage, setAdminPage, onSignOut }) {
               onClick={() => {
                 setAdminPage(item.key);
               }}
+              className="flex items-center gap-2 w-full py-2 px-4 border-none text-left font-sans text-[13px] cursor-pointer transition-colors"
               style={{
-                display: 'flex', alignItems: 'center', gap: 9,
-                width: '100%', padding: '9px 16px',
-                background: active ? '#1A1540' : 'transparent',
-                border: 'none',
+                background: active ? '#C9963A20' : 'transparent',
                 borderLeft: `3px solid ${active ? '#C9963A' : 'transparent'}`,
-                color: active ? '#EDD98A' : '#FBF5E6',
-                fontSize: 13, cursor: 'pointer', textAlign: 'left',
-                fontFamily: 'system-ui, sans-serif',
-                transition: 'background 0.12s',
+                color: active ? '#C9963A' : '#FBF5E6',
               }}
               onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
             >
-              <span style={{ fontSize: 13, opacity: active ? 1 : 0.55, width: 16 }}>{item.glyph}</span>
+              <span className="text-[13px] w-4" style={{ opacity: active ? 1 : 0.55 }}>{item.glyph}</span>
               {item.label}
             </button>
           );
         })}
       </nav>
 
-      <div style={{ padding: '14px 16px', borderTop: '0.5px solid #1E1650' }}>
-        <div style={{ color: '#6B5E80', fontSize: 11, marginBottom: 8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+      <div className="py-3.5 px-4 border-t border-[#1E1650]/50">
+        <div className="text-[#6B5E80] text-[11px] mb-2 truncate">
           {userEmail}
         </div>
         <button
           onClick={onSignOut}
-          style={{ background: 'transparent', border: 'none', color: '#C9963A', fontSize: 12, cursor: 'pointer', padding: 0, fontFamily: 'system-ui, sans-serif' }}
+          className="bg-transparent border-none text-sapi-gold text-xs cursor-pointer p-0 font-sans"
         >
           Sign out
         </button>

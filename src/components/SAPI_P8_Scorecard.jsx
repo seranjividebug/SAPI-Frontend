@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAssessmentResults } from "../services/assessmentService";
 
@@ -182,47 +182,14 @@ const DEMO_PROFILE = {
   }),
 };
 
-// ── Logo Component ───────────────────────────────────────────────────────────
-function SAPILogo({ size = 34 }) {
-  return (
-    <img
-      src="/logo.png"
-      alt="SAPI Logo"
-      style={{
-        width: size,
-        height: size,
-        objectFit: 'contain',
-        background: 'transparent',
-        borderRadius: '50%',
-        padding: '2px',
-        boxSizing: 'border-box',
-        WebkitMaskImage: 'radial-gradient(circle, white 100%, transparent 100%)',
-        maskImage: 'radial-gradient(circle, white 100%, transparent 100%)'
-      }}
-    />
-  );
-}
-
 // ── Score Bar ─────────────────────────────────────────────────────────────────
 function ScoreBar({ score, color }) {
   return (
-    <div style={{
-      position: "relative",
-      height: 4,
-      borderRadius: 2,
-      background: "rgba(255,255,255,0.06)",
-      overflow: "hidden",
-      flex: 1,
-      minWidth: 80,
-    }}>
-      <div style={{
-        position: "absolute", left: 0, top: 0, bottom: 0,
-        width: `${Math.max(score, 2)}%`,
-        background: color,
-        borderRadius: 2,
-        opacity: 0.75,
-        transition: "width 0.4s ease",
-      }} />
+    <div className="relative h-1 rounded-[2px] bg-white/[0.06] overflow-hidden flex-1 min-w-[60px_sm:80px]">
+      <div
+        className="absolute left-0 top-0 bottom-0 rounded-[2px] opacity-75 transition-[width] duration-[0.4s] ease-[ease]"
+        style={{ width: `${Math.max(score, 2)}%`, background: color }}
+      />
     </div>
   );
 }
@@ -231,42 +198,27 @@ function ScoreBar({ score, color }) {
 function SubIndicatorRow({ name, score, isPrimaryGap }) {
   const color = getScoreColor(score);
   return (
-    <div style={{
-      display: "flex",
-      alignItems: "center",
-      gap: 16,
-      padding: "9px 0",
-      borderBottom: `1px solid ${C.bronze}`,
-    }}>
+    <div
+      className="flex items-center gap-3 sm:gap-4 py-2"
+      style={{ borderBottom: `1px solid ${C.bronze}` }}
+    >
       {/* Gap marker */}
-      <div style={{
-        width: 3, height: 28, borderRadius: 2, flexShrink: 0,
-        background: isPrimaryGap ? C.crimson : "transparent",
-      }} />
+      <div
+        className="w-[3px] h-6 sm:h-7 rounded-[2px] flex-shrink-0"
+        style={{ background: isPrimaryGap ? C.crimson : "transparent" }}
+      />
 
       {/* Name */}
-      <div style={{
-        fontFamily: "system-ui, sans-serif",
-        fontSize: 11.5,
-        color: isPrimaryGap ? C.parchment : C.muted,
-        letterSpacing: "0.02em",
-        minWidth: 190,
-        lineHeight: 1.3,
-      }}>
+      <div
+        className="font-sans text-[12px] sm:text-[13.5px] tracking-[0.02em] min-w-[140px_sm:190px] leading-[1.3]"
+        style={{ color: isPrimaryGap ? C.parchment : C.muted }}
+      >
         {name}
         {isPrimaryGap && (
-          <span style={{
-            display: "inline-block",
-            marginLeft: 8,
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 8,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: C.crimson,
-            background: "rgba(192,48,88,0.12)",
-            padding: "2px 6px",
-            borderRadius: 2,
-          }}>
+          <span
+            className="inline-block ml-2 font-sans text-[9px] sm:text-[10px] tracking-[0.14em] uppercase px-1.5 py-0.5 rounded-[2px]"
+            style={{ color: C.crimson, background: "rgba(192,48,88,0.12)" }}
+          >
             Primary Gap
           </span>
         )}
@@ -276,14 +228,10 @@ function SubIndicatorRow({ name, score, isPrimaryGap }) {
       <ScoreBar score={score} color={color} />
 
       {/* Score value */}
-      <div style={{
-        fontFamily: "Georgia, serif",
-        fontSize: 13,
-        color: isPrimaryGap ? C.crimson : color,
-        minWidth: 36,
-        textAlign: "right",
-        opacity: isPrimaryGap ? 1 : 0.85,
-      }}>
+      <div
+        className="font-sans text-[13px] sm:text-[15px] min-w-[30px_sm:36px] text-right font-medium"
+        style={{ color: isPrimaryGap ? C.crimson : color, opacity: isPrimaryGap ? 1 : 0.85 }}
+      >
         {Number(score).toFixed(0)}
       </div>
     </div>
@@ -318,99 +266,57 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
         onClick={onToggle}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        className="w-full border-none cursor-pointer px-4 sm:px-6 py-4 sm:py-5 flex items-center gap-3 sm:gap-5 transition-colors text-left"
         style={{
-          width: "100%",
           background: isOpen ? C.midnight : (hovered ? "rgba(26,21,64,0.6)" : C.navy),
-          border: "none",
-          cursor: "pointer",
-          padding: "18px 24px",
-          display: "flex",
-          alignItems: "center",
-          gap: 20,
-          transition: "background 0.15s",
-          textAlign: "left",
         }}
       >
         {/* Dimension number */}
-        <div style={{
-          fontFamily: "Georgia, serif",
-          fontSize: 22,
-          color: isOpen ? C.paleGold : C.gold,
-          opacity: isOpen ? 0.9 : 0.6,
-          lineHeight: 1,
-          minWidth: 28,
-          flexShrink: 0,
-        }}>
+        <div
+          className="font-sans text-[20px] sm:text-[24px] leading-none min-w-6 sm:min-w-7 flex-shrink-0 font-medium"
+          style={{ color: isOpen ? C.paleGold : C.gold, opacity: isOpen ? 0.9 : 0.6 }}
+        >
           D{dim.number}
         </div>
 
         {/* Name + weight */}
-        <div style={{ flex: 1 }}>
-          <div style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 14,
-            color: C.parchment,
-            letterSpacing: "0.03em",
-            lineHeight: 1.25,
-            marginBottom: 3,
-          }}>
+        <div className="flex-1">
+          <div className="font-serif text-[13px] sm:text-[15px] text-sapi-parchment tracking-[0.03em] leading-[1.25] mb-0.5">
             {dim.name}
           </div>
-          <div style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 9,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-            color: C.muted,
-            opacity: 0.5,
-          }}>
+          <div className="font-sans text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-sapi-muted opacity-50">
             Weight {dim.weight} · {dim.subIndicators.length} sub-indicators
           </div>
         </div>
 
         {/* Score */}
-        <div style={{ textAlign: "right", marginRight: 16, flexShrink: 0 }}>
-          <div style={{
-            fontFamily: "Georgia, serif",
-            fontSize: 26,
-            color: isOpen ? band.color : C.paleGold,
-            lineHeight: 1,
-          }}>
+        <div className="text-right mr-3 sm:mr-4 flex-shrink-0">
+          <div
+            className="font-sans text-[24px] sm:text-[28px] leading-none font-medium"
+            style={{ color: isOpen ? band.color : C.paleGold }}
+          >
             {Number(dimScore).toFixed(1)}
           </div>
-          <div style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 8,
-            letterSpacing: "0.12em",
-            color: C.muted,
-            opacity: 0.45,
-            marginTop: 2,
-          }}>
+          <div className="font-sans text-[9px] sm:text-[10px] tracking-[0.12em] text-sapi-muted opacity-45 mt-0.5">
             / 100
           </div>
         </div>
 
         {/* Band pill */}
-        <div style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: 8.5,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: band.color,
-          background: band.bg,
-          padding: "4px 10px",
-          borderRadius: 3,
-          border: `1px solid ${band.color}22`,
-          minWidth: 62,
-          textAlign: "center",
-          flexShrink: 0,
-        }}>
+        <div
+          className="font-sans text-[9.5px] sm:text-[10.5px] tracking-[0.18em] uppercase pl-3 sm:pl-4 pr-2 sm:pr-2.5 py-1 rounded-[3px] min-w-[55px_sm:62px] text-center flex-shrink-0"
+          style={{
+            color: band.color,
+            background: band.bg,
+            border: `1px solid ${band.color}22`,
+          }}
+        >
           {band.label}
         </div>
 
         {/* Chevron */}
         <svg
-          width="14" height="14" viewBox="0 0 14 14" fill="none"
+          width="12" height="12" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 14 14" fill="none"
           style={{
             flexShrink: 0,
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
@@ -426,116 +332,71 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
 
       {/* ── Expanded Content ── */}
       {isOpen && (
-        <div style={{
-          background: C.void,
-          borderTop: `1px solid ${C.bronze}`,
-          padding: "28px 28px 32px",
-        }}>
+        <div
+          className="py-5 sm:py-7 pl-10 sm:pl-14 pr-5 sm:pr-7 pb-6 sm:pb-8"
+          style={{ background: C.void, borderTop: `1px solid ${C.bronze}` }}
+        >
           {/* Top row: large score + band classification */}
-          <div style={{
-            display: "flex",
-            gap: 24,
-            marginBottom: 28,
-          }}>
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-5 sm:mb-7">
             {/* Score hero */}
-            <div style={{
-              background: C.navy,
-              border: `1px solid ${C.bronze}`,
-              borderTop: `2.5px solid ${band.color}`,
-              borderRadius: 6,
-              padding: "20px 28px",
-              textAlign: "center",
-              minWidth: 110,
-              flexShrink: 0,
-            }}>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 8.5,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: C.muted,
-                opacity: 0.5,
-                marginBottom: 8,
-              }}>
+            <div
+              className="text-center min-w-[100px_sm:110px] flex-shrink-0 py-4 sm:py-5 px-5 sm:px-7"
+              style={{
+                background: C.navy,
+                border: `1px solid ${C.bronze}`,
+                borderTop: `2.5px solid ${band.color}`,
+                borderRadius: 6,
+              }}
+            >
+              <div className="font-sans text-[9.5px] sm:text-[10.5px] tracking-[0.22em] uppercase text-sapi-muted opacity-50 mb-2">
                 Dimension Score
               </div>
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 44,
-                color: band.color,
-                lineHeight: 1,
-                marginBottom: 4,
-              }}>
+              <div
+                className="font-sans text-[38px] sm:text-[46px] leading-none mb-1 font-medium"
+                style={{ color: band.color }}
+              >
                 {Number(dimScore).toFixed(1)}
               </div>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 9,
-                letterSpacing: "0.16em",
-                color: band.color,
-                background: band.bg,
-                padding: "3px 10px",
-                borderRadius: 2,
-                display: "inline-block",
-                textTransform: "uppercase",
-              }}>
+              <div
+                className="inline-block font-sans text-[10px] sm:text-[11px] tracking-[0.16em] uppercase px-2 sm:px-2.5 py-0.5 rounded-[2px]"
+                style={{ color: band.color, background: band.bg }}
+              >
                 {band.label} Band
               </div>
             </div>
 
             {/* Band classification + description */}
-            <div style={{
-              flex: 1,
-              background: C.navy,
-              border: `1px solid ${C.bronze}`,
-              borderLeft: `3px solid ${band.color}`,
-              borderRadius: 6,
-              padding: "20px 22px",
-            }}>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 9,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: band.color,
-                marginBottom: 10,
-                opacity: 0.8,
-              }}>
+            <div
+              className="flex-1 py-4 sm:py-5 pl-4 sm:pl-5 px-4 sm:px-5.5"
+              style={{
+                background: C.navy,
+                border: `1px solid ${C.bronze}`,
+                borderLeft: `3px solid ${band.color}`,
+                borderRadius: 6,
+              }}
+            >
+              <div
+                className="font-sans text-[10px] sm:text-[11px] tracking-[0.22em] uppercase mb-2 sm:mb-2.5 opacity-80"
+                style={{ color: band.color }}
+              >
                 Band Classification · {band.label} (
                 {band.label === "High" ? "65–100" : band.label === "Medium" ? "40–64" : "1–39"}
                 )
               </div>
-              <p style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 13,
-                color: C.parchment,
-                lineHeight: 1.8,
-                margin: 0,
-                letterSpacing: "0.01em",
-              }}>
+              <p className="font-serif text-[13px] sm:text-[15px] text-sapi-parchment leading-[1.7] sm:leading-[1.8] m-0 tracking-[0.01em]">
                 {bandDesc}
               </p>
 
               {/* Primary gap callout */}
-              <div style={{
-                marginTop: 14,
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-              }}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <div className="mt-3 sm:mt-3.5 flex items-center gap-2">
+                <svg width="11" height="11" className="sm:w-[12px] sm:h-[12px]" viewBox="0 0 12 12" fill="none">
                   <circle cx="6" cy="6" r="5" stroke={C.crimson} strokeWidth="1" />
                   <path d="M6 3.5V6.5" stroke={C.crimson} strokeWidth="1.1" strokeLinecap="round" />
                   <circle cx="6" cy="8.5" r="0.6" fill={C.crimson} />
                 </svg>
-                <span style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 11,
-                  color: C.crimson,
-                  letterSpacing: "0.02em",
-                }}>
+                <span className="font-sans text-[12px] sm:text-[13px] text-sapi-crimson tracking-[0.02em]">
                   Primary gap:{" "}
-                  <strong style={{ fontWeight: 500 }}>
+                  <strong className="font-medium">
                     {primaryGap.name}
                   </strong>{" "}
                   ({Number(primaryGapScore).toFixed(0)})
@@ -545,23 +406,13 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
           </div>
 
           {/* Sub-indicators table */}
-          <div style={{ marginBottom: 24 }}>
-            <div style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 9,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: C.muted,
-              opacity: 0.5,
-              marginBottom: 4,
-              paddingLeft: 19,
-              display: "flex",
-              alignItems: "center",
-              gap: 16,
-            }}>
-              <span style={{ minWidth: 190 }}>Sub-Indicator</span>
-              <span style={{ flex: 1 }}>Score Distribution</span>
-              <span style={{ minWidth: 36, textAlign: "right" }}>Score</span>
+          <div className="mb-5 sm:mb-6">
+            <div
+              className="font-sans text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-sapi-muted opacity-50 mb-1 pl-4 sm:pl-5 flex items-center gap-3 sm:gap-4"
+            >
+              <span className="min-w-[140px_sm:190px]">Sub-Indicator</span>
+              <span className="flex-1">Score Distribution</span>
+              <span className="min-w-[30px_sm:36px] text-right">Score</span>
             </div>
 
             {dim.subIndicators.map((si, i) => (
@@ -575,43 +426,25 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
           </div>
 
           {/* Intervention hint */}
-          <div style={{
-            background: C.navy,
-            border: `1px solid ${C.bronze}`,
-            borderLeft: `3px solid rgba(201,150,58,0.45)`,
-            borderRadius: 4,
-            padding: "14px 18px",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 12,
-          }}>
+          <div
+            className="flex items-start gap-2.5 sm:gap-3 py-4 sm:py-5 px-4 sm:px-4.5 rounded"
+            style={{
+              background: C.navy,
+              border: `1px solid ${C.bronze}`,
+              borderLeft: `3px solid rgba(201,150,58,0.45)`,
+            }}
+          >
             {/* Icon */}
-            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
+            <svg width="16" height="16" className="sm:w-[18px] sm:h-[18px] flex-shrink-0 pl-2" viewBox="0 0 15 15" fill="none">
               <circle cx="7.5" cy="7.5" r="6.5" stroke={C.gold} strokeWidth="1" opacity="0.7" />
               <path d="M7.5 4.5V8" stroke={C.gold} strokeWidth="1.2" strokeLinecap="round" opacity="0.7" />
               <circle cx="7.5" cy="10.2" r="0.7" fill={C.gold} opacity="0.7" />
             </svg>
             <div>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 8.5,
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: C.gold,
-                opacity: 0.6,
-                marginBottom: 5,
-              }}>
+              <div className="font-sans text-[9.5px] sm:text-[10.5px] tracking-[0.2em] uppercase text-sapi-gold opacity-60 mb-1">
                 Priority Intervention · {band.label} Band
               </div>
-              <p style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 12,
-                color: C.parchment,
-                lineHeight: 1.65,
-                margin: 0,
-                letterSpacing: "0.015em",
-                opacity: 0.85,
-              }}>
+              <p className="font-sans text-[12px] sm:text-[13px] text-sapi-parchment leading-[1.6] sm:leading-[1.65] m-0 tracking-[0.015em] opacity-85">
                 {intervention}
               </p>
             </div>
@@ -624,17 +457,41 @@ function DimensionPanel({ dim, dimScore, answers, isOpen, onToggle }) {
 
 // ── Horizontal divider ────────────────────────────────────────────────────────
 function Rule() {
-  return <div style={{ height: 1, background: C.bronze, margin: "32px 0" }} />;
+  return <div className="h-px bg-sapi-bronze my-6 sm:my-8" />;
 }
 
 // ── P8 Main ───────────────────────────────────────────────────────────────────
 export default function SAPIScorecard({ appState: passedState, setAppState, setCurrentPage }) {
   const navigate = useNavigate();
-  
+
   // API data states
   const [apiData, setApiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const currentUser = JSON.parse(localStorage.getItem("sapi_current_user") || "{}");
+  const email = currentUser.email || "";
+  const firstLetter = email.charAt(0).toUpperCase() || "U";
+
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   
   // Fetch results from API on mount
   useEffect(() => {
@@ -713,7 +570,7 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   const date = orgProfile?.assessmentDate ||
     new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 
-  // Open state per dimension — all collapsed by default
+  // Open state per dimension - all collapsed by default
   const [openDims, setOpenDims] = useState({});
 
   function toggleDim(code) {
@@ -742,9 +599,8 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
 
   if (loading) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-        <SAPILogo size={64} />
-        <div style={{ fontFamily: "system-ui, sans-serif", fontSize: 14, color: C.muted, letterSpacing: "0.1em", marginTop: 24 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-4">
+        <div className="font-sans text-[13px] sm:text-[15px] text-sapi-muted tracking-[0.1em] mt-6">
           Loading scorecard data…
         </div>
       </div>
@@ -753,14 +609,13 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
 
   if (error || !appState) {
     return (
-      <div style={{ minHeight: "100vh", background: C.void, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40 }}>
-        <SAPILogo size={64} />
-        <div style={{ fontFamily: "Georgia, serif", fontSize: 18, color: C.crimson, marginTop: 24, marginBottom: 16 }}>
+      <div className="min-h-screen bg-sapi-void flex flex-col items-center justify-center p-6 sm:p-10">
+        <div className="font-serif text-[17px] sm:text-[19px] text-sapi-crimson mt-6 mb-4 text-center">
           {error || "Unable to load scorecard"}
         </div>
         <button 
           onClick={() => navigate('/')}
-          style={{ background: C.gold, color: C.void, border: "none", padding: "12px 24px", fontFamily: "system-ui, sans-serif", fontSize: 12, cursor: "pointer", borderRadius: 3 }}
+          className="bg-sapi-gold text-sapi-void border-none px-5 py-2.5 sm:px-6 sm:py-3 font-sans text-[12px] sm:text-[13px] cursor-pointer rounded hover:opacity-90"
         >
           Start New Assessment
         </button>
@@ -769,118 +624,92 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: C.void, fontFamily: "system-ui, sans-serif" }}>
+    <div className="min-h-screen bg-sapi-void font-sans">
 
       {/* ── Top bar ──────────────────────────────────────────────────────── */}
-      <div style={{
-        background: C.navy,
-        borderBottom: `1px solid ${C.bronze}`,
-        padding: "0 40px",
-      }}>
-        <div style={{
-          maxWidth: 1100, margin: "0 auto",
-          height: 62,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <SAPILogo size={34} />
-            <div>
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 9.5,
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
-                color: C.parchment,
-                opacity: 0.88,
-              }}>
+      <div
+        style={{ background: C.navy, borderBottom: `1px solid ${C.bronze}` }}
+      >
+        <div className="max-w-[1100px] mx-auto pl-3 sm:pl-3 pr-4 sm:pr-10 h-[60px_sm:67px] flex items-center justify-between mt-1 mb-3">
+          <div className="flex items-center gap-3 sm:gap-3.5">
+            <img
+              src="/SAPI_Logo_B4.svg"
+              alt="SAPI Logo"
+              className="h-32 w-32 sm:h-40 sm:w-40 object-contain"
+            />
+            <div className="hidden sm:block">
+              <div
+                className="font-serif text-[10.5px] sm:text-[11.5px] tracking-[0.3em] uppercase opacity-88"
+                style={{ color: C.parchment }}
+              >
                 The Sovereign AI Power Index
               </div>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 8.5,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: C.gold,
-                opacity: 0.6,
-                marginTop: 2,
-              }}>
+              <div
+                className="font-sans text-[10px] sm:text-[10.5px] tracking-[0.22em] uppercase text-sapi-gold opacity-60 mt-0.5"
+              >
                 Dimension Scorecard
               </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            <div style={{ textAlign: "right" }}>
-              <div style={{
-                fontFamily: "Georgia, serif",
-                fontSize: 13,
-                color: C.parchment,
-                opacity: 0.9,
-                letterSpacing: "0.04em",
-              }}>
+          <div className="flex items-center gap-3 sm:gap-5">
+            <div className="text-right hidden sm:block">
+              <div
+                className="font-serif text-[13px] sm:text-[15px] tracking-[0.04em] opacity-90"
+                style={{ color: C.parchment }}
+              >
                 {nationName}
               </div>
-              <div style={{
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 8.5,
-                color: C.muted,
-                opacity: 0.5,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                marginTop: 2,
-              }}>
+              <div
+                className="font-sans text-[9.5px] sm:text-[10.5px] text-sapi-muted opacity-50 tracking-[0.1em] uppercase mt-0.5"
+              >
                 {date} · Tier 1
               </div>
             </div>
-            <div style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 9.5,
-              letterSpacing: "0.15em",
-              color: C.muted,
-              border: `1px solid ${C.bronze}`,
-              padding: "4px 10px",
-              textTransform: "uppercase",
-              opacity: 0.7,
-            }}>
+            {/* <div
+              className="font-serif text-[11.5px] tracking-[0.15em] text-sapi-muted px-2.5 py-1 uppercase opacity-70"
+              style={{ border: `1px solid ${C.bronze}` }}
+            >
               Classification: Restricted
+            </div> */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="flex items-center gap-2 text-sapi-parchment focus:outline-none"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-sapi-gold flex items-center justify-center text-sapi-void font-sans text-[13px] sm:text-sm font-medium">
+                  {firstLetter}
+                </div>
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-36 sm:w-40 bg-[#0a0a12] border border-sapi-bronze rounded-md shadow-lg z-50">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-3.5 sm:px-4 py-2 text-[13px] sm:text-sm text-sapi-parchment hover:bg-sapi-navy transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
       {/* ── Content ──────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 40px 88px" }}>
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-10 py-8 sm:py-10 pb-16 sm:pb-22">
 
         {/* ── Back + Page title ─────────────────────────────────────────── */}
-        <div style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          marginBottom: 36,
-        }}>
+        <div className="flex items-start justify-between mb-7 sm:mb-9 flex-col sm:flex-row gap-4">
           <div>
             <button
               onClick={() => nav("results")}
               onMouseEnter={() => setBackHover(true)}
               onMouseLeave={() => setBackHover(false)}
-              style={{
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-                color: backHover ? C.gold : C.muted,
-                fontFamily: "system-ui, sans-serif",
-                fontSize: 11,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 16,
-                transition: "color 0.15s",
-              }}
+              className="bg-transparent border-none cursor-pointer p-0 font-sans text-[12px] sm:text-[13px] tracking-[0.14em] uppercase flex items-center gap-1.5 mb-3 sm:mb-4 transition-colors"
+              style={{ color: backHover ? C.gold : C.muted }}
             >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <svg width="12" height="12" className="sm:w-[14px] sm:h-[14px]" viewBox="0 0 14 14" fill="none">
                 <path d="M9 2.5L4.5 7L9 11.5"
                   stroke="currentColor" strokeWidth="1.3"
                   strokeLinecap="round" strokeLinejoin="round"
@@ -889,33 +718,19 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
               Back to Results
             </button>
 
-            <h1 style={{
-              fontFamily: "Georgia, serif",
-              fontSize: 28,
-              color: C.parchment,
-              fontWeight: 400,
-              letterSpacing: "0.04em",
-              margin: 0,
-              lineHeight: 1.2,
-            }}>
+            <h1
+              className="font-serif text-[24px] sm:text-[30px] font-normal tracking-[0.04em] m-0 leading-[1.2]"
+              style={{ color: C.parchment }}
+            >
               Dimension Scorecard
             </h1>
-            <div style={{
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 12,
-              color: C.muted,
-              marginTop: 6,
-              letterSpacing: "0.02em",
-              lineHeight: 1.55,
-            }}>
+            <div
+              className="font-sans text-[12px] sm:text-[13px] text-sapi-muted mt-1.5 tracking-[0.02em] leading-[1.55]"
+            >
               Sub-indicator breakdown · Gap identification · Intervention priorities
-              <span style={{
-                display: "inline-block",
-                marginLeft: 12,
-                fontSize: 11,
-                color: C.paleGold,
-                opacity: 0.65,
-              }}>
+              <span
+                className="inline-block ml-3 text-[12px] sm:text-[13px] text-sapi-paleGold opacity-65"
+              >
                 {nationName}
               </span>
             </div>
@@ -926,20 +741,11 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
             onClick={toggleAll}
             onMouseEnter={() => setExpandAllHover(true)}
             onMouseLeave={() => setExpandAllHover(false)}
+            className="bg-transparent px-4 sm:px-4.5 py-2 sm:py-2.5 font-sans text-[10.5px] sm:text-[11.5px] tracking-[0.2em] uppercase cursor-pointer rounded flex-shrink-0 transition-all"
             style={{
-              background: "transparent",
               border: `1px solid ${expandAllHover ? "rgba(152,128,176,0.5)" : C.bronze}`,
               color: expandAllHover ? C.parchment : C.muted,
-              padding: "9px 18px",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 9.5,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              cursor: "pointer",
-              borderRadius: 3,
-              transition: "all 0.15s",
-              flexShrink: 0,
-              marginTop: 38,
+              marginTop: 0,
             }}
           >
             {allOpen ? "Collapse All" : "Expand All"}
@@ -947,72 +753,41 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
         </div>
 
         {/* ── Summary score strip ───────────────────────────────────────── */}
-        <div style={{
-          background: C.navy,
-          border: `1px solid ${C.bronzeHi}`,
-          borderRadius: 6,
-          padding: "20px 28px",
-          display: "flex",
-          alignItems: "center",
-          gap: 0,
-          marginBottom: 32,
-          overflow: "hidden",
-          position: "relative",
-        }}>
-          <div style={{
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse at 10% 50%, rgba(201,150,58,0.04) 0%, transparent 55%)",
-            pointerEvents: "none",
-          }} />
+        <div
+          className="rounded-md py-4 sm:py-5 px-5 sm:px-7 mb-6 sm:mb-8 overflow-hidden relative"
+          style={{ background: C.navy, border: `1px solid ${C.bronzeHi}` }}
+          >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse at 10% 50%, rgba(201,150,58,0.04) 0%, transparent 55%)" }}
+          />
 
-          {DIMENSIONS.map((dim, i) => {
-            const score = scores[dim.code] ?? 0;
-            const band = getBand(score);
-            const isLast = i === DIMENSIONS.length - 1;
-            return (
-              <div
-                key={dim.code}
-                onClick={() => {
-                  setOpenDims(prev => ({ ...prev, [dim.code]: true }));
-                  // Scroll to accordion — handled visually
-                }}
-                style={{
-                  flex: 1,
-                  borderRight: isLast ? "none" : `1px solid ${C.bronze}`,
-                  padding: "4px 20px",
-                  cursor: "pointer",
-                  textAlign: "center",
-                }}
-              >
-                <div style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 8,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: C.muted,
-                  opacity: 0.45,
-                  marginBottom: 6,
-                }}>
+          <div className="overflow-x-auto -mx-5 sm:mx-0 px-5 sm:px-0">
+            <div className="flex items-center gap-0 min-w-max">
+              {DIMENSIONS.map((dim, i) => {
+                const score = scores[dim.code] ?? 0;
+                const band = getBand(score);
+                const isLast = i === DIMENSIONS.length - 1;
+                return (
+                  <div
+                    key={dim.code}
+                    onClick={() => {
+                      setOpenDims(prev => ({ ...prev, [dim.code]: true }));
+                      // Scroll to accordion - handled visually
+                    }}
+                    className="py-1 px-4 sm:px-5 cursor-pointer text-center"
+                    style={{ borderRight: isLast ? "none" : `1px solid ${C.bronze}`, minWidth: "100px" }}
+                  >
+                <div className="font-sans text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-sapi-muted opacity-45 mb-1.5">
                   {dim.code}
                 </div>
-                <div style={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: 24,
-                  color: band.color,
-                  lineHeight: 1,
-                  marginBottom: 4,
-                }}>
+                <div
+                  className="font-sans text-[20px] sm:text-[24px] leading-none mb-1 font-medium"
+                  style={{ color: band.color }}
+                >
                   {Number(score).toFixed(1)}
                 </div>
-                <div style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 9,
-                  color: C.muted,
-                  letterSpacing: "0.01em",
-                  marginBottom: 8,
-                  opacity: 0.65,
-                }}>
+                <div className="font-sans text-[11px] text-sapi-muted tracking-[0.01em] mb-2 opacity-65">
                   {dim.name.split(" ").map((w, j) => (
                     <span key={j}>
                       {j > 0 && <br />}
@@ -1021,46 +796,27 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
                   ))}
                 </div>
                 {/* Mini bar */}
-                <div style={{
-                  height: 2.5,
-                  borderRadius: 2,
-                  background: "rgba(255,255,255,0.06)",
-                  overflow: "hidden",
-                }}>
-                  <div style={{
-                    height: "100%",
-                    width: `${score}%`,
-                    background: band.color,
-                    opacity: 0.7,
-                    borderRadius: 2,
-                  }} />
+                <div className="h-[2.5px] rounded-[2px] bg-white/[0.06] overflow-hidden">
+                  <div
+                    className="h-full rounded-[2px] opacity-70"
+                    style={{ width: `${score}%`, background: band.color }}
+                  />
                 </div>
-                <div style={{
-                  fontFamily: "system-ui, sans-serif",
-                  fontSize: 8,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: band.color,
-                  marginTop: 5,
-                  opacity: 0.75,
-                }}>
+                <div
+                  className="font-sans text-[10px] tracking-[0.14em] uppercase mt-1 opacity-75"
+                  style={{ color: band.color }}
+                >
                   {band.label}
                 </div>
               </div>
             );
           })}
+            </div>
+          </div>
         </div>
 
         {/* ── Instruction note ─────────────────────────────────────────── */}
-        <div style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: 11,
-          color: C.muted,
-          opacity: 0.5,
-          letterSpacing: "0.02em",
-          marginBottom: 20,
-          fontStyle: "italic",
-        }}>
+        <div className="font-sans text-[12px] sm:text-[13px] text-sapi-muted opacity-50 tracking-[0.02em] mb-4 sm:mb-5 italic">
           Select a dimension to view sub-indicator scores, gap analysis, and recommended interventions.
           Primary gaps are flagged in crimson.
         </div>
@@ -1082,68 +838,28 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
         <Rule />
 
         {/* ── Methodology note ─────────────────────────────────────────── */}
-        <div style={{
-          background: C.navy,
-          border: `1px solid ${C.bronze}`,
-          borderRadius: 4,
-          padding: "16px 22px",
-          display: "flex",
-          gap: 14,
-          alignItems: "flex-start",
-          marginBottom: 32,
-        }}>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0, marginTop: 2 }}>
-            <circle cx="7" cy="7" r="6" stroke={C.muted} strokeWidth="0.9" opacity="0.5" />
-            <path d="M7 4V7.5" stroke={C.muted} strokeWidth="1.1" strokeLinecap="round" opacity="0.5" />
-            <circle cx="7" cy="9.5" r="0.6" fill={C.muted} opacity="0.5" />
+        <div
+          className="rounded py-3.5 sm:py-4 px-4 sm:px-5.5 flex gap-3 sm:gap-3.5 items-start mb-6 sm:mb-8"
+          style={{ background: C.navy, border: `1px solid ${C.bronze}` }}
+        >
+          <svg width="16" height="16" className="sm:w-[18px] sm:h-[18px] flex-shrink-0 mt-0.5 pl-2" viewBox="0 0 14 14" fill="none">
+            <circle cx="7" cy="7" r="6" stroke="white" strokeWidth="0.9" opacity="0.5" />
+            <path d="M7 4V7.5" stroke="white" strokeWidth="1.1" strokeLinecap="round" opacity="0.5" />
+            <circle cx="7" cy="9.5" r="0.6" fill="white" opacity="0.5" />
           </svg>
-          <p style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 11,
-            color: C.muted,
-            opacity: 0.6,
-            lineHeight: 1.65,
-            margin: 0,
-            letterSpacing: "0.015em",
-          }}>
+          <p className="font-sans text-[12px] sm:text-[13px] text-sapi-muted opacity-60 leading-[1.6] sm:leading-[1.65] m-0 tracking-[0.015em]">
             Sub-indicator scores are derived directly from individual question responses.
             Dimension scores represent arithmetic means across their respective question sets.
             Composite SAPI score is computed as a geometric mean weighted by dimension coefficients.
-            Tier 1 assessment is automated and indicative — Tier 2 and above apply practitioner validation.
+            Tier 1 assessment is automated and indicative - Tier 2 and above apply practitioner validation.
           </p>
         </div>
 
         {/* ── Bottom CTA ───────────────────────────────────────────────── */}
-        <div style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          gap: 14,
-        }}>
+        <div className="flex justify-end items-center gap-3 sm:gap-3.5 flex-col sm:flex-row">
           <button
             onClick={() => nav("results")}
-            style={{
-              background: "transparent",
-              color: C.muted,
-              border: `1px solid rgba(152,128,176,0.3)`,
-              padding: "13px 28px",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              fontWeight: 500,
-              cursor: "pointer",
-              borderRadius: 3,
-              transition: "color 0.15s, border-color 0.15s",
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.color = C.parchment;
-              e.currentTarget.style.borderColor = "rgba(152,128,176,0.55)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.color = C.muted;
-              e.currentTarget.style.borderColor = "rgba(152,128,176,0.3)";
-            }}
+            className="w-full sm:w-auto bg-transparent text-sapi-muted border border-sapi-muted/30 px-6 sm:px-7 py-3 sm:py-3.5 font-sans text-[11px] sm:text-[12px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded transition-colors hover:text-sapi-parchment hover:border-sapi-muted/55"
           >
             ← Back to Results
           </button>
@@ -1152,52 +868,19 @@ export default function SAPIScorecard({ appState: passedState, setAppState, setC
             onClick={() => nav("roadmap")}
             onMouseEnter={() => setRoadmapHover(true)}
             onMouseLeave={() => setRoadmapHover(false)}
-            style={{
-              background: roadmapHover ? "#B8862A" : C.gold,
-              color: C.void,
-              border: "none",
-              padding: "13px 36px",
-              fontFamily: "system-ui, sans-serif",
-              fontSize: 10,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              fontWeight: 500,
-              cursor: "pointer",
-              borderRadius: 3,
-              transition: "background 0.15s",
-            }}
+            className="w-full sm:w-auto bg-sapi-gold text-sapi-void border-none px-6 sm:px-9 py-3 sm:py-3.5 font-sans text-[11px] sm:text-[12px] tracking-[0.22em] uppercase font-medium cursor-pointer rounded transition-colors hover:bg-[#B8862A]"
           >
             View 12–18 Month Roadmap →
           </button>
         </div>
 
         {/* ── Footer ───────────────────────────────────────────────────── */}
-        <div style={{
-          marginTop: 52,
-          paddingTop: 20,
-          borderTop: `1px solid ${C.bronze}`,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}>
-          <div style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 8.5,
-            color: C.muted,
-            opacity: 0.4,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}>
+        <div className="mt-10 sm:mt-13 pt-4 sm:pt-5 border-t border-sapi-bronze flex justify-between items-center flex-col sm:flex-row gap-2 sm:gap-0">
+          <div className="font-sans text-[9.5px] sm:text-[10.5px] text-sapi-muted opacity-40 tracking-[0.12em] uppercase text-center sm:text-left">
             Classification: Restricted · Tier 1 Automated Assessment · Sub-Indicator Analysis
           </div>
-          <div style={{
-            fontFamily: "system-ui, sans-serif",
-            fontSize: 8.5,
-            color: C.muted,
-            opacity: 0.4,
-            letterSpacing: "0.1em",
-          }}>
-            SAPI © {new Date().getFullYear()} · CoreIntel
+          <div className="font-sans text-[9.5px] sm:text-[10.5px] text-sapi-muted opacity-40 tracking-[0.1em] text-center sm:text-right">
+            SAPI © {new Date().getFullYear()}
           </div>
         </div>
       </div>

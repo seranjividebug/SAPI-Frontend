@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
-import { LoginPage, RegisterPage, LandingPage, PreviewPage } from './pages';
+import { LoginPage, RegisterPage, LandingPage, PreviewPage, MainPage } from './pages';
+import MethodologyPage from './pages/methodology/MethodologyPage';
+import AboutPage from './pages/about/AboutPage';
+import ContactPage from './pages/contact/ContactPage';
+import SAPILogin from './pages/Login_RequestAccess';
+import SAPILoginRequestAccess from './pages/SAPI_Login_RequestAccess';
+import QRLoginEmailPage from './pages/QRLoginEmailPage';
+import QRLoginOtpPage from './pages/QRLoginOtpPage';
+import QRVerifiedPage from './pages/QRVerifiedPage';
 import SAPIBriefing from './components/SAPI_P3_Briefing';
 import SAPIDimIntro from './components/SAPI_P4_DimIntro';
 import SAPIQuiz from './components/SAPI_P5_Quiz';
@@ -10,14 +18,15 @@ import P7Results from './pages/common/result';
 import SAPIScorecard from './components/SAPI_P8_Scorecard';
 import SAPIPeerComparison from './components/SAPI_P9_PeerComparison';
 import SAPIRoadmap from './components/SAPI_P10_Roadmap';
-import SapiA1AdminDashboard from './components/SAPI_A1_AdminDashboard';
-import SubmissionsList from './components/SAPI_B1_SubmissionsList';
-import SubmissionDetail from './components/SAPI_B2_SubmissionDetail';
-import LeadsPipeline from './components/SAPI_C1_LeadsPipeline';
-import LeadDetail from './components/SAPI_C2_LeadDetail';
-import LeadDetailCombined from './components/SAPI_C2_B2_Combined';
+import SAPIArcDashboard from './pages/PowerArc';
+import SapiIndexPage from './pages/sapi-index-page';
+import SAPIIndexPageDemo from './pages/SAPI_IndexPage_Enhancements';
+import AdminDashboard from './components/AdminDashboard';
+import SubmissionsList from './pages/admin/SubmissionsList';
+import SubmissionDetail from './pages/admin/SubmissionDetail';
 import QuestionEditor from './components/SAPI_E1_QuestionEditor';
 import ProtectedRoute from './components/ProtectedRoute';
+import 'flag-icons/css/flag-icons.min.css';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -166,40 +175,52 @@ function App() {
       <div className="App">
         <ScrollToTop />
         <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/main" replace />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<LandingPage />} />
-          <Route path="/preview" element={<PreviewPage />} />
+          <Route path="/sapi-login" element={<SAPILogin />} />
+          <Route path="/qr-login" element={<QRLoginEmailPage />} />
+          <Route path="/qr-login/verify" element={<QRLoginOtpPage />} />
+          <Route path="/qr-login/success" element={<QRVerifiedPage />} />
+          <Route path="/sapi-login-request" element={<SAPILoginRequestAccess />} />
+          <Route path="/home" element={<ProtectedRoute allowedRole={2}><LandingPage /></ProtectedRoute>} />
+          <Route path="/preview" element={<ProtectedRoute allowedRole={2}><PreviewPage /></ProtectedRoute>} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/briefing" element={<BriefingWrapper setCurrentDimension={setCurrentDimension} />} />
+          <Route path="/briefing" element={<ProtectedRoute allowedRole={2}><BriefingWrapper setCurrentDimension={setCurrentDimension} /></ProtectedRoute>} />
           <Route 
             path="/dimintro" 
-            element={<DimIntroWrapper 
+            element={<ProtectedRoute allowedRole={2}><DimIntroWrapper 
               currentDimension={currentDimension} 
               setCurrentDimension={setCurrentDimension}
-            />} 
+            /></ProtectedRoute>} 
           />
           <Route 
             path="/quiz" 
-            element={<QuizWrapper 
+            element={<ProtectedRoute allowedRole={2}><QuizWrapper 
               currentDimension={currentDimension}
               setCurrentDimension={setCurrentDimension}
-            />} 
+            /></ProtectedRoute>} 
           />
-          <Route path="/calculating" element={<SAPICalculating />} />
-          <Route path="/results" element={<SAPIResults />} />
-          <Route path="/results-report" element={<ResultsWrapper />} />
-          <Route path="/scorecard" element={<SAPIScorecard />} />
-          <Route path="/peercomparison" element={<SAPIPeerComparison />} />
-          <Route path="/roadmap" element={<SAPIRoadmap />} />
-          <Route path="/admin" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
-          <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><SapiA1AdminDashboard /></ProtectedRoute>} />
+          <Route path="/calculating" element={<ProtectedRoute allowedRole={2}><SAPICalculating /></ProtectedRoute>} />
+          <Route path="/results" element={<ProtectedRoute allowedRole={2}><SAPIResults /></ProtectedRoute>} />
+          <Route path="/results-report" element={<ProtectedRoute allowedRole={2}><ResultsWrapper /></ProtectedRoute>} />
+          <Route path="/scorecard" element={<ProtectedRoute allowedRole={2}><SAPIScorecard /></ProtectedRoute>} />
+          <Route path="/peercomparison" element={<ProtectedRoute allowedRole={2}><SAPIPeerComparison /></ProtectedRoute>} />
+          <Route path="/roadmap" element={<ProtectedRoute allowedRole={2}><SAPIRoadmap /></ProtectedRoute>} />
+          <Route path="/powerarc" element={<SAPIArcDashboard />} />
+          <Route path="/sapi-index" element={<SapiIndexPage />} />
+          <Route path="/sapi-index-demo" element={<SAPIIndexPageDemo />} />
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/methodology" element={<MethodologyPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/submissionlist" element={<ProtectedRoute allowedRole={1}><SubmissionsList /></ProtectedRoute>} />
           <Route path="/submissiondetail" element={<ProtectedRoute allowedRole={1}><SubmissionDetail /></ProtectedRoute>} />
-          <Route path="/leadspipeline" element={<ProtectedRoute allowedRole={1}><LeadsPipeline /></ProtectedRoute>} />
-          <Route path="/leaddetail" element={<LeadDetail />} />
-          <Route path="/leaddetailcombined" element={<LeadDetailCombined />} />
+          <Route path="/leadspipeline" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/leaddetail" element={<Navigate to="/admin" replace />} />
+          <Route path="/leaddetailcombined" element={<Navigate to="/admin" replace />} />
           <Route path="/questioneditor" element={<QuestionEditor />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
@@ -207,5 +228,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

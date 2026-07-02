@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 /**
  * Register a new user
@@ -64,6 +64,61 @@ export async function login(credentials) {
   }
 
   // Store token in localStorage
+  if (data.data?.token) {
+    localStorage.setItem('sapi_token', data.data.token);
+    localStorage.setItem('sapi_current_user', JSON.stringify(data.data.user));
+  }
+
+  return data;
+}
+
+/**
+ * Send a one-time login code to the given email (passwordless / QR login).
+ * The backend only sends a code to emails that already have a portal account.
+ * @param {string} email - User's email
+ * @returns {Promise<Object>} - Response indicating the code was sent
+ */
+export async function sendQrLoginCode(email) {
+  const response = await fetch(`${API_BASE_URL}/auth/qr-login/send-code`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || data.message || 'Failed to send verification code');
+  }
+
+  return data;
+}
+
+/**
+ * Verify a one-time login code. On success the backend returns a JWT + user,
+ * which we store just like a normal login.
+ * @param {string} email - User's email
+ * @param {string} code - The 6-digit code from the email
+ * @returns {Promise<Object>} - Response with user data and token
+ */
+export async function verifyQrLoginCode(email, code) {
+  const response = await fetch(`${API_BASE_URL}/auth/qr-login/verify`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, code }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || data.message || 'Verification failed');
+  }
+
+  // Store token in localStorage (same as login)
   if (data.data?.token) {
     localStorage.setItem('sapi_token', data.data.token);
     localStorage.setItem('sapi_current_user', JSON.stringify(data.data.user));

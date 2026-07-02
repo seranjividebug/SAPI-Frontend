@@ -6,8 +6,8 @@ const DIMENSION_DATA = [
   {
     number: "01",
     name: "Compute Capacity",
-    insight: "The infrastructure floor — sovereign compute determines whether your AI capability is owned or merely rented.",
-    definition: "Sovereign access to high-performance compute and energy infrastructure — the foundational hardware layer that determines a nation's ability to train, run, and scale AI systems independently.",
+    insight: "The infrastructure floor - sovereign compute determines whether your AI capability is owned or merely rented.",
+    definition: "Sovereign access to high-performance compute and energy infrastructure - the foundational hardware layer that determines a nation's ability to train, run, and scale AI systems independently.",
     questionCount: 5,
     subIndicators: [
       "GPU / TPU Density",
@@ -20,8 +20,8 @@ const DIMENSION_DATA = [
   {
     number: "02",
     name: "Capital Formation",
-    insight: "Capital is the binding constraint for most nations — this dimension separates strategic intent from execution.",
-    definition: "Institutional capital available for long-horizon AI infrastructure investment — encompassing sovereign wealth deployment, public-private co-investment mechanisms, and AI-dedicated budget structures.",
+    insight: "Capital is the binding constraint for most nations - this dimension separates strategic intent from execution.",
+    definition: "Institutional capital available for long-horizon AI infrastructure investment - encompassing sovereign wealth deployment, public-private co-investment mechanisms, and AI-dedicated budget structures.",
     questionCount: 6,
     subIndicators: [
       "Sovereign AI Budget Allocation",
@@ -36,7 +36,7 @@ const DIMENSION_DATA = [
     number: "03",
     name: "Regulatory Readiness",
     insight: "Legal clarity is what converts AI capability into public trust and deployment at scale.",
-    definition: "The maturity of governance frameworks that enable public trust, legal clarity, and responsible deployment of AI systems — covering legislation, institutional capacity, and international alignment.",
+    definition: "The maturity of governance frameworks that enable public trust, legal clarity, and responsible deployment of AI systems - covering legislation, institutional capacity, and international alignment.",
     questionCount: 7,
     subIndicators: [
       "AI Legislation Status",
@@ -52,7 +52,7 @@ const DIMENSION_DATA = [
     number: "04",
     name: "Data Sovereignty",
     insight: "Your AI systems are only as sovereign as the data they learn from.",
-    definition: "National control over the data AI systems learn from and act upon — encompassing data localisation, cross-border transfer governance, and the strategic integrity of national data assets.",
+    definition: "National control over the data AI systems learn from and act upon - encompassing data localisation, cross-border transfer governance, and the strategic integrity of national data assets.",
     questionCount: 6,
     subIndicators: [
       "Data Localisation Policy",
@@ -67,7 +67,7 @@ const DIMENSION_DATA = [
     number: "05",
     name: "Directed Intelligence Maturity",
     insight: "Most nations possess latent AI capability that never becomes coordinated state action. This dimension measures the gap.",
-    definition: "How effectively your nation converts AI capability into coordinated state action — measuring deployment in public services, civil service AI literacy, and the institutional capacity to direct AI as a strategic instrument.",
+    definition: "How effectively your nation converts AI capability into coordinated state action - measuring deployment in public services, civil service AI literacy, and the institutional capacity to direct AI as a strategic instrument.",
     questionCount: 6,
     subIndicators: [
       "Government AI Deployment",
@@ -103,7 +103,7 @@ function DimensionProgressBar({ currentIndex }) {
 // ── Sub-indicator Chip ────────────────────────────────────────────────────────
 function SubChip({ label }) {
   return (
-    <div className="font-sans text-[11px] tracking-wide text-sapi-muted border border-sapi-bronze/35 bg-sapi-navy px-2.5 py-1 rounded-sm whitespace-nowrap leading-snug">
+    <div className="font-sans text-[17px] tracking-wide text-sapi-muted border border-sapi-bronze/35 bg-sapi-navy px-2.5 py-1 rounded-sm whitespace-nowrap leading-snug">
       {label}
     </div>
   );
@@ -114,7 +114,7 @@ function DimGlyph({ number }) {
   return (
     <div className="relative mb-2 select-none">
       {/* Foreground number only */}
-      <div className="font-serif text-[56px] font-normal text-sapi-gold leading-none opacity-90 -tracking-wide">
+      <div className="font-sans text-[58px] font-medium text-sapi-gold leading-none opacity-90 -tracking-wide">
         {number}
       </div>
     </div>
@@ -154,12 +154,12 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
 
   return (
     <PageLayout>
-      <PageHeader showAdmin={false} />
+      <PageHeader />
 
       {/* ── Top nav bar: back + wizard steps ── */}
       <div className="max-w-container mx-auto px-8 pt-5 flex items-center justify-between flex-wrap gap-4">
         <button
-          className={`bg-none border-none cursor-pointer font-sans text-[11px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
+          className={`bg-none border-none cursor-pointer font-sans text-[13px] tracking-wide uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 ${backHover ? 'text-sapi-gold' : 'text-sapi-muted'}`}
           onMouseEnter={() => setBackHover(true)}
           onMouseLeave={() => setBackHover(false)}
           onClick={handleBack}
@@ -188,12 +188,12 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
                       <path d="M2 4.5L3.8 6.5L7 3" stroke="#C9963A" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   ) : (
-                    <span className={`font-sans text-[9px] font-medium ${step.n === 3 ? 'text-sapi-void' : 'text-sapi-muted'}`}>
+                    <span className={`font-sans text-[11px] font-medium ${step.n === 3 ? 'text-sapi-void' : 'text-sapi-muted'}`}>
                       {step.n}
                     </span>
                   )}
                 </div>
-                <span className={`font-sans text-[10px] tracking-wide uppercase hidden sm:inline ${step.n === 3 ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>
+                <span className={`font-sans text-[12px] tracking-wide uppercase hidden sm:inline ${step.n === 3 ? 'text-sapi-parchment' : 'text-sapi-muted'}`}>
                   {step.label}
                 </span>
               </div>
@@ -207,10 +207,10 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
         {/* ── Dimension progress + label ── */}
         <div className="mb-10">
           <div className="flex items-center justify-between mb-2.5">
-            <span className="font-sans text-[10px] tracking-super-wide uppercase text-sapi-gold">
+            <span className="font-sans text-[12px] tracking-super-wide uppercase text-sapi-gold">
               Dimension {currentIndex + 1} of 5
             </span>
-            <span className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-muted opacity-70">
+            <span className="font-sans text-[12px] tracking-extra-wide uppercase text-sapi-muted opacity-70">
               {dim.questionCount} Questions
             </span>
           </div>
@@ -221,7 +221,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
         <div className="relative mb-7">
           <DimGlyph number={dim.number} />
 
-          <h1 className="font-serif text-[32px] font-normal text-sapi-parchment tracking-wide leading-tight mt-3.5">
+          <h1 className="font-serif text-[34px] font-normal text-sapi-parchment tracking-wide leading-tight mt-3.5">
             {dim.name}
           </h1>
 
@@ -236,14 +236,14 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
             <svg width="7" height="7" viewBox="0 0 7 7" fill="none">
               <rect x="3.5" y="0.5" width="4.24" height="4.24" rx="0.4" transform="rotate(45 3.5 0.5)" fill="#C9963A" />
             </svg>
-            <span className="font-sans text-[10px] tracking-extra-wide uppercase text-sapi-paleGold">
+            <span className="font-sans text-[12px] tracking-extra-wide uppercase text-sapi-paleGold">
               Weight in SAPI Composite: {dim.weight}
             </span>
           </span>
         </div>
 
         {/* ── Definition ── */}
-        <p className="font-sans text-sm text-sapi-parchment leading-relaxed mb-10 tracking-wide opacity-88">
+        <p className="font-sans text-[15px] text-sapi-parchment leading-relaxed mb-10 tracking-wide opacity-88">
           {dim.definition}
         </p>
 
@@ -252,7 +252,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
 
         {/* ── Sub-indicators ── */}
         <div className="mb-12">
-          <div className="font-sans text-[10px] tracking-super-wide uppercase text-sapi-muted mb-3.5 opacity-70">
+          <div className="font-sans text-[12px] tracking-super-wide uppercase text-sapi-muted mb-3.5 opacity-70">
             Sub-Indicators Assessed
           </div>
 
@@ -270,7 +270,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
             <path d="M7.5 5V7.5" stroke="#9880B0" strokeWidth="1.2" strokeLinecap="round" />
             <circle cx="7.5" cy="10" r="0.7" fill="#9880B0" />
           </svg>
-          <p className="font-sans text-xs text-sapi-muted leading-snug m-0 tracking-wide">
+          <p className="font-sans text-[13px] text-sapi-muted leading-snug m-0 tracking-wide">
             Answer based on your nation's <em className="text-sapi-parchment italic">current operational state</em>, not plans or aspirational strategies under development. Precision in your responses produces the most actionable diagnostic output.
           </p>
         </div>
@@ -278,7 +278,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
         {/* ── CTA button ── */}
         <div className="flex flex-col gap-3">
           <button
-            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-xs tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 flex items-center justify-center gap-2.5 ${
+            className={`w-full text-sapi-void border-none px-12 py-4 font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm transition-colors duration-150 flex items-center justify-center gap-2.5 ${
               ctaHover ? 'bg-[#B8862A]' : 'bg-sapi-gold'
             }`}
             onMouseEnter={() => setCtaHover(true)}
@@ -293,7 +293,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
 
           {!isFirst && (
             <button
-              className={`w-full bg-transparent border px-12 py-3.5 font-sans text-xs tracking-extra-wide uppercase font-normal cursor-pointer rounded-sm transition-colors duration-150 ${
+              className={`w-full bg-transparent border px-12 py-3.5 font-sans text-[13px] tracking-extra-wide uppercase font-normal cursor-pointer rounded-sm transition-colors duration-150 ${
                 backHover ? 'text-sapi-parchment border-sapi-bronze/40' : 'text-sapi-muted border-sapi-bronze'
               }`}
               onMouseEnter={() => setBackHover(true)}
@@ -306,7 +306,7 @@ export default function SAPIDimIntro({ currentIndex = 0, onBegin, onBack }) {
         </div>
 
         {/* ── Meta line ── */}
-        <div className="font-sans text-[11px] text-sapi-muted tracking-wide text-center mt-3.5 opacity-50 leading-relaxed">
+        <div className="font-sans text-[13px] text-sapi-muted tracking-wide text-center mt-3.5 opacity-50 leading-relaxed">
           {dim.questionCount} questions in this dimension &nbsp;·&nbsp; {30 - DIMENSION_DATA.slice(0, currentIndex).reduce((a, d) => a + d.questionCount, 0)} questions remaining
         </div>
       </div>
