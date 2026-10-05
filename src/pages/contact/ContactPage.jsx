@@ -1,369 +1,233 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { PageLayout, EnhancedFooter } from "../common";
+import { memo, useState } from "react";
+import ObsidianLayout from "../common/ObsidianLayout";
 import { submitContactForm } from "../../services/contactService";
 
-// Placeholder components
-const FadeIn = ({ children, className = "", delay = 0 }) => (
-  <div className={className} style={{ '--animation-delay': `${delay}s`, animationDelay: 'var(--animation-delay)' }}>
-    {children}
-  </div>
-);
+// "Request a briefing" page, ported from the "SAPI Obsidian" reference build (briefing.html).
+// The enquiry form posts to the existing contact API (POST /contact/submit).
 
-const Toast = ({ visible, message, type = 'success' }) => {
+const INTERESTS = [
+  { value: "briefing", label: "An investor briefing", hint: "A working session against the current edition." },
+  { value: "assessment", label: "A country or corporate assessment", hint: "A commissioned assessment of a single nation or company." },
+  { value: "convening", label: "Convening participation", hint: "Attending, or speaking at, a SAPI convening." },
+  { value: "defence", label: "A defence AI investment read", hint: <><span data-di="">Directed Intelligence</span> applied to defence and national security programmes.</> },
+  { value: "report", label: "The edition report or methodology paper", hint: "Released to institutional counterparts under NDA." },
+  { value: "press", label: "Press", hint: "Media and press enquiries." },
+];
+
+const TIMESCALES = ["Within two weeks", "Within a month", "This quarter", "Exploratory, no deadline"];
+
+const EMPTY_FORM = { interest: "briefing", name: "", email: "", organisation: "", role: "", country: "", timescale: "", message: "" };
+
+const REQUIRED = { name: "Name", email: "Work email", organisation: "Organisation", message: "The decision you are trying to make" };
+
+const ContactIntro = memo(function ContactIntro() {
   return (
-    <div
-      className={`fixed top-7 right-7 z-[9999] bg-[#1A1540] border border-[#2A204A] text-[#FBF5E6] px-4 py-3 rounded-lg text-sm flex items-center gap-2.5 shadow-lg transition-all duration-300 pointer-events-none ${
-        visible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
-      }`}
-    >
-      <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${type === 'success' ? 'bg-[#28A868]' : 'bg-[#C03058]'}`} />
-      {message}
-    </div>
-  );
-};
-
-const SectionLabel = ({ children, tone = "default", className = "" }) => (
-  <div className={`font-sans text-[13px] tracking-[0.22em] uppercase ${
-    tone === "accent" || tone === "white" ? "text-sapi-gold" : "text-sapi-muted"
-  } ${className}`}>
-    {children}
-  </div>
-);
-
-const PageHero = ({ description, label, title }) => {
-  return (
-    <div className="space-y-4 sm:space-y-6">
-      <SectionLabel tone="accent">{label}</SectionLabel>
-      <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl leading-tight text-sapi-parchment max-w-4xl">
-        {title}
-      </h1>
-      <p className="font-sans text-base sm:text-lg leading-8 text-sapi-muted max-w-2xl">
-        {description}
-      </p>
-    </div>
-  );
-};
-
-const CustomHeader = () => {
-  const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  return (
-    <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
-      <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2 sm:gap-4">
-          <img
-            src="/SAPI_Logo1.svg"
-            alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
-          />
-          <div
-            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
-            onClick={() => navigate('/main')}
-          >
-            THE SOVEREIGN<br />AI POWER INDEX
+    <>
+      <section className="hero">
+        <div className="shell">
+          <p className="eyebrow eyebrow--plain">Enquiries</p>
+          <h1>Request a briefing</h1>
+          <p className="lede">Tell us the decision you are trying to make and by when.</p>
+        </div>
+      </section>
+      
+      <section className="section on-paper">
+        <div className="shell">
+          <p className="eyebrow">What you can ask for</p>
+          <h2 style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", marginBottom: "2rem" }}>What you can ask for</h2>
+          <div className="grid grid--3 grid--services">
+            <div className="service" id="briefing">
+              <h3>Investor briefing</h3>
+              <p>A working session against the current edition, for capital allocators evaluating national
+                AI infrastructure exposure.</p>
+              <ul className="service__what">
+                <li>Cross-country comparison on the dimensions relevant to your mandate</li>
+                <li>Where funded demand sits, and where capital has to arrive first</li>
+                <li>Written follow-up covering the questions raised</li>
+              </ul>
+              <p className="service__foot segmented-meta"><span className="segment">Half day</span><span className="segment"> · fee quoted on enquiry</span></p>
+            </div>
+            <div className="service" id="assessment">
+              <h3>Country or corporate assessment</h3>
+              <p>A full SAPI assessment across five dimensions and thirty indicators, commissioned by the
+                government, company, or a body acting for it.</p>
+              <ul className="service__what">
+                <li>Every indicator traced to its source and confidence grade</li>
+                <li>A gap analysis ranking the highest-leverage interventions</li>
+                <li>The private score alongside the published one</li>
+              </ul>
+              <p className="service__foot segmented-meta"><span className="segment">Commissioned engagement</span><span className="segment"> · scoped on enquiry</span></p>
+            </div>
+            <div className="service" id="convening">
+              <h3>Convening participation</h3>
+              <p>A seat, or a speaking slot for a national delegation, at a SAPI convening.</p>
+              <ul className="service__what">
+                <li>Reviewed against institutional mandate and timing</li>
+                <li>Chatham House Rule throughout</li>
+              </ul>
+              <p className="service__foot segmented-meta"><span className="segment">By application</span></p>
+            </div>
+            <div className="service" id="defence">
+              <h3>Defence AI investment read</h3>
+              <p><span data-di="">Directed Intelligence</span> applied to defence and national security: which AI investments turn into
+                mission value, measured on your own programme data.</p>
+              <ul className="service__what">
+                <li>Data readiness, model performance, mission value, assurance and the wider portfolio</li>
+                <li>Insight from SAPI's work across sectors and nations, never another client's data</li>
+                <li>Your organisation is never scored or published on the index</li>
+              </ul>
+              <p className="service__foot segmented-meta"><span className="segment">Commissioned engagement</span><span className="segment"> · scoped on enquiry</span></p>
+            </div>
           </div>
         </div>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Index
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/methodology')}
-          >
-            Methodology
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/about')}
-          >
-            About Us
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-            onClick={() => navigate('/contact')}
-          >
-            Request Introduction
-          </button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-sapi-parchment p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
-          <div className="flex flex-col gap-4">
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/sapi-index');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Index
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/methodology');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Methodology
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/about');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              About Us
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-              onClick={() => {
-                navigate('/contact');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Request Introduction
-            </button>
-          </div>
-        </div>
-      )}
-    </header>
+      </section>
+    </>
   );
-};
+});
 
-const IntroductionForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    organization: '',
-    role: '',
-    interest: '',
-    message: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
+function EnquiryForm() {
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState({ state: "idle", message: "" });
 
-  // Auto-hide toast after 3 seconds
-  useEffect(() => {
-    if (toast.visible) {
-      const timer = setTimeout(() => {
-        setToast({ visible: false, message: '', type: 'success' });
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [toast.visible]);
+  const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    const missing = Object.keys(REQUIRED).filter((field) => !form[field].trim());
+    if (missing.length) {
+      setStatus({ state: "error", message: `Please complete: ${missing.map((f) => REQUIRED[f]).join(", ")}.` });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setStatus({ state: "error", message: "Please enter a valid work email." });
+      return;
+    }
+
+    setStatus({ state: "sending", message: "" });
+    // The contact API has no columns for country or timescale, so they lead the message.
+    const context = [
+      form.country.trim() && `Country or region: ${form.country.trim()}`,
+      form.timescale && `Needed by: ${form.timescale}`,
+    ].filter(Boolean);
 
     try {
-      const interestMapping = {
-        council: 'Westminster Council Participation',
-        assessment: 'Sovereign AI Assessment',
-        partnership: 'Strategic Partnership',
-        other: 'Other'
-      };
-
-      const contactData = {
-        name: formData.name,
-        email: formData.email,
-        organization: formData.organization,
-        role: formData.role,
-        area_of_interest: interestMapping[formData.interest] || formData.interest,
-        message: formData.message
-      };
-
-      const response = await submitContactForm(contactData);
-
-      if (response.success) {
-        setToast({ visible: true, message: 'Thank you for your interest. We will be in touch soon.', type: 'success' });
-        setFormData({
-          name: '',
-          email: '',
-          organization: '',
-          role: '',
-          interest: '',
-          message: ''
-        });
-      } else {
-        setError('Failed to submit contact form. Please try again.');
-        setToast({ visible: true, message: 'Failed to submit contact form. Please try again.', type: 'error' });
-      }
+      const response = await submitContactForm({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        organization: form.organisation.trim(),
+        role: form.role.trim(),
+        area_of_interest: INTERESTS.find((i) => i.value === form.interest).label,
+        message: [...context, ...(context.length ? [""] : []), form.message.trim()].join("\n"),
+      });
+      if (!response.success) throw new Error(response.error || "Submission failed");
+      setForm(EMPTY_FORM);
+      setStatus({ state: "sent", message: "Thank you. Your enquiry has been sent and we will reply directly." });
     } catch (err) {
-      console.error('Contact form submission error:', err);
-      setError('An error occurred. Please try again later.');
-    } finally {
-      setLoading(false);
+      console.error("Enquiry submission error:", err);
+      setStatus({ state: "error", message: "Your enquiry could not be sent. Please try again shortly." });
     }
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-        {error && (
-          <div className="bg-red-900/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-sm text-sm">
-            {error}
+    <form className="form" onSubmit={handleSubmit} noValidate>
+      <fieldset>
+        <legend>What are you asking about?</legend>
+        {INTERESTS.map(({ value, label, hint }) => (
+          <div className="choice" key={value} id={value === "press" ? "press" : undefined}>
+            <input type="radio" id={`i-${value}`} name="interest" value={value}
+              checked={form.interest === value} onChange={update("interest")} />
+            <label htmlFor={`i-${value}`}>{label}{" "}
+              <span className="hint">{hint}</span></label>
           </div>
-        )}
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Name</label>
-          <input
-            type="text"
-            required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Email</label>
-          <input
-            type="email"
-            required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          />
-        </div>
-      </div>
+        ))}
+      </fieldset>
 
-      <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
-        <div className="space-y-2">
-          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Organisation</label>
-          <input
-            type="text"
-            required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-            value={formData.organization}
-            onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Role</label>
-          <input
-            type="text"
-            required
-            className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-          />
-        </div>
+      <div className="field">
+        <label htmlFor="f-name">Name <span className="req" aria-hidden="true">*</span></label>
+        <input type="text" id="f-name" name="name" autoComplete="name" required aria-required="true"
+          value={form.name} onChange={update("name")} />
       </div>
-
-      <div className="space-y-2">
-        <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Area of Interest</label>
-        <select
-          required
-          className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-          value={formData.interest}
-          onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
-        >
-          <option value="">Select an option</option>
-          <option value="council">Westminster Council Participation</option>
-          <option value="assessment">Sovereign AI Assessment</option>
-          <option value="partnership">Strategic Partnership</option>
-          <option value="other">Other</option>
+      <div className="field">
+        <label htmlFor="f-email">Work email <span className="req" aria-hidden="true">*</span></label>
+        <input type="email" id="f-email" name="email" autoComplete="email" required aria-required="true"
+          value={form.email} onChange={update("email")} />
+      </div>
+      <div className="field">
+        <label htmlFor="f-org">Organisation <span className="req" aria-hidden="true">*</span></label>
+        <input type="text" id="f-org" name="organisation" autoComplete="organization" required aria-required="true"
+          value={form.organisation} onChange={update("organisation")} />
+      </div>
+      <div className="field">
+        <label htmlFor="f-role">Role</label>
+        <input type="text" id="f-role" name="role" autoComplete="organization-title"
+          value={form.role} onChange={update("role")} />
+      </div>
+      <div className="field">
+        <label htmlFor="f-country">Country or region in question</label>
+        <input type="text" id="f-country" name="country" value={form.country} onChange={update("country")} />
+      </div>
+      <div className="field">
+        <label htmlFor="f-when">When you need it by</label>
+        <select id="f-when" name="timescale" value={form.timescale} onChange={update("timescale")}>
+          <option value="">Select</option>
+          {TIMESCALES.map((t) => <option key={t}>{t}</option>)}
         </select>
       </div>
-
-      <div className="space-y-2">
-        <label className="font-sans text-[12px] sm:text-[13px] tracking-[0.22em] uppercase text-sapi-muted">Message</label>
-        <textarea
-          required
-          rows={5}
-          className="w-full bg-[#0a0a12] border border-sapi-bronze px-3 sm:px-4 py-2.5 sm:py-3 text-sapi-parchment focus:outline-none focus:border-sapi-gold transition-colors resize-none [&:-webkit-autofill]:bg-[#0a0a12] [&:-webkit-autofill]:text-sapi-parchment [&:-webkit-autofill:focus:bg-[#0a0a12]"
-          value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-          />
+      <div className="field">
+        <label htmlFor="f-msg">The decision you are trying to make <span className="req" aria-hidden="true">*</span></label>
+        <textarea id="f-msg" name="message" required aria-required="true" aria-describedby="f-msg-hint"
+          value={form.message} onChange={update("message")} />
+        <span className="hint" id="f-msg-hint">A few sentences is enough. The more specific the
+          decision, the more useful the reply.</span>
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="font-sans text-[13px] sm:text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-8 sm:px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {loading ? 'Submitting...' : 'Submit Request'}
-      </button>
+      <p className="meta"><span className="req" aria-hidden="true">*</span> Required. We use what you send
+        only to answer your enquiry.</p>
+
+      {(status.state === "sent" || status.state === "error") && (
+        <div className="callout" role={status.state === "error" ? "alert" : "status"}>
+          <span className="callout__label">{status.state === "error" ? "Not sent" : "Enquiry sent"}</span>
+          <p className="mb-0">{status.message}</p>
+        </div>
+      )}
+
+      <div>
+        <button className="btn btn--primary" type="submit" disabled={status.state === "sending"}>
+          {status.state === "sending" ? "Sending…" : "Send enquiry"}
+        </button>
+      </div>
     </form>
-    <Toast visible={toast.visible} message={toast.message} type={toast.type} />
-    </>
   );
-};
+}
 
 export default function ContactPage() {
   return (
-    <PageLayout>
-      <CustomHeader />
-      <section className="bg-[#0a0a12] pt-2 min-h-screen font-sans">
-        <style>{`
-          input:-webkit-autofill,
-          input:-webkit-autofill:hover, 
-          input:-webkit-autofill:focus,
-          textarea:-webkit-autofill,
-          textarea:-webkit-autofill:hover,
-          textarea:-webkit-autofill:focus,
-          select:-webkit-autofill,
-          select:-webkit-autofill:hover,
-          select:-webkit-autofill:focus {
-            -webkit-text-fill-color: #fbf5e6;
-            -webkit-box-shadow: 0 0 0px 1000px #0a0a12 inset;
-            transition: background-color 5000s ease-in-out 0s;
-          }
-        `}</style>
-        <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-container mx-auto">
-          <div className="space-y-10 sm:space-y-14">
-            {/* <button
-              className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
-              onClick={() => window.location.href = '/main'}
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M9 2.5L4.5 7L9 11.5" stroke="currentColor" strokeWidth="1.3"
-                  strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Back to Main Page
-            </button> */}
-            <PageHero
-              description="SAPI operates on an introduction basis. Council seats, assessment commissions, and strategic partnerships are reviewed against institutional mandate, timing, and strategic alignment. Provide the context below and the appropriate team will respond directly."
-              label="Request an Introduction"
-              title="Start the Conversation"
-            />
+    <ObsidianLayout page="briefing">
+      <main id="main">
+        <ContactIntro />
 
-            <FadeIn delay={0.08}>
-              <IntroductionForm />
-            </FadeIn>
+        <section className="section">
+          <div className="shell">
+            <div className="grid grid--2" style={{ gap: "3rem", alignItems: "start" }}>
+              <div>
+                <p className="eyebrow">Enquiry</p>
+                <h2 style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)" }}>Send it here</h2>
+                <EnquiryForm />
+              </div>
+
+              <aside>
+                <div className="callout" style={{ marginTop: "2rem" }} id="report">
+                  <span id="methodology" className="visually-hidden">Methodology paper</span>
+                  <span className="callout__label">Edition report and methodology paper</span>
+                  <p className="mb-0">The index-level report and the full weighting methodology are released to
+                    institutional counterparts under NDA. Select that option above and say which edition you
+                    need.</p>
+                </div>
+              </aside>
+            </div>
           </div>
-        </div>
-      </section>
-      <EnhancedFooter />
-    </PageLayout>
+        </section>
+      </main>
+    </ObsidianLayout>
   );
 }
