@@ -2,3 +2,7 @@
    SAPI Obsidian reference pages rely on in their prose. Restore the browser defaults there. */
 .article-body ul { list-style: disc; }
 .article-body ol { list-style: decimal; }
+
+/* Preflight also strips link underlines; the reference relies on the browser default
+   (its own classes, e.g. .nav a and .btn, still opt out explicitly). */
+a { text-decoration: underline; }

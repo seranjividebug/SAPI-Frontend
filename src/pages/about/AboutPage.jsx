@@ -1,245 +1,141 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { PageLayout } from "../common";
-import { EnhancedFooter } from "../common/EnhancedFooter";
+import { memo } from "react";
+import ObsidianLayout from "../common/ObsidianLayout";
 
-// Placeholder components
-const FadeIn = ({ children, className = "", delay = 0 }) => (
-  <div className={className} style={{ '--animation-delay': `${delay}s`, animationDelay: 'var(--animation-delay)' }}>
-    {children}
-  </div>
-);
-
-const SectionLabel = ({ children, tone = "default", className = "" }) => (
-  <div className={`font-sans text-[13px] tracking-[0.22em] uppercase ${
-    tone === "accent" || tone === "white" ? "text-sapi-gold" : "text-sapi-muted"
-  } ${className}`}>
-    {children}
-  </div>
-);
-
-const Button = ({ href, variant = "default", children }) => {
-  const navigate = useNavigate();
-  
+// About page, ported from the "SAPI Obsidian" reference build (about.html).
+// motion.js adds the reveals over this markup after mount, so it is memoised and never re-renders.
+const AboutBody = memo(function AboutBody() {
   return (
-    <button
-      onClick={() => navigate(href)}
-      className={`font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 transition-colors duration-150 ${
-        variant === "text" 
-          ? "text-sapi-gold hover:text-[#B8862A]" 
-          : "bg-sapi-gold text-sapi-void hover:bg-[#B8862A]"
-      }`}
-    >
-      {children}
-    </button>
-  );
-};
-
-const PageHero = ({ description, label, title }) => {
-  return (
-    <div className="space-y-4 sm:space-y-6">
-      <SectionLabel tone="accent">{label}</SectionLabel>
-      <h1 className="font-sans text-3xl sm:text-4xl md:text-5xl leading-tight text-sapi-parchment max-w-4xl">
-        {title}
-      </h1>
-      <p className="font-sans text-base sm:text-lg leading-8 text-sapi-muted max-w-2xl">
-        {description}
-      </p>
-    </div>
-  );
-};
-
-const CustomHeader = () => {
-  const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  return (
-    <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
-      <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-2 sm:gap-4">
-          <img
-            src="/SAPI_Logo1.svg"
-            alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
-          />
-          <div
-            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
-            onClick={() => navigate('/main')}
-          >
-            THE SOVEREIGN<br />AI POWER INDEX
-          </div>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Index
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/methodology')}
-          >
-            Methodology
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/about')}
-          >
-            About Us
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-            onClick={() => navigate('/contact')}
-          >
-            Request Introduction
-          </button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-sapi-parchment p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+    <main id="main">
+    <section className="hero">
+      <div className="shell">
+        <p className="eyebrow eyebrow--plain">About</p>
+        <h1>An independent UK company assessing sovereign AI capability</h1>
+        <p className="lede">SAPI makes sovereign AI capability measurable. It publishes a quarterly index,
+          produces commissioned assessments for governments and investors, and convenes the parties who
+          need to work from the same numbers.</p>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
-          <div className="flex flex-col gap-4">
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/sapi-index');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Index
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/methodology');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Methodology
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/about');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              About Us
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-              onClick={() => {
-                navigate('/contact');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Request Introduction
-            </button>
+    </section>
+    
+    <section className="section on-paper">
+      <div className="shell">
+        <p className="eyebrow">What SAPI does</p>
+        <h2 style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)", marginBottom: "2rem" }}>Three functions, one standard</h2>
+        <div className="grid grid--3">
+          <div className="service">
+            <h3>The Index</h3>
+            <p>A quarterly assessment of national AI capability across five dimensions and thirty
+              indicators. Fifty countries in the current edition, published 2 July 2026.</p>
+            <ul className="service__what">
+              <li>Public: composite, tier, strongest and weakest dimension for every country</li>
+              <li>Released to clients: dimension scores, indicator detail, sources and confidence grades</li>
+            </ul>
+            <p className="service__foot"><a href="/sapi-index">Current edition</a></p>
+          </div>
+          <div className="service">
+            <h3>Assessments</h3>
+            <p>Commissioned country and corporate assessments that identify capability gaps and produce the
+              evidence capital and delivery partners need before committing.</p>
+            <ul className="service__what">
+              <li>Every indicator traced to a source and a confidence grade</li>
+              <li>A gap ranking with intervention pathways</li>
+              <li>Defence AI investment reads: <span data-di="">Directed Intelligence</span> applied to defence and national security programmes</li>
+            </ul>
+            <p className="service__foot"><a href="/contact">Commission an assessment</a></p>
+          </div>
+          <div className="service">
+            <h3>Convenings</h3>
+            <p>Sessions bringing national delegations, infrastructure operators and sovereign capital
+              around a shared assessment, under the Chatham House Rule.</p>
+            <ul className="service__what">
+              <li>Dated public record for every convening</li>
+              <li>Participation reviewed against mandate and timing</li>
+            </ul>
           </div>
         </div>
-      )}
-    </header>
-  );
-};
+      </div>
+    </section>
+    
+    <section className="section" id="people">
+      <div className="shell">
+        <p className="eyebrow">People</p>
+        <h2 style={{ fontSize: "clamp(1.8rem,3.2vw,2.4rem)" }}>Who is accountable for the work</h2>
+    
+        <div className="grid grid--2 grid--people" style={{ gap: "2.5rem 3rem", marginTop: "2rem" }}>
+    
+          <div className="person">
+            <img className="person__photo" src="/assets/img/people/tasmina-ahmed-sheikh.jpg" alt="Portrait of Tasmina Ahmed-Sheikh OBE" width="96" height="96" loading="lazy" decoding="async" />
+            <div>
+              <h3>Tasmina Ahmed-Sheikh OBE</h3>
+              <p className="person__role">Founder</p>
+              <p>Lawyer and former Member of Parliament for Ochil and South Perthshire, the first woman of
+                colour in Scottish history elected to the House of Commons. At Westminster she was her
+                party's spokesperson for Trade and Investment and Deputy Shadow Leader of the House of
+                Commons, and she is a former member of the Council of Europe. She heads The Scotland Forum
+                and the Interparliamentary Alliance for Women's Leadership, sits on an external advisory
+                board at the University of California, Berkeley, and was appointed OBE in 2014 for services
+                to business and the Asian community.</p>
+            </div>
+          </div>
+    
+          <div className="person">
+            <img className="person__photo" src="/assets/img/people/asim-razvi.jpg" alt="Portrait of Asim Razvi" width="96" height="96" loading="lazy" decoding="async" />
+            <div>
+              <h3>Asim Razvi</h3>
+              <p className="person__role">Chief Data and AI Officer</p>
+              <p>Founder and principal of CoreIntel, and author of <em>The AI Power Curve</em>. He has led data
+                and AI functions as head of business intelligence and AI at American Logistics and head of
+                data at National Life Group, and was vice president of data strategy and analytics at ONIS
+                Solutions, working with AT&amp;T, Frontier Communications and Spectrum. Earlier, as head of
+                data at Cognizant, he served clients including Disney, Verizon and Comcast. He owns SAPI's
+                scoring engine and data operations.</p>
+            </div>
+          </div>
+    
+          <div className="person">
+            <img className="person__photo" src="/assets/img/people/steve-maclaren.jpg" alt="Portrait of Steve Maclaren" width="96" height="96" loading="lazy" decoding="async" />
+            <div>
+              <h3>Steve Maclaren</h3>
+              <p className="person__role">Director of Global Research and Academic Partnerships</p>
+              <p>Chief Operating Officer of The National Robotarium in Edinburgh, and a board advisor and
+                speaker on innovation and technology adoption. He previously led enterprise technology
+                strategy and digital transformation programmes in the aerospace sector, from horizon scanning
+                and proof-of-concept sponsorship to the digitisation of customer support services. At SAPI
+                he leads research and academic partnerships.</p>
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    </section>
+    
+    <section className="section on-ink">
+      <div className="shell shell--narrow">
+        <p className="eyebrow">Independence</p>
+        <div className="article-body">
+          <h2 style={{ border: "0", padding: "0", marginTop: "0", color: "var(--on-ink)" }}>How the work is funded, and what that means for a score</h2>
+          <p style={{ color: "var(--on-ink-muted)" }}>SAPI is an independent UK company. It earns revenue from
+            commissioned assessments, briefings and convening participation. Commissioning an assessment does not affect scoring.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section className="section on-paper">
+      <div className="shell shell--narrow center">
+        <h2 style={{ fontSize: "clamp(1.7rem,3vw,2.2rem)" }}>Talk to us</h2>
+        <p className="lede" style={{ marginInline: "auto" }}>Tell us the decision you are trying to make.</p>
+        <div className="btn-row" style={{ justifyContent: "center", marginTop: "1.5rem" }}>
+          <a className="btn btn--primary" href="/contact">Request a briefing</a>
+        </div>
+      </div>
+    </section>
+    
+    </main>  );
+});
 
 export default function AboutPage() {
   return (
-    <PageLayout>
-      <CustomHeader />
-      <section className="bg-[#0a0a12] pt-2 min-h-screen font-sans">
-        <div className="px-4 sm:px-6 md:px-8 py-6 sm:py-8 max-w-container mx-auto">
-          <div className="mx-auto max-w-5xl">
-            {/* <button
-              className="bg-none border-none cursor-pointer font-sans text-[11px] tracking-[0.14em] uppercase flex items-center gap-1.5 p-0 transition-colors duration-150 mb-9 hover:text-sapi-gold text-sapi-muted"
-              onClick={() => window.location.href = '/main'}
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M9 2.5L4.5 7L9 11.5" stroke="currentColor" strokeWidth="1.3"
-                  strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Back to Main Page
-            </button> */}
-            <PageHero
-              description="Founded in the UK, The Sovereign AI Power Index is an intelligence and convening platform with one purpose. It makes Sovereign AI capability measurable, investable, and governable. The platform serves governments, sovereign wealth funds, infrastructure operators building national AI systems, and corporate entities."
-              label="About SAPI"
-              title="The institutional standard for Sovereign AI capability"
-            />
-          </div>
-
-          <div className="mt-16 sm:mt-24 grid gap-12 sm:gap-16">
-            <div className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
-              <FadeIn className="space-y-5">
-                <SectionLabel>Platform Model</SectionLabel>
-                <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
-                  Three functions.<br />One standard.
-                </h2>
-              </FadeIn>
-
-              <FadeIn className="grid gap-4 sm:gap-6">
-                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
-                  <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">The Sovereign AI Power Index</p>
-                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    The benchmark. Scores national AI preparedness across five dimensions including compute capacity, capital formation, regulatory readiness, data sovereignty, and Directed Intelligence Maturity. Published quarterly. Sovereign wealth funds, government leaders in AI, infrastructure investors, and corporate entities use it to compare, prioritise, and act.
-                  </p>
-                </div>
-                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
-                  <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Westminster. Quarterly</p>
-                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    Nations present. Corporations present. Sovereign capital evaluates. Strategic partners deliver. Chatham House Rule throughout.
-                  </p>
-                </div>
-                <div className="border-b border-sapi-bronze pb-4 sm:pb-6">
-                  <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Assessments</p>
-                  <p className="mt-3 sm:mt-4 text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                    The intelligence. Bespoke country and corporate assessments that identify capability gaps, score governance maturity, and produce the intelligence that capital and delivery partners need before they commit.
-                  </p>
-                </div>
-              </FadeIn>
-            </div>
-
-            <FadeIn className="grid gap-8 sm:gap-12 border-t border-sapi-bronze pt-8 sm:pt-12 lg:grid-cols-[0.82fr_1.18fr]">
-              <div className="space-y-4 sm:space-y-5">
-                <SectionLabel>Launch Status</SectionLabel>
-                <h2 className="font-sans max-w-xl text-2xl sm:text-3xl leading-tight text-sapi-parchment sm:text-4xl">
-                  SAPI operates as an independent UK organisation.
-                </h2>
-              </div>
-              <div className="space-y-4 sm:space-y-6">
-                <p className="max-w-2xl text-sm sm:text-base leading-7 sm:leading-8 text-sapi-muted">
-                  Advisory relationships, institutional affiliations, and leadership appointments are disclosed as they
-                  are formalised.
-                </p>
-              </div>
-            </FadeIn>
-
-            <FadeIn className="border-t border-sapi-bronze pt-8 sm:pt-12">
-              <SectionLabel tone="accent">Next Step</SectionLabel>
-              <div className="mt-6 sm:mt-8">
-                <Button href="/contact">Request an Introduction</Button>
-              </div>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-      <EnhancedFooter />
-    </PageLayout>
+    <ObsidianLayout page="about">
+      <AboutBody />
+    </ObsidianLayout>
   );
 }
