@@ -1,0 +1,855 @@
+{
+ "note": "Approximate centroids for 3D placement only. Scores from the Quarter 2 Rankings 2026.",
+ "countries": [
+  {
+   "rank": 1,
+   "country": "South Korea",
+   "composite": 59.2,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 52.3,
+    "CF": 50.5,
+    "RR": 74.1,
+    "DS": 74.2,
+    "DI": 57.0
+   },
+   "lat": 36.5,
+   "lng": 127.8
+  },
+  {
+   "rank": 2,
+   "country": "United Arab Emirates",
+   "composite": 58.9,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 40.9,
+    "CF": 64.4,
+    "RR": 62.9,
+    "DS": 70.8,
+    "DI": 60.8
+   },
+   "lat": 24.0,
+   "lng": 54.0
+  },
+  {
+   "rank": 3,
+   "country": "Singapore",
+   "composite": 58.2,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 44.7,
+    "CF": 48.9,
+    "RR": 72.9,
+    "DS": 69.2,
+    "DI": 63.7
+   },
+   "lat": 1.35,
+   "lng": 103.8
+  },
+  {
+   "rank": 4,
+   "country": "United States",
+   "composite": 57.5,
+   "tier": "Developing",
+   "strongest": "Compute Capacity",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 91.0,
+    "CF": 35.7,
+    "RR": 66.9,
+    "DS": 69.2,
+    "DI": 52.8
+   },
+   "lat": 39.8,
+   "lng": -98.6
+  },
+  {
+   "rank": 5,
+   "country": "Estonia",
+   "composite": 56.6,
+   "tier": "Developing",
+   "strongest": "Directed Intelligence",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 32.9,
+    "CF": 40.8,
+    "RR": 63.3,
+    "DS": 80.0,
+    "DI": 83.3
+   },
+   "lat": 58.6,
+   "lng": 25.0
+  },
+  {
+   "rank": 6,
+   "country": "France",
+   "composite": 55.6,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 44.1,
+    "CF": 48.2,
+    "RR": 70.0,
+    "DS": 72.5,
+    "DI": 55.3
+   },
+   "lat": 46.6,
+   "lng": 2.4
+  },
+  {
+   "rank": 7,
+   "country": "Saudi Arabia",
+   "composite": 54.2,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 31.3,
+    "CF": 62.2,
+    "RR": 61.9,
+    "DS": 76.7,
+    "DI": 53.8
+   },
+   "lat": 24.0,
+   "lng": 45.0
+  },
+  {
+   "rank": 8,
+   "country": "Oman",
+   "composite": 52.7,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 32.4,
+    "CF": 37.5,
+    "RR": 55.0,
+    "DS": 78.3,
+    "DI": 77.3
+   },
+   "lat": 21.0,
+   "lng": 57.0
+  },
+  {
+   "rank": 9,
+   "country": "Japan",
+   "composite": 50.6,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 43.6,
+    "CF": 36.9,
+    "RR": 68.3,
+    "DS": 59.2,
+    "DI": 55.4
+   },
+   "lat": 36.2,
+   "lng": 138.3
+  },
+  {
+   "rank": 10,
+   "country": "Italy",
+   "composite": 48.8,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 32.2,
+    "CF": 31.6,
+    "RR": 74.3,
+    "DS": 69.2,
+    "DI": 59.3
+   },
+   "lat": 42.5,
+   "lng": 12.5
+  },
+  {
+   "rank": 11,
+   "country": "Canada",
+   "composite": 48.6,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 33.2,
+    "CF": 36.8,
+    "RR": 67.6,
+    "DS": 56.2,
+    "DI": 58.8
+   },
+   "lat": 56.1,
+   "lng": -106.3
+  },
+  {
+   "rank": 12,
+   "country": "United Kingdom",
+   "composite": 48.3,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 41.0,
+    "CF": 40.1,
+    "RR": 65.4,
+    "DS": 52.5,
+    "DI": 49.7
+   },
+   "lat": 54.0,
+   "lng": -2.5
+  },
+  {
+   "rank": 13,
+   "country": "Finland",
+   "composite": 46.4,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 35.9,
+    "CF": 31.6,
+    "RR": 61.9,
+    "DS": 63.3,
+    "DI": 53.8
+   },
+   "lat": 64.0,
+   "lng": 26.0
+  },
+  {
+   "rank": 14,
+   "country": "Germany",
+   "composite": 46.3,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 43.6,
+    "CF": 31.7,
+    "RR": 65.5,
+    "DS": 61.7,
+    "DI": 46.1
+   },
+   "lat": 51.2,
+   "lng": 10.4
+  },
+  {
+   "rank": 15,
+   "country": "Australia",
+   "composite": 45.6,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 40.4,
+    "CF": 28.0,
+    "RR": 59.3,
+    "DS": 60.0,
+    "DI": 54.8
+   },
+   "lat": -25.3,
+   "lng": 133.8
+  },
+  {
+   "rank": 16,
+   "country": "India",
+   "composite": 45.2,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 41.2,
+    "CF": 34.0,
+    "RR": 55.2,
+    "DS": 55.0,
+    "DI": 48.8
+   },
+   "lat": 22.0,
+   "lng": 79.0
+  },
+  {
+   "rank": 17,
+   "country": "Norway",
+   "composite": 44.8,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 34.8,
+    "CF": 32.9,
+    "RR": 65.7,
+    "DS": 58.3,
+    "DI": 47.1
+   },
+   "lat": 62.0,
+   "lng": 9.0
+  },
+  {
+   "rank": 18,
+   "country": "Sweden",
+   "composite": 44.2,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 31.9,
+    "CF": 31.3,
+    "RR": 59.5,
+    "DS": 57.9,
+    "DI": 52.6
+   },
+   "lat": 62.0,
+   "lng": 15.0
+  },
+  {
+   "rank": 19,
+   "country": "Qatar",
+   "composite": 44.0,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 25.0,
+    "CF": 48.2,
+    "RR": 46.7,
+    "DS": 57.5,
+    "DI": 49.9
+   },
+   "lat": 25.3,
+   "lng": 51.2
+  },
+  {
+   "rank": 20,
+   "country": "Vietnam",
+   "composite": 43.0,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 32.1,
+    "CF": 30.6,
+    "RR": 57.1,
+    "DS": 65.4,
+    "DI": 47.2
+   },
+   "lat": 16.0,
+   "lng": 107.8
+  },
+  {
+   "rank": 21,
+   "country": "Chile",
+   "composite": 41.5,
+   "tier": "Developing",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 25.9,
+    "CF": 31.1,
+    "RR": 62.3,
+    "DS": 40.2,
+    "DI": 55.4
+   },
+   "lat": -33.0,
+   "lng": -71.0
+  },
+  {
+   "rank": 22,
+   "country": "Malaysia",
+   "composite": 41.0,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 42.7,
+    "CF": 33.0,
+    "RR": 48.3,
+    "DS": 54.2,
+    "DI": 38.1
+   },
+   "lat": 4.0,
+   "lng": 102.0
+  },
+  {
+   "rank": 23,
+   "country": "Egypt",
+   "composite": 40.1,
+   "tier": "Developing",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 31.7,
+    "CF": 26.8,
+    "RR": 52.9,
+    "DS": 58.3,
+    "DI": 45.6
+   },
+   "lat": 26.8,
+   "lng": 30.8
+  },
+  {
+   "rank": 24,
+   "country": "Kazakhstan",
+   "composite": 40.0,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 24.6,
+    "CF": 27.9,
+    "RR": 57.1,
+    "DS": 58.3,
+    "DI": 49.0
+   },
+   "lat": 48.0,
+   "lng": 68.0
+  },
+  {
+   "rank": 25,
+   "country": "Switzerland",
+   "composite": 39.5,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 38.6,
+    "CF": 24.6,
+    "RR": 50.0,
+    "DS": 63.3,
+    "DI": 40.8
+   },
+   "lat": 46.8,
+   "lng": 8.2
+  },
+  {
+   "rank": 26,
+   "country": "Brazil",
+   "composite": 38.0,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 29.7,
+    "CF": 30.9,
+    "RR": 46.9,
+    "DS": 48.3,
+    "DI": 41.4
+   },
+   "lat": -10.0,
+   "lng": -53.0
+  },
+  {
+   "rank": 27,
+   "country": "Türkiye",
+   "composite": 37.4,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 28.0,
+    "CF": 28.9,
+    "RR": 45.0,
+    "DS": 58.3,
+    "DI": 40.1
+   },
+   "lat": 39.0,
+   "lng": 35.0
+  },
+  {
+   "rank": 28,
+   "country": "Uzbekistan",
+   "composite": 33.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 19.6,
+    "CF": 27.0,
+    "RR": 46.9,
+    "DS": 48.3,
+    "DI": 40.0
+   },
+   "lat": 41.5,
+   "lng": 64.0
+  },
+  {
+   "rank": 29,
+   "country": "New Zealand",
+   "composite": 33.1,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 17.8,
+    "CF": 24.2,
+    "RR": 45.0,
+    "DS": 54.2,
+    "DI": 41.9
+   },
+   "lat": -41.0,
+   "lng": 174.0
+  },
+  {
+   "rank": 30,
+   "country": "Indonesia",
+   "composite": 32.6,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 33.4,
+    "CF": 19.3,
+    "RR": 41.2,
+    "DS": 55.0,
+    "DI": 33.7
+   },
+   "lat": -2.5,
+   "lng": 118.0
+  },
+  {
+   "rank": 31,
+   "country": "Bahrain",
+   "composite": 32.2,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 24.6,
+    "CF": 23.5,
+    "RR": 42.4,
+    "DS": 50.0,
+    "DI": 34.1
+   },
+   "lat": 26.0,
+   "lng": 50.5
+  },
+  {
+   "rank": 32,
+   "country": "Argentina",
+   "composite": 32.0,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 26.5,
+    "CF": 15.1,
+    "RR": 30.5,
+    "DS": 56.7,
+    "DI": 52.9
+   },
+   "lat": -34.0,
+   "lng": -64.0
+  },
+  {
+   "rank": 33,
+   "country": "Mexico",
+   "composite": 30.5,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 31.1,
+    "CF": 20.2,
+    "RR": 36.2,
+    "DS": 43.3,
+    "DI": 32.4
+   },
+   "lat": 23.6,
+   "lng": -102.5
+  },
+  {
+   "rank": 34,
+   "country": "Morocco",
+   "composite": 30.2,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 28.4,
+    "CF": 25.9,
+    "RR": 35.5,
+    "DS": 42.9,
+    "DI": 27.5
+   },
+   "lat": 32.0,
+   "lng": -6.0
+  },
+  {
+   "rank": 35,
+   "country": "Pakistan",
+   "composite": 29.3,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 19.4,
+    "CF": 22.2,
+    "RR": 36.7,
+    "DS": 42.5,
+    "DI": 35.1
+   },
+   "lat": 30.4,
+   "lng": 69.3
+  },
+  {
+   "rank": 36,
+   "country": "Kenya",
+   "composite": 29.1,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 22.6,
+    "CF": 27.5,
+    "RR": 36.9,
+    "DS": 47.5,
+    "DI": 24.7
+   },
+   "lat": 0.5,
+   "lng": 37.9
+  },
+  {
+   "rank": 37,
+   "country": "Azerbaijan",
+   "composite": 28.8,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 30.2,
+    "CF": 19.2,
+    "RR": 37.1,
+    "DS": 45.8,
+    "DI": 26.9
+   },
+   "lat": 40.4,
+   "lng": 47.6
+  },
+  {
+   "rank": 38,
+   "country": "Kuwait",
+   "composite": 27.4,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 15.6,
+    "CF": 21.4,
+    "RR": 30.7,
+    "DS": 42.5,
+    "DI": 36.4
+   },
+   "lat": 29.3,
+   "lng": 47.6
+  },
+  {
+   "rank": 39,
+   "country": "South Africa",
+   "composite": 26.1,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 25.8,
+    "CF": 11.2,
+    "RR": 31.2,
+    "DS": 45.4,
+    "DI": 36.2
+   },
+   "lat": -29.0,
+   "lng": 25.0
+  },
+  {
+   "rank": 40,
+   "country": "Rwanda",
+   "composite": 25.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 11.6,
+    "CF": 18.1,
+    "RR": 44.8,
+    "DS": 55.0,
+    "DI": 29.1
+   },
+   "lat": -2.0,
+   "lng": 30.0
+  },
+  {
+   "rank": 41,
+   "country": "Senegal",
+   "composite": 25.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 13.6,
+    "CF": 25.2,
+    "RR": 32.8,
+    "DS": 36.7,
+    "DI": 29.1
+   },
+   "lat": 14.5,
+   "lng": -14.5
+  },
+  {
+   "rank": 42,
+   "country": "Jordan",
+   "composite": 24.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 12.6,
+    "CF": 17.9,
+    "RR": 34.8,
+    "DS": 50.0,
+    "DI": 29.7
+   },
+   "lat": 31.0,
+   "lng": 36.5
+  },
+  {
+   "rank": 43,
+   "country": "Nigeria",
+   "composite": 24.0,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 10.4,
+    "CF": 13.9,
+    "RR": 36.4,
+    "DS": 50.8,
+    "DI": 34.8
+   },
+   "lat": 9.1,
+   "lng": 8.7
+  },
+  {
+   "rank": 44,
+   "country": "Ghana",
+   "composite": 23.5,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 15.6,
+    "CF": 24.8,
+    "RR": 31.4,
+    "DS": 41.7,
+    "DI": 18.6
+   },
+   "lat": 7.9,
+   "lng": -1.0
+  },
+  {
+   "rank": 45,
+   "country": "Kyrgyzstan",
+   "composite": 22.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 9.6,
+    "CF": 11.4,
+    "RR": 42.1,
+    "DS": 45.0,
+    "DI": 35.2
+   },
+   "lat": 41.2,
+   "lng": 74.8
+  },
+  {
+   "rank": 46,
+   "country": "Ethiopia",
+   "composite": 22.3,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 22.6,
+    "CF": 9.0,
+    "RR": 24.9,
+    "DS": 49.2,
+    "DI": 30.3
+   },
+   "lat": 9.1,
+   "lng": 40.5
+  },
+  {
+   "rank": 47,
+   "country": "Tajikistan",
+   "composite": 19.6,
+   "tier": "Nascent",
+   "strongest": "Directed Intelligence",
+   "weakest": "Compute Capacity",
+   "dimensions": {
+    "CC": 6.6,
+    "CF": 18.9,
+    "RR": 27.0,
+    "DS": 18.7,
+    "DI": 33.5
+   },
+   "lat": 38.9,
+   "lng": 71.3
+  },
+  {
+   "rank": 48,
+   "country": "Paraguay",
+   "composite": 19.5,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 21.0,
+    "CF": 6.9,
+    "RR": 23.5,
+    "DS": 31.7,
+    "DI": 30.9
+   },
+   "lat": -23.4,
+   "lng": -58.4
+  },
+  {
+   "rank": 49,
+   "country": "Iraq",
+   "composite": 16.9,
+   "tier": "Nascent",
+   "strongest": "Regulatory Readiness",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 11.6,
+    "CF": 9.1,
+    "RR": 27.6,
+    "DS": 23.3,
+    "DI": 22.6
+   },
+   "lat": 33.2,
+   "lng": 43.7
+  },
+  {
+   "rank": 50,
+   "country": "Turkmenistan",
+   "composite": 14.9,
+   "tier": "Nascent",
+   "strongest": "Data Sovereignty",
+   "weakest": "Capital Formation",
+   "dimensions": {
+    "CC": 15.6,
+    "CF": 7.6,
+    "RR": 20.4,
+    "DS": 24.3,
+    "DI": 16.6
+   },
+   "lat": 39.0,
+   "lng": 59.5
+  }
+ ]
+}

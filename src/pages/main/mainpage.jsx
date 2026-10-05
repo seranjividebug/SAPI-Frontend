@@ -1,333 +1,167 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { DimensionChart } from "./DimensionChart";
-import { PageLayout, EnhancedFooter } from "../common";
+import { useLayoutEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { HomeBody, HomeFooter } from "./HomeMarkup";
 
-// Placeholder components for the imports that don't exist in this project
-const FadeIn = ({ children, className = "", delay = 0 }) => (
-  <div className={className} style={{ '--animation-delay': `${delay}s`, animationDelay: 'var(--animation-delay)' }}>
-    {children}
-  </div>
-);
+/*
+ * Home page ("SAPI Obsidian" design). The design ships as plain CSS + scripts under public/assets,
+ * which style the whole document (body, h1, a...). They are attached only while this page is
+ * mounted and removed on unmount, so the Tailwind pages elsewhere in the app are unaffected.
+ */
 
-const SectionLabel = ({ children, tone = "default" }) => (
-  <div className={`font-sans text-[13px] tracking-[0.22em] uppercase ${
-    tone === "accent" ? "text-sapi-gold" : "text-sapi-muted"
-  }`}>
-    {children}
-  </div>
-);
+const STYLESHEETS = ["/assets/css/sapi.css", "/assets/css/fifteen-hundred.css"];
 
-const HorizontalRule = () => (
-  <div className="w-full h-px bg-sapi-bronze" />
-);
+// Loaded once per session and left in place (window globals).
+const VENDOR_SCRIPTS = [
+  { src: "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js", global: "THREE" },
+  { src: "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js", global: "gsap" },
+  { src: "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js", global: "ScrollTrigger" },
+  { src: "https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js", global: "Lenis" },
+];
 
-const AnimatedStat = ({ value, prefix = "", suffix = "" }) => {
-  const [displayValue, setDisplayValue] = useState(0);
-  
-  useEffect(() => {
-    let startTimestamp = null;
-    const duration = 2000;
-    const startValue = 0;
-    const endValue = parseInt(value);
-    
-    const step = (timestamp) => {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      setDisplayValue(Math.floor(progress * (endValue - startValue) + startValue));
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
-      }
-    };
-    
-    window.requestAnimationFrame(step);
-  }, [value]);
-  
-  return <span>{prefix}{displayValue}{suffix}</span>;
-};
+// Re-run on every mount: they bind to the DOM rendered by HomeBody.
+const PAGE_SCRIPTS = ["/assets/js/motion.js", "/assets/js/field.js"];
 
-const StatRow = ({ label, value, prefix = "", suffix = "" }) => (
-  <div className="border-l border-sapi-bronze pl-6">
-    <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">{label}</p>
-    <p className="font-sans text-5xl leading-none text-sapi-parchment mt-4"><AnimatedStat value={value} prefix={prefix} suffix={suffix} /></p>
-  </div>
-);
+const HTML_CLASSES = ["js", "js-motion", "no-webgl", "lenis", "lenis-smooth", "lenis-stopped", "lenis-scrolling"];
 
-const CustomHeader = () => {
-  const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+function loadStylesheet(href) {
+  return new Promise((resolve) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    link.dataset.sapiHome = "";
+    link.onload = link.onerror = () => resolve(link);
+    document.head.appendChild(link);
+  });
+}
+
+function loadScript(src, { keep = false } = {}) {
+  return new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    script.crossOrigin = "anonymous";
+    if (!keep) script.dataset.sapiHome = "";
+    script.onload = script.onerror = () => resolve(script);
+    document.body.appendChild(script);
+  });
+}
+
+// Same gate the reference page runs inline in <head>: decide reduced motion before first paint.
+function applyMotionGate() {
+  const root = document.documentElement;
+  let stored = null;
+  try { stored = localStorage.getItem("sapi-motion"); } catch (e) { /* private mode */ }
+  const reduced = stored === "reduce" ||
+    (stored !== "full" && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  root.classList.add("js");
+  root.setAttribute("data-motion", reduced ? "reduce" : "full");
+  if (!reduced) root.classList.add("js-motion");
+}
+
+function teardown() {
+  const SAPI = window.SAPI;
+  if (SAPI) {
+    (SAPI.disposers || []).forEach((fn) => { try { fn(); } catch (e) { /* already gone */ } });
+    SAPI.disposers = [];
+    if (SAPI.lenis) { try { SAPI.lenis.destroy(); } catch (e) { /* already gone */ } SAPI.lenis = null; }
+  }
+  if (window.ScrollTrigger) { try { window.ScrollTrigger.killAll(); } catch (e) { /* none */ } }
+  document.querySelectorAll("[data-sapi-home]").forEach((el) => el.remove());
+  document.documentElement.classList.remove(...HTML_CLASSES);
+  document.documentElement.removeAttribute("data-motion");
+  delete document.body.dataset.page;
+}
+
+function Masthead() {
+  const [navOpen, setNavOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!navOpen) return undefined;
+    const onKey = (e) => { if (e.key === "Escape") setNavOpen(false); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [navOpen]);
+
+  const close = () => setNavOpen(false);
 
   return (
-    <header className="bg-[#0a0a12] border-b border-sapi-bronze py-2">
-      <div className="pl-2 pr-8 py-1 max-w-container mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-1 sm:gap-2">
-          <img
-            src="/SAPI_Logo1.svg"
-            alt="SAPI Logo"
-            className="h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 lg:h-35 lg:w-35 object-contain"
-          />
-          <div
-            className="font-sans text-sm sm:text-base md:text-lg lg:text-xl text-[#fbf5e6] cursor-pointer tracking-wide leading-tight"
-            onClick={() => navigate('/main')}
-          >
-            THE SOVEREIGN<br />AI POWER INDEX
-          </div>
-        </div>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/sapi-index')}
-          >
-            Index
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/methodology')}
-          >
-            Methodology
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150"
-            onClick={() => navigate('/about')}
-          >
-            About Us
-          </button>
-          <button
-            className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-            onClick={() => navigate('/contact')}
-          >
-            Request Introduction
-          </button>
-        </div>
-
-        {/* Mobile Menu Button */}
+    <header className="masthead">
+      <div className="shell masthead__inner">
+        <Link className="wordmark" to="/main">
+          <span className="wordmark__mark" aria-hidden="true"></span>
+          <span className="wordmark__text">The Sovereign<br />AI Power Index</span>
+        </Link>
         <button
-          className="md:hidden text-sapi-parchment p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="nav-toggle"
+          type="button"
+          aria-expanded={navOpen}
+          aria-controls="primary-nav"
+          onClick={() => setNavOpen((open) => !open)}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {isMobileMenuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
+          Menu
         </button>
+        <nav className="nav" id="primary-nav" aria-label="Primary" data-open={String(navOpen)}>
+          <Link to="/sapi-index" onClick={close}>The Index</Link>
+          <Link to="/methodology" onClick={close}>Methodology</Link>
+          <Link to="/about" onClick={close}>About</Link>
+          {/* Wired up by motion.js */}
+          <button className="motion-toggle" type="button" aria-pressed="false" title="Show the site as still plates instead of motion">Reduce motion</button>
+          <Link className="btn btn--primary" to="/contact" onClick={close}>Request a briefing</Link>
+        </nav>
       </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-[#0a0a12] border-t border-sapi-bronze px-4 py-4">
-          <div className="flex flex-col gap-4">
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/sapi-index');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Index
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/methodology');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Methodology
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase text-sapi-parchment hover:text-sapi-gold transition-colors duration-150 text-left"
-              onClick={() => {
-                navigate('/about');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              About Us
-            </button>
-            <button
-              className="font-sans text-[13px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-6 py-2 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-              onClick={() => {
-                navigate('/contact');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              Request Introduction
-            </button>
-          </div>
-        </div>
-      )}
     </header>
   );
-};
-
-const HeroSection = ({ title, description, primaryCta }) => {
-  const navigate = useNavigate();
-  
-  return (
-    <div className="px-8 py-8 max-w-container mx-auto">
-      <h1 className="font-sans text-5xl leading-tight text-sapi-parchment mb-6 max-w-4xl">
-        {title}
-      </h1>
-      <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl mb-8">
-        {description}
-      </p>
-      <button 
-        onClick={() => navigate(primaryCta.href)}
-        className="font-sans text-[15px] tracking-extra-wide uppercase font-medium cursor-pointer rounded-sm px-11 py-3.5 bg-sapi-gold text-sapi-void hover:bg-[#B8862A] transition-colors duration-150"
-      >
-        {primaryCta.label}
-      </button>
-    </div>
-  );
-};
-
-// Constants
-const dimensions = [
-  {
-    key: "compute",
-    label: "Compute Capacity",
-    shortDescription: "Sovereign access to high-performance compute and energy.",
-    description:
-      "Assesses access to hyperscale compute, power resilience, grid capacity, and the physical infrastructure required to host strategic AI workloads.",
-    sampleScore: 58,
-  },
-  {
-    key: "capital",
-    label: "Capital Formation",
-    shortDescription: "The depth and strategic orientation of capital for AI development: sovereign wealth deployment, venture ecosystems, and mechanisms directing capital toward sovereign priorities.",
-    description:
-      "The depth and strategic orientation of capital for AI development: sovereign wealth deployment, venture ecosystems, and mechanisms directing capital toward sovereign priorities.",
-    sampleScore: 72,
-  },
-  {
-    key: "regulatory",
-    label: "Regulatory Readiness",
-    shortDescription: "The policy conditions that allow AI infrastructure to move with velocity.",
-    description:
-      "Scores legal clarity, procurement maturity, licensing pathways, and the coherence of national AI policy to support deployment.",
-    sampleScore: 65,
-  },
-  {
-    key: "dataSov",
-    label: "Data Sovereignty",
-    shortDescription: "Control over strategic data, hosting and trusted operating environments.",
-    description:
-      "Evaluates national control over data localisation, trusted cloud environments, security frameworks, and jurisdictional certainty.",
-    sampleScore: 62,
-  },
-  {
-    key: "di",
-    label: "Directed Intelligence",
-    shortDescription: "How effectively a nation or corporation converts AI capability into measurable outcomes.",
-    description:
-      "Measures the operational maturity required to transform AI capability into state and corporate level execution, from mission design through to durable institutional adoption.",
-    sampleScore: 63,
-    proprietary: true,
-  },
-
-];
-
-const standardStats = [
-  { label: "SOVEREIGN CAPITAL INVESTED", value: 584, prefix: "£", suffix: "M" },
-  { label: "REVIEW SESSIONS PER YEAR", value: 4 },
-  { label: "AI DIMENSIONS MEASURED", value: 5 },
-];
+}
 
 export default function MainPage() {
+  const rootRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Layout effect so teardown runs before React removes the DOM the scripts are bound to.
+  useLayoutEffect(() => {
+    let cancelled = false;
+    document.body.dataset.page = "home";
+    applyMotionGate();
+
+    (async () => {
+      await Promise.all(STYLESHEETS.map(loadStylesheet));
+      if (cancelled) return;
+      rootRef.current.style.visibility = "";
+
+      for (const { src, global } of VENDOR_SCRIPTS) {
+        if (!window[global]) await loadScript(src, { keep: true });
+        if (cancelled) return;
+      }
+      for (const src of PAGE_SCRIPTS) {
+        await loadScript(src);
+        if (cancelled) return;
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      teardown();
+    };
+  }, []);
+
+  // The ported markup uses plain <a href>; route internal ones through the SPA router.
+  const handleClick = (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const href = a.getAttribute("href");
+    if (href.startsWith("/") && !href.startsWith("//")) {
+      e.preventDefault();
+      navigate(href);
+    }
+  };
+
   return (
-    <PageLayout>
-      <CustomHeader />
-      
-      <div className="bg-[#0a0a12] min-h-screen">
-        {/* Hero Section */}
-        <HeroSection
-        description="The Sovereign AI Power Index (SAPI) evaluates national and corporate AI readiness across five key dimensions. It holds quarterly convenings in Westminster and designs governance frameworks that determine which organisations lead and which rely on others."
-        primaryCta={{ href: "/contact", label: "Request an Introduction" }}
-        title="Sovereign AI readiness intelligence for nations and capital"
-      />
-
-      {/* The Standard Section */}
-      <section className="bg-[#0a0a12] border-b border-sapi-bronze">
-        <div className="px-8 py-20 max-w-container mx-auto">
-          <FadeIn className="space-y-10">
-            <SectionLabel tone="accent">The Standard</SectionLabel>
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-              <div className="space-y-6">
-                <h2 className="font-sans text-4xl leading-tight text-sapi-parchment sm:text-5xl lg:text-6xl max-w-4xl">
-                  Every consequential standard began the same way.
-                </h2>
-                <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-                  A credible measure enters the market. Capital reorganises around it. Policy follows. Access becomes conditional on it.
-                </p>
-                <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-                  Credit ratings did this for sovereign debt. ESG scores did it for institutional allocation. SAPI does it for Sovereign AI.
-                </p>
-              </div>
-
-              <div className="border-l border-sapi-bronze pl-6">
-                <p className="font-sans text-[13px] tracking-[0.22em] uppercase text-sapi-muted/70">Lead market signal</p>
-                <p className="font-sans text-6xl leading-none text-sapi-parchment sm:text-7xl lg:text-[6.5rem] mt-4">
-                  <AnimatedStat value="64" />
-                </p>
-                <p className="font-sans text-[0.62rem] uppercase tracking-[0.22em] text-sapi-muted/70 mt-3">
-                  SAPI Composite Score
-                </p>
-                <p className="font-sans text-[0.72rem] uppercase tracking-[0.22em] text-sapi-gold mt-3">
-                  SAMPLE COUNTRY
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-10 pt-8 md:grid-cols-3">
-              {standardStats.map((stat) => (
-                <StatRow key={stat.label} label={stat.label} value={stat.value} prefix={stat.prefix} suffix={stat.suffix} />
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-        <HorizontalRule />
-      </section>
-
-      {/* Methodology Section */}
-      <section className="bg-[#0a0a12]">
-        <div className="px-8 py-20 max-w-container mx-auto">
-          <FadeIn className="mb-14 space-y-6">
-            <SectionLabel>Methodology</SectionLabel>
-            <h2 className="font-sans text-4xl leading-tight text-sapi-parchment sm:text-5xl lg:text-6xl">
-              Five dimensions. One score.
-            </h2>
-            <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              SAPI translates sovereign readiness into a decision-grade framework.
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <DimensionChart dimensions={dimensions} />
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* Westminster Council Section */}
-      <section className="border-y border-sapi-bronze bg-[#0a0a12]">
-        <div className="px-8 py-20 max-w-container mx-auto">
-          <FadeIn className="space-y-6">
-            <SectionLabel>The Westminster Sovereign AI Council</SectionLabel>
-            <h2 className="font-sans text-4xl leading-tight text-sapi-parchment sm:text-5xl lg:text-6xl">
-              Westminster. Quarterly.
-            </h2>
-            <p className="font-sans text-lg leading-8 text-sapi-muted max-w-2xl">
-              Nations attend. Corporations attend. Sovereign capital evaluates. The SAPI assessment provides the shared language. If your institution deploys capital into national AI infrastructure or your government seeks it, this is where it begins.
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-      </div>
-
-      <EnhancedFooter />
-    </PageLayout>
+    // Hidden until the design's stylesheets arrive, so the unstyled markup never flashes.
+    <div ref={rootRef} style={{ visibility: "hidden" }} onClick={handleClick}>
+      <a className="skip" href="#main">Skip to main content</a>
+      <Masthead />
+      <HomeBody />
+      <HomeFooter />
+    </div>
   );
 }

@@ -1,0 +1,628 @@
+/* ===========================================================================
+   SAPI — "Fifteen Hundred" iteration. Motion + scene layer.
+   Layered AFTER sapi.css. Uses its tokens; forks none of them.
+
+   Gates:
+     html.js            JavaScript booted (progressive enhancement only)
+     html.js-motion     JS booted AND motion allowed (no reduce preference, toggle off)
+     html[data-motion=reduce]   the "plate" mode: everything posed and visible, nothing moves
+   =========================================================================== */
+
+:root {
+  --ease-out: cubic-bezier(.215,.61,.355,1);      /* power3.out */
+  --ease-inout: cubic-bezier(.645,.045,.355,1);   /* power2.inOut */
+  --wm-fill: 1;                                    /* wordmark inner square, 0..1 (UI progress state) */
+  --masthead-h: 76px;
+}
+@media (max-width: 900px) { :root { --masthead-h: 64px; } }
+
+/* OBSIDIAN: the scroll scene keeps the baseline's own ink values. sapi.css flattens --ink-raised,
+   neutralises --ink-line and --on-ink-muted for the rest of the site; inside the scene they are
+   restored here so not one scene colour moves. */
+.field-stage, .act1 .plate, .field-cursor {
+  --ink-raised: #100E1A;
+  --ink-line:   #241F33;
+  --on-ink-muted: #A9A497;
+  --gold-wash:  rgba(201,150,58,.10);
+}
+
+/* --- Lenis ---------------------------------------------------------------- */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto !important; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* --- Masthead ------------------------------------------------------------- */
+.masthead { border-bottom-color: transparent; }
+.masthead::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--ink-line); transform-origin: left center;
+}
+.js-motion .masthead::after { transform: scaleX(0); animation: rule-draw .45s var(--ease-inout) forwards; }
+.masthead { position: sticky; }
+.masthead__inner { min-height: var(--masthead-h); }
+.masthead__progress {
+  position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%;
+  background: var(--text); transform-origin: left center; transform: scaleX(0);
+  pointer-events: none;
+}
+.wordmark__mark::after { transform: scale(var(--wm-fill)); transform-origin: center; }
+.motion-toggle {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: none; border: 1px solid var(--control); color: var(--on-ink);
+  font-family: var(--sans); font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; padding: .5rem .75rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease;
+}
+.motion-toggle::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid currentColor; box-sizing: border-box;
+}
+.motion-toggle[aria-pressed="true"] { color: var(--text); border-color: var(--text); }
+.motion-toggle[aria-pressed="true"]::before { background: currentColor; }
+.motion-toggle:hover { border-color: var(--text); }
+.js .motion-toggle { display: inline-flex; }
+.motion-toggle { display: none; }
+@media (max-width: 900px) {
+  .nav .motion-toggle { margin-top: .75rem; justify-content: center; }
+}
+
+/* --- Reveal grammar: rule, then text --------------------------------------- */
+@keyframes rule-draw { to { transform: scaleX(1); } }
+.js-motion .rv {
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .55s var(--ease-out), transform .55s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * .06s + var(--d, 0s));
+}
+.js-motion .rv.is-in { opacity: 1; transform: none; }
+.js-motion .eyebrow::after { transform: scaleX(0); transform-origin: left center; transition: transform .45s var(--ease-inout); }
+.js-motion .eyebrow.is-in::after, .js-motion .is-in .eyebrow::after { transform: scaleX(1); }
+.js-motion .rv--rule::before {
+  content: ""; display: block; height: 1px; background: var(--ivory-line);
+  transform: scaleX(0); transform-origin: left center; transition: transform .45s var(--ease-inout);
+  margin-bottom: 1rem;
+}
+.js-motion .on-ink .rv--rule::before { background: var(--ink-line); }
+.js-motion .rv--rule.is-in::before { transform: scaleX(1); }
+/* rows and bars */
+.js-motion tbody tr.rv { transition-delay: calc(var(--i, 0) * .02s); }
+.js-motion .bar__fill { transform: scaleX(0); transform-origin: left center; transition: transform .5s var(--ease-out) .1s; }
+.js-motion .is-in .bar__fill, .js-motion tr.is-in .bar__fill { transform: scaleX(1); }
+/* photo slot dashed border draws in */
+.js-motion .photo-slot { border-color: transparent; transition: border-color .45s var(--ease-inout); }
+.js-motion .is-in .photo-slot, .js-motion .photo-slot.is-in { border-color: var(--edge); }
+.js-motion .is-in .photo-slot--light, .js-motion .photo-slot--light.is-in { border-color: var(--edge); }
+/* ordered steps read as a sequence */
+.js-motion ol.stack > li.rv { transition-delay: calc(var(--i, 0) * .08s); }
+/* article h2 top rules draw in before their text (research notes, methodology, event record) */
+.js-motion .article-body h2.rv { border-top-color: transparent; position: relative; }
+.js-motion .article-body h2.rv::before {
+  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--ivory-line);
+  transform: scaleX(0); transform-origin: left center; transition: transform .45s var(--ease-inout);
+}
+.js-motion .article-body h2.rv.is-in::before { transform: scaleX(1); }
+/* callouts: the coloured left rule arrives with the block */
+.js-motion .callout.rv { border-left-color: transparent; transition: opacity .55s var(--ease-out), transform .55s var(--ease-out), border-left-color .45s var(--ease-inout) .2s; }
+.js-motion .callout.rv.is-in { border-left-color: var(--text); }
+/* fact rows read as a record: 0.05s per row */
+.js-motion .facts > li.rv { transition-delay: calc(var(--i, 0) * .05s); }
+/* editorial notes are never animated: they must read as flags, not features */
+.editorial-note.rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+
+/* --- Hover / focus micro-interactions (every hover has a :focus-visible twin) ----- */
+.link-more { border-bottom: 0; padding-bottom: 3px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat; background-size: 100% 1px; background-position: left bottom;
+  transition: background-size .25s var(--ease-out), color .18s ease; }
+.js-motion .link-more { background-size: 0% 1px; }
+.js-motion .link-more:hover, .js-motion .link-more:focus-visible,
+.js-motion .rv.is-in .link-more { background-size: 100% 1px; }
+.js-motion .link-more:hover, .js-motion .link-more:focus-visible { background-size: 100% 1px; }
+.card:hover, .card:focus-within { transform: translateY(-2px); border-color: var(--text-3); }
+.card:hover .claim, .card:focus-within .claim { border-left-color: var(--text); }
+.claim { transition: border-color .18s ease; }
+.service, .person { transition: border-color .18s ease, transform .18s ease; }
+.service:hover, .service:focus-within { border-color: var(--text-3); }
+.on-ink .service:hover, .on-ink .service:focus-within { border-color: var(--text-3); }
+table.data tbody tr:focus-within, table.data tbody tr[tabindex]:focus-visible { background: var(--gold-wash); outline-offset: -3px; }
+.nav a:not(.btn) { transition: border-color .18s ease, color .18s ease; }
+.nav a:not(.btn):focus-visible { border-bottom-color: var(--text); }
+
+/* --- Count-ups -------------------------------------------------------------- */
+[data-count] { font-variant-numeric: tabular-nums; }
+
+/* ===========================================================================
+   HOMEPAGE — Act I: the field
+   =========================================================================== */
+/* Homepage: the masthead is fixed (out of flow) so the stage fills the viewport behind it;
+   it stays solid ink so the nav never sits over particles. Hero padding accounts for its height. */
+body[data-page="home"] .masthead { position: fixed; top: 0; left: 0; right: 0; }
+.act1 { position: relative; background: var(--ink); color: var(--on-ink); isolation: isolate; }
+.act1 > .section, .act1 > .hero { background: transparent; position: relative; z-index: 1; }
+
+/* The stage: one canvas, sticky for the whole of Act I. Desktop: full viewport
+   under the text. Mobile: a band under the masthead, text flows beneath. */
+.field-stage {
+  display: none; position: sticky; top: 0; height: 100vh; height: 100svh; z-index: 0;
+  overflow: hidden; pointer-events: none;
+}
+.js-motion .field-stage { display: block; }
+.js-motion .act1 > .hero--field { margin-top: -100vh; margin-top: -100svh; }
+.field-stage canvas { display: block; width: 100%; height: 100%; }
+/* Poster: an SVG graticule (the sphere's own axes) paints instantly, before three.min.js and the two JSON
+   files arrive; the WebGL canvas cross-fades over it once the field is live. Costs no library. */
+.field-poster { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+/* svh, not vh: the stage itself is 100svh (css:137), so on a phone whose address bar collapses
+   mid-scroll a vh-based poster would resize while the stage did not. Same basis, no reflow. */
+.field-poster svg { width: min(52vh, 46vw); width: min(52svh, 46vw); height: auto; overflow: visible; }
+.field-poster .fp-grat { fill: none; stroke: var(--gold); stroke-width: .6; opacity: .28; }
+.field-poster .fp-rim { fill: none; stroke: var(--gold); stroke-width: .8; opacity: .5; }
+.field-poster .fp-dot { fill: var(--gold); opacity: .55; }
+.field-poster .fp-red { fill: #A33A32; opacity: .9; }
+.field-poster text { font-family: var(--mono); font-size: 10px; fill: var(--on-ink-muted); letter-spacing: .05em; }
+@media (min-width: 1024px) { .field-poster { justify-items: end; padding-right: 8vw; } }
+/* The poster sits UNDER the canvas. The canvas is hidden (not faded: a transition can stall in a
+   background or headless tab) until the field is live; its first frames are the dust assembling
+   over the poster's position, which is the cross-fade. */
+.field-stage canvas { position: relative; z-index: 1; visibility: hidden; }
+.field-stage.is-live canvas { visibility: visible; }
+/* Once the field is live the canvas is opaque (field.js: WebGLRenderer alpha:false, setClearColor alpha 1)
+   and covers the poster, so the poster has nothing left to do. Hiding it here matters because the canvas
+   is hidden again on is-done: without this the poster — Act I's own first frame — was UNCOVERED by the
+   dissolve and the gold globe reappeared over the exit (baseline poses p17/p18/p19, dis=1.00). */
+.field-stage.is-live .field-poster { visibility: hidden; }
+[data-motion="reduce"] .field-poster { display: none; }
+.field-stage.is-done canvas, .field-stage.is-done .field-ui, .field-stage.is-done .field-poster { visibility: hidden; }   /* after the dissolve: nothing left to show */
+.field-stage__mobile-scrim { display: none; }
+
+/* Text columns over the canvas: solid enough for AA (94% ink), with a soft edge
+   that fades to nothing over 140px so the field reads as continuous. */
+.field-text { position: relative; }
+.js-motion .field-text {
+  background-color: rgba(8,6,15,.94);
+  padding: 1rem 1.75rem 1rem 0; margin-left: -1.75rem; padding-left: 1.75rem;
+}
+.js-motion .field-text::after {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 100%; width: 140px;
+  background: linear-gradient(to right, rgba(8,6,15,.94), rgba(8,6,15,0)); pointer-events: none;
+}
+.act1 .grid--field { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); align-items: start; }
+@media (min-width: 1024px) {
+  .hero--field .grid--field { grid-template-columns: 7fr 5fr; }
+  .act-edition .grid--field { grid-template-columns: 5fr 7fr; }
+  .act-dims .grid--field { grid-template-columns: 6fr 6fr; }
+}
+
+/* Hero */
+.hero--field { padding-block: 0; }
+.hero--field .hero__inner { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding-block: calc(var(--masthead-h) + 1rem) 1.25rem; }
+.hero--field .grid--field { flex: 1 0 auto; align-content: center; }
+.js-motion .hero--field { min-height: 130vh; min-height: 130svh; }
+.js-motion .hero--field .hero__inner { position: sticky; top: 0; }
+.hero--field h1 { font-size: clamp(2.2rem, 4.2vw, 3.3rem); max-width: 17ch; margin-bottom: 1rem; }
+.hero--field .lede { margin-bottom: 0; font-size: clamp(1.05rem, 1.55vw, 1.2rem); max-width: 58ch; }
+.hero--field .eyebrow { margin-bottom: 1.1rem; display: block; }
+.hero--field .hero__actions { margin-top: 1.4rem; }
+.hero__finding {
+  font-family: var(--serif); font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.45;
+  border-left: 3px solid var(--text); padding-left: 1rem; margin: 1.25rem 0 0; color: var(--on-ink);
+  max-width: 46ch;
+}
+.hero__finding strong { color: var(--text); font-weight: 400; }
+.hero--field .evidence-strip { margin-top: 2rem; padding-top: 1.1rem; gap: .75rem 1.5rem; position: relative; }
+.hero--field .evidence-strip dd { font-size: 1.5rem; }
+.hero--field .evidence-strip .note { font-size: .76rem; margin-top: .25rem; }
+@media (min-width: 1024px) {
+  /* pinned to the bottom edge of the hero viewport, four across, on its own scrim */
+  .hero--field .evidence-strip { margin-top: auto; grid-template-columns: repeat(4, 1fr); padding-top: 1rem; }
+  .js-motion .hero--field .evidence-strip {
+    background: rgba(8,6,15,.92); border-top-color: var(--ink-line);
+    padding: .85rem 1.25rem 0 1.25rem; margin-inline: -1.25rem;
+  }
+}
+@media (max-width: 1023px) {
+  .hero--field .evidence-strip { grid-template-columns: 1fr 1fr; }
+  .js-motion .field-text::after { display: none; }
+  .js-motion .field-text { padding-right: 0; }
+}
+@media (max-width: 767px) {
+  .hero--field h1 { font-size: clamp(2rem, 8.6vw, 2.4rem); margin-bottom: .7rem; }
+  .hero--field .lede { font-size: .96rem; line-height: 1.42; }
+  .hero--field .eyebrow { margin-bottom: .7rem; }
+  .eyebrow__more { display: none; }
+  .hero__finding { margin-top: .9rem; }
+  .hero--field .hero__actions { margin-top: 1rem; }
+  .hero--field .evidence-strip { margin-top: 1.5rem; }
+  .hero--field .evidence-strip .note { display: none; }
+  .hero--field .evidence-strip dd { font-size: 1.3rem; }
+}
+
+/* Plates: the JS-off / reduced-motion figures that live in each right column. */
+.plate { display: block; }
+.js-motion .plate { display: none; }
+.plate figcaption { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; color: var(--on-ink-muted); margin-top: .75rem; line-height: 1.5; }
+.plate img { width: 100%; height: auto; display: block; border: 1px solid var(--ink-line); }
+.field-strip { width: 100%; display: block; }
+.field-strip--hero { height: auto; border: 1px solid var(--ink-line); background: var(--ink-raised); }
+.field-strip .fs-lbl-empty { fill: var(--gold); }
+.field-strip .fs-lbl-mean { fill: var(--gold-bright); }
+.field-strip .fs-axis { stroke: var(--ink-line); }
+.field-strip--detail .fs-labels tspan { fill: var(--gold-bright); }
+.field-strip .fs-cols line { stroke: var(--gold); stroke-width: 1.25; opacity: .8; }
+.field-strip .fs-tier { stroke: var(--on-ink-muted); stroke-width: 1; stroke-dasharray: 3 4; opacity: .7; }
+.field-strip .fs-mean { stroke: var(--gold-bright); stroke-width: 2; }
+.field-strip text { font-family: var(--mono); font-size: 10px; fill: var(--on-ink-muted); }
+.field-strip--detail { background: var(--ink-raised); border: 1px solid var(--ink-line); }
+.field-strip--detail .fs-labels text { font-size: 11px; fill: var(--on-ink); }
+.field-strip--detail .fs-cols line { stroke-width: 2; }
+
+/* Projected labels, captions, tier labels, chip, cursor ring */
+/* contain: layout style — the label layer is written every frame, and containment keeps a write inside
+   it (or inside any ancestor of it) from invalidating layout or style anywhere else on the page.
+   NOT paint: it would clip the labels' two-stop text-shadow glow. NOT size: the labels are
+   shrink-to-fit and would collapse. */
+.field-ui { position: absolute; inset: 0; pointer-events: none; font-family: var(--mono); list-style: none; margin: 0; padding: 0; contain: layout style; }
+.field-label::before { content: none; }
+.field-label {
+  position: absolute; left: 0; top: 0; transform: translate(-50%, -100%);
+  font-size: .72rem; letter-spacing: .05em; color: var(--on-ink); white-space: nowrap;
+  opacity: 0; transition: opacity .25s ease;
+  text-shadow: 0 0 6px var(--ink), 0 0 12px var(--ink);
+  contain: layout style;
+}
+/* will-change lives on .is-on, not on .field-label: the compositing hint costs a promoted layer per
+   element, and there are 82 labels in the layer while at most 27 (the ruler beat) are ever visible at
+   once — through the prism, side, solo and rings beats only 5 to 7, and none at all through the
+   dissolve and the exit. Promoting only what is on the screen is the difference, and it is measured:
+   RecalcStyleCount identical across control and treatment, the milliseconds down 32%.
+   THE ALTERNATIVE WAS TRIED AND IS WORSE, so do not "simplify" this to one hint on .field-ui. That
+   was proposed to explain trackpad-1440r's RecalcStyleCount sitting ~2.8% above the frozen snapshot's
+   2786. Measured A/B in one session: one hint on .field-ui gives count 2885 / 1018ms against this
+   rule's 2862 / 964ms on the identical build — worse on both, so the count was never the label
+   promotion. It is session drift: the SAME build measures 2839 / 612ms, 2863 / 878ms and 2862 / 964ms
+   in three different sessions, a spread wider than the +-2% window itself. Compare counts only
+   against a control run in the same session.
+   THE CAVEAT MEASUREMENT CANNOT COVER: toggling will-change is what MDN warns against, because each
+   toggle builds and tears down a compositor layer. Every run behind this is on an Apple M2 with ANGLE
+   Metal, and --cpu=4 throttles the main thread, not the GPU — so layer churn is precisely the cost
+   none of the instruments here can see. If this ever gets in front of an integrated GPU or a
+   mid-range phone, re-measure before trusting it. */
+.field-label.is-on { opacity: 1; will-change: transform; }
+.field-label--tier { color: var(--on-ink-muted); transform: translate(6px, -100%); font-size: .7rem; text-transform: uppercase; }
+.field-label--tier.is-empty { color: var(--gold); }
+.field-label--tick { color: var(--gold-bright); transform: translate(-50%, 0); }
+.field-label--arm { color: var(--gold); text-transform: uppercase; font-size: .64rem; text-align: center; transform: translate(-50%, -50%); line-height: 1.35; }
+.field-label--arm small { display: block; color: var(--on-ink-muted); text-transform: none; letter-spacing: .03em; }
+.field-label--val { color: var(--gold-bright); font-size: .8rem; transform: translate(-50%, -50%); }
+.field-label--country { color: var(--gold-bright); }
+.field-label--axis { color: var(--on-ink-muted); font-size: .66rem; transform: translate(-50%, 0); }
+.field-label--tierpent { color: var(--on-ink-muted); font-size: .66rem; text-transform: uppercase; transform: translate(0, -50%); }
+.field-label--tierpent.is-empty { color: var(--gold); }
+.field-label--ridge { color: var(--gold-bright); font-size: .74rem; text-transform: uppercase; }
+.field-label--ridge small { display: block; color: var(--on-ink); text-transform: none; letter-spacing: .03em; font-size: .7rem; }
+.field-label--penalty { color: var(--on-ink); font-size: .72rem; text-align: left; white-space: normal; max-width: 21ch; line-height: 1.45; transform: translate(0, 0); }
+.field-label--penalty strong { color: var(--gold-bright); font-weight: 400; display: block; font-size: .95rem; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+.field-label--val.is-hi { color: var(--on-ink); text-shadow: 0 0 6px var(--gold), 0 0 12px var(--ink); }
+.field-label--country.is-hi { color: var(--on-ink); font-size: .78rem; }
+.field-caption {
+  position: absolute; right: clamp(1.25rem, 4vw, 3rem); bottom: 2rem; max-width: 40ch;
+  font-family: var(--serif); font-size: .98rem; line-height: 1.45; color: var(--on-ink);
+  background: rgba(8,6,15,.9); border-left: 2px solid var(--gold); padding: .75rem 1rem;
+  opacity: 0; transition: opacity .35s ease; transform: translateY(6px);
+}
+.field-caption, .field-ui { z-index: 2; }   /* above the canvas (z-index 1): the key and the projected labels are what the canvas is for */
+.field-caption.is-on { opacity: 1; transform: none; }
+.field-caption.is-instant { transition: none; }
+@media (min-width: 1024px) { .field-caption[data-caption="sphere"] { bottom: 9rem; } }   /* above the pinned evidence strip */
+.field-caption small { display: block; font-family: var(--mono); font-size: .68rem; color: var(--on-ink-muted); margin-top: .35rem; letter-spacing: .04em; }
+.field-caption__short { display: none; }   /* the one-line mono key used inside the mobile band */
+.field-chip {
+  position: absolute; left: 0; top: 0; transform: translate(14px, 14px);
+  background: rgba(16,14,26,.96); border: 1px solid var(--ink-line); border-left: 2px solid var(--gold);
+  padding: .6rem .8rem; font-size: .72rem; line-height: 1.5; color: var(--on-ink); white-space: nowrap;
+  opacity: 0; transition: opacity .18s ease; pointer-events: none; z-index: 3;
+}
+.field-chip.is-on { opacity: 1; }
+.field-chip strong { color: var(--gold-bright); font-weight: 400; font-size: .82rem; }
+.field-chip .red { color: #E06A60; }
+.field-chip .muted { color: var(--on-ink-muted); }
+.field-cursor {
+  position: fixed; left: 0; top: 0; width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  border: 1.5px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 90;
+  opacity: 0; transition: opacity .18s ease, width .18s ease, height .18s ease, margin .18s ease;
+}
+.field-cursor.is-on { opacity: 1; }
+.field-cursor { color: #08060F; }   /* OBSIDIAN: the baseline's inherited body ink, so the scene computes identically */
+.field-cursor.is-snap { width: 22px; height: 22px; margin: -11px 0 0 -11px; border-color: var(--gold-bright); }
+.field-explore { position: absolute; left: 0; top: 0; }
+.field-explore:focus-visible { position: fixed; left: 1rem; top: calc(var(--masthead-h) + 1rem); width: auto; height: auto; clip: auto; margin: 0; padding: .5rem .8rem; background: var(--ink-raised); color: var(--on-ink); border: 1px solid var(--gold); z-index: 95; font-family: var(--mono); font-size: .72rem; }
+.field-live { }
+
+/* Act sections */
+.act-edition, .act-dims { padding-block: clamp(3rem, 7vw, 5.5rem); }
+/* Act heights on the stage's own basis: the stage is 100svh, so these two — which define how much
+   scroll Act I gets — must agree with it about what a viewport is, or they disagree at exactly the
+   moment a phone's chrome collapses. The vh line stays first as the fallback for browsers without svh.
+   .act-dims 300 -> 326svh (and the no-svh fallback 300 -> 312vh) pays for two things at once, and
+   they must be read together with field.js's .act-dims end function:
+     (a) THE EXIT HOLD BAND, 0.14 of a viewport on desktop and 0.20 on touch, which the trigger end
+         subtracts from the timeline. It is pure hold AFTER the dissolve has finished and before the
+         sticky stage releases, and it is what keeps a fast scroller from seeing the stage leave
+         mid-dissolve. The band is subtracted from the timeline's own length, so the section has to
+         carry it on top of everything else — that is the 126px at 900.
+     (b) 4.4% OF EXTRA TIMELINE, so that the dissolve finishing at 98% of the timeline (the 2% padding
+         tween, see field.js) does not come out of the beats. The finale beats are positioned as
+         fractions; without this the pad and the band would together take 5% of the act's scroll off
+         the beats themselves, and the ring beat's deliberate widening would have to be paid for by
+         shortening another beat — which is exactly what went wrong before: the United States solo beat
+         lost 169px and half its frames on a flick. With it, every finale beat is within about 1% of
+         the frozen snapshot's own scroll distance except the ring, which is 48% longer on purpose.
+   Length arithmetic at 1440x900, so a future edit can check it: section 326svh = 2934px; the trigger
+   runs 'top 70%' to 'bottom bottom+=126', so the timeline is 2934 - 270 - 126 = 2538px against the
+   snapshot's 2430px. The no-svh fallback drops the band entirely (field.js feature-detects svh), so
+   312vh = 2808 - 270 = 2538px lands on the same length. Revert both lines or neither.
+   THE BAND IS THE SMALLEST IT CAN BE, because every pixel of it is a black screen: once the dissolve
+   completes the field is gone, the caption is off and the .dims column has scrolled by, so the reader
+   sees the masthead over nothing. It was 0.6 of a viewport and cost 580px — 4.7 seconds — of that;
+   then 0.15, then 0.08. 0.08 was sized against the worst measured scrub lag EXACTLY, with no factor,
+   and that is too thin to survive run-to-run variation: touch-768 came back at exit.dissolve 0.996 on
+   one of three fresh runs and at 1.000 with 0px of margin on the other two, and 1280x800 under
+   --cpu=4 finished the dissolve 29px before the release. 0.14 / 0.20 is about 1.8x the worst lag and
+   costs a trackpad reader ~56px more pinned black. Do not shrink it without re-running flick and
+   touch-768 three times each and reporting the exit MARGIN in pixels, not just exit.dissolve. */
+.js-motion .act-edition { min-height: 160vh; min-height: 160svh; }
+.js-motion .act-dims { min-height: 312vh; min-height: 326svh; }
+.js-motion .act-dims .field-text, .js-motion .act-edition .field-text { padding-top: 1.5rem; }
+.act-edition .table-wrap { margin-top: 1.5rem; }
+.act-edition table.data caption { white-space: normal; }
+.act1 table.data tbody tr { transition: background .18s ease; }
+.act1 table.data tbody tr.is-hi { background: rgba(251,245,230,.07); }
+.act-dims .dim__eg { transition: border-color .25s ease, background .25s ease; }
+.act-dims .dim.is-active .dim__name { color: #FFFFFF; }
+.act-dims .dim.is-active .dim__eg { border-left-color: var(--text); }
+.act-dims .dim__name { transition: color .25s ease; }
+.js-motion .act-dims .dims-col { position: sticky; top: calc(var(--masthead-h) + 1rem); }
+.act1 .plate--edition { margin-top: 3.4rem; }
+
+/* Mobile: the stage becomes a 36svh band under the masthead; text scrolls beneath it. */
+@media (max-width: 767px) {
+  .js-motion .act1 { padding-top: var(--masthead-h); }
+  /* the band sits ABOVE the text on mobile (text scrolls up beneath it); on desktop the text sits over the canvas */
+  /* 25svh (203px on an 812px phone) leaves the finding and BOTH actions inside the first viewport */
+  .js-motion .field-stage { top: var(--masthead-h); height: 25vh; height: 25svh; border-bottom: 1px solid var(--ink-line); z-index: 2; background: var(--ink); }
+  .field-poster svg { width: min(21vh, 56vw); width: min(21svh, 56vw); }   /* svh: matches the 25svh mobile stage above */
+  .js-motion .act1 > .hero--field { margin-top: 0; }
+  .js-motion .hero--field { min-height: 0; }
+  .js-motion .hero--field .hero__inner { position: static; min-height: 0; padding-top: .75rem; }
+  .js-motion .field-text { background: transparent; padding: 0; margin: 0; }
+  .js-motion .field-text::after { display: none; }
+  .js-motion .act-edition, .js-motion .act-dims { min-height: 0; }
+  .js-motion .act-dims .dims-col { position: static; }
+  .field-caption { left: .6rem; right: .6rem; top: auto; bottom: .4rem; max-width: none; font-family: var(--mono); font-size: .6rem; line-height: 1.4; letter-spacing: .02em; padding: .25rem .5rem; transform: none; background: rgba(8,6,15,.86); color: var(--on-ink); }
+  .field-caption__long { display: none; }
+  .field-caption__short.segmented-meta { display: flex; }
+  .field-label--axis { font-size: .58rem; }
+  .field-label--penalty { display: none; }   /* the mobile rings caption carries the penalty reading */
+  .field-cursor { display: none; }
+}
+
+/* ===========================================================================
+   Paper sections on the homepage
+   =========================================================================== */
+.section--research .card { transition: border-color .18s ease, transform .18s ease; }
+
+/* ===========================================================================
+   Footer signature: the field, again, at the end of every page
+   =========================================================================== */
+.site-foot__field { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--ink-line); }
+.site-foot__field .field-strip { height: 40px; width: 100%; }
+.site-foot__field .field-strip .fs-cols line { stroke-width: 1; stroke: var(--mark); }
+.site-foot__field .field-strip .fs-mean { stroke: var(--text); }
+.site-foot__field .field-strip .fs-tier { stroke: var(--text-3); }
+.site-foot__field .field-strip .fs-axis { stroke: var(--rule); }
+.site-foot__field p { font-family: var(--mono); font-size: .7rem; letter-spacing: .05em; text-transform: uppercase; margin: .6rem 0 0; color: var(--text-3); }
+
+/* ===========================================================================
+   THE INDEX — the ruler and its instruments
+   =========================================================================== */
+.ruler {
+  position: sticky; top: var(--masthead-h); z-index: 50; background: var(--ink); color: var(--on-ink);
+  border-bottom: 1px solid var(--ink-line); height: 112px; display: none;
+}
+.js .ruler { display: block; }
+.ruler canvas { display: block; width: 100%; height: 112px; }
+.ruler__chip {
+  /* one line, docked to the bottom edge of the strip so it never covers the key (top right) or the tier row */
+  position: absolute; top: auto; bottom: 4px; right: var(--gutter); font-family: var(--mono); font-size: .68rem; line-height: 1.4;
+  background: rgba(8,6,15,.96); border: 1px solid var(--edge); border-left: 2px solid var(--text); padding: .28rem .6rem;
+  color: var(--on-ink); opacity: 0; transition: opacity .18s ease; pointer-events: none; max-width: calc(100% - 2 * var(--gutter));
+}
+.ruler__chip.is-on { opacity: 1; }
+.ruler__chip strong { color: var(--text); font-weight: 400; }
+.ruler__chip .red { color: var(--red-text); }
+.ruler__lead { position: fixed; width: 1px; background: var(--text); opacity: 0; pointer-events: none; z-index: 49; transition: opacity .18s ease; }
+.ruler__lead.is-on { opacity: .7; }
+.ruler canvas { cursor: crosshair; }
+[data-motion="reduce"] .ruler canvas { cursor: default; }
+#movers-table .mover-cell { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.leader-row { cursor: default; }
+/* The key (one disc = one country ...) is painted on the canvas at >= 768px, in the empty zone past 60;
+   on phones there is no room in the strip, so it is real text under the canvas instead. */
+.ruler__key { display: none; margin: 0; padding: 5px var(--gutter) 6px; font-family: var(--mono); font-size: .6rem; line-height: 1.5; letter-spacing: .03em; color: var(--text-3); background: var(--black); border-bottom: 1px solid var(--ink-line); }
+.ruler__key .red { color: var(--red-text); }
+@media (max-width: 767px) {
+  .ruler, .ruler canvas { height: 84px; }
+  .ruler__key { display: flex; }
+  /* compact chip, docked bottom-left: a tap on a disc names it (rank · country · composite · unsourced) */
+  /* compact chip, docked bottom-left: a tap on a disc names it (rank · country · composite · unsourced) */
+  .ruler__chip { top: auto; bottom: 3px; left: var(--gutter); right: auto; font-size: .6rem; padding: .18rem .45rem; max-width: calc(100% - 2 * var(--gutter)); }
+}
+
+/* Ranking table instruments */
+#rank-table td.num .bar { position: relative; }
+#rank-table .bar__track { position: relative; overflow: visible; }
+#rank-table .bar__track::after { content: ""; position: absolute; left: 60%; top: -4px; bottom: -4px; width: 1px; background: var(--text); opacity: .55; }
+#rank-table tr.tier-boundary th, #rank-table tr.tier-boundary td { border-top: 1px solid var(--text-3); }
+#rank-table tbody tr { transition: background .18s ease; }
+#rank-table tbody tr.is-hi { background: rgba(251,245,230,.07); }
+.rank-legend { font-family: var(--mono); font-size: .72rem; color: var(--text-3); margin: .5rem 0 0; }
+.rank-legend i { display: inline-block; width: 1px; height: 10px; background: var(--text-3); vertical-align: middle; margin-right: .4rem; }
+
+/* Pentagons (SVG) */
+.pg { display: block; }
+.pg .pg-axis { stroke: var(--ink-line); stroke-width: 1; }
+.on-paper .pg .pg-axis, .section:not(.on-ink) .pg .pg-axis { stroke: var(--ink-line); }
+.pg .pg-shape { fill: rgba(201,150,58,.14); stroke: var(--gold); stroke-width: 1.5; stroke-linejoin: round; }
+.pg .pg-dot { fill: var(--gold-bright); }
+.pg .pg-dot--lead { fill: var(--gold-ink); }
+.pg .pg-member { fill: var(--gold-ink); }
+.on-ink .pg .pg-member { fill: var(--gold-bright); }
+.pg .pg-val { font-family: var(--mono); font-size: 11px; fill: var(--on-ink); }
+.pg .pg-note { font-family: var(--mono); font-size: 10px; fill: var(--on-ink-muted); }
+.pg .pg-note--gold { fill: var(--gold); }
+.pg .pg-ring { fill: none; stroke-width: 1.5; }
+.pg .pg-ring--dash { stroke: var(--on-ink-muted); stroke-dasharray: 5 5; }
+.pg .pg-ring--solid { stroke: var(--gold-bright); }
+/* OBSIDIAN: outside the scroll-scene plates every pentagon is monochrome (the plate keeps the rules above). */
+.pg:not(.plate .pg) .pg-axis { stroke: var(--edge); }
+.pg:not(.plate .pg) .pg-shape { fill: rgba(251,245,230,.06); stroke: var(--mark); }
+.pg:not(.plate .pg) .pg-dot, .pg:not(.plate .pg) .pg-dot--lead, .pg:not(.plate .pg) .pg-member { fill: var(--text); }
+.pg:not(.plate .pg) .pg-val { fill: var(--text); }
+.pg:not(.plate .pg) .pg-note { fill: var(--text-3); }
+.pg:not(.plate .pg) .pg-note--gold { fill: var(--text); }
+.pg:not(.plate .pg) .pg-ring--dash { stroke: var(--text-3); }
+.pg:not(.plate .pg) .pg-ring--solid { stroke: var(--text); }
+.pg--us, .pg--mean { max-width: 560px; margin-inline: auto; }   /* viewBox -80..500 so the outer labels fit */
+.js-motion .pg--us.is-in .pg-ring--dash { animation: ring-contract .9s var(--ease-inout) forwards; transform-box: fill-box; transform-origin: center; }
+.js-motion .pg--us .pg-ring--solid { opacity: 0; }
+.js-motion .pg--us.is-in .pg-ring--solid { animation: ring-in .9s var(--ease-inout) forwards; }
+@keyframes ring-contract { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(.958); opacity: .35; } }
+@keyframes ring-in { 0%, 40% { opacity: 0; } 100% { opacity: 1; } }
+.pg--sig { width: 76px; height: 71px; flex: none; }
+.pg--mini { width: 64px; height: 64px; }
+.leader-row .pg--mini { opacity: .55; transition: opacity .2s ease; }
+.leader-row:hover .pg--mini, .leader-row:focus-within .pg--mini, .leader-row:focus-visible .pg--mini,
+[data-motion="reduce"] .leader-row .pg--mini { opacity: 1; }
+/* the shape is drawn in with its row (path-draw .5s once the row reveals); hover/focus grows the leading vertex */
+.js-motion .leader-row .pg-draw { stroke-dasharray: 600; stroke-dashoffset: 600; }
+.js-motion .leader-row.is-in .pg-draw { animation: pg-draw .5s var(--ease-out) forwards; animation-delay: calc(var(--i, 0) * .08s + .2s); }
+.leader-row .pg-dot--lead { transition: r .2s ease; }
+.leader-row:hover .pg-dot--lead, .leader-row:focus-within .pg-dot--lead, .leader-row:focus-visible .pg-dot--lead { r: 4; }
+@keyframes pg-draw { to { stroke-dashoffset: 0; } }
+.leader-cell { display: flex; align-items: center; gap: .75rem; }
+.sig-cell { display: flex; align-items: center; gap: .75rem; }
+.sig-cell .pg--sig { margin-left: -.25rem; }
+.sig-cell span { display: block; }
+
+/* Movers tracks */
+.mover { display: grid; gap: .3rem; min-width: 190px; }
+.mover__track { position: relative; height: 8px; background: var(--edge); }
+.mover__track::before { content: ""; position: absolute; left: 60%; top: -3px; bottom: -3px; width: 1px; background: var(--text); opacity: .5; }
+.mover__trail { position: absolute; top: 0; height: 100%; background: var(--mark); transform-origin: left center; }
+.mover__trail--down { background: var(--text-3); }   /* OBSIDIAN: #858585, 2.56:1 on the #464646 track (#6E6E6E would drop to 1.84:1) */
+.mover__dot { position: absolute; top: -2px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--text); border: 2px solid var(--black); }
+.mover__dot--prior { background: transparent; border: 1.5px solid var(--text-3); width: 10px; height: 10px; top: -1px; margin-left: -5px; }
+.mover__meta { font-family: var(--mono); font-size: .7rem; color: var(--text-3); letter-spacing: .03em; }
+.js-motion .mover.is-in .mover__trail { animation: trail-grow .8s var(--ease-out) forwards; transform: scaleX(0); }
+.js-motion .mover .mover__trail { transform: scaleX(0); }
+.js-motion .mover.is-in .mover__dot--now { animation: dot-travel .8s var(--ease-out) forwards; }
+.js-motion .mover .mover__dot--now { left: var(--from); }
+@keyframes trail-grow { to { transform: scaleX(1); } }
+@keyframes dot-travel { from { left: var(--from); } to { left: var(--to); } }
+
+/* Flag wall */
+.flag-wall-wrap { overflow-x: auto; margin: 2rem 0 1rem; border: 1px solid var(--edge); background: var(--black); padding: 1rem; }
+.flag-wall { min-width: 700px; width: 100%; height: auto; display: block; }
+.flag-wall .fw-gold { fill: var(--edge); }   /* sourced: dark grey, so a red cell also differs in lightness */
+.flag-wall .fw-red { fill: var(--red); }
+.flag-wall .fw-grid { stroke: var(--rule); stroke-width: .5; }
+.flag-wall .fw-name, .flag-wall .fw-n, .flag-wall .fw-head { font-family: var(--mono); font-size: 10px; fill: var(--text-2); }
+.flag-wall .fw-n--red { fill: var(--red-text); font-weight: 700; }
+.js-motion .flag-wall .fw-row { opacity: 0; transition: opacity .3s ease; transition-delay: calc(var(--i, 0) * 8ms); }
+.js-motion .flag-wall.is-in .fw-row { opacity: 1; }
+.flag-wall__summary { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; color: var(--text-3); text-transform: uppercase; margin-top: .75rem; }
+.flag-wall__summary b { color: var(--red-text); font-weight: 700; }
+
+/* Ranking single-match ring in the ruler is drawn on canvas; nothing needed here. */
+
+/* Scroll spy on the research-note spine */
+.spine li:has(a[aria-current="true"]) { border-color: var(--text); color: var(--text); }
+.spine a[aria-current="true"] { color: var(--text); }
+.spine li { transition: border-color .18s ease, color .18s ease; }
+
+/* Methodology figures */
+.method-figure { margin-top: 2rem; }
+.method-figure figcaption { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; line-height: 1.5; margin-top: .75rem; color: var(--text-3); }
+.dims-with-figure { display: grid; gap: 2.5rem; align-items: start; }
+@media (min-width: 900px) { .dims-with-figure { grid-template-columns: 1.4fr 1fr; } .dims-with-figure figure { position: sticky; top: calc(var(--masthead-h) + 2rem); } }
+.dims-with-figure figcaption { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; line-height: 1.5; margin-top: .75rem; color: var(--text-3); }
+
+/* ===========================================================================
+   Reduced motion — "a posed edition, not a paused one"
+   =========================================================================== */
+[data-motion="reduce"] .rv { opacity: 1 !important; transform: none !important; transition: none !important; }
+[data-motion="reduce"] .masthead::after { transform: none; animation: none; }
+[data-motion="reduce"] .field-stage { display: none !important; }
+[data-motion="reduce"] .plate { display: block !important; }
+[data-motion="reduce"] .hero--field { margin-top: 0 !important; min-height: 0 !important; }
+[data-motion="reduce"] .act1 { padding-top: 0 !important; }
+[data-motion="reduce"] .hero--field .hero__inner { position: static !important; }
+[data-motion="reduce"] .field-text { background: transparent !important; padding: 0 !important; margin: 0 !important; }
+[data-motion="reduce"] .field-text::after { display: none !important; }
+[data-motion="reduce"] .act-edition, [data-motion="reduce"] .act-dims { min-height: 0 !important; }
+[data-motion="reduce"] .act-dims .dims-col { position: static !important; }
+[data-motion="reduce"] .link-more { background-size: 100% 1px !important; }
+[data-motion="reduce"] .bar__fill { transform: none !important; transition: none !important; }
+[data-motion="reduce"] .photo-slot { border-color: var(--edge) !important; }
+[data-motion="reduce"] .article-body h2 { border-top-color: var(--ivory-line) !important; }
+[data-motion="reduce"] .callout { border-left-color: var(--text) !important; }
+[data-motion="reduce"] .photo-slot--light { border-color: var(--edge) !important; }
+[data-motion="reduce"] .mover .mover__trail { transform: none !important; animation: none !important; }
+[data-motion="reduce"] .mover .mover__dot--now { left: var(--to) !important; animation: none !important; }
+[data-motion="reduce"] .flag-wall .fw-row { opacity: 1 !important; transition: none !important; }
+[data-motion="reduce"] .pg--us .pg-ring--solid { opacity: 1 !important; animation: none !important; }
+[data-motion="reduce"] .pg--us .pg-ring--dash { animation: none !important; }
+[data-motion="reduce"] .leader-row .pg-draw { stroke-dashoffset: 0 !important; animation: none !important; }
+[data-motion="reduce"] .eyebrow::after { transform: none !important; }
+[data-motion="reduce"] .rv--rule::before { transform: none !important; }
+[data-motion="reduce"] *, [data-motion="reduce"] *::before, [data-motion="reduce"] *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+[data-motion="reduce"] .wordmark__mark::after { transform: none; }
+
+/* No WebGL (or the data failed to load): the stage steps aside and the inline SVG plates carry Act I. */
+.no-webgl .field-stage { display: none !important; }
+.no-webgl .plate { display: block !important; }
+.no-webgl .act1 > .hero--field { margin-top: 0 !important; min-height: 0 !important; }
+.no-webgl .hero--field .hero__inner { position: static !important; }
+.no-webgl .act-edition, .no-webgl .act-dims { min-height: 0 !important; }
+.no-webgl .act-dims .dims-col { position: static !important; }
+
+/* Research cards: a 24px field strip generated from cycle2.json at build time, with the note's own
+   number lit (Estonia's column; the Capital Formation mean; the six published rank movements). */
+.card__strip { width: 100%; height: auto; display: block; margin: .25rem 0 .9rem; overflow: visible; }
+.card__strip .cs-cols line { stroke: var(--mark-dim); stroke-width: 1; }
+.card__strip .cs-cols .cs-mark { stroke: var(--text-2); stroke-width: 1.25; }
+.card__strip .cs-cols .cs-lit { stroke: var(--text); stroke-width: 2.5; }
+.card__strip .cs-tier { stroke: var(--edge); stroke-width: 1; stroke-dasharray: 2 3; }
+.card__strip .cs-axis { stroke: var(--rule); stroke-width: 1; }
+.card__strip .cs-mean { stroke: var(--text); stroke-width: 2; }
+.card__strip .cs-move { stroke: var(--text); stroke-width: 1.5; }
+.card__strip .cs-move--down { stroke: var(--mark-dim); }
+.card__strip .cs-now { fill: var(--text); }
+.card__strip .cs-now--down { fill: var(--mark-dim); }
+.card__strip text { font-family: var(--mono); font-size: 7px; fill: var(--text-2); }
+.card__strip .cs-lbl { fill: var(--text); font-size: 7.5px; }
+.js-motion .card__strip .cs-cols, .js-motion .card__strip .cs-mean, .js-motion .card__strip .cs-move, .js-motion .card__strip .cs-now { opacity: 0; transition: opacity .5s var(--ease-out) .25s; }
+.js-motion .card.is-in .card__strip .cs-cols, .js-motion .card.is-in .card__strip .cs-mean, .js-motion .card.is-in .card__strip .cs-move, .js-motion .card.is-in .card__strip .cs-now { opacity: 1; }
+[data-motion="reduce"] .card__strip * { opacity: 1 !important; }
+
+/* ===========================================================================
+   OBSIDIAN: gold is Directed Intelligence, and nothing else.
+   Words carry --gold; Directed Intelligence numbers carry --gold-bright (data-di="n").
+   The scroll-scene plates keep their own rules (.plate .pg is excluded).
+   =========================================================================== */
+[data-di]:not(svg *) { color: var(--gold) !important; }
+[data-di="n"]:not(svg *) { color: var(--gold-bright) !important; }
+.pg:not(.plate .pg) .pg-axis[data-di] { stroke: var(--gold); }
+.pg:not(.plate .pg) .pg-dot[data-di] { fill: var(--gold-bright); }
+.pg:not(.plate .pg) .pg-val[data-di] { fill: var(--gold-bright); }
+.pg:not(.plate .pg) .pg-note[data-di] { fill: var(--gold); }
