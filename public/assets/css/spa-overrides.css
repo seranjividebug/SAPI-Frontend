@@ -1,0 +1,4 @@
+/* The React app's global Tailwind preflight (src/index.css) strips list markers, which the
+   SAPI Obsidian reference pages rely on in their prose. Restore the browser defaults there. */
+.article-body ul { list-style: disc; }
+.article-body ol { list-style: decimal; }
