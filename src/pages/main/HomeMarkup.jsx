@@ -589,8 +589,9 @@ export const HomeBody = memo(function HomeBody() {
       <text x="180.0" y="35" textAnchor="middle">50</text>
       <text x="356.0" y="35" textAnchor="end">100</text>
       </svg>
-              <h3><span data-di="">Directed Intelligence</span>, not compute</h3>
+              <h3><a href="/insights/conversion-not-compute"><span data-di="">Directed Intelligence</span>, not compute</a></h3>
               <p>Estonia, a state of 1.3 million, outranks every G7 member except the United States  -  on the strength of <span data-di="">Directed Intelligence</span>, not scale.</p>
+              <p className="card__foot"><a className="link-more" href="/insights/conversion-not-compute">Read the note</a></p>
             </article>
       
             <article className="card">
@@ -659,9 +660,10 @@ export const HomeBody = memo(function HomeBody() {
       <text x="180.0" y="35" textAnchor="middle">50</text>
       <text x="356.0" y="35" textAnchor="end">100</text>
       </svg>
-              <h3>The financing gap</h3>
+              <h3><a href="/insights/capital-formation-bottleneck">The financing gap</a></h3>
               <p>Governments have written the policy of sovereign AI well ahead of financing the machine.
                 Field mean 28.5, correlation with the composite 0.89.</p>
+              <p className="card__foot"><a className="link-more" href="/insights/capital-formation-bottleneck">Read the note</a></p>
             </article>
       
             <article className="card">
@@ -734,11 +736,14 @@ export const HomeBody = memo(function HomeBody() {
       <text x="180.0" y="35" textAnchor="middle">50</text>
       <text x="356.0" y="35" textAnchor="end">100</text>
       </svg>
-              <h3>How to read a readiness score</h3>
+              <h3><a href="/insights/reading-national-ai-readiness">How to read a readiness score</a></h3>
               <p>What a rank movement between editions does and does not tell you, and why a country's
                 weakest dimension is usually the more useful number.</p>
+              <p className="card__foot"><a className="link-more" href="/insights/reading-national-ai-readiness">Read the note</a></p>
             </article>
           </div>
+      
+          <p style={{ marginTop: "2.5rem" }}><a className="link-more" href="/insights">All insights</a></p>
       
         </div>
       </section>
@@ -752,6 +757,7 @@ export const HomeBody = memo(function HomeBody() {
               <p className="meta segmented-meta"><span className="segment">2 July 2026</span><span className="segment"> · House of Lords, Westminster</span></p>
               <h2 style={{ fontSize: "clamp(1.8rem,3.2vw,2.4rem)", marginTop: ".75rem" }}>The Quarter 2 Rankings launch</h2>
               <p>SAPI hosted the release of the Quarter 2 Rankings 2026 in a House of Lords committee room. Fifty nations were scored, and fifteen nations took part.</p>
+              <p><a className="link-more" href="/convenings/2026-07-02-house-of-lords">Read the event record</a></p>
             </div>
             <figure>
               <img className="event-photo" src="/assets/img/events/2026-07-02/room-wide.jpg" alt="Delegates seated along the committee table in a House of Lords committee room face the head table, where screens show the Quarter 2 Rankings 2026." width="1200" height="675" loading="lazy" decoding="async" />

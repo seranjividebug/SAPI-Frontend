@@ -4,6 +4,13 @@ import { LoginPage, RegisterPage, LandingPage, PreviewPage, MainPage } from './p
 import MethodologyPage from './pages/methodology/MethodologyPage';
 import AboutPage from './pages/about/AboutPage';
 import ContactPage from './pages/contact/ContactPage';
+import InsightsPage from './pages/insights/InsightsPage';
+import ConversionNotCompute from './pages/insights/ConversionNotCompute';
+import CapitalFormationBottleneck from './pages/insights/CapitalFormationBottleneck';
+import ReadingNationalAiReadiness from './pages/insights/ReadingNationalAiReadiness';
+import ConveningsPage from './pages/convenings/ConveningsPage';
+import HouseOfLords20260415 from './pages/convenings/HouseOfLords20260415';
+import HouseOfLords20260702 from './pages/convenings/HouseOfLords20260702';
 import SAPILogin from './pages/Login_RequestAccess';
 import SAPILoginRequestAccess from './pages/SAPI_Login_RequestAccess';
 import QRLoginEmailPage from './pages/QRLoginEmailPage';
@@ -213,6 +220,13 @@ function App() {
           <Route path="/methodology" element={<MethodologyPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/insights" element={<InsightsPage />} />
+          <Route path="/insights/conversion-not-compute" element={<ConversionNotCompute />} />
+          <Route path="/insights/capital-formation-bottleneck" element={<CapitalFormationBottleneck />} />
+          <Route path="/insights/reading-national-ai-readiness" element={<ReadingNationalAiReadiness />} />
+          <Route path="/convenings" element={<ConveningsPage />} />
+          <Route path="/convenings/2026-04-15-house-of-lords" element={<HouseOfLords20260415 />} />
+          <Route path="/convenings/2026-07-02-house-of-lords" element={<HouseOfLords20260702 />} />
           <Route path="/admin" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admindashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute allowedRole={1}><AdminDashboard /></ProtectedRoute>} />

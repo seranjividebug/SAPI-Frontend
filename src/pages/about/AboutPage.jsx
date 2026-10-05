@@ -50,6 +50,7 @@ const AboutBody = memo(function AboutBody() {
               <li>Dated public record for every convening</li>
               <li>Participation reviewed against mandate and timing</li>
             </ul>
+            <p className="service__foot"><a href="/convenings">Convenings record</a></p>
           </div>
         </div>
       </div>

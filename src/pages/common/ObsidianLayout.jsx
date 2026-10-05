@@ -69,7 +69,7 @@ function teardown() {
   delete document.body.dataset.page;
 }
 
-function Masthead() {
+function Masthead({ progress }) {
   const [navOpen, setNavOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -100,6 +100,8 @@ function Masthead() {
         {/* NavLink sets aria-current="page", which the design styles as the active tab. */}
         <nav className="nav" id="primary-nav" aria-label="Primary" data-open={String(navOpen)}>
           <NavLink to="/sapi-index" onClick={close}>The Index</NavLink>
+          <NavLink to="/insights" onClick={close}>Insights</NavLink>
+          <NavLink to="/convenings" onClick={close}>Convenings</NavLink>
           <NavLink to="/methodology" onClick={close}>Methodology</NavLink>
           <NavLink to="/about" onClick={close}>About</NavLink>
           {/* Wired up by motion.js */}
@@ -107,6 +109,8 @@ function Masthead() {
           <Link className="btn btn--primary" to="/contact" onClick={close}>Request a briefing</Link>
         </nav>
       </div>
+      {/* Reading-progress hairline, driven by motion.js */}
+      {progress && <span className="masthead__progress" aria-hidden="true"></span>}
     </header>
   );
 }
@@ -128,12 +132,14 @@ const SiteFooter = memo(function SiteFooter() {
             <h2>Research</h2>
             <ul>
               <li><a href="/sapi-index">The Index</a></li>
+              <li><a href="/insights">Insights</a></li>
               <li><a href="/methodology">Methodology</a></li>
             </ul>
           </div>
           <div>
             <h2>Organisation</h2>
             <ul>
+              <li><a href="/convenings">Convenings</a></li>
               <li><a href="/about">About</a></li>
               <li><a href="https://www.linkedin.com/company/the-sovereign-ai-power-index/">LinkedIn</a></li>
             </ul>
@@ -221,8 +227,9 @@ const SiteFooter = memo(function SiteFooter() {
  * @param {string} page - body[data-page] value the design's CSS and motion.js key off ("home", "methodology")
  * @param {string[]} vendors - VENDOR_SCRIPTS globals this page needs, in load order
  * @param {string[]} scripts - page scripts under public/assets/js, re-run on every mount
+ * @param {boolean} progress - show the masthead reading-progress hairline (long-read pages)
  */
-export default function ObsidianLayout({ page, vendors = ["Lenis"], scripts = ["/assets/js/motion.js"], children }) {
+export default function ObsidianLayout({ page, vendors = ["Lenis"], scripts = ["/assets/js/motion.js"], progress = false, children }) {
   const rootRef = useRef(null);
   const navigate = useNavigate();
 
@@ -270,7 +277,7 @@ export default function ObsidianLayout({ page, vendors = ["Lenis"], scripts = ["
     // Hidden until the design's stylesheets arrive, so the unstyled markup never flashes.
     <div ref={rootRef} style={{ visibility: "hidden" }} onClick={handleClick}>
       <a className="skip" href="#main">Skip to main content</a>
-      <Masthead />
+      <Masthead progress={progress} />
       {children}
       <SiteFooter />
     </div>

@@ -65,7 +65,7 @@ const ContactIntro = memo(function ContactIntro() {
                 <li>Reviewed against institutional mandate and timing</li>
                 <li>Chatham House Rule throughout</li>
               </ul>
-              <p className="service__foot segmented-meta"><span className="segment">By application</span></p>
+              <p className="service__foot segmented-meta"><span className="segment">By application</span><span className="segment"> · <a href="/convenings">see the record</a></span></p>
             </div>
             <div className="service" id="defence">
               <h3>Defence AI investment read</h3>

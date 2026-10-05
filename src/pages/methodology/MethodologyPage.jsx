@@ -261,6 +261,7 @@ const MethodologyBody = memo(function MethodologyBody() {
             <li><strong>Real change.</strong> Movement attributable to something that happened in the
               country. Six are identified in the current edition and each carries a stated driver.</li>
           </ul>
+          <p><a className="link-more" href="/insights/reading-national-ai-readiness">A practical guide to reading the score</a></p>
         </div>
       </div>
     </section>
@@ -281,7 +282,7 @@ const MethodologyBody = memo(function MethodologyBody() {
 
 export default function MethodologyPage() {
   return (
-    <ObsidianLayout page="methodology">
+    <ObsidianLayout page="methodology" progress>
       <MethodologyBody />
     </ObsidianLayout>
   );
