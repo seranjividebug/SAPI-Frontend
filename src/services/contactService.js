@@ -10,6 +10,8 @@ console.log("REACT_APP_API_URL", process.env.REACT_APP_API_URL)
  * @param {string} contactData.organization - Organization name
  * @param {string} contactData.role - Role/title
  * @param {string} contactData.area_of_interest - Area of interest
+ * @param {string} [contactData.country] - Country or region in question
+ * @param {string} [contactData.timescale] - When the enquirer needs it by
  * @param {string} contactData.message - Contact message
  */
 export async function submitContactForm(contactData) {

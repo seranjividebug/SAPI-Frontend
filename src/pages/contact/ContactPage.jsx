@@ -104,11 +104,6 @@ function EnquiryForm() {
     }
 
     setStatus({ state: "sending", message: "" });
-    // The contact API has no columns for country or timescale, so they lead the message.
-    const context = [
-      form.country.trim() && `Country or region: ${form.country.trim()}`,
-      form.timescale && `Needed by: ${form.timescale}`,
-    ].filter(Boolean);
 
     try {
       const response = await submitContactForm({
@@ -117,7 +112,9 @@ function EnquiryForm() {
         organization: form.organisation.trim(),
         role: form.role.trim(),
         area_of_interest: INTERESTS.find((i) => i.value === form.interest).label,
-        message: [...context, ...(context.length ? [""] : []), form.message.trim()].join("\n"),
+        country: form.country.trim(),
+        timescale: form.timescale,
+        message: form.message.trim(),
       });
       if (!response.success) throw new Error(response.error || "Submission failed");
       setForm(EMPTY_FORM);
